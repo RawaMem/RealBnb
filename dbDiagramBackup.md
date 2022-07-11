@@ -208,6 +208,28 @@ Table Listings {
 | updatedAt    | datetime       | not null       |
 
 
+## Categories
+
+| Column Name  | Data Type      | Details       |
+|   ---        |     ---        |     ---       |
+| id           | int            | not null, pk, increment    |
+| name  | varcahr     | not null  |
+| iconUrl     | varchar        | not null       |
+| createdAt    | datetime       | not null       |
+| updatedAt    | datetime       | not null       |
+
+
+## ListingCategories
+
+| Column Name  | Data Type      | Details       |
+|   ---        |     ---        |     ---       |
+| id           | int            | not null, pk, increment    |
+| categoryId  | int     | not null  |
+| listingId     | int        | not null       |
+| createdAt    | datetime       | not null       |
+| updatedAt    | datetime       | not null       |
+
+
 ## Reviews
 
 | Column Name  | Data Type      | Details       |
@@ -243,5 +265,27 @@ Table Listings {
 | id           | int            | not null, pk, increment    |
 | imageId  | int     | not null  |
 | listingId     | int        | not null       |
+| createdAt    | datetime       | not null       |
+| updatedAt    | datetime       | not null       |
+
+
+## ReviewImages
+
+| Column Name  | Data Type      | Details       |
+|   ---        |     ---        |     ---       |
+| id           | int            | not null, pk, increment    |
+| imageId  | int     | not null  |
+| reviewId     | int        | not null       |
+| createdAt    | datetime       | not null       |
+| updatedAt    | datetime       | not null       |
+
+## ReviewImages
+
+| Column Name  | Data Type      | Details       |
+|   ---        |     ---        |     ---       |
+| id           | int            | not null, pk, increment    |
+| listingId  | int     | not null  |
+| startDate     | datetime        | not null       |
+| endDate     | datetime        | not null       |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |

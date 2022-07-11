@@ -178,6 +178,8 @@ Table Listings {
 | name    | varchar        | not null       |
 | description     | varchar        | not null       |
 | price        | decimal        | not null       |
+| serviceFee  | decimal     | not null  |
+| cleaningFee  | decimal     | not null  |
 | city  | varchar     | not null  |
 | state  | varchar     | not null  |
 | zipCode  | int     | not null  |
@@ -279,12 +281,14 @@ Table Listings {
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
 
-## ReviewImages
+## Bookings
 
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
 | id           | int            | not null, pk, increment    |
 | listingId  | int     | not null  |
+| totalCost  | decimal     | not null  |
+| pricePerDay  | decimal     | not null  |
 | startDate     | datetime        | not null       |
 | endDate     | datetime        | not null       |
 | createdAt    | datetime       | not null       |

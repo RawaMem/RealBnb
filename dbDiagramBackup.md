@@ -178,7 +178,6 @@
 |   ---        |     ---        |     ---       |
 | id           | int            | not null, pk, increment    |
 | userId  | int     | not null  |
-| listingId  | int     | not null  |
 | destination     | varchar        | nullable       |
 | checkIn     | datetime        | nullable       |
 | checkOut     | datetime        | nullable       |
@@ -188,6 +187,63 @@
 | petGuests     | int        | nullable       |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
+
+## wishlistListings
+
+| Column Name  | Data Type      | Details       |
+|   ---        |     ---        |     ---       |
+| id           | int            | not null, pk, increment    |
+| wishlistId  | int     | not null  |
+| listingId     | int        | not null       |
+| createdAt    | datetime       | not null       |
+| updatedAt    | datetime       | not null       |
+
+## chatSessions
+
+| Column Name  | Data Type      | Details       |
+|   ---        |     ---        |     ---       |
+| id           | int            | not null, pk, increment    |
+| hostId  | int     | not null  |
+| guestId     | int        | nullable       |
+| createdAt    | datetime       | not null       |
+| updatedAt    | datetime       | not null       |
+
+## sessionMessages
+
+| Column Name  | Data Type      | Details       |
+|   ---        |     ---        |     ---       |
+| id           | int            | not null, pk, increment    |
+| senderId  | int     | not null  |
+| recieverId  | int     | not null  |
+| notified  | bool     | not null  |
+| content     | varchar        | nullable       |
+| createdAt    | datetime       | not null       |
+| updatedAt    | datetime       | not null       |
+
+## directMessageThreads
+
+| Column Name  | Data Type      | Details       |
+|   ---        |     ---        |     ---       |
+| id           | int            | not null, pk, increment    |
+| hostId  | int     | not null  |
+| guestId     | int        | nullable       |
+| createdAt    | datetime       | not null       |
+| updatedAt    | datetime       | not null       |
+
+## directMessages
+
+| Column Name  | Data Type      | Details       |
+|   ---        |     ---        |     ---       |
+| id           | int            | not null, pk, increment    |
+| senderId  | int     | not null  |
+| recieverId  | int     | not null  |
+| notified  | bool     | not null  |
+| content     | varchar        | nullable       |
+| createdAt    | datetime       | not null       |
+| updatedAt    | datetime       | not null       |
+
+
+
 
 
 <!-- code below is for db diagram but wont allow us to make more than 10 tables -->

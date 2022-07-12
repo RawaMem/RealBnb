@@ -31,16 +31,21 @@
 - Users can remove listings from their wishlists
 - Bonus: create multiple wishlists and edit / delete.
 
-
 ## 6. Categories
+- Users can view listings based on categories
 
 ## 7. Search
+- Users can search listings based
 
 ## 8. View listings on Google map
+- Users can see general location of a listing using Google map
 
 ## 9. Messages / Chat between the host and the Realbnber
+- Host can receive user's booking info(creat/edit/delete)
+- Host and Realbnber can chat with each other
 
 ## 10. Categories
+
 
 ## 11. Search
 

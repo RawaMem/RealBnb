@@ -15,6 +15,23 @@
 | hashedpassword  | varchar     | not null  |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
+Users.id has many Listings.ownerId
+Users.id has many Reviews.authorId
+Users.id has many Images.userId
+Users.id has many Booking.userId
+Users.id has many ListingBrowseHistories.userId
+Users.id has many SearchHistories.userId
+Users.id has many WishLists.userId
+Users.id has many ChatSessions.hostId
+Users.id has many ChatSessions.guestId
+Users.id has many SessionMessages.senderId
+Users.id has many SessionMessages.receiverId
+Users.id has many DirectMessageThreads.hostId
+Users.id has many DirectMessageThreads.guestId
+Users.id has many DirectMessages.senderId
+Users.id has many DirectMessages.receiverId
+Users.id has many UserSettings.userId
+Users.id has many PasswordHistories.userId
 
 
 ## Listings
@@ -36,11 +53,16 @@
 | latitude  | decimal     | not null  |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
-ownerId belongs to Users.id
-previewImageId belongs to Images.id
+Listings.ownerId belongs to Users.id
+Listings.previewImageId belongs to Images.id
+Listings.id has many ListingPrices.listingId
 Listings belongs to many Amenities through ListingsAmenities
 Listings belongs to many Categories through ListingsCategories
+Listings.id has many Reviews.listingId
+Listings.id has many Booking.listingId
 Listings belongs to many WishLists through WishlistListings
+Listings.id has many ChatSessions.listingId
+
 
 
 
@@ -57,7 +79,7 @@ Listings belongs to many WishLists through WishlistListings
 | endDate     | datetime        | not null       |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
-listingId belongs to Listings.id
+ListingPrices.listingId belongs to Listings.id
 
 
 ## Amenities
@@ -113,6 +135,7 @@ Categories belongs to many Listings through ListingsCategories
 |   ---        |     ---        |     ---       |
 | id           | int            | not null, pk, increment    |
 | authorId  | int     | not null  |
+| listingId  | int     | not null  |
 | starRating     | int        | not null       |
 | content     | int        | not null       |
 | cleanliness        | int        | not null       |
@@ -122,8 +145,9 @@ Categories belongs to many Listings through ListingsCategories
 | value  | int     | not null  |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
-Reviews belongs to Users.id
-Reviews belongs to many Listings through ReviewImages
+Reviews.authorId belongs to Users.id
+Reviews belongs to many Images through ReviewImages
+Reviews.listingId belongs to Listings.id
 
 
 
@@ -132,12 +156,16 @@ Reviews belongs to many Listings through ReviewImages
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
 | id           | int            | not null, pk, increment    |
+| userId  | int     | not null  |
 | url  | varchar     | not null  |
 | description     | varchar        | not null       |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
 Images belongs to many Reviews through ReviewImages
 Images belongs to many Listing through ListingImages
+Images.userId belongs to Users.id
+Images.id has many Listings.previewImageId
+
 
 
 
@@ -178,8 +206,8 @@ Images belongs to many Listing through ListingImages
 | endDate     | datetime        | not null       |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
-Booking belongs to Users.id
-Booking belongs to Listings.id
+Booking.userId belongs to Users.id
+Booking.listingId belongs to Listings.id
 
 ## ListingBrowseHistories
 
@@ -250,10 +278,12 @@ WishLists belongs to many Listing through WishlistListings
 | id           | int            | not null, pk, increment    |
 | hostId  | int     | not null  |
 | guestId     | int        | nullable       |
+| listingId     | int        | nullable       |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
 ChatSessions.hostId belongs to Users.id
 ChatSessions.guestId belongs to Users.id
+ChatSessions.listingId belongs to Listings.id
 
 
 ## SessionMessages
@@ -262,15 +292,15 @@ ChatSessions.guestId belongs to Users.id
 |   ---        |     ---        |     ---       |
 | id           | int            | not null, pk, increment    |
 | senderId  | int     | not null  |
-| recieverId  | int     | not null  |
+| receiverId  | int     | not null  |
 | chatSessionId  | int     | not null  |
 | notified  | bool     | not null  |
 | content     | varchar        | nullable       |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
-ChatSessions.senderId belongs to Users.id
-ChatSessions.recieverId belongs to Users.id
-ChatSessions.chatSessionId belongs to ChatSessions.id
+SessionMessages.senderId belongs to Users.id
+SessionMessages.receiverId belongs to Users.id
+SessionMessages.chatSessionId belongs to ChatSessions.id
 
 
 
@@ -283,6 +313,9 @@ ChatSessions.chatSessionId belongs to ChatSessions.id
 | guestId     | int        | nullable       |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
+DirectMessageThreads.hostId belongs to Users.id
+DirectMessageThreads.guestId belongs to Users.id
+
 
 ## DirectMessages
 
@@ -290,14 +323,14 @@ ChatSessions.chatSessionId belongs to ChatSessions.id
 |   ---        |     ---        |     ---       |
 | id           | int            | not null, pk, increment    |
 | senderId  | int     | not null  |
-| recieverId  | int     | not null  |
+| receiverId  | int     | not null  |
 | directMessagesId  | int     | not null  |
 | notified  | bool     | not null  |
 | content     | varchar        | nullable       |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
 DirectMessages.senderId belongs to Users.id
-DirectMessages.recieverId belongs to Users.id
+DirectMessages.receiverId belongs to Users.id
 DirectMessages.directMessagesId belongs to DirectMessageThreads.id
 
 ## UserSettings

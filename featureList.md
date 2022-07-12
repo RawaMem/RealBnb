@@ -44,17 +44,14 @@
 - Host can receive user's booking info(creat/edit/delete)
 - Host and Realbnber can chat with each other
 
-## 10. Categories
-
-
-## 11. Search
-
-## 12. Images
+## 10. Images
+- Host can upload multiple images to one listing
+- Images are using AWS cloud service
 
 # Bonus
 
-## 12. Light and Dark themes
+## 11. Light and Dark themes
 
-## 13. Browse history
+## 12. Browse history
 
-## 14. Search history
+## 13. Search history

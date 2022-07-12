@@ -6,10 +6,10 @@
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
 | id           | int            | not null, pk, increment    |
-| username     | varchar        | not null       |
+| username     | varchar        | not null, unique       |
 | firstName    | varchar        | not null       |
 | lastName     | varchar        | not null       |
-| email        | varchar        | not null       |
+| email        | varchar        | not null, unique       |
 | profileImg        | varchar        | not null       |
 | host        | bool        | not null, default: false       |
 | hashedpassword  | varchar     | not null  |
@@ -22,14 +22,11 @@ Users.id has many Booking.userId
 Users.id has many ListingBrowseHistories.userId
 Users.id has many SearchHistories.userId
 Users.id has many WishLists.userId
-Users.id has many ChatSessions.hostId
 Users.id has many ChatSessions.guestId
 Users.id has many SessionMessages.senderId
-Users.id has many SessionMessages.receiverId
 Users.id has many DirectMessageThreads.hostId
 Users.id has many DirectMessageThreads.guestId
 Users.id has many DirectMessages.senderId
-Users.id has many DirectMessages.receiverId
 Users.id has many UserSettings.userId
 Users.id has many PasswordHistories.userId
 
@@ -62,9 +59,10 @@ Listings.id has many Reviews.listingId
 Listings.id has many Booking.listingId
 Listings belongs to many WishLists through WishlistListings
 Listings.id has many ChatSessions.listingId
+Listing.id has many Images.listingId
 
-
-
+something to consider: we can have 2 listings in the same place, potentitially for people who rent out rooms in the same location
+so no unique constraint at this point
 
 
 
@@ -146,8 +144,9 @@ Categories belongs to many Listings through ListingsCategories
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
 Reviews.authorId belongs to Users.id
-Reviews belongs to many Images through ReviewImages
 Reviews.listingId belongs to Listings.id
+Review.id has many Images.reviewId
+
 
 
 
@@ -156,20 +155,23 @@ Reviews.listingId belongs to Listings.id
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
 | id           | int            | not null, pk, increment    |
+| listingId           | int            |  nullable   |
+| reviewId           | int            |  nullable   |
 | userId  | int     | not null  |
 | url  | varchar     | not null  |
 | description     | varchar        | not null       |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
-Images belongs to many Reviews through ReviewImages
-Images belongs to many Listing through ListingImages
+
+Images.listingId belongs to Listing.id
+Images.reviewId belongs to Review.id
 Images.userId belongs to Users.id
 Images.id has many Listings.previewImageId
 
 
 
 
-## ListingImages
+<!-- ## ListingImages
 
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
@@ -177,11 +179,11 @@ Images.id has many Listings.previewImageId
 | imageId  | int     | not null  |
 | listingId     | int        | not null       |
 | createdAt    | datetime       | not null       |
-| updatedAt    | datetime       | not null       |
+| updatedAt    | datetime       | not null       | -->
 
 
 
-## ReviewImages
+<!-- ## ReviewImages
 
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
@@ -189,7 +191,7 @@ Images.id has many Listings.previewImageId
 | imageId  | int     | not null  |
 | reviewId     | int        | not null       |
 | createdAt    | datetime       | not null       |
-| updatedAt    | datetime       | not null       |
+| updatedAt    | datetime       | not null       | -->
 
 
 ## Bookings
@@ -247,6 +249,7 @@ SearchHistories.userId belongs to Users.id
 |   ---        |     ---        |     ---       |
 | id           | int            | not null, pk, increment    |
 | userId  | int     | not null  |
+| name     | varchar        | not null       |
 | destination     | varchar        | nullable       |
 | checkIn     | datetime        | nullable       |
 | checkOut     | datetime        | nullable       |
@@ -276,14 +279,13 @@ WishLists belongs to many Listing through WishlistListings
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
 | id           | int            | not null, pk, increment    |
-| hostId  | int     | not null  |
 | guestId     | int        | nullable       |
 | listingId     | int        | nullable       |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
-ChatSessions.hostId belongs to Users.id
 ChatSessions.guestId belongs to Users.id
 ChatSessions.listingId belongs to Listings.id
+(we might not need hostId because the associated listing has the hostId/ ownerId)
 
 
 ## SessionMessages
@@ -292,14 +294,12 @@ ChatSessions.listingId belongs to Listings.id
 |   ---        |     ---        |     ---       |
 | id           | int            | not null, pk, increment    |
 | senderId  | int     | not null  |
-| receiverId  | int     | not null  |
 | chatSessionId  | int     | not null  |
 | notified  | bool     | not null  |
 | content     | varchar        | nullable       |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
 SessionMessages.senderId belongs to Users.id
-SessionMessages.receiverId belongs to Users.id
 SessionMessages.chatSessionId belongs to ChatSessions.id
 
 
@@ -315,6 +315,9 @@ SessionMessages.chatSessionId belongs to ChatSessions.id
 | updatedAt    | datetime       | not null       |
 DirectMessageThreads.hostId belongs to Users.id
 DirectMessageThreads.guestId belongs to Users.id
+DirectMessageThreads.id has many DirectMessages.directMessagesThreadId
+
+
 
 
 ## DirectMessages
@@ -323,15 +326,15 @@ DirectMessageThreads.guestId belongs to Users.id
 |   ---        |     ---        |     ---       |
 | id           | int            | not null, pk, increment    |
 | senderId  | int     | not null  |
-| receiverId  | int     | not null  |
-| directMessagesId  | int     | not null  |
+
+| directMessagesThreadId  | int     | not null  |
 | notified  | bool     | not null  |
 | content     | varchar        | nullable       |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
 DirectMessages.senderId belongs to Users.id
-DirectMessages.receiverId belongs to Users.id
-DirectMessages.directMessagesId belongs to DirectMessageThreads.id
+DirectMessages.directMessagesThreadId belongs to DirectMessageThreads.id
+
 
 ## UserSettings
 
@@ -341,11 +344,11 @@ DirectMessages.directMessagesId belongs to DirectMessageThreads.id
 | userId  | int     | not null  |
 | theme  | varchar     | not null  |
 | recoveryQuestion1  | varchar     | not null  |
-| hashedAnswer1     | varchar        | nullable       |
+| hashedAnswer1     | string.binary        | nullable       |
 | recoveryQuestion2  | varchar     | not null  |
-| hashedAnswer2     | varchar        | nullable       |
+| hashedAnswer2     | string.binary         | nullable       |
 | recoveryQuestion3  | varchar     | not null  |
-| hashedAnswer3     | varchar        | nullable       |
+| hashedAnswer3     | string.binary         | nullable       |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
 UserSettings.userId belongs to Users.id

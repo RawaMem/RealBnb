@@ -229,11 +229,10 @@ Returns all the spots.
     ```json
     [
         {
-          "id": 1,
-          "ownerId": 1,
+        "Listing": {
+      "ownerId": 1,
           "previewImageId": 1,
           "address": "111 Main St",
-          "pricePerDay": 123,
           "serviceFee": 123,
           "cleaningFee": 123,
           "city": "San Francisco",
@@ -246,7 +245,27 @@ Returns all the spots.
           "description": "A nice place by the ocean",
           "createdAt": "2022-12-22 08:00:00",
           "updatedAt": "2022-12-29 11:00:00",
-        }
+    },
+        "Amenities" : [{
+            "id": 1,
+            "name": "pool"
+        }],
+        "Categories": [{
+            "id": 1,
+            "name": "beach"
+        }],
+        "ListingPrice": [{
+            "id": 1,
+            "pricePerDay": 200,
+            "startDate": "11-24-2022",
+            "endDate": "12-25-2022",
+        }],
+        "Images": [{
+            "id": 1,
+            "url": "image.jpg"
+        }]
+
+    }
       ]
     ```
 
@@ -269,11 +288,10 @@ Returns all the spots owned (created) by the current user.
     ```json
     [
         {
-          "id": 1,
-          "ownerId": 1,
+        "Listing": {
+      "ownerId": 1,
           "previewImageId": 1,
           "address": "111 Main St",
-          "pricePerDay": 123,
           "serviceFee": 123,
           "cleaningFee": 123,
           "city": "San Francisco",
@@ -286,7 +304,20 @@ Returns all the spots owned (created) by the current user.
           "description": "A nice place by the ocean",
           "createdAt": "2022-12-22 08:00:00",
           "updatedAt": "2022-12-29 11:00:00",
-        }
+    },
+
+        "ListingPrice": [{
+            "id": 1,
+            "pricePerDay": 200,
+            "startDate": "11-24-2022",
+            "endDate": "12-25-2022",
+        }],
+        "Images": [{
+            "id": 1,
+            "url": "image.jpg"
+        }]
+
+    }
       ]
     ```
 
@@ -373,10 +404,10 @@ Creates and returns a new listings.
 
     ```json
     {
+        "Listing": {
       "ownerId": 1,
           "previewImageId": 1,
           "address": "111 Main St",
-          "pricePerDay": 123,
           "serviceFee": 123,
           "cleaningFee": 123,
           "city": "San Francisco",
@@ -389,6 +420,22 @@ Creates and returns a new listings.
           "description": "A nice place by the ocean",
           "createdAt": "2022-12-22 08:00:00",
           "updatedAt": "2022-12-29 11:00:00",
+    },
+        "Amenities" : [{
+            "name": "pool"
+        }],
+        "Categories": [{
+            "name": "beach"
+        }],
+        "ListingPrice": [{
+            "pricePerDay": 200,
+            "startDate": "11-24-2022",
+            "endDate": "12-25-2022",
+        }],
+        "Images": [{
+            "url": "image.jpg"
+        }]
+
     }
     ```
 
@@ -400,23 +447,42 @@ Creates and returns a new listings.
 
     ```json
     {
-      "id": 1,
+        "Listing": {
       "ownerId": 1,
-      "previewImageId": 1,
-      "address": "111 Main St",
-      "pricePerDay": 123,
-      "serviceFee": 123,
-      "cleaningFee": 123,
-      "city": "San Francisco",
-      "state": "California",
-      "zipCode": "99999",
-      "country": "United States of America",
-      "lat": 11.1111111,
-      "lng": -111.1111111,
-      "name": "Beach House",
-      "description": "A nice place by the ocean",
-      "createdAt": "2022-12-22 08:00:00",
-      "updatedAt": "2022-12-29 11:00:00",
+          "previewImageId": 1,
+          "address": "111 Main St",
+          "serviceFee": 123,
+          "cleaningFee": 123,
+          "city": "San Francisco",
+          "state": "California",
+          "zipCode": "99999",
+          "country": "United States of America",
+          "lat": 11.1111111,
+          "lng": -111.1111111,
+          "name": "Beach House",
+          "description": "A nice place by the ocean",
+          "createdAt": "2022-12-22 08:00:00",
+          "updatedAt": "2022-12-29 11:00:00",
+    },
+        "Amenities" : [{
+            "id": 1,
+            "name": "pool"
+        }],
+        "Categories": [{
+            "id": 1,
+            "name": "beach"
+        }],
+        "ListingPrice": [{
+            "id": 1,
+            "pricePerDay": 200,
+            "startDate": "11-24-2022",
+            "endDate": "12-25-2022",
+        }],
+        "Images": [{
+            "id": 1,
+            "url": "image.jpg"
+        }]
+
     }
     ```
 
@@ -454,8 +520,8 @@ Updates and returns an existing listing.
 * Require Authentication: true
 * Require proper authorization: Listing must belong to the current user
 * Request
-  * Method: ?
-  * URL: ?
+  * Method: PUT
+  * URL: api/listings/:listingId
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -557,8 +623,8 @@ Deletes an existing listing.
 * Require Authentication: true
 * Require proper authorization: Listing must belong to the current user
 * Request
-  * Method: ?
-  * URL: ?
+  * Method: api/listings/:listingId
+  * URL: DELETE
   * Body: none
 
 * Successful Response

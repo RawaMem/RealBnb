@@ -1,7 +1,7 @@
 
 # Database Schema
 
-## Users
+## `Users`
 
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
@@ -15,6 +15,7 @@
 | hashedpassword  | varchar     | not null  |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
+
 Users.id has many Listings.ownerId
 Users.id has many Reviews.authorId
 Users.id has many Images.userId
@@ -31,7 +32,7 @@ Users.id has many UserSettings.userId
 Users.id has many PasswordHistories.userId
 
 
-## Listings
+## `Listings`
 
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
@@ -50,6 +51,7 @@ Users.id has many PasswordHistories.userId
 | latitude  | decimal     | not null  |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
+
 Listings.ownerId belongs to Users.id
 Listings.previewImageId belongs to Images.id
 Listings.id has many ListingPrices.listingId
@@ -66,7 +68,7 @@ so no unique constraint at this point
 
 
 
-## ListingPrices
+## `ListingPrices`
 
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
@@ -77,10 +79,11 @@ so no unique constraint at this point
 | endDate     | datetime        | not null       |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
+
 ListingPrices.listingId belongs to Listings.id
 
 
-## Amenities
+## `Amenities`
 
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
@@ -89,10 +92,11 @@ ListingPrices.listingId belongs to Listings.id
 | iconUrl     | varchar        | not null       |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
+
 Amenities belongs to many Listings through ListingsAmenities
 
 
-## ListingAmenities
+## `ListingAmenities`
 
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
@@ -103,7 +107,7 @@ Amenities belongs to many Listings through ListingsAmenities
 | updatedAt    | datetime       | not null       |
 
 
-## Categories
+## `Categories`
 
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
@@ -112,11 +116,12 @@ Amenities belongs to many Listings through ListingsAmenities
 | iconUrl     | varchar        | not null       |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
+
 Categories belongs to many Listings through ListingsCategories
 
 
 
-## ListingCategories
+## `ListingCategories`
 
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
@@ -127,7 +132,7 @@ Categories belongs to many Listings through ListingsCategories
 | updatedAt    | datetime       | not null       |
 
 
-## Reviews
+## `Reviews`
 
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
@@ -143,6 +148,7 @@ Categories belongs to many Listings through ListingsCategories
 | value  | int     | not null  |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
+
 Reviews.authorId belongs to Users.id
 Reviews.listingId belongs to Listings.id
 Review.id has many Images.reviewId
@@ -150,7 +156,7 @@ Review.id has many Images.reviewId
 
 
 
-## Images
+## `Images`
 
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
@@ -171,7 +177,7 @@ Images.id has many Listings.previewImageId
 
 
 
-<!-- ## ListingImages
+<!-- ## `ListingImages`
 
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
@@ -183,7 +189,7 @@ Images.id has many Listings.previewImageId
 
 
 
-<!-- ## ReviewImages
+<!-- ## `ReviewImages`
 
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
@@ -194,7 +200,7 @@ Images.id has many Listings.previewImageId
 | updatedAt    | datetime       | not null       | -->
 
 
-## Bookings
+## `Bookings`
 
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
@@ -208,10 +214,11 @@ Images.id has many Listings.previewImageId
 | endDate     | datetime        | not null       |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
+
 Booking.userId belongs to Users.id
 Booking.listingId belongs to Listings.id
 
-## ListingBrowseHistories
+## `ListingBrowseHistories`
 
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
@@ -220,11 +227,12 @@ Booking.listingId belongs to Listings.id
 | listingId     | int        | not null       |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
+
 ListingBrowseHistories.userId belongs to Users.id
 
 
 
-## SearchHistories
+## `SearchHistories`
 
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
@@ -239,11 +247,12 @@ ListingBrowseHistories.userId belongs to Users.id
 | petGuests     | int        | nullable       |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
+
 SearchHistories.userId belongs to Users.id
 
 
 
-## WishLists
+## `WishLists`
 
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
@@ -259,12 +268,13 @@ SearchHistories.userId belongs to Users.id
 | petGuests     | int        | nullable       |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
+
 WishLists.userId belongs to Users.id
 WishLists belongs to many Listing through WishlistListings
 
 
 
-## WishlistListings
+## `WishlistListings`
 
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
@@ -274,7 +284,7 @@ WishLists belongs to many Listing through WishlistListings
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
 
-## ChatSessions
+## `ChatSessions`
 
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
@@ -283,12 +293,13 @@ WishLists belongs to many Listing through WishlistListings
 | listingId     | int        | nullable       |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
+
 ChatSessions.guestId belongs to Users.id
 ChatSessions.listingId belongs to Listings.id
 (we might not need hostId because the associated listing has the hostId/ ownerId)
 
 
-## SessionMessages
+## `SessionMessages`
 
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
@@ -299,12 +310,13 @@ ChatSessions.listingId belongs to Listings.id
 | content     | varchar        | nullable       |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
+
 SessionMessages.senderId belongs to Users.id
 SessionMessages.chatSessionId belongs to ChatSessions.id
 
 
 
-## DirectMessageThreads
+## `DirectMessageThreads`
 
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
@@ -313,6 +325,7 @@ SessionMessages.chatSessionId belongs to ChatSessions.id
 | guestId     | int        | nullable       |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
+
 DirectMessageThreads.hostId belongs to Users.id
 DirectMessageThreads.guestId belongs to Users.id
 DirectMessageThreads.id has many DirectMessages.directMessagesThreadId
@@ -320,7 +333,7 @@ DirectMessageThreads.id has many DirectMessages.directMessagesThreadId
 
 
 
-## DirectMessages
+## `DirectMessages`
 
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
@@ -332,11 +345,12 @@ DirectMessageThreads.id has many DirectMessages.directMessagesThreadId
 | content     | varchar        | nullable       |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
+
 DirectMessages.senderId belongs to Users.id
 DirectMessages.directMessagesThreadId belongs to DirectMessageThreads.id
 
 
-## UserSettings
+## `UserSettings`
 
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
@@ -351,10 +365,11 @@ DirectMessages.directMessagesThreadId belongs to DirectMessageThreads.id
 | hashedAnswer3     | string.binary         | nullable       |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
+
 UserSettings.userId belongs to Users.id
 
 
-## PasswordHistories
+## `PasswordHistories`
 
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
@@ -363,6 +378,7 @@ UserSettings.userId belongs to Users.id
 | previousPassword  | string.binary     | not null  |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
+
 PasswordHistories.userId belongs to Users.id
 
 

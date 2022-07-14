@@ -33,3 +33,23 @@ npx sequelize model:generate --name DirectMessage --attributes senderId:int,dire
 npx sequelize model:generate --name UserSetting --attributes userId:int,theme:string,recoveryQuestion1:string,hashedAnswer1:string,recoveryQuestion2:string,hashedAnswer2:string,recoveryQuestion3:string,hashedAnswer3:string
 
 npx sequelize model:generate --name PasswordHistory --attributes userId:int,previousHashedPassword:string
+
+
+npx sequelize seed:generate --name usersSeed
+npx sequelize seed:generate --name listingSeed
+npx sequelize seed:generate --name listingPricesSeed
+npx sequelize seed:generate --name amenitiesSeed
+npx sequelize seed:generate --name listingAmenitiesSeed
+npx sequelize seed:generate --name categoriesSeed
+npx sequelize seed:generate --name listingCategoriesSeed
+npx sequelize seed:generate --name reviewsSeed
+npx sequelize seed:generate --name imagesSeed
+npx sequelize seed:generate --name bookingsSeed
+npx sequelize seed:generate --name listingBrowseHistoriesSeed
+npx sequelize seed:generate --name searchHistoriesSeed
+npx sequelize seed:generate --name wishlistSeed
+npx sequelize seed:generate --name wishlistListingSeed
+npx sequelize seed:generate --name directMessageThreadSeed
+npx sequelize seed:generate --name directMessageSeed
+npx sequelize seed:generate --name userSettingSeed
+npx sequelize seed:generate --name passwordHistorySeed

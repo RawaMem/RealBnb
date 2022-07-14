@@ -2,8 +2,6 @@
 
 ## Database Schema Design
 
-`<insert database schema design here>`
-
 ## API Documentation
 
 ## FEATURE 0: USER AUTHORIZATION

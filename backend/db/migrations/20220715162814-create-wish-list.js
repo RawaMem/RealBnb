@@ -9,27 +9,36 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       userId: {
-        type: Sequelize.INTEGER
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: { model: 'Users' }
       },
       name: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       checkIn: {
+        allowNull: false,
         type: Sequelize.DATE
       },
       checkOut: {
+        allowNull: false,
         type: Sequelize.DATE
       },
       adultGuests: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       childGuests: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       infantGuests: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       petGuests: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       createdAt: {

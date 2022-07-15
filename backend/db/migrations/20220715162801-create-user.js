@@ -13,10 +13,41 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
+      firstName: {
+        type: Sequelize.STRING(30),
+        allowNull: false
+      },
+      lastName: {
+        type: Sequelize.STRING(30),
+        allowNull: false
+      },
       email: {
         type: Sequelize.STRING(256),
         allowNull: false,
         unique: true,
+      },
+      host: {
+        allowNull: false,
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+      },
+      superHost: {
+        allowNull: false,
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+      },
+      identityVerified: {
+        allowNull: false,
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+      },
+      aboutMe: {
+        type: Sequelize.STRING(2000),
+        allowNull: false,
+      },
+      duringStay: {
+        type: Sequelize.STRING(2000),
+        allowNull: false,
       },
       hashedPassword: {
         type: Sequelize.STRING.BINARY,

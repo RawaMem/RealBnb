@@ -9,33 +9,45 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       authorId: {
-        type: Sequelize.INTEGER
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: { model: 'Users' }
       },
       listingId: {
-        type: Sequelize.INTEGER
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: { model: 'Listings' }
       },
       content: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       starRating: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       cleanliness: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       communication: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       checkIn: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       accuracy: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       location: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       value: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       createdAt: {

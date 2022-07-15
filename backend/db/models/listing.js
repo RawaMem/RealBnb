@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     latitude: DataTypes.DECIMAL
   }, {});
   Listing.associate = function(models) {
-    // associations can be defined here
+    
   };
   return Listing;
 };

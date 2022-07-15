@@ -138,3 +138,78 @@
         }
 }
 ```
+
+## Chats
+
+```js
+"chats": {              // to differentiate between the two types of convos
+    "hosting": {
+        1: {            // this would be the chatId
+            "Host": {
+                "id": 1,
+                "username": "demo-user",
+                "firstName": "Demo",
+                "lastName": "User",
+                "email": "demo@user.io",
+                "profileImg": "image url",
+                "host": true
+            },
+            "User": {
+                "id": 2,
+                "username": "fake-user",
+                "firstName": "Fake",
+                "lastName": "User",
+                "email": "fake@user.io",
+                "profileImg": "image url",
+                "host": true
+            },
+            "Messages": {
+                1: {
+                    "senderId": 1,
+                    "message": "How many towels will you need?",
+                    "createdAt": "2023-07-11 15:22:32:00UTC"
+                },
+                2: {
+                    "senderId": 2,
+                    "message": "4 would be great!",
+                    "createdAt": "2023-07-11 15:25:52:00UTC"
+                }
+            }
+        }
+    },
+    "renting": {
+        1: {            // this would be the chatId
+            "Host": {
+                "id": 2,
+                "username": "fake-user",
+                "firstName": "Fake",
+                "lastName": "User",
+                "email": "fake@user.io",
+                "profileImg": "image url",
+                "host": true
+            },
+            "User": {
+                "id": 1,
+                "username": "demo-user",
+                "firstName": "Demo",
+                "lastName": "User",
+                "email": "demo@user.io",
+                "profileImg": "image url",
+                "host": true
+            },
+            "Messages": {
+                1: {
+                    "senderId": 2,
+                    "message": "How many towels will you need?",
+                    "createdAt": "2023-07-11 15:22:32:00UTC"
+                },
+                2: {
+                    "senderId": 1,
+                    "message": "4 would be great!",
+                    "createdAt": "2023-07-11 15:25:52:00UTC"
+                }
+            }
+        }
+    }
+}
+```

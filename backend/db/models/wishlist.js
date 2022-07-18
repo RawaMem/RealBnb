@@ -12,6 +12,13 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   WishList.associate = function(models) {
     // associations can be defined here
+
+    const columnMap = {
+      through: 'WishListListing',
+      foreignKey: 'wishlistId',
+      otherKey: 'listingId'
+    }
+    WishList.belongsToMany(models.Listing, { columnMap })
   };
   return WishList;
 };

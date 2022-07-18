@@ -6,6 +6,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   ListingBrowseHistory.associate = function(models) {
     // associations can be defined here
+    ListingBrowseHistory.belongsTo(models.Listing, { foreignKey: 'listingId' });
+
   };
   return ListingBrowseHistory;
 };

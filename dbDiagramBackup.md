@@ -12,6 +12,10 @@
 | email        | varchar        | not null, unique       |
 | profileImg        | varchar        | not null       |
 | host        | bool        | not null, default: false       |
+| superHost        | bool        | not null, default: false       |
+| identityVerified        | bool        | not null, default: false       |
+| aboutMe        | string        | not null, default: false       |
+| duringStay        | string        | not null, default: false       |
 | hashedpassword  | varchar     | not null  |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
@@ -41,7 +45,8 @@ Users.id has many PasswordHistories.userId
 | previewImageId     | int        | not null       |
 | name    | varchar        | not null       |
 | description     | varchar        | not null       |
-| pricePerDay        | decimal        | not null       |
+| maxGuests        | int        | not null       |
+| airCover        | bool        | not null       |
 | serviceFee  | decimal     | not null  |
 | cleaningFee  | decimal     | not null  |
 | city  | varchar     | not null  |
@@ -65,6 +70,18 @@ Listing.id has many Images.listingId
 
 something to consider: we can have 2 listings in the same place, potentitially for people who rent out rooms in the same location
 so no unique constraint at this point
+
+## `Rooms`
+
+| Column Name  | Data Type      | Details       |
+|   ---        |     ---        |     ---       |
+| id           | int            | not null, pk, increment    |
+| ownerId  | int     | not null  |
+| listingId     | int        | not null       |
+| name    | varchar        | not null       |
+| bed     | varchar        | not null       |
+| createdAt    | datetime       | not null       |
+| updatedAt    | datetime       | not null       |
 
 
 
@@ -145,6 +162,7 @@ Categories belongs to many Listings through ListingsCategories
 | communication  | int     | not null  |
 | checkIn  | int     | not null  |
 | accuracy  | int     | not null  |
+| location  | int     | not null  |
 | value  | int     | not null  |
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
@@ -284,7 +302,7 @@ WishLists belongs to many Listing through WishlistListings
 | createdAt    | datetime       | not null       |
 | updatedAt    | datetime       | not null       |
 
-## `ChatSessions`
+<!-- ## `ChatSessions`
 
 | Column Name  | Data Type      | Details       |
 |   ---        |     ---        |     ---       |
@@ -312,7 +330,7 @@ ChatSessions.listingId belongs to Listings.id
 | updatedAt    | datetime       | not null       |
 
 SessionMessages.senderId belongs to Users.id
-SessionMessages.chatSessionId belongs to ChatSessions.id
+SessionMessages.chatSessionId belongs to ChatSessions.id -->
 
 
 

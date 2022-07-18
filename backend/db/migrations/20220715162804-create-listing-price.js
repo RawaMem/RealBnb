@@ -9,15 +9,20 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       listingId: {
-        type: Sequelize.INTEGER
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: { model: 'Listings' }
       },
       pricePerDay: {
+        allowNull: false,
         type: Sequelize.DECIMAL
       },
       startDate: {
+        allowNull: false,
         type: Sequelize.DATE
       },
       endDate: {
+        allowNull: false,
         type: Sequelize.DATE
       },
       createdAt: {

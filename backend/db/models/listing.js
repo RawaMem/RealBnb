@@ -17,7 +17,17 @@ module.exports = (sequelize, DataTypes) => {
     latitude: DataTypes.DECIMAL
   }, {});
   Listing.associate = function(models) {
-    // associations can be defined here
+    Listing.belongsTo(models.User, { foreignKey: 'ownerId' });
+    Listing.hasMany(models.Review, { foreignKey: 'authorId'})
+    Listing.belongsTo(models.Image, { foreignKey: 'previewImageId' });
+    Listing.hasMany(models.Image, { foreignKey: 'listingId' });
+
+    const columnMap = {
+      through: 'ListingAmenities',
+      foreignKey: 'listingId',
+      otherKey: 'categoryId'
+    }
+    Listing.belongsToMany(models.Category, { columnMap })
   };
   return Listing;
 };

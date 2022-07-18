@@ -9,9 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
-        type: Sequelize.STRING
-      },
-      iconUrl: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       createdAt: {

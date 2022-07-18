@@ -9,10 +9,14 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       wishlistId: {
-        type: Sequelize.INTEGER
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: { model: 'WishLists' }
       },
       listingId: {
-        type: Sequelize.INTEGER
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: { model: 'Listings' }
       },
       createdAt: {
         allowNull: false,

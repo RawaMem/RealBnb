@@ -9,28 +9,37 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       userId: {
-        type: Sequelize.INTEGER
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: { model: 'Users' }
       },
       theme: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       recoveryQuestion1: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       hashedAnswer1: {
-        type: Sequelize.STRING
+        allowNull: false,
+        type: Sequelize.STRING.BINARY
       },
       recoveryQuestion2: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       hashedAnswer2: {
-        type: Sequelize.STRING
+        allowNull: false,
+        type: Sequelize.STRING.BINARY
       },
       recoveryQuestion3: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       hashedAnswer3: {
-        type: Sequelize.STRING
+        allowNull: false,
+        type: Sequelize.STRING.BINARY
       },
       createdAt: {
         allowNull: false,

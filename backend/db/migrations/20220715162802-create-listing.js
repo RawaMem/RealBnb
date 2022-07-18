@@ -9,45 +9,61 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       ownerId: {
-        type: Sequelize.INTEGER
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: { model: 'Users' }
       },
       previewImageId: {
-        type: Sequelize.INTEGER
+        allowNull: true,
+        type: Sequelize.INTEGER,
+        references: { model: 'Images' }
       },
       name: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       description: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       serviceFee: {
+        allowNull: false,
         type: Sequelize.DECIMAL
       },
       serviceFee: {
+        allowNull: false,
         type: Sequelize.DECIMAL
       },
       cleaningFee: {
+        allowNull: false,
         type: Sequelize.DECIMAL
       },
       numRooms: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       maxGuests: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       city: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       state: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       zipCode: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       longitude: {
+        allowNull: false,
         type: Sequelize.DECIMAL
       },
       latitude: {
+        allowNull: false,
         type: Sequelize.DECIMAL
       },
       createdAt: {

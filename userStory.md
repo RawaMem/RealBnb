@@ -5,10 +5,10 @@
 ### Sign Up
 
 - As a registered and unauthorized user, I would like to find a Sign up button by clicking on a profile logo on the navigation bar. I should then see a drop down modal of choices where the Sign up button is located at. 
-- I want to be redirected to `api/users/signup` after clicking the Sign up button.
+- I want to be redirected to `users/signup` after clicking the Sign up button.
 - I want to be able to sign up for the website via the sign-up form.
 
-    - When I'm on the `api/users/signup` page:
+    - When I'm on the `users/signup` page:
 
         - I would like to be able to enter my email, first name, last name and preferred password on a clearly laid out form.
         - I would like the website to log me in upon successful completion of the sign-up form.
@@ -21,13 +21,13 @@
 ### Log in
 
 - As a registered and unauthorized user, I would like to find a Log in button by clicking on a profile logo on the navigation bar. I should then see a drop down modal of choices where the Log in button is located at. 
-- I want to be redirected to `api/users/login` after clicking the Log in button.
+- I want to be redirected to `users/login` after clicking the Log in button.
 - I want to be able to log in to the website via the log-in form.
 
-    - When I'm on the `api/users/login` page:
+    - When I'm on the `users/login` page:
 
         - I would like to be able to enter my email and password on a clearly laid out form.
-        - I would like the website to log me in to all listings page `api/listings` upon successful completion of the log-in form.
+        - I would like the website to log me in to all listings page `listings` upon successful completion of the log-in form.
             - So that I can seamlessly review all listed rooms and access the site's functionality.
     - When I enter invalid data on the log-in form:
 
@@ -36,9 +36,9 @@
 
 ### Demo User
 
-- As an unregistered and unauthorized user, I would like an easy to find and clear button on both the `api/users/signup` and `api/users/login` pages to allow me to visit the site as a guest without signing up or logging in.
+- As an unregistered and unauthorized user, I would like an easy to find and clear button on both the `users/signup` and `users/login` pages to allow me to visit the site as a guest without signing up or logging in.
 
-    - When I'm on either the `api/users/signup` or `api/users/login`:
+    - When I'm on either the `users/signup` or `users/login`:
     
         - I can click on a `Continue as Guest` button to log me in and allow me certain accesses as a normal user.
             - So that I can test the site's features and functionality without needing to stop and enter credentials.
@@ -50,6 +50,83 @@
     - While on any page of the site:
         - I can log out of my account via the same log out button located at the same place and remain on the same page.
             - So that I won't lose access to the page I was reviewing before I logged out.
+
+
+## Listing
+
+### Create a listing
+
+- As a logged in user, I want to be able to create new listings.
+    - I can click on a `Become a Host` button on the navigation bar. 
+
+    - I want to be redirected to a video introduction page where I can find a `Let's go!` button, this button will redirect me to select the type of property I would like to list.
+
+    - When I'm on the page that allows me to select the type of property I would like to list. 
+        - I want to have choices of Home, Cabin, Villa, Condominium.
+
+        - I have accesses to a `Back` button, which will bring me back to the video introduction page and a `Next` button to take me to the comfirm address form.
+
+    - When I'm on the confirm address form:
+
+        - I would like to be able to enter my address, city, state, zip code and select country/region on a clearly laid out form.
+
+        - When I enter invalid data on the confirm address form:
+
+            - I would like the website to inform me of the validations I failed to pass, and repopulate the form with my valid entries.
+
+            - So I can try again without having to refill forms that I had entered valid data into.
+
+        - I have accesses to a `Back` button, which will bring me back to the page that allows me to select the type of property I would like to list and a `Next` button to take me to the property accommodation page.
+
+    - When I'm on the property accommodation page:
+
+        - I would like to be able to select guests limit, and beds, bedrooms and bathrooms numbers.
+
+        - I have accesses to a `Back` button, which will bring me back to the the confirm address form and a `Next` button to take me to the amentities selection page.
+
+    - When I'm on the amentities selection page:
+
+        - I would like to be able to select all the amenity names and its respective icons that my property offers.
+
+        - I have accesses to a `Back` button, which will bring me back to the the property accommodation page and a `Next` button to take me to the image uploading page.
+
+    - When I'm on the image uploading form:
+
+        - I would like to drag and drop at least 5 photos to showcase the property I'm listing.
+
+        - I would like to see a video about adding photoes of my place.
+
+        - When I uploaded less than 5 photos on the image uploading page:
+
+            - I would like the website to inform me of the validations I failed to pass, and repopulate the form with the photos I have previously uploaded.
+
+            - So I can add sufficient amount of photos without having to reload the photos I have previously selected and uploaded.
+
+        - I have accesses to a `Back` button, which will bring me back to the the amentities selection page and a `Next` button to take me to the title creation form.
+    
+    - When I'm on the titel creation form:
+
+        - I would like to be able to create a name for my listing.
+        - The `Next` button is disabled when I leave the form empty. 
+        - I can't enter more than 50 characters.
+        - I have accesses to a `Back` button, which will bring me back to the image uploading form and a `Next` button to take me to the description creation form.
+
+    - When I'm on the description creation form:
+
+        - I would like to be able to create a description for my listing.
+        - The `Next` button is disabled when I leave the form empty. 
+        - I can't enter more than 500 characters to describe my listing.
+        - I have accesses to a `Back` button, which will bring me back to the titel creation form and a `Next` button to take me to price setting form.
+
+
+        
+        
+
+
+        
+                
+
+
 
 
 

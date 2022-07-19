@@ -19,6 +19,10 @@ module.exports = (sequelize, DataTypes) => {
       otherKey: 'listingId'
     }
     WishList.belongsToMany(models.Listing, { columnMap })
+
+    WishList.hasMany(models.User, { foreignKey: 'userId' });
+
+
   };
   return WishList;
 };

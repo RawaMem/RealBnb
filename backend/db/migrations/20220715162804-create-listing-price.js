@@ -13,6 +13,11 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: { model: 'Listings' }
       },
+      userId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: { model: 'Users' }
+      },
       pricePerDay: {
         allowNull: false,
         type: Sequelize.DECIMAL

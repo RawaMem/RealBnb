@@ -60,6 +60,8 @@ module.exports = (sequelize, DataTypes) => {
     User.hasMany(models.DirectMessage, { foreignKey: 'senderId' });
     User.hasMany(models.Booking, { foreignKey: 'userId' });
     User.hasMany(models.ListingBrowseHistory, { foreignKey: 'userId' });
+    User.hasMany(models.ListingPrice, { foreignKey: 'userId' });
+    User.hasMany(models.WishList, { foreignKey: 'userId' });
 
   };
 

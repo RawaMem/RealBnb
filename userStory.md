@@ -59,64 +59,60 @@
 - As a logged in user, I want to be able to create new listings.
     - I can click on a `Become a Host` button on the navigation bar. 
 
-    - I want to be redirected to a video introduction page where I can find a `Let's go!` button, this button will redirect me to select the type of property I would like to list.
+    - I want to be redirected to a video introduction page where I can find a `Let's go!` button, this button will redirect me to the listing form.
+    
+    - When I'm on the listing form:
+        - I would like to be able to select the type of property I would like to list.
+            - I want to have choices of Home, Cabin, Villa, Condominium.
 
-    - When I'm on the page that allows me to select the type of property I would like to list. 
-        - I want to have choices of Home, Cabin, Villa, Condominium.
+        - I would like to be able to enter my address, city, state, zip code and select country/region.
 
-        - I have accesses to a `Back` button, which will bring me back to the video introduction page and a `Next` button to take me to the comfirm address form.
+            - When I enter invalid data on the above columns:
 
-    - When I'm on the confirm address form:
+                - I would like the website to inform me of the validations I failed to pass, and repopulate the form with my valid entries.
 
-        - I would like to be able to enter my address, city, state, zip code and select country/region on a clearly laid out form.
-
-        - When I enter invalid data on the confirm address form:
-
-            - I would like the website to inform me of the validations I failed to pass, and repopulate the form with my valid entries.
-
-            - So I can try again without having to refill forms that I had entered valid data into.
-
-        - I have accesses to a `Back` button, which will bring me back to the page that allows me to select the type of property I would like to list and a `Next` button to take me to the property accommodation page.
-
-    - When I'm on the property accommodation page:
+                - So I can try again without having to refill forms that I had entered valid data into.
 
         - I would like to be able to select guests limit, and beds, bedrooms and bathrooms numbers.
 
-        - I have accesses to a `Back` button, which will bring me back to the the confirm address form and a `Next` button to take me to the amentities selection page.
-
-    - When I'm on the amentities selection page:
-
         - I would like to be able to select all the amenity names and its respective icons that my property offers.
-
-        - I have accesses to a `Back` button, which will bring me back to the the property accommodation page and a `Next` button to take me to the image uploading page.
-
-    - When I'm on the image uploading form:
 
         - I would like to drag and drop at least 5 photos to showcase the property I'm listing.
 
-        - I would like to see a video about adding photoes of my place.
+            - When I uploaded less than 5 photos on the image uploading page:
 
-        - When I uploaded less than 5 photos on the image uploading page:
+                - I would like the website to inform me of the validations I failed to pass, and repopulate the form with the photos I have previously uploaded.
 
-            - I would like the website to inform me of the validations I failed to pass, and repopulate the form with the photos I have previously uploaded.
-
-            - So I can add sufficient amount of photos without having to reload the photos I have previously selected and uploaded.
-
-        - I have accesses to a `Back` button, which will bring me back to the the amentities selection page and a `Next` button to take me to the title creation form.
-    
-    - When I'm on the titel creation form:
+                - So I can add sufficient amount of photos without having to reload the photos I have previously selected and uploaded.
 
         - I would like to be able to create a name for my listing.
-        - The `Next` button is disabled when I leave the form empty. 
-        - I can't enter more than 50 characters.
-        - I have accesses to a `Back` button, which will bring me back to the image uploading form and a `Next` button to take me to the description creation form.
-
-    - When I'm on the description creation form:
+            - I can't enter more than 50 characters.
 
         - I would like to be able to create a description for my listing.
-        - The `Next` button is disabled when I leave the form empty. 
-        - I can't enter more than 500 characters to describe my listing.
-        - I have accesses to a `Back` button, which will bring me back to the titel creation form and a `Next` button to take me to price setting form.
+            - I can't enter more than 500 characters to describe my listing.
+
+        - I would like to be able to set a price for my listing.
+        - I have access to a `Save your listing` button that will confirm my new listing.
+
+### Edit/Delete listing
+- As a logged in user, and a host, I want to be able to edit my existing listings.
+    - I can click on a `Switch to hosting` button on the navigation bar.
+
+    - I want to be redirected to a host profile page. 
+    - When I'm on the host profile page:
+        - I can find a `Menu` dropdown button on the navbar, where I will be able to find a Listing option.
+        - I want to see all my listings on `/users/:userId/listings` after I click on the Listing option where I will have choices to either edit or delete existing listings.
+
+### Review listings
+- As a logged in user, I want to be able to see all existing listings of Realbnb on `/listings`.
+    - When I'm on `/listings` page:
+        - I want to be able to filter review results by price range, type of place, number of bedrooms and beds, perperty type, and the essentials of amenities.
+
+### Review a single listing
+- As a logged in user, I want to be able to see details of a listing on `/listings/:id` by click on any of the listings on `/listings`page.
+    - When I'm on the `/listings` page:
+        - I would like to review the name, city, state, country, images, accommodation size, price, and reviews from other guests of the property.
+        - I also want to see a booking form on this page.
 
 
         

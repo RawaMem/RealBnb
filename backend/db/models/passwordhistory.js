@@ -6,6 +6,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   PasswordHistory.associate = function(models) {
     // associations can be defined here
+    PasswordHistory.belongsTo(models.User, { foreignKey: 'userId' });
+
   };
   return PasswordHistory;
 };

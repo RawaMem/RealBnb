@@ -6,6 +6,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   DirectMessageThread.associate = function(models) {
     // associations can be defined here
+    UserSetting.belongsTo(models.User, { foreignKey: 'userId' });
+
   };
   return DirectMessageThread;
 };

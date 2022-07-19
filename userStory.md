@@ -114,6 +114,26 @@
         - I would like to review the name, city, state, country, images, accommodation size, price, and reviews from other guests of the property.
         - I also want to see a booking form on this page.
 
+## Bookings
+
+### Make a booking. 
+- As a logged in user, I want to be see a booking form on every `/listings/:id` page.
+    - When I'm on the booking form:
+        - I want to be able to see the unit price/night, and select my check-in date, checkout date, and guests number.
+        - I want to see the total charge based on my selections.
+
+### Review all bookings.
+- As a logged in user, I want to like to be able to click on a profile logo on the navbar and find a `review my bookings` option among the selections.
+- I will be redirected to `/bookings` page when I click on `review my bookins` option, where I can review all my bookings.
+
+### Review/ Edit/ Delete a single booking
+#### Review
+- As a logged in user, when I'm on `/bookings` page, I want to be able to click on any of the listed bookings and be redirected to `/bookings/:bookingId` where I can review details of the selected booking. 
+
+#### Edit/ Delete
+- As a logged in user, when I'm on `/bookings/:bookingId`, I want to have access to edit or to delete the selected booking.
+
+
 
         
         

@@ -92,7 +92,28 @@
             - I can't enter more than 500 characters to describe my listing.
 
         - I would like to be able to set a price for my listing.
-        - I have access to a Save your listing button that will confirm my new listing.
+        - I have access to a `Save your listing` button that will confirm my new listing.
+
+### Edit/Delete listing
+- As a logged in user, and a host, I want to be able to edit my existing listings.
+    - I can click on a `Switch to hosting` button on the navigation bar.
+
+    - I want to be redirected to a host profile page. 
+    - When I'm on the host profile page:
+        - I can find a `Menu` dropdown button on the navbar, where I will be able to find a Listing option.
+        - I want to see all my listings on `/users/:userId/listings` after I click on the Listing option where I will have choices to either edit or delete existing listings.
+
+### Review listings
+- As a logged in user, I want to be able to see all existing listings of Realbnb on `/listings`.
+    - When I'm on `/listings` page:
+        - I want to be able to filter review results by price range, type of place, number of bedrooms and beds, perperty type, and the essentials of amenities.
+
+### Review a single listing
+- As a logged in user, I want to be able to see details of a listing on `/listings/:id` by click on any of the listings on `/listings`page.
+    - When I'm on the `/listings` page:
+        - I would like to review the name, city, state, country, images, accommodation size, price, and reviews from other guests of the property.
+        - I also want to see a booking form on this page.
+
 
         
         

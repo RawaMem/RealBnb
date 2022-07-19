@@ -8,6 +8,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   ListingPrice.associate = function(models) {
     // associations can be defined here
+    ListingPrice.belongsTo(models.Listing, { foreignKey: 'listingId' });
+
   };
   return ListingPrice;
 };

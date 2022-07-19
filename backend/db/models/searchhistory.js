@@ -12,6 +12,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   SearchHistory.associate = function(models) {
     // associations can be defined here
+    SearchHistory.belongsTo(models.User, { foreignKey: 'userId' });
+
   };
   return SearchHistory;
 };

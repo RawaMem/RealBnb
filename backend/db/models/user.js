@@ -51,6 +51,8 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     User.hasMany(models.Listing, { foreignKey: 'ownerId' });
     User.hasMany(models.Review, { foreignKey: 'authorId' });
+    User.hasMany(models.Image, { foreignKey: 'userId' });
+    User.hasMany(models.SearchHistory, { foreignKey: 'userId' });
 
   };
 

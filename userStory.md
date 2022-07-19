@@ -114,6 +114,94 @@
         - I would like to review the name, city, state, country, images, accommodation size, price, and reviews from other guests of the property.
         - I also want to see a booking form on this page.
 
+## Bookings
+
+### Make a booking. 
+- As a logged in user, I want to be see a booking form on every `/listings/:id` page.
+    - When I'm on the booking form:
+        - I want to be able to see the unit price/night, and select my check-in date, checkout date, and guests number.
+        - I want to see the total charge based on my selections.
+
+### Review all bookings.
+- As a logged in user, I want to like to be able to click on a profile logo on the navbar and find a `review my bookings` option among the selections.
+- I will be redirected to `/bookings` page when I click on `review my bookins` option, where I can review all my bookings.
+
+### Review/ Edit/ Delete a single booking
+#### Review
+- As a logged in user, when I'm on `/bookings` page, I want to be able to click on any of the listed bookings and be redirected to `/bookings/:bookingId` where I can review details of the selected booking. 
+
+#### Edit/ Delete
+- As a logged in user, when I'm on `/bookings/:bookingId`, I want to have access to edit or to delete the selected booking.
+
+## Reviews
+
+### Review all comments for a listing.
+- As a logged in user, when I'm on the `/listings/:id` page, I woule like to see the average score (1-5) of the listing that I'm currently reviewing; I would also like to see a clickable link of the number of reviews that are written for the listing.
+- When I click on the review link, I would like to see a portal slide up.
+    - When I'm on the portal:
+        - I would like to see the average score for the Cleanliness, Accuracy, Communication, Location, Check-in and Value of the listing.
+        - I would like to see all reviews for the listing.
+            - For each of the reviews, I would like to see the user name and profile photo, date when the review is written and content of the review.
+
+### Create a review for a listing.
+- As a logged in user, I would like to be able to write down my experience and reviews after checking out.
+
+### Edit/Delete a review for a listing.
+- As a logged in user, I would like to be able to edit and delete any of the reviews I have written in my profile.
+
+## Wishlists
+
+### Review wishlists
+
+- As a logged in user, I would like to find a `Wishlists` selection when I click on my profile logo on navbar.
+- I would like to be redirected to `/wishlists` page after clicking on the `Wishlists` selection.
+    - When I'm on `/wishlists` page:
+        - I would be able to review all my wishlists folders.
+        - I will be redirected to `/wishlists/:wishlistsId` page after I click on any of my wishlists folders.
+        - When I'm on `/wishlists/:wishlistsId` page:
+            - I should be able to see all listings saved under this wishlists folder and their locations marked on a Google map. 
+            - I can click on any of the saved listing and be redirected to the `/listing/:id` page.
+
+### Edit/Delete a wishlist folder
+
+- As a logged in user, when I'm on `/wishlists/:wishlistsId` page:
+    - I would like to have a setting button. When I click on the setting button, I would like to see a Modal.
+        - When I'm on the Modal:
+            - I would like to be able to rename and delete my wishlist folder.
+            - When I enter more than 50 characters to rename my wishlist folder:
+                - I would like the website to inform me of the validations I failed to pass.
+            - I would like to have access to a `Cancel` button in case I decide not to make any change to my wish list folder.
+
+### Remove a listing from a wishlist folder
+
+- As a logged in user, when I'm on the `/wishlists/:wishlistsId` page:
+    - I would like to see a heart shaped button highlighted on every saved listings.
+    - I would like to be able to remove a saved listing from the wishlist folder by clicking on the heart shaped button.  
+
+### Create a wishlist folder
+
+- As a logged in user, when I'm on the `/listings/:id` page, I would like to see a `Save` link. A Modal will pop up when I click on the `Save` link.
+    - When I'm on the Modal:
+        - I would like to see a `Create new wishlist` Link and all my existing wishlist folders.
+        - When I clik on the `Create new wishlist` link, I would like to see another Modal where I can create a new wishlist folder and add the listing to it.
+        - When I enter more than 50 characters to name my wishlist folder:
+            - I would like the website to inform me of the validations I failed to pass.
+
+### Add to a wishlist folder
+
+- As a logged in user, when I'm on the `/listings/:id` page, I would like to see a `Save` link. A Modal will pop up when I click on the `Save` link.
+    - When I'm on the Modal:
+        - I would like to see a `Create new wishlist` Link and all my existing wishlist folders.
+        - I have two options to add the current listing to my wishlist:
+            - I can click on the `Create new wishlist` Link to create a new wishlist folder then add the listing to the newly created wishlist folder.
+            - I can select any of the existing wishlist folders and add the listing to it.
+
+
+
+
+
+
+
 
         
         

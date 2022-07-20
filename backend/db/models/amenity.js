@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
   Amenity.associate = function(models) {
     // associations can be defined here
     const columnMap = {
-      through: 'ListingAmenities',
+      through: 'ListingAmenity',
       foreignKey: 'amenityId',
       otherKey: 'listingId'
     }

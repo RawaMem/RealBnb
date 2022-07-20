@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     }
     WishList.belongsToMany(models.Listing, { columnMap })
 
-    WishList.hasMany(models.User, { foreignKey: 'userId' });
+    WishList.belongsTo(models.User, { foreignKey: 'userId' });
 
 
   };

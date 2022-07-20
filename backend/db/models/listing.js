@@ -18,22 +18,23 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Listing.associate = function(models) {
     Listing.belongsTo(models.User, { foreignKey: 'ownerId' });
-    Listing.hasMany(models.Review, { foreignKey: 'authorId'})
+    Listing.hasMany(models.Review, { foreignKey: 'listingId'})
     Listing.belongsTo(models.Image, { foreignKey: 'previewImageId' });
     Listing.hasMany(models.Image, { foreignKey: 'listingId' });
     Listing.hasMany(models.ListingBrowseHistory, { foreignKey: 'listingId' });
     Listing.hasMany(models.ListingPrice, { foreignKey: 'listingId' });
+    Listing.hasMany(models.Booking, { foreignKey: 'listingId' });
 
 
     const columnMap1 = {
-      through: 'ListingCategories',
+      through: 'ListingCategory',
       foreignKey: 'listingId',
       otherKey: 'categoryId'
     }
     Listing.belongsToMany(models.Category, { columnMap1 })
 
     const columnMap2 = {
-      through: 'ListingAmenities',
+      through: 'ListingAmenity',
       foreignKey: 'listingId',
       otherKey: 'amenityId'
     }
@@ -44,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'listingId',
       otherKey: 'wishlistId'
     }
-    Listing.belongsToMany(models.Amenity, { columnMap3 })
+    Listing.belongsToMany(models.WishList, { columnMap3 })
   };
   return Listing;
 };

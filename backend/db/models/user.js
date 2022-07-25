@@ -53,6 +53,15 @@ module.exports = (sequelize, DataTypes) => {
     User.hasMany(models.Review, { foreignKey: 'authorId' });
     User.hasMany(models.Image, { foreignKey: 'userId' });
     User.hasMany(models.SearchHistory, { foreignKey: 'userId' });
+    User.hasMany(models.PasswordHistory, { foreignKey: 'userId' });
+    User.hasMany(models.UserSetting, { foreignKey: 'userId' });
+    User.hasMany(models.DirectMessageThread, { foreignKey: 'hostId' }); //needs alias
+    User.hasMany(models.DirectMessageThread, { foreignKey: 'guestId' }); //needs alias
+    User.hasMany(models.DirectMessage, { foreignKey: 'senderId' });
+    User.hasMany(models.Booking, { foreignKey: 'userId' });
+    User.hasMany(models.ListingBrowseHistory, { foreignKey: 'userId' });
+    User.hasMany(models.ListingPrice, { foreignKey: 'userId' });
+    User.hasMany(models.WishList, { foreignKey: 'userId' });
 
   };
 

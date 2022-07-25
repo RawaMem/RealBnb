@@ -7,13 +7,13 @@ module.exports = (sequelize, DataTypes) => {
   Category.associate = function(models) {
     // associations can be defined here
     const columnMap = {
-      through: 'ListingCategories',
+      through: 'ListingCategory',
       foreignKey: 'categoryId',
       otherKey: 'listingId'
     }
     Category.belongsToMany(models.Listing, { columnMap })
 
-  
+
 
   };
   return Category;

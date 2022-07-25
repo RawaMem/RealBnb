@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
   ListingBrowseHistory.associate = function(models) {
     // associations can be defined here
     ListingBrowseHistory.belongsTo(models.Listing, { foreignKey: 'listingId' });
+    ListingBrowseHistory.belongsTo(models.User, { foreignKey: 'userId' });
 
   };
   return ListingBrowseHistory;

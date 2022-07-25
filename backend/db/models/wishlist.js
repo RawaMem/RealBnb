@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     WishList.belongsToMany(models.Listing, { columnMap })
 
     WishList.belongsTo(models.User, { foreignKey: 'userId' });
+    WishList.hasMany(models.WishListListing, { foreignKey: 'wishlistId', onDelete: 'cascade', hooks: 'true' });
 
 
   };

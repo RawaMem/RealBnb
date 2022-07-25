@@ -17,13 +17,18 @@ module.exports = (sequelize, DataTypes) => {
     latitude: DataTypes.DECIMAL
   }, {});
   Listing.associate = function(models) {
+    //need to figure out onCascade delete for listings and images also with previewimage, might lead to circular delete, possible solition is make listingId nullable on image and for preview image leave it blank
     Listing.belongsTo(models.User, { foreignKey: 'ownerId' });
-    Listing.hasMany(models.Review, { foreignKey: 'listingId'})
-    Listing.belongsTo(models.Image, { foreignKey: 'previewImageId' });
-    Listing.hasMany(models.Image, { foreignKey: 'listingId' });
-    Listing.hasMany(models.ListingBrowseHistory, { foreignKey: 'listingId' });
-    Listing.hasMany(models.ListingPrice, { foreignKey: 'listingId' });
-    Listing.hasMany(models.Booking, { foreignKey: 'listingId' });
+    Listing.hasMany(models.Review, { foreignKey: 'listingId', onDelete: 'cascade', hooks: 'true'})
+    //docs say to use singular for belongsTo aliases and plural for hasMany aliases
+    Listing.belongsTo(models.Image, { foreignKey: 'previewImageId', as: 'previewImage', onDelete: 'cascade', hooks: 'true' }); //has alias
+    Listing.hasMany(models.Image, { foreignKey: 'listingId', as: 'allImages', onDelete: 'cascade', hooks: 'true' }); //has alias
+    Listing.hasMany(models.ListingBrowseHistory, { foreignKey: 'listingId', onDelete: 'cascade', hooks: 'true' });
+    Listing.hasMany(models.ListingPrice, { foreignKey: 'listingId', onDelete: 'cascade', hooks: 'true' });
+    Listing.hasMany(models.Booking, { foreignKey: 'listingId', onDelete: 'cascade', hooks: 'true' });
+    Listing.hasMany(models.WishListListing, { foreignKey: 'listingId', onDelete: 'cascade', hooks: 'true' });
+    Listing.hasMany(models.ListingCategory, { foreignKey: 'listingId', onDelete: 'cascade', hooks: 'true' });
+    Listing.hasMany(models.ListingAmenity, { foreignKey: 'listingId', onDelete: 'cascade', hooks: 'true' });
 
 
     const columnMap1 = {

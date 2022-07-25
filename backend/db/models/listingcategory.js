@@ -6,6 +6,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   ListingCategory.associate = function(models) {
     // associations can be defined here
+    ListingCategory.belongsTo(models.Listing, { foreignKey: 'listingId'});
+
   };
   return ListingCategory;
 };

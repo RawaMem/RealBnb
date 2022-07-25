@@ -6,6 +6,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   WishListListing.associate = function(models) {
     // associations can be defined here
+    WishListListing.belongsTo(models.Listing, { foreignKey: 'listingId'});
+    WishListListing.belongsTo(models.WishList, { foreignKey: 'wishlistId'});
   };
   return WishListListing;
 };

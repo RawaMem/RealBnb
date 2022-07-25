@@ -8,8 +8,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Image.associate = function(models) {
     // associations can be defined here
-    //should work without alias from this side for the 2 listing relationships but we might need it
-    Image.hasMany(models.Listing, { foreignKey: 'previewImageId'});
+    //should work without alias from this side for the listing relationship but we might need it
     Image.belongsTo(models.Listing, { foreignKey: 'listingId' });
     Image.belongsTo(models.User, { foreignKey: 'userId' });
 

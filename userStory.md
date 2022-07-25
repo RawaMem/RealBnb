@@ -113,6 +113,7 @@
     - When I'm on the `/listings` page:
         - I would like to review the name, city, state, country, images, accommodation size, price, and reviews from other guests of the property.
         - I also want to see a booking form on this page.
+        - I want to see the listing location on a Google map.
 
 ## Bookings
 
@@ -195,6 +196,14 @@
         - I have two options to add the current listing to my wishlist:
             - I can click on the `Create new wishlist` Link to create a new wishlist folder then add the listing to the newly created wishlist folder.
             - I can select any of the existing wishlist folders and add the listing to it.
+
+## Search
+
+- As a logged in user, I would like to be able to search for listings based on destinations on the navbars of every page.
+
+## Messages / Chat between hosts and Realbnber
+
+- As a logged in user, when I'm on the `/listings/:id` page, I would like to have access to a `Contact Host` button that will bring up a chat box, alowing me to leave a message or to chat with the host.
 
 
 

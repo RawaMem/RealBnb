@@ -13,10 +13,9 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: { model: 'Users' }
       },
-      previewImageId: {
+      previewImageUrl: {
         allowNull: true,
-        type: Sequelize.INTEGER,
-        references: { model: 'Images' }
+        type: Sequelize.STRING
       },
       name: {
         allowNull: false,

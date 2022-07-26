@@ -40,7 +40,7 @@ module.exports = {
         identityVerified: false,
         aboutMe: 'Who am I?',
         duringStay: 'Do whatever!'
-      },
+      }
     ], {});
   },
 

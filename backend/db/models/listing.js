@@ -35,21 +35,21 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'listingId',
       otherKey: 'categoryId'
     }
-    Listing.belongsToMany(models.Category, { columnMap1 })
+    Listing.belongsToMany(models.Category, columnMap1)
 
     const columnMap2 = {
       through: 'ListingAmenity',
       foreignKey: 'listingId',
       otherKey: 'amenityId'
     }
-    Listing.belongsToMany(models.Amenity, { columnMap2 })
+    Listing.belongsToMany(models.Amenity, columnMap2)
 
     const columnMap3 = {
       through: 'WishListListing',
       foreignKey: 'listingId',
       otherKey: 'wishlistId'
     }
-    Listing.belongsToMany(models.WishList, { columnMap3 })
+    Listing.belongsToMany(models.WishList, columnMap3)
   };
   return Listing;
 };

@@ -11,10 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'categoryId',
       otherKey: 'listingId'
     }
-    Category.belongsToMany(models.Listing, { columnMap })
-
-
-
+    Category.belongsToMany(models.Listing, columnMap);
   };
   return Category;
 };

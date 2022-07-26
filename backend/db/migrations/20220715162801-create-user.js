@@ -26,17 +26,7 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
-      host: {
-        allowNull: false,
-        type: Sequelize.BOOLEAN,
-        defaultValue: false
-      },
       superHost: {
-        allowNull: false,
-        type: Sequelize.BOOLEAN,
-        defaultValue: false
-      },
-      identityVerified: {
         allowNull: false,
         type: Sequelize.BOOLEAN,
         defaultValue: false

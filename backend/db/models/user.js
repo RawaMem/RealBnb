@@ -40,9 +40,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
     },
-    host: DataTypes.BOOLEAN,
     superHost: DataTypes.BOOLEAN,
-    identityVerified: DataTypes.BOOLEAN,
     aboutMe: DataTypes.STRING,
     duringStay: DataTypes.STRING,
     email: {

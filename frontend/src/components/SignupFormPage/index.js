@@ -9,6 +9,10 @@ function SignupFormPage() {
   const sessionUser = useSelector((state) => state.session.user);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [aboutMe, setAboutMe] = useState("");
+  const [duringStay, setDuringStay] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState([]);
@@ -31,7 +35,7 @@ function SignupFormPage() {
   return (
     <>
       <h1>Sign Up</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
         <ul>
           {errors.map((error, idx) => <li key={idx}>{error}</li>)}
         </ul>
@@ -41,6 +45,42 @@ function SignupFormPage() {
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          First Name
+          <input
+            type="text"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          Last Name
+          <input
+            type="text"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          About Me
+          <input
+            type="text"
+            value={aboutMe}
+            onChange={(e) => setAboutMe(e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          During Stay
+          <input
+            type="text"
+            value={duringStay}
+            onChange={(e) => setDuringStay(e.target.value)}
             required
           />
         </label>

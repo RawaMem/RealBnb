@@ -16,6 +16,35 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
     },
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        len: [2, 15],
+        isNotEmail(value) {
+          if (Validator.isEmail(value)) {
+            throw new Error('Cannot be an email.');
+          }
+        },
+      },
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        len: [2, 30],
+        isNotEmail(value) {
+          if (Validator.isEmail(value)) {
+            throw new Error('Cannot be an email.');
+          }
+        },
+      },
+    },
+    host: DataTypes.BOOLEAN,
+    superHost: DataTypes.BOOLEAN,
+    identityVerified: DataTypes.BOOLEAN,
+    aboutMe: DataTypes.STRING,
+    duringStay: DataTypes.STRING,
     email: {
       type: DataTypes.STRING,
       allowNull: false,

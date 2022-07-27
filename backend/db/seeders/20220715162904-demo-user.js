@@ -16,6 +16,13 @@ module.exports = {
         aboutMe: 'I strive to the the best demo user the guests who visit my site and home.',
         duringStay: 'We are available 24/7 to accomodate your needs',
         hashedPassword: bcrypt.hashSync('password'),
+        firstName: 'Demo',
+        lastName: 'User',
+        host: true,
+        superHost: true,
+        identityVerified: true,
+        aboutMe: 'I am the ultimate user. I am the original. Numero Uno.',
+        duringStay: 'You better be clean to my place!'
       },
       {
         username: 'MacBookProEnergy',
@@ -52,6 +59,13 @@ module.exports = {
         aboutMe: 'They call me Jenn. They have always called me Jenn. Because I asked them to call me Jenn',
         duringStay: 'During your stay I will make sure that you call me Jenn.',
         hashedPassword: bcrypt.hashSync(faker.internet.password()),
+        firstName: 'Fake',
+        lastName: 'User',
+        host: true,
+        superHost: false,
+        identityVerified: true,
+        aboutMe: 'I am a fake. I am just a regular host.',
+        duringStay: 'I apologize ahead of time if you hear me snore.'
       },
       {
         username: 'Mod2Pro',
@@ -64,7 +78,14 @@ module.exports = {
         aboutMe: 'Data structures and algorithms are like playing with baby toys to me.',
         duringStay: 'Please do not hesitate to contact me for any data structure and algorithm questions.',
         hashedPassword: bcrypt.hashSync(faker.internet.password()),
-      },
+        firstName: 'Fake',
+        lastName: 'User',
+        host: false,
+        superHost: false,
+        identityVerified: false,
+        aboutMe: 'Who am I?',
+        duringStay: 'Do whatever!'
+      }
     ], {});
   },
 

@@ -29,10 +29,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DECIMAL
       },
-      serviceFee: {
-        allowNull: false,
-        type: Sequelize.DECIMAL
-      },
       cleaningFee: {
         allowNull: false,
         type: Sequelize.DECIMAL
@@ -44,6 +40,10 @@ module.exports = {
       maxGuests: {
         allowNull: false,
         type: Sequelize.INTEGER
+      },
+      address: {
+        allowNull: false,
+        type: Sequelize.STRING
       },
       city: {
         allowNull: false,

@@ -2,7 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
   const Listing = sequelize.define('Listing', {
     ownerId: DataTypes.INTEGER,
-    previewImageId: DataTypes.STRING,
+    previewImageUrl: DataTypes.STRING,
     name: DataTypes.STRING,
     description: DataTypes.STRING,
     serviceFee: DataTypes.DECIMAL,

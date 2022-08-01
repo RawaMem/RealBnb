@@ -22,7 +22,9 @@ module.exports = {
         superHost: true,
         identityVerified: true,
         aboutMe: 'I am the ultimate user. I am the original. Numero Uno.',
-        duringStay: 'You better be clean to my place!'
+        duringStay: 'You better be clean to my place!',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         username: 'MacBookProEnergy',
@@ -35,6 +37,8 @@ module.exports = {
         aboutMe: 'Using one monitor allows me to see everything without moving my eyes which is my super power',
         duringStay: 'Our property manager company, MBP Energy, is local and has staff available at all times with one monitor each.',
         hashedPassword: bcrypt.hashSync(faker.internet.password()),
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         username: 'AlwaysDebugging',
@@ -47,6 +51,8 @@ module.exports = {
         aboutMe: 'My wide screen monitor allows me to open 10 windows at the same time so I never miss any messages.',
         duringStay: 'I will make sure that I am monitoring you on my widescreen monitor at all times.',
         hashedPassword: bcrypt.hashSync(faker.internet.password()),
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         username: 'TheyCallMeJenn',
@@ -65,7 +71,9 @@ module.exports = {
         superHost: false,
         identityVerified: true,
         aboutMe: 'I am a fake. I am just a regular host.',
-        duringStay: 'I apologize ahead of time if you hear me snore.'
+        duringStay: 'I apologize ahead of time if you hear me snore.',
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         username: 'Mod2Pro',
@@ -84,7 +92,9 @@ module.exports = {
         superHost: false,
         identityVerified: false,
         aboutMe: 'Who am I?',
-        duringStay: 'Do whatever!'
+        duringStay: 'Do whatever!',
+        createdAt: new Date(),
+        updatedAt: new Date()
       }
     ], {});
   },

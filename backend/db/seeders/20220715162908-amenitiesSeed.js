@@ -8,67 +8,107 @@ module.exports = {
 
       Example:
       */
-   return queryInterface.bulkInsert('Amenities', [
-    {
-      name: 'Washer'
-    },
-    {
-      name: 'Dryer'
-    },
-    {
-      name: 'Air Conditioning'
-    },
-    {
-      name: 'Heating'
-    },
-    {
-      name: 'Wifi'
-    },
-    {
-      name: 'First aid kit'
-    },
-    {
-      name: 'Hot tub'
-    },
-    {
-      name: 'BBQ grill'
-    },
-    {
-      name: 'Self check-in'
-    },
-    {
-      name: 'Long term stays allowed'
-    },
-    {
-      name: 'Free parking'
-    },
-    {
-      name: 'Exercise equipment'
-    },
-    {
-      name: 'Pets allowed'
-    },
-    {
-      name: 'Elevator'
-    },
-    {
-      name: 'Coffee'
-    },
-    {
-      name: 'Security cameras'
-    },
-    {
-      name: 'Fire pit'
-    },
-    {
-      name: 'Gym'
-    },
-    {
-      name: 'Private patio or balcony'
-    },
-    {
-      name: 'Streaming services'
-    },
+    return queryInterface.bulkInsert('Amenities', [
+      {
+        name: 'Washer',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Dryer',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Air Conditioning',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Heating',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Wifi',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'First aid kit',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Hot tub',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'BBQ grill',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Self check-in',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Long term stays allowed',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Free parking',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Exercise equipment',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Pets allowed',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Elevator',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Coffee',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Security cameras',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Fire pit',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Gym',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Private patio or balcony',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'Streaming services',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
     ], {});
   },
 
@@ -79,6 +119,6 @@ module.exports = {
 
       Example:
       */
-   return queryInterface.bulkDelete('Amenities', null, {});
+    return queryInterface.bulkDelete('Amenities', null, {});
   }
 };

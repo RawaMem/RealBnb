@@ -17,6 +17,8 @@ module.exports = {
           paymentConfirmed: true,
           startDate: "2022-09-10",
           endDate:"2022-09-14",
+        createdAt: new Date(),
+        updatedAt: new Date()
         },
         {
           userId: 1,
@@ -26,6 +28,8 @@ module.exports = {
           paymentConfirmed: true,
           startDate: "2022-11-06",
           endDate:"2022-11-09",
+        createdAt: new Date(),
+        updatedAt: new Date()
         },
     ], {});
   },

@@ -20,6 +20,8 @@ module.exports = {
       accuracy: 5,
       location: 4,
       value: 4,
+        createdAt: new Date(),
+        updatedAt: new Date()
    },
     {
       authorId: 1,
@@ -32,6 +34,8 @@ module.exports = {
       accuracy: 3,
       location: 3,
       value: 5,
+        createdAt: new Date(),
+        updatedAt: new Date()
    },
     {
       authorId: 1,
@@ -44,6 +48,8 @@ module.exports = {
       accuracy: 5,
       location: 4,
       value: 3,
+        createdAt: new Date(),
+        updatedAt: new Date()
    },
     {
       authorId: 1,
@@ -56,6 +62,8 @@ module.exports = {
       accuracy: 2,
       location: 3,
       value: 2,
+        createdAt: new Date(),
+        updatedAt: new Date()
    },
     {
       authorId: 2,
@@ -68,6 +76,8 @@ module.exports = {
       accuracy: 3,
       location: 4,
       value: 4,
+        createdAt: new Date(),
+        updatedAt: new Date()
    },
     {
       authorId: 2,
@@ -80,6 +90,8 @@ module.exports = {
       accuracy: 3,
       location: 4,
       value: 4,
+        createdAt: new Date(),
+        updatedAt: new Date()
    },
     {
       authorId: 2,
@@ -92,6 +104,8 @@ module.exports = {
       accuracy: 4,
       location: 4,
       value: 4,
+        createdAt: new Date(),
+        updatedAt: new Date()
    },
     {
       authorId: 2,
@@ -104,6 +118,8 @@ module.exports = {
       accuracy: 3,
       location: 4,
       value: 4,
+        createdAt: new Date(),
+        updatedAt: new Date()
    },
     {
       authorId: 3,
@@ -116,6 +132,8 @@ module.exports = {
       accuracy: 3,
       location: 4,
       value: 5,
+        createdAt: new Date(),
+        updatedAt: new Date()
    },
     {
       authorId: 3,
@@ -128,6 +146,8 @@ module.exports = {
       accuracy: 5,
       location: 5,
       value: 5,
+        createdAt: new Date(),
+        updatedAt: new Date()
    },
   ], {});
   },

@@ -10,24 +10,36 @@ module.exports = {
       */
    return queryInterface.bulkInsert('Categories', [
     {
-      name: 'Beach'
+      name: 'Beach',
+        createdAt: new Date(),
+        updatedAt: new Date()
     },
     {
-      name: 'Skyscrapers'
+      name: 'Skyscrapers',
+        createdAt: new Date(),
+        updatedAt: new Date()
     },
     {
-      name: 'Iconic cities'
+      name: 'Iconic cities',
+        createdAt: new Date(),
+        updatedAt: new Date()
     },
     {
-      name: 'Amazing views'
+      name: 'Amazing views',
+        createdAt: new Date(),
+        updatedAt: new Date()
     },
     {
-      name: 'Castles'
+      name: 'Castles',
+        createdAt: new Date(),
+        updatedAt: new Date()
     },
     {
-      name: 'Wildlife'
+      name: 'Wildlife',
+        createdAt: new Date(),
+        updatedAt: new Date()
     },
-    
+
 
   ], {});
   },

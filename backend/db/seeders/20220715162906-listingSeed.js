@@ -23,7 +23,9 @@ module.exports = {
       state: 'CA',
       zipCode: 90210,
       longitude: '-118.413030',
-      latitude: '34.066350'
+      latitude: '34.066350',
+      createdAt: new Date(),
+      updatedAt: new Date()
    },
     {
       ownerId: '2',
@@ -39,7 +41,9 @@ module.exports = {
       state: 'CA',
       zipCode: 92661,
       longitude: '-117.888030',
-      latitude: '33.596670'
+      latitude: '33.596670',
+      createdAt: new Date(),
+      updatedAt: new Date()
    },
     {
       ownerId: '3',
@@ -55,7 +59,9 @@ module.exports = {
       state: 'CA',
       zipCode: 92802,
       longitude: '-117.926399',
-      latitude: '33.815395'
+      latitude: '33.815395',
+      createdAt: new Date(),
+      updatedAt: new Date()
    },
     {
       ownerId: '4',
@@ -71,7 +77,9 @@ module.exports = {
       state: 'NY',
       zipCode: 10001,
       longitude: '-73.985352',
-      latitude: '40.748718'
+      latitude: '40.748718',
+      createdAt: new Date(),
+      updatedAt: new Date()
    },
     {
       ownerId: '5',
@@ -87,7 +95,9 @@ module.exports = {
       state: 'WA',
       zipCode: 98101,
       longitude: '-122.342420',
-      latitude: '47.607880'
+      latitude: '47.607880',
+      createdAt: new Date(),
+      updatedAt: new Date()
    },
   ], {});
   },

@@ -7,6 +7,9 @@ import * as sessionActions from './store/session';
 import Navigation from './components/Navigation';
 import { Modal } from './context/Modal';
 import { SingleListingPage } from './components/SingleListing';
+import Listings from './components/Listings';
+
+
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -34,6 +37,9 @@ function App() {
           </Route>
           <Route path='/listings/:id'>
             <SingleListingPage />
+          </Route>
+          <Route path="/listings">
+            <Listings />
           </Route>
         </Switch>
       )}

@@ -8,7 +8,16 @@ const { requireAuth } = require('../../utils/auth');
 
 const { Op } = require('sequelize');
 
-const { Listing, ListingPrice, Review, Category } = require('../../db/models');
+const { Listing,
+   ListingPrice,
+   ListingAmenity,
+   ListingCategory,
+   Review,
+   Category,
+   Image,
+   Booking,
+   WishList,
+   User } = require('../../db/models');
 
 const router = express.Router();
 
@@ -39,21 +48,129 @@ router.get('/', asyncHandler(async (req, res) => {
 
 //ask Alec how to do aggregate average rating for findall listings including reviews
 // Model.User.findOne({
-//     where: { id: 7 },
-//     attributes: [
-//       [Sequelize.fn('AVG', Sequelize.col('seller_rating.stars')), 'avgRating'],
-//     ],
-//     include: [
-//       {
-//         model: Model.Rating,
-//         as: 'seller_rating',
-//         attributes: [],
-//       },
-//     ],
-//     raw: true,
-//     group: ['User.id'],
-//   }).then((res) => console.log(res));
+  //     where: { id: 7 },
+  //     attributes: [
+    //       [Sequelize.fn('AVG', Sequelize.col('seller_rating.stars')), 'avgRating'],
+    //     ],
+    //     include: [
+      //       {
+        //         model: Model.Rating,
+        //         as: 'seller_rating',
+        //         attributes: [],
+        //       },
+        //     ],
+        //     raw: true,
+        //     group: ['User.id'],
+        //   }).then((res) => console.log(res));
 
 
+        router.post('/', asyncHandler(async (req, res) => {
+          //destucture listing info
+          const { ownerId,
+            previewImageUrl,
+            name,
+            description,
+            serviceFee,
+            cleaningFee,
+            numRooms,
+            maxGuests,
+            address,
+            city,
+            state,
+            zipCode,
+            longitude,
+            latitude,
+            listingPriceArr,
+            amenityArr,
+            categoryArr,
+            imageArr
+          } = req.body
 
-module.exports = router;
+          const newListing = { ownerId,
+            previewImageUrl,
+            name,
+            description,
+            serviceFee,
+            cleaningFee,
+            numRooms,
+            maxGuests,
+            address,
+            city,
+            state,
+            zipCode,
+            longitude,
+            latitude
+          }
+          //create new listing to generate id
+          const createdListing = await Listing.create(newListing)
+
+          //create listing prices using new listing id
+          if (listingPriceArr.length) {
+            for (let i = 0; i < listingPriceArr.length; i++) {
+              const listingPriceObj= {
+                listingId: createdListing.id,
+                userId,
+                pricePerDay,
+                startDate,
+                endDate
+              }
+              await ListingPrice.create(listingPriceObj)
+          }}
+
+          //create listing amentities using new listing id
+          if (amenityArr.length) {
+            for (let i = 0; i < amenityArr.length; i++) {
+              const amenityObj= {
+                listingId: createdListing.id,
+                amenityId
+              }
+              await ListingAmenity.create(amenityObj)
+          }}
+
+          //create listing categories using new listing id
+          if (categoryArr.length) {
+            for (let i = 0; i < categoryArr.length; i++) {
+              const categoryObj= {
+                listingId: createdListing.id,
+                categoryId
+              }
+              await ListingCategory.create(categoryObj)
+          }}
+
+          //create listing categories using new listing id
+          if (imageArr.length) {
+            for (let i = 0; i < imageArr.length; i++) {
+              const imageObj= {
+                listingId: createdListing.id,
+                userId,
+                url,
+                description
+              }
+              await Image.create(imageObj)
+          }}
+          const finalListing = await Listing.findByPK(createdListing.id, {
+            include: [Image,
+               Category,
+               ListingPrice,
+               Amenity,
+               Review,
+               Booking,
+               WishList,
+               {  model: User,
+                  attributes: {
+                    exclude: ['hashedPassword', 'email', 'createdAt', 'updatedAt'],
+                  },
+                  include: {model: Listing,
+                            attributes: ['id'],
+                            include: {
+                              model: Review,
+                              attributes: ['id']
+                            }
+                  }
+              }
+              ]
+          })
+            return res.json(finalListing);
+        }));
+
+        module.exports = router;

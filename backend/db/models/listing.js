@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     Listing.belongsTo(models.User, { foreignKey: 'ownerId' });
     Listing.hasMany(models.Review, { foreignKey: 'listingId', onDelete: 'cascade', hooks: 'true'})
     //docs say to use singular for belongsTo aliases and plural for hasMany aliases
-    Listing.hasMany(models.Image, { foreignKey: 'listingId', as: 'allImages', onDelete: 'cascade', hooks: 'true' }); //has alias
+    Listing.hasMany(models.Image, { foreignKey: 'listingId', onDelete: 'cascade', hooks: 'true' }); //has alias
     Listing.hasMany(models.ListingBrowseHistory, { foreignKey: 'listingId', onDelete: 'cascade', hooks: 'true' });
     Listing.hasMany(models.ListingPrice, { foreignKey: 'listingId', onDelete: 'cascade', hooks: 'true' });
     Listing.hasMany(models.Booking, { foreignKey: 'listingId', onDelete: 'cascade', hooks: 'true' });

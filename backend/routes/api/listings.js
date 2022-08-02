@@ -176,6 +176,7 @@ router.post('/', asyncHandler(async (req, res) => {
 //get single listing for listing detail page
 router.get('/:listingId(\\d+)', asyncHandler(async (req, res) => {
   const { listingId } = req.params
+  console.log('IN THE GET ROUTE', listingId)
   const singleListing = await Listing.findByPk(listingId, {
     include: [Image,
         Category,

@@ -45,6 +45,33 @@ module.exports = {
       createdAt: new Date(),
       updatedAt: new Date()
    },
+   {
+    listingId: 3,
+    userId: 3,
+    pricePerDay: 220,
+    startDate: "2022-11-01",
+    endDate: "2022-12-01",
+    createdAt: new Date(),
+    updatedAt: new Date()
+ },
+  {
+    listingId: 4,
+    userId: 4,
+    pricePerDay: 400,
+    startDate: "2022-09-05",
+    endDate: "2022-10-10",
+    createdAt: new Date(),
+    updatedAt: new Date()
+ },
+  {
+    listingId: 5,
+    userId: 5,
+    pricePerDay: 160,
+    startDate: "2022-11-01",
+    endDate: "2022-12-10",
+    createdAt: new Date(),
+    updatedAt: new Date()
+ },
   ], {});
   },
 

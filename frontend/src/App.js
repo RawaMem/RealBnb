@@ -6,6 +6,7 @@ import SignupFormPage from './components/SignupFormPage';
 import * as sessionActions from './store/session';
 import Navigation from './components/Navigation';
 import { Modal } from './context/Modal';
+import { SingleListingPage } from './components/SingleListing';
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -30,6 +31,9 @@ function App() {
           </Route> */}
           <Route path='/signup'>
             <SignupFormPage />
+          </Route>
+          <Route path='/listings/:id'>
+            <SingleListingPage />
           </Route>
         </Switch>
       )}

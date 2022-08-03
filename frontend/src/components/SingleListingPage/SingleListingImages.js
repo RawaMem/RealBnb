@@ -5,7 +5,7 @@
 export default function SingleListingImages({listing}) {
 
 
-
+    console.log('THIS IS IMAGE ARRAY', listing.Images)
 
 
 
@@ -15,11 +15,11 @@ export default function SingleListingImages({listing}) {
                 <img src={listing.previewImageUrl} alt="" />
             </div>
             <div className="rightImages">
-                <img src={listing.Images[0]} alt="" />
-                <img src={listing.Images[1]} alt="" />
-                <img src={listing.Images[2]} alt="" />
-                <img src={listing.Images[3]} alt="" />
-                <img src={listing.Images[4]} alt="" />
+                <img src={listing.Images[0].url} alt="" />
+                <img src={listing.Images[1].url} alt="" />
+                <img src={listing.Images[2].url} alt="" />
+                <img src={listing.Images[3].url} alt="" />
+                <img src={listing.Images[4].url} alt="" />
             </div>
         </div>
     )

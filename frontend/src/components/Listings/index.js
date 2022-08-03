@@ -7,7 +7,8 @@ import ListingCard from './ListingCard';
 export default function Listings() {
     const dispatch = useDispatch();
     const listingsObj = useSelector(state => state.listings);
-    const listings = Object.values(listingsObj);
+    let listings;
+    if (listingsObj) listings = Object.values(listingsObj);
 
     useEffect(() => {
         dispatch(getListings());

@@ -39,7 +39,46 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
     },
-
+    {
+      name: 'Lakefront',
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+      name: 'National parks',
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+      name: 'Cabins',
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+      name: 'Islands',
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+      name: 'Tiny homes',
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+      name: 'Camping',
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+      name: 'Design',
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
+    {
+      name: 'Amazing pools',
+        createdAt: new Date(),
+        updatedAt: new Date()
+    },
 
   ], {});
   },

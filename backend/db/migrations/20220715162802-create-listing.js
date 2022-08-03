@@ -33,7 +33,15 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DECIMAL
       },
-      numRooms: {
+      bedrooms: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      beds: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      baths: {
         allowNull: false,
         type: Sequelize.INTEGER
       },

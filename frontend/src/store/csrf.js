@@ -19,6 +19,7 @@ export async function csrfFetch(url, options = {}) {
 
   // if the response status code is 400 or above, then throw an error with the
   // error being the response
+  console.log('CSRF FETCH RUNNING', res)
   if (res.status >= 400) throw res;
 
   // if the response status code is under 400, then return the response to the
@@ -27,5 +28,6 @@ export async function csrfFetch(url, options = {}) {
 }
 
 export function restoreCSRF() {
+  console.log('RESTORE CSRF RUNNING')
   return csrfFetch("/api/csrf/restore");
 }

@@ -6,7 +6,7 @@ import SignupFormPage from './components/SignupFormPage';
 import * as sessionActions from './store/session';
 import Navigation from './components/Navigation';
 import { Modal } from './context/Modal';
-import { SingleListingPage } from './components/SingleListing';
+import SingleListingPage from './components/SingleListingPage';
 import Listings from './components/Listings';
 
 
@@ -35,7 +35,7 @@ function App() {
           <Route path='/signup'>
             <SignupFormPage />
           </Route>
-          <Route path='/listings/:id'>
+          <Route path='/listings/:listingId'>
             <SingleListingPage />
           </Route>
           <Route path="/listings">

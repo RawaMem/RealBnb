@@ -12,7 +12,7 @@ export default function HostAndSpecs({listing}) {
                 </h4>
             </div>
             <div className="listingSpecs">
-                <p>{listing.maxGuests} guests · {listing.numRooms} bedrooms · {listing.numRooms} beds · {listing.numRooms} baths</p>
+                <p>{listing.maxGuests} guests · {listing.bedrooms} bedrooms · {listing.beds} beds · {listing.baths} baths</p>
             </div>
         </div>
     )

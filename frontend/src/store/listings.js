@@ -36,7 +36,7 @@ export const getSingleListingThunk = (listingId) => async dispatch => {
     }
 }
 
-const initialState = {};
+const initialState = null;
 export default function listings(state = initialState, action) {
     let newState;
     switch(action.type) {

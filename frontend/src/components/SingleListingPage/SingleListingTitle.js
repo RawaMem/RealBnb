@@ -2,8 +2,10 @@
 
 export default function SingleListingTitle({ listing }) {
 
+    console.log('THIS IS LISTING', listing)
 
     function calcAveReviewScore(reviewArr) {
+        console.log('THIS IS REVIEW', reviewArr)
         let total = 0
         reviewArr.forEach(review => {
             total += review.starRating
@@ -16,7 +18,7 @@ export default function SingleListingTitle({ listing }) {
         <div className="singleListingTitleContent">
             <div className="upperTitle">{listing.name}</div>
             <div className="lowerTitle">
-                <div className="reviewStar">{calcAveReviewScore(listing.Reviews)}</div>
+                {listing && (<div className="reviewStar">{calcAveReviewScore(listing.Reviews)}</div>)}
                 <div className="reviewAverageScore">{listing.city}</div>
                 <div className="listingCityState">{listing.state}</div>
                 {!!listing.WishLists.length ? (

@@ -19,6 +19,7 @@ export default function SingleListingImages({listing}) {
                 <img src={listing.Images[1]} alt="" />
                 <img src={listing.Images[2]} alt="" />
                 <img src={listing.Images[3]} alt="" />
+                <img src={listing.Images[4]} alt="" />
             </div>
         </div>
     )

@@ -19,6 +19,7 @@ const { Listing,
    WishList,
    Amenity,
    User } = require('../../db/models');
+const { singlePublicFileUpload, singleMulterUpload } = require('../../awsS3');
 
 const router = express.Router();
 
@@ -64,10 +65,9 @@ router.get('/', asyncHandler(async (req, res) => {
         //   }).then((res) => console.log(res));
 
         //create listing
-router.post('/', asyncHandler(async (req, res) => {
+router.post('/', singleMulterUpload('image'), asyncHandler(async (req, res) => {
   //destucture listing info
   const { ownerId,
-    previewImageUrl,
     name,
     description,
     serviceFee,
@@ -85,6 +85,8 @@ router.post('/', asyncHandler(async (req, res) => {
     categoryArr,
     imageArr
   } = req.body
+
+  const previewImageUrl = await singlePublicFileUpload(req.file);
 
   const newListing = { ownerId,
     previewImageUrl,
@@ -197,5 +199,10 @@ router.get('/:listingId(\\d+)', asyncHandler(async (req, res) => {
   res.json(singleListing);
 }));
 
+router.post('/testing', singleMulterUpload('image'), asyncHandler(async (req, res) => {
+  const url = await singlePublicFileUpload(req.file);
+
+  console.log("THIS IS THE URL!!!!!!!!!!!!!!!!!!!! => ", url);
+}));
 
         module.exports = router;

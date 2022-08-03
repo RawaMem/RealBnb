@@ -8,6 +8,7 @@ import Navigation from './components/Navigation';
 import { Modal } from './context/Modal';
 import SingleListingPage from './components/SingleListingPage';
 import Listings from './components/Listings';
+import TestCompontent from './components/TestComponent';
 
 
 function App() {
@@ -40,6 +41,9 @@ function App() {
           </Route>
           <Route path="/listings">
             <Listings />
+          </Route>
+          <Route path='/testing'>
+            <TestCompontent />
           </Route>
         </Switch>
       )}

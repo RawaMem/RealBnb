@@ -179,6 +179,9 @@ router.get('/:listingId(\\d+)', asyncHandler(async (req, res) => {
   const { listingId } = req.params
   console.log('IN THE GET ROUTE', listingId)
   const singleListing = await Listing.findByPk(listingId, {
+    attributes: {
+      include: [[Sequelize.fn('AVG', Sequelize.col('Reviews.starRating')), 'avgRating'],]
+    },
     include: [Image,
         Category,
         ListingPrice,
@@ -194,8 +197,33 @@ router.get('/:listingId(\\d+)', asyncHandler(async (req, res) => {
                     attributes: ['id'],
                     include: {
                       model: Review,
-                      attributes: ['id']
-  }}}]})
+                      attributes: ['id']}}}],
+    group: [
+                'Listing.id',
+                'ListingPrices.id',
+                'Bookings.id',
+                'Reviews.id',
+                'Images.id',
+                'WishLists.id',
+                'Categories.id',
+                'User->Listings->Reviews.id',
+                'Categories->ListingCategory.categoryId',
+                'Categories->ListingCategory.listingId',
+                'Categories->ListingCategory.createdAt',
+                'Categories->ListingCategory.updatedAt',
+                'Amenities.id',
+                'Amenities->ListingAmenity.amenityId',
+                'Amenities->ListingAmenity.listingId',
+                'Amenities->ListingAmenity.createdAt',
+                'Amenities->ListingAmenity.updatedAt',
+                'WishLists->WishListListing.wishlistId',
+                'WishLists->WishListListing.listingId',
+                'WishLists->WishListListing.createdAt',
+                'WishLists->WishListListing.updatedAt',
+                'User.id',
+                'User->Listings.id',
+              ]
+  })
   res.json(singleListing);
 }));
 

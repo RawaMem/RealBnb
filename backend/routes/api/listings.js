@@ -44,7 +44,6 @@ router.get('/', asyncHandler(async (req, res) => {
                 'Categories->ListingCategory.createdAt',
                 'Categories->ListingCategory.updatedAt']
     });
-    // console.log("=======this is listing=====", listings[0])
     return res.json(listings);
 }));
 

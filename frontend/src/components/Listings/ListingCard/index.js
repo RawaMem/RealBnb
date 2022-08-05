@@ -1,22 +1,22 @@
 
 
 export default function ListingCard({listing}) {
-    
-    const avgReviewRating = () => {
-        let totalRating = 0;
-        if (listing.Reviews) {
-            const reviews = listing.Reviews;
-            reviews.map((review) => {
-                totalRating += review.starRating
-            })
 
-            const rounded = Math.round(totalRating / reviews.length * 10) / 10
-            var fixed = rounded.toFixed(1)
-            return fixed
-        } else {
-            return "New"
-        }
-    }
+    // const avgReviewRating = () => {
+    //     let totalRating = 0;
+    //     if (listing.Reviews) {
+    //         const reviews = listing.Reviews;
+    //         reviews.map((review) => {
+    //             totalRating += review.starRating
+    //         })
+
+    //         const rounded = Math.round(totalRating / reviews.length * 10) / 10
+    //         var fixed = rounded.toFixed(1)
+    //         return fixed
+    //     } else {
+    //         return "New"
+    //     }
+    // }
 
     const avaDate = () => {
         const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"]
@@ -48,9 +48,9 @@ export default function ListingCard({listing}) {
             <div key={listing.id} style={{ display: "flex", flexFlow: "column" }}>
                 <img alt="listing" width="300" height="400" src={listing.previewImageUrl}></img>
                 <div>{listing.name}</div>
-                <div>${listing?.ListingPrices[0]?.pricePerDay} night</div>
+                <div>${listing.ListingPrices[0].pricePerDay} night</div>
                 <div>{avaDate()}</div>
-                <div>{avgReviewRating()}</div>
+                <div>{listing.avgRating}</div>
             </div>
         </>
     )

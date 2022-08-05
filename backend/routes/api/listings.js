@@ -6,7 +6,7 @@ const { handleValidationErrors } = require('../../utils/validation');
 const Sequelize = require('sequelize');
 const { requireAuth } = require('../../utils/auth');
 
-const { Op } = require('sequelize');
+const { Op, QueryTypes } = require('sequelize');
 
 const { Listing,
    ListingPrice,
@@ -24,30 +24,30 @@ const { singlePublicFileUpload, singleMulterUpload } = require('../../awsS3');
 const router = express.Router();
 
 // get all listings
-//when wishlist is implemented, include wishlist so that we know which hearsts are filled in
+//when wishlist is implemented, include wishlist so that we know which hearts are filled in
 router.get('/', asyncHandler(async (req, res) => {
     const listings = await Listing.findAll({
-        // attributes: [
-        //           [Sequelize.fn('AVG', Sequelize.col('Reviews.starRating')), 'avgRating'],
-
-        //         ],
+        attributes: {
+          include: [[Sequelize.fn('AVG', Sequelize.col('Reviews.starRating')), 'avgRating'],]
+        },
         include: [
-                  Review,
-                  // {
-                  //   model: Review,
-                  //   as: 'avgReview',
-                  //   attributes: [],
-                  // },
-                  ListingPrice,
-                  Category
-                ],
-
+              {model: Review,
+                attributes: []},
+              ListingPrice,
+              Category
+            ],
+        group: ['Listing.id',
+                'ListingPrices.id',
+                'Categories.id',
+                'Categories->ListingCategory.categoryId',
+                'Categories->ListingCategory.listingId',
+                'Categories->ListingCategory.createdAt',
+                'Categories->ListingCategory.updatedAt']
     });
-    console.log("=======this is listing=====", listings[0].Categories)
+    // console.log("=======this is listing=====", listings[0])
     return res.json(listings);
 }));
 
-//ask Alec how to do aggregate average rating for findall listings including reviews
 // Model.User.findOne({
   //     where: { id: 7 },
   //     attributes: [
@@ -64,7 +64,7 @@ router.get('/', asyncHandler(async (req, res) => {
         //     group: ['User.id'],
         //   }).then((res) => console.log(res));
 
-        //create listing
+//create listing
 router.post('/', singleMulterUpload('image'), asyncHandler(async (req, res) => {
   //destucture listing info
   const { ownerId,

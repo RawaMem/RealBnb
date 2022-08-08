@@ -6,7 +6,7 @@ const { handleValidationErrors } = require('../../utils/validation');
 const Sequelize = require('sequelize');
 const { requireAuth } = require('../../utils/auth');
 
-const { Op, QueryTypes } = require('sequelize');
+const { Op } = require('sequelize');
 
 const { Listing,
    ListingPrice,

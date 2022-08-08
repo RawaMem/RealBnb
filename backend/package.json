@@ -31,13 +31,15 @@
     "express-validator": "^6.6.1",
     "faker": "^5.1.0",
     "helmet": "^4.1.1",
+    "http": "^0.0.1-security",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "per-env": "^1.0.2",
     "pg": "^8.7.3",
     "sequelize": "^5.22.5",
-    "sequelize-cli": "^5.5.1"
+    "sequelize-cli": "^5.5.1",
+    "socket.io": "^4.5.1"
   },
   "devDependencies": {
     "dotenv-cli": "^4.0.0",

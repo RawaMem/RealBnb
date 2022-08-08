@@ -11,12 +11,37 @@ import Listings from './components/Listings';
 import TestCompontent from './components/TestComponent';
 
 
+//websocket setup
+import { io } from 'socket.io-client'
+let serverUrl;
+if (process.env.NODE_ENV === 'production') {
+  serverUrl = 'https://realbnb-app.herokuapp.com'
+} else {
+  serverUrl = 'http://localhost/5000'
+}
+
+const socket = io(serverUrl, {
+  transports: ['websocket']
+})
+socket.on("connect_error", (err) => {
+  console.log(`connect_error due to ${err.message}`);
+});
+socket.on("connect", () => {
+  console.log(`socket created in frontend/App.js with socket.id ${socket.id}.`)
+})
+//end websocket code
+
+
+
+
+
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
   const [showModal, setShowModal] = useState(false);
   useEffect(() => {
-    dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
+    dispatch(sessionActions.restoreUser())
+    .then(() => setIsLoaded(true));
   }, [dispatch]);
 
   return (

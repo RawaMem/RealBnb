@@ -24,30 +24,29 @@ const { singlePublicFileUpload, singleMulterUpload } = require('../../awsS3');
 const router = express.Router();
 
 // get all listings
-//when wishlist is implemented, include wishlist so that we know which hearsts are filled in
+//when wishlist is implemented, include wishlist so that we know which hearts are filled in
 router.get('/', asyncHandler(async (req, res) => {
     const listings = await Listing.findAll({
-        // attributes: [
-        //           [Sequelize.fn('AVG', Sequelize.col('Reviews.starRating')), 'avgRating'],
-
-        //         ],
+        attributes: {
+          include: [[Sequelize.fn('AVG', Sequelize.col('Reviews.starRating')), 'avgRating'],]
+        },
         include: [
-                  Review,
-                  // {
-                  //   model: Review,
-                  //   as: 'avgReview',
-                  //   attributes: [],
-                  // },
-                  ListingPrice,
-                  Category
-                ],
-
+              {model: Review,
+                attributes: []},
+              ListingPrice,
+              Category
+            ],
+        group: ['Listing.id',
+                'ListingPrices.id',
+                'Categories.id',
+                'Categories->ListingCategory.categoryId',
+                'Categories->ListingCategory.listingId',
+                'Categories->ListingCategory.createdAt',
+                'Categories->ListingCategory.updatedAt']
     });
-    console.log("=======this is listing=====", listings[0].Categories)
     return res.json(listings);
 }));
 
-//ask Alec how to do aggregate average rating for findall listings including reviews
 // Model.User.findOne({
   //     where: { id: 7 },
   //     attributes: [
@@ -64,7 +63,7 @@ router.get('/', asyncHandler(async (req, res) => {
         //     group: ['User.id'],
         //   }).then((res) => console.log(res));
 
-        //create listing
+//create listing
 router.post('/', singleMulterUpload('image'), asyncHandler(async (req, res) => {
   //destucture listing info
   const { ownerId,
@@ -180,6 +179,9 @@ router.get('/:listingId(\\d+)', asyncHandler(async (req, res) => {
   const { listingId } = req.params
   console.log('IN THE GET ROUTE', listingId)
   const singleListing = await Listing.findByPk(listingId, {
+    attributes: {
+      include: [[Sequelize.fn('AVG', Sequelize.col('Reviews.starRating')), 'avgRating'],]
+    },
     include: [Image,
         Category,
         ListingPrice,
@@ -195,8 +197,33 @@ router.get('/:listingId(\\d+)', asyncHandler(async (req, res) => {
                     attributes: ['id'],
                     include: {
                       model: Review,
-                      attributes: ['id']
-  }}}]})
+                      attributes: ['id']}}}],
+    group: [
+                'Listing.id',
+                'ListingPrices.id',
+                'Bookings.id',
+                'Reviews.id',
+                'Images.id',
+                'WishLists.id',
+                'Categories.id',
+                'User->Listings->Reviews.id',
+                'Categories->ListingCategory.categoryId',
+                'Categories->ListingCategory.listingId',
+                'Categories->ListingCategory.createdAt',
+                'Categories->ListingCategory.updatedAt',
+                'Amenities.id',
+                'Amenities->ListingAmenity.amenityId',
+                'Amenities->ListingAmenity.listingId',
+                'Amenities->ListingAmenity.createdAt',
+                'Amenities->ListingAmenity.updatedAt',
+                'WishLists->WishListListing.wishlistId',
+                'WishLists->WishListListing.listingId',
+                'WishLists->WishListListing.createdAt',
+                'WishLists->WishListListing.updatedAt',
+                'User.id',
+                'User->Listings.id',
+              ]
+  })
   res.json(singleListing);
 }));
 

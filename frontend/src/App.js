@@ -13,11 +13,12 @@ import TestCompontent from './components/TestComponent';
 
 //websocket setup
 import { io } from 'socket.io-client'
+import Socket from './components/Socket';
 let serverUrl;
 if (process.env.NODE_ENV === 'production') {
   serverUrl = 'https://realbnb-app.herokuapp.com'
 } else {
-  serverUrl = 'http://localhost/5000'
+  serverUrl = 'http://localhost:5000'
 }
 
 const socket = io(serverUrl, {
@@ -30,7 +31,7 @@ socket.on("connect", () => {
   console.log(`socket created in frontend/App.js with socket.id ${socket.id}.`)
 })
 //end websocket code
-
+// let socket;
 
 
 
@@ -40,8 +41,16 @@ function App() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [showModal, setShowModal] = useState(false);
   useEffect(() => {
+    // socket = io();
+
+    // socket.on('connect', () => {
+    //   console.log("TESTING")
+    // });
     dispatch(sessionActions.restoreUser())
     .then(() => setIsLoaded(true));
+
+    // return () => socket.disconnect();
+
   }, [dispatch]);
 
   return (
@@ -53,6 +62,7 @@ function App() {
           <h1>Hello I am a Modal</h1>
         </Modal>
       )}
+      {isLoaded && <Socket socket={socket}/>}
       {isLoaded && (
         <Switch>
           {/* <Route path="/login" >

@@ -13,9 +13,17 @@ const io = new Server(httpServer, {
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"]
   }
 });
+const addString = string => {
+  return string + " testing"
+};
 
 io.on("connection", socket => {
   console.log(`THIS IS THE SOCKET ID IN BIN WWW ${socket.id}`)
+
+  socket.on('message', async (data) => {
+    console.log("this is the message recieved from the front end", data);
+    io.emit('testing', data);
+  })
 })
 //end websocket code
 

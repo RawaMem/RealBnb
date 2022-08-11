@@ -9,6 +9,8 @@ import { Modal } from './context/Modal';
 import SingleListingPage from './components/SingleListingPage';
 import Listings from './components/Listings';
 import TestCompontent from './components/TestComponent';
+import GoogleMaps from './components/GoogleMaps';
+import { Wrapper, Status } from '@googlemaps/react-wrapper';
 
 
 //websocket setup
@@ -40,6 +42,11 @@ function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
   const [showModal, setShowModal] = useState(false);
+
+  const render = (status) => {
+    return <h1>{status}</h1>;
+  }
+
   useEffect(() => {
     // socket = io();
 
@@ -79,6 +86,11 @@ function App() {
           </Route>
           <Route path='/testing'>
             <TestCompontent />
+          </Route>
+          <Route path='/maps'>
+            <Wrapper apiKey={process.env.GOOGLE_MAPS_API_KEY} render={render}>
+              <GoogleMaps />
+            </Wrapper>
           </Route>
         </Switch>
       )}

@@ -5,7 +5,6 @@ import './index.css';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { Wrapper, Status } from '@googlemaps/react-wrapper';
 import { ModalProvider } from './context/Modal';
 import App from './App';
 

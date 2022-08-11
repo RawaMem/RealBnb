@@ -54,7 +54,6 @@ function App() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [showModal, setShowModal] = useState(false);
   //Google Maps setup
-  const searchInput = useRef(null);
   // const [apiKey, setApiKey] = useState('');
   const [clicks, setClicks] = useState([]);
   const [zoom, setZoom] = useState(12); // initial zoom
@@ -99,32 +98,11 @@ function App() {
   // };
 
   const initMapScript = (data) => {
-    console.log("this is the data from the init script => ", data);
     if (window.google) {
       return Promise.resolve()
     }
     const src = `${mapApiJs}?key=${data}&libraries=places`;
-    console.log("this is the src => ", src)
     return loadAsyncScript(src)
-  };
-
-  const initAutocomplete = () => {
-    console.log(searchInput)
-    if (!searchInput.current) return;
-
-    const options = {
-      componentRestrictions: { country: "us" },
-      fields: ["address_components", "geometry", "icon", "name"],
-      strictBounds: false,
-      types: ["establishment"],
-    };
-    const autocomplete = new window.google.maps.places.Autocomplete(searchInput.current, options);
-    autocomplete.setFields(["place_id", "geometry", "name"]);
-  };
-
-  const onChangeAddress = (autocomplete) => {
-    const location = autocomplete.getPlace();
-    console.log('location', location);
   };
 
   // end of setup
@@ -137,12 +115,6 @@ function App() {
       .then(() => setIsLoaded(true));
   }, [dispatch]);
 
-  useEffect(() => {
-    if (!searchInput.current) return;
-    initAutocomplete();
-  }, [searchInput.current])
-
-  console.log('searchINput', searchInput);
   return (
     <>
       <Navigation isLoaded={isLoaded} />
@@ -170,13 +142,16 @@ function App() {
             <TestCompontent />
           </Route>
           <Route path='/maps'>
-            <>
-              <input ref={searchInput} type='text' placeholder='Search Location...' />
-              <button>Get Current Location</button>
-              <GoogleMaps center={center} zoom={zoom} onClick={onClick} onIdle={onIdle} style={{ height: '30rem', width: '30rem' }}>
-                {clicks.map((latLng, i) => (<Marker key={i} position={latLng} />))}
-              </GoogleMaps>
-            </>
+            <GoogleMaps center={center} setCenter={setCenter} zoom={zoom} setZoom={setZoom} onClick={onClick} onIdle={onIdle} style={{ height: '30rem', width: '30rem' }} options={{
+              zoomControl: true,
+              mapTypeControl: true,
+              scaleControl: true,
+              streetViewControl: true,
+              rotateControl: true,
+              fullscreenControl: true
+            }}>
+              {clicks.map((latLng, i) => (<Marker key={i} position={latLng} />))}
+            </GoogleMaps>
           </Route>
           <Route path='/sockets'>
             <Socket socket={socket} />

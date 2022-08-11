@@ -4,11 +4,6 @@
 
 export default function SingleListingImages({listing}) {
 
-
-    console.log('THIS IS IMAGE ARRAY', listing.Images)
-
-
-
     return (
         <div className="singleListingImagesContent">
             <div className="leftPreviewImage">

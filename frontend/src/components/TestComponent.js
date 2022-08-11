@@ -8,8 +8,6 @@ export default function TestCompontent(props) {
         e.preventDefault();
         const formData = new FormData();
 
-        console.log('this is the image before fetching', image);
-
         if (image) formData.append('image', image);
 
         await csrfFetch('/api/listings/testing', {

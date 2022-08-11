@@ -47,6 +47,11 @@ router.use("/users", usersRouter);
 
 router.use("/listings", listingsRouter);
 
+router.get('/maps-key', (req, res) => {
+  const apiKey = process.env.GOOGLE_MAPS_API_KEY;
+  res.json(apiKey);
+});
+
 
 
 module.exports = router;

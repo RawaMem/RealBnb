@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import SignupFormPage from './components/SignupFormPage';
@@ -35,11 +35,26 @@ socket.on("connect", () => {
 })
 //end websocket code
 
+// load google map api js
+function loadAsyncScript(src) {
+  return new Promise(resolve => {
+    const script = document.createElement('script');
+    Object.assign(script, {
+      type: 'text/javascript',
+      async: true,
+      src
+    });
+    script.addEventListener('load', () => resolve(script));
+    document.head.appendChild(script);
+  });
+}
+
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
   const [showModal, setShowModal] = useState(false);
   //Google Maps setup
+  const searchInput = useRef(null);
   const [apiKey, setApiKey] = useState('');
   const [clicks, setClicks] = useState([]);
   const [zoom, setZoom] = useState(12); // initial zoom
@@ -48,6 +63,7 @@ function App() {
     lat: 27.9884033,
     lng: 86.9169069,
   });
+  const mapApiJs = 'https://maps.googleapis.com/maps/api/js'
 
   const onClick = (e) => {
     // avoid directly mutating state
@@ -65,26 +81,8 @@ function App() {
       case Status.SUCCESS: {
         return (
           <>
-            <label htmlFor="lat">Latitude</label>
-            <input
-              type="number"
-              id="lat"
-              name="lat"
-              value={center.lat}
-              onChange={(event) =>
-                setCenter({ ...center, lat: Number(event.target.value) })
-              }
-            />
-            <label htmlFor="lat">Longitude</label>
-            <input
-              type="number"
-              id="lng"
-              name="lng"
-              value={center.lng}
-              onChange={(event) =>
-                setCenter({ ...center, lng: Number(event.target.value) })
-              }
-            />
+            <input ref={searchInput} type='text' placeholder='Search Location...' />
+            <button>Get Current Location</button>
             <GoogleMaps center={center} zoom={zoom} onClick={onClick} onIdle={onIdle} style={{ height: '30rem', width: '30rem' }}>
               {clicks.map((latLng, i) => (<Marker key={i} position={latLng} />))}
             </GoogleMaps>
@@ -100,13 +98,32 @@ function App() {
     }
   };
 
+  const initMapScript = () => {
+    if (window.google) {
+      return Promise.resolve()
+    }
+    const src = `${mapApiJs}?key=${apiKey}&libraries=places&v=weekly`;
+    return loadAsyncScript(src)
+  }
+
+  const initAutocomplete = () => {
+    if (!searchInput.current) return;
+
+    const autcomplete = new window.google.maps.places.Autocomplete(searchInput.current);
+    autcomplete.setFields(['address_component', 'geometry']);
+  }
+
   // end of setup
 
   useEffect(() => {
     dispatch(sessionActions.restoreUser())
       .then(() => setIsLoaded(true));
-    fetch('/api/maps-key').then(res => res.json().then(data => setApiKey(data)))
+    fetch('/api/maps-key').then(res => res.json().then(data => setApiKey(data))).then(() => {
+      initMapScript().then(() => initAutocomplete())
+    })
   }, [dispatch]);
+
+  console.log('apiKey', apiKey);
 
   return (
     <>

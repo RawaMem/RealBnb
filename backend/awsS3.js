@@ -84,7 +84,6 @@ const storage = multer.memoryStorage({
 });
 
 const singleMulterUpload = (nameOfKey) =>{
-    // console.log('WE MADE IT HERES THE KEY FOR YA => ', nameOfKey);
   return multer({ storage: storage }).single(nameOfKey);
 }
 const multipleMulterUpload = (nameOfKey) =>

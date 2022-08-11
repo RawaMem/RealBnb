@@ -5,10 +5,8 @@ export default function Socket({ socket }) {
 
     useEffect(() => {
         socket.on('testing', data => {
-            console.log('here is the data! => ', data);
             setMessage(data)
         });
-        console.log("useEffect ran with socket")
     }, [socket])
 
     const handleSubmit = e => {

@@ -176,8 +176,7 @@ router.post('/', singleMulterUpload('image'), asyncHandler(async (req, res) => {
 
 //get single listing for listing detail page
 router.get('/:listingId(\\d+)', asyncHandler(async (req, res) => {
-  const { listingId } = req.params
-  console.log('IN THE GET ROUTE', listingId)
+  const { listingId } = req.params;
   const singleListing = await Listing.findByPk(listingId, {
     attributes: {
       include: [[Sequelize.fn('AVG', Sequelize.col('Reviews.starRating')), 'avgRating'],]
@@ -229,8 +228,6 @@ router.get('/:listingId(\\d+)', asyncHandler(async (req, res) => {
 
 router.post('/testing', singleMulterUpload('image'), asyncHandler(async (req, res) => {
   const url = await singlePublicFileUpload(req.file);
-
-  console.log("THIS IS THE URL!!!!!!!!!!!!!!!!!!!! => ", url);
 }));
 
         module.exports = router;

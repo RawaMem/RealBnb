@@ -40,6 +40,7 @@ function App() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [showModal, setShowModal] = useState(false);
   //Google Maps setup
+  const [apiKey, setApiKey] = useState('');
   const [clicks, setClicks] = useState([]);
   const [zoom, setZoom] = useState(12); // initial zoom
   // Mt Everest 27.9884033, 86.9169069
@@ -104,6 +105,7 @@ function App() {
   useEffect(() => {
     dispatch(sessionActions.restoreUser())
       .then(() => setIsLoaded(true));
+    fetch('/api/maps-key').then(res => res.json().then(data => setApiKey(data)))
   }, [dispatch]);
 
   return (
@@ -133,7 +135,7 @@ function App() {
             <TestCompontent />
           </Route>
           <Route path='/maps'>
-            <Wrapper apiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY} render={render} />
+            <Wrapper apiKey={apiKey} render={render} />
           </Route>
           <Route path='/sockets'>
             <Socket socket={socket} />

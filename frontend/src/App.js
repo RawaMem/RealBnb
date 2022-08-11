@@ -55,7 +55,7 @@ function App() {
   const [showModal, setShowModal] = useState(false);
   //Google Maps setup
   const searchInput = useRef(null);
-  const [apiKey, setApiKey] = useState('');
+  // const [apiKey, setApiKey] = useState('');
   const [clicks, setClicks] = useState([]);
   const [zoom, setZoom] = useState(12); // initial zoom
   // Mt Everest 27.9884033, 86.9169069
@@ -76,55 +76,73 @@ function App() {
     setCenter(m.getCenter().toJSON());
   };
 
-  const render = (status) => {
-    switch (status) {
-      case Status.SUCCESS: {
-        return (
-          <>
-            <input ref={searchInput} type='text' placeholder='Search Location...' />
-            <button>Get Current Location</button>
-            <GoogleMaps center={center} zoom={zoom} onClick={onClick} onIdle={onIdle} style={{ height: '30rem', width: '30rem' }}>
-              {clicks.map((latLng, i) => (<Marker key={i} position={latLng} />))}
-            </GoogleMaps>
-          </>
-        )
-      }
-      case Status.FAILURE: {
-        return <h2>There was a problem: {Status.FAILURE}</h2>
-      }
-      case Status.LOADING: {
-        return <h2>Please wait while Maps loads</h2>
-      }
-    }
-  };
+  // const render = (status) => {
+  //   switch (status) {
+  //     case Status.SUCCESS: {
+  //       return (
+  //         <>
+  //           <input ref={searchInput} type='text' placeholder='Search Location...' />
+  //           <button>Get Current Location</button>
+  //           <GoogleMaps center={center} zoom={zoom} onClick={onClick} onIdle={onIdle} style={{ height: '30rem', width: '30rem' }}>
+  //             {clicks.map((latLng, i) => (<Marker key={i} position={latLng} />))}
+  //           </GoogleMaps>
+  //         </>
+  //       )
+  //     }
+  //     case Status.FAILURE: {
+  //       return <h2>There was a problem: {Status.FAILURE}</h2>
+  //     }
+  //     case Status.LOADING: {
+  //       return <h2>Please wait while Maps loads</h2>
+  //     }
+  //   }
+  // };
 
-  const initMapScript = () => {
+  const initMapScript = (data) => {
+    console.log("this is the data from the init script => ", data);
     if (window.google) {
       return Promise.resolve()
     }
-    const src = `${mapApiJs}?key=${apiKey}&libraries=places&v=weekly`;
+    const src = `${mapApiJs}?key=${data}&libraries=places`;
+    console.log("this is the src => ", src)
     return loadAsyncScript(src)
-  }
+  };
 
   const initAutocomplete = () => {
+    console.log(searchInput)
     if (!searchInput.current) return;
 
-    const autcomplete = new window.google.maps.places.Autocomplete(searchInput.current);
-    autcomplete.setFields(['address_component', 'geometry']);
-  }
+    const options = {
+      componentRestrictions: { country: "us" },
+      fields: ["address_components", "geometry", "icon", "name"],
+      strictBounds: false,
+      types: ["establishment"],
+    };
+    const autocomplete = new window.google.maps.places.Autocomplete(searchInput.current, options);
+    autocomplete.setFields(["place_id", "geometry", "name"]);
+  };
+
+  const onChangeAddress = (autocomplete) => {
+    const location = autocomplete.getPlace();
+    console.log('location', location);
+  };
 
   // end of setup
 
   useEffect(() => {
     dispatch(sessionActions.restoreUser())
+    fetch('/api/maps-key')
+      .then(res => res.json())
+      .then(data => initMapScript(data))
       .then(() => setIsLoaded(true));
-    fetch('/api/maps-key').then(res => res.json().then(data => setApiKey(data))).then(() => {
-      initMapScript().then(() => initAutocomplete())
-    })
   }, [dispatch]);
 
-  console.log('apiKey', apiKey);
+  useEffect(() => {
+    if (!searchInput.current) return;
+    initAutocomplete();
+  }, [searchInput.current])
 
+  console.log('searchINput', searchInput);
   return (
     <>
       <Navigation isLoaded={isLoaded} />
@@ -152,7 +170,13 @@ function App() {
             <TestCompontent />
           </Route>
           <Route path='/maps'>
-            <Wrapper apiKey={apiKey} render={render} />
+            <>
+              <input ref={searchInput} type='text' placeholder='Search Location...' />
+              <button>Get Current Location</button>
+              <GoogleMaps center={center} zoom={zoom} onClick={onClick} onIdle={onIdle} style={{ height: '30rem', width: '30rem' }}>
+                {clicks.map((latLng, i) => (<Marker key={i} position={latLng} />))}
+              </GoogleMaps>
+            </>
           </Route>
           <Route path='/sockets'>
             <Socket socket={socket} />

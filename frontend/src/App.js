@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import SignupFormPage from './components/SignupFormPage';
@@ -35,12 +35,26 @@ socket.on("connect", () => {
 })
 //end websocket code
 
+// load google map api js
+function loadAsyncScript(src) {
+  return new Promise(resolve => {
+    const script = document.createElement('script');
+    Object.assign(script, {
+      type: 'text/javascript',
+      async: true,
+      src
+    });
+    script.addEventListener('load', () => resolve(script));
+    document.head.appendChild(script);
+  });
+}
+
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
   const [showModal, setShowModal] = useState(false);
   //Google Maps setup
-  const [apiKey, setApiKey] = useState('');
+  // const [apiKey, setApiKey] = useState('');
   const [clicks, setClicks] = useState([]);
   const [zoom, setZoom] = useState(12); // initial zoom
   // Mt Everest 27.9884033, 86.9169069
@@ -48,6 +62,7 @@ function App() {
     lat: 27.9884033,
     lng: 86.9169069,
   });
+  const mapApiJs = 'https://maps.googleapis.com/maps/api/js'
 
   const onClick = (e) => {
     // avoid directly mutating state
@@ -60,52 +75,44 @@ function App() {
     setCenter(m.getCenter().toJSON());
   };
 
-  const render = (status) => {
-    switch (status) {
-      case Status.SUCCESS: {
-        return (
-          <>
-            <label htmlFor="lat">Latitude</label>
-            <input
-              type="number"
-              id="lat"
-              name="lat"
-              value={center.lat}
-              onChange={(event) =>
-                setCenter({ ...center, lat: Number(event.target.value) })
-              }
-            />
-            <label htmlFor="lat">Longitude</label>
-            <input
-              type="number"
-              id="lng"
-              name="lng"
-              value={center.lng}
-              onChange={(event) =>
-                setCenter({ ...center, lng: Number(event.target.value) })
-              }
-            />
-            <GoogleMaps center={center} zoom={zoom} onClick={onClick} onIdle={onIdle} style={{ height: '30rem', width: '30rem' }}>
-              {clicks.map((latLng, i) => (<Marker key={i} position={latLng} />))}
-            </GoogleMaps>
-          </>
-        )
-      }
-      case Status.FAILURE: {
-        return <h2>There was a problem: {Status.FAILURE}</h2>
-      }
-      case Status.LOADING: {
-        return <h2>Please wait while Maps loads</h2>
-      }
+  // const render = (status) => {
+  //   switch (status) {
+  //     case Status.SUCCESS: {
+  //       return (
+  //         <>
+  //           <input ref={searchInput} type='text' placeholder='Search Location...' />
+  //           <button>Get Current Location</button>
+  //           <GoogleMaps center={center} zoom={zoom} onClick={onClick} onIdle={onIdle} style={{ height: '30rem', width: '30rem' }}>
+  //             {clicks.map((latLng, i) => (<Marker key={i} position={latLng} />))}
+  //           </GoogleMaps>
+  //         </>
+  //       )
+  //     }
+  //     case Status.FAILURE: {
+  //       return <h2>There was a problem: {Status.FAILURE}</h2>
+  //     }
+  //     case Status.LOADING: {
+  //       return <h2>Please wait while Maps loads</h2>
+  //     }
+  //   }
+  // };
+
+  const initMapScript = (data) => {
+    if (window.google) {
+      return Promise.resolve()
     }
+    const src = `${mapApiJs}?key=${data}&libraries=places`;
+    return loadAsyncScript(src)
   };
 
   // end of setup
 
   useEffect(() => {
     dispatch(sessionActions.restoreUser())
+    fetch('/api/maps-key')
+      .then(res => res.json())
+      .then(data => initMapScript(data))
       .then(() => setIsLoaded(true));
-    fetch('/api/maps-key').then(res => res.json().then(data => setApiKey(data)))
   }, [dispatch]);
 
   return (
@@ -135,7 +142,16 @@ function App() {
             <TestCompontent />
           </Route>
           <Route path='/maps'>
-            <Wrapper apiKey={apiKey} render={render} />
+            <GoogleMaps center={center} setCenter={setCenter} zoom={zoom} setZoom={setZoom} onClick={onClick} onIdle={onIdle} style={{ height: '30rem', width: '30rem' }} options={{
+              zoomControl: true,
+              mapTypeControl: true,
+              scaleControl: true,
+              streetViewControl: true,
+              rotateControl: true,
+              fullscreenControl: true
+            }}>
+              {clicks.map((latLng, i) => (<Marker key={i} position={latLng} />))}
+            </GoogleMaps>
           </Route>
           <Route path='/sockets'>
             <Socket socket={socket} />

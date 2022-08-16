@@ -28,7 +28,7 @@ export default function Listings() {
         return categories && categories.map(category => (
             <div key={category.id}>
                 <NavLink style={{textDecoration:'none', marginRight:"10px"}} to={'/listings'}>                  
-                        {category.name}                 
+                    {category.name}                 
                 </NavLink>
             </div>
         ))

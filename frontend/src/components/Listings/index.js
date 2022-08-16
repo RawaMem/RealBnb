@@ -15,13 +15,13 @@ export default function Listings() {
      }, [dispatch]);
 
      if (!listings) return null
-
+    
     return(
         <>
             <h4>Welcome to Listings Page!</h4>
             {listings && listings.map(listing => (
                 <div key = {listing.id}>
-                    <NavLink to={`/listings/${listing.id}`}>< ListingCard listing = {listing}/></NavLink>
+                    <NavLink style={{ textDecoration: 'none'}} to={`/listings/${listing.id}`}>< ListingCard listing = {listing}/></NavLink>
                 </div>
             ))}
 

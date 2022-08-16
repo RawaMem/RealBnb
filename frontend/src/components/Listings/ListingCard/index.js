@@ -22,8 +22,10 @@ export default function ListingCard({listing}) {
         const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"]
         let avaDateRes, startMonth, endMonth, startDate, endDate;
         if (listing?.ListingPrices[0]) {
+            // "2022-09-01T00:00:00.000Z"
             const startDateString = listing.ListingPrices[0].startDate
             if (startDateString.substr(8, 2) === "01") {
+                // 9-2+1 = 8
                 startMonth = monthNames[(new Date(startDateString).getMonth()) + 1]
                 startDate = startMonth + " 1"
             } else {
@@ -50,7 +52,8 @@ export default function ListingCard({listing}) {
                 <div>{listing.name}</div>
                 <div>${listing.ListingPrices[0].pricePerDay} night</div>
                 <div>{avaDate()}</div>
-                <div>{listing.avgRating}</div>
+                <div><span className="material-symbols-outlined">star</span> 
+                    {listing?.avgRating ? Number(listing.avgRating).toFixed(2): "New"}</div>
             </div>
         </>
     )

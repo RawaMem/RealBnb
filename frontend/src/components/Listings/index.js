@@ -19,25 +19,17 @@ export default function Listings() {
     function handleListingsDisplay() {
         if(listingsObj) {
             let listingsToDispaly = Object.values(listingsObj);
-            if(!sorted) {
-                return listingsToDispaly
-            } else {
+            if(sorted) {
                 listingsToDispaly = listingsToDispaly.filter(listObj => {
                     let categoryArr = listObj.Categories;
-                    console.log('categoryArr', categoryArr);
                     for(let category of categoryArr) {
-                        console.log('category', category.name);
-                        console.log('boolean', category.name === selectedCategory);
                         return category.name === selectedCategory;
                     };
                 });
-                console.log('in the else', listingsToDispaly);
-                return listingsToDispaly;
             };
-        }
+            return listingsToDispaly
+        };
     };
-
-
 
     useEffect(() => {
         dispatch(getListings());
@@ -55,28 +47,30 @@ export default function Listings() {
     function displayCategories() {
         return categories && categories.map(category => (
             <div key={category.id}>
-                <NavLink style={{textDecoration:'none', marginRight:"10px"}} to={'/listings'} onClick={() => {setSelectedCategory(category.name); setSorted(true)}}>                  
+                <div style={{marginRight:"10px", cursor:"pointer"}} onClick={() => {setSelectedCategory(category.name); setSorted(true)}}>                  
                     {category.name}                 
-                </NavLink>
+                </div>
             </div>
         ))
     }
 
-     if (!listings) return null
+    if (!listings) return null
     
     return(
         <>
             <h4>Welcome to Listings Page!</h4> 
             <div style={{display:"flex"}}>
                 {displayCategories()}
-            </div>    
-            {listings && listings.map(listing => (
-                <div key = {listing.id}>
-                    <NavLink style={{ textDecoration: 'none'}} to={`/listings/${listing.id}`}>                     
-                            <ListingCard listing = {listing}/>                       
-                    </NavLink>
-                </div>
-            ))}
+            </div>
+            <div style={{display:"flex"}}>
+                {listings && listings.map(listing => (
+                    <div key = {listing.id}>
+                        <NavLink style={{ textDecoration: 'none'}} to={`/listings/${listing.id}`}>                     
+                                <ListingCard listing = {listing}/>                       
+                        </NavLink>
+                    </div>
+                ))}
+            </div>  
         </>
     )
 }

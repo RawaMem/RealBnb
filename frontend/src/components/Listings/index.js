@@ -59,19 +59,16 @@ export default function Listings() {
         if(listingsObj) {
             let listingsToDispaly = Object.values(listingsObj);
             if(sorted) {
-                console.log('am I here???')
                 listingsToDispaly = listingsToDispaly.filter(listObj => {
                     let categoryArr = listObj.Categories;
                     for(let category of categoryArr) {
                         return category.name === selectedCategory;
                     };
                 });
-                // return listingsToDispaly
             }
             
             if(search) {
                 listingsToDispaly = handleSearch();
-                // return listingsToDispaly
             };
             return listingsToDispaly
         };

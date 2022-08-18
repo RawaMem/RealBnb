@@ -13,23 +13,70 @@ export default function Listings() {
     const [categories, setCategories] = useState(null);
     const [sorted, setSorted] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState(null);
+    const [ query, setQuery ] = useState('');
+    const [ search, setSearch] = useState(false);
 
     let listings = handleListingsDisplay();
+
+    
+    function removeSpacePunc(str) {
+        let removeSpace = str.replace(/\s/g,'');
+        let removePunc = removeSpace.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()']/g,"");
+        return removePunc.toLowerCase();
+    };
+    
+
+    function handleSearch() {
+        if(listingsObj) {
+            let listingsToDisplay = Object.values(listingsObj);
+            let searchResult = [];
+            listingsToDisplay.map(list => {
+                let city = removeSpacePunc(list.city);
+                let state = removeSpacePunc(list.state);
+                let name = removeSpacePunc(list.name);
+                let checkedQuery = removeSpacePunc(query);
+                let checkedLists = [city, state, name];
+                for (let checkList of checkedLists) {
+                    if(checkList.indexOf(checkedQuery) !== -1 && checkList.startsWith(checkedQuery)) {
+                        searchResult.push(list);
+                        break;
+                    }                  
+                }
+            })
+            return searchResult;
+        }
+    }
+
+
+    function handleSearchSubmit(e) {
+        e.preventDefault();
+        if(!query) return;
+        setSearch(true);
+        setSorted(false);
+    }
 
     function handleListingsDisplay() {
         if(listingsObj) {
             let listingsToDispaly = Object.values(listingsObj);
             if(sorted) {
+                console.log('am I here???')
                 listingsToDispaly = listingsToDispaly.filter(listObj => {
                     let categoryArr = listObj.Categories;
                     for(let category of categoryArr) {
                         return category.name === selectedCategory;
                     };
                 });
+                // return listingsToDispaly
+            }
+            
+            if(search) {
+                listingsToDispaly = handleSearch();
+                // return listingsToDispaly
             };
             return listingsToDispaly
         };
     };
+
 
     useEffect(() => {
         dispatch(getListings());
@@ -47,7 +94,7 @@ export default function Listings() {
     function displayCategories() {
         return categories && categories.map(category => (
             <div key={category.id}>
-                <div style={{marginRight:"10px", cursor:"pointer"}} onClick={() => {setSelectedCategory(category.name); setSorted(true)}}>                  
+                <div style={{marginRight:"10px", cursor:"pointer"}} onClick={() => {setSelectedCategory(category.name); setSorted(true); setSearch(false)}}>                  
                     {category.name}                 
                 </div>
             </div>
@@ -59,18 +106,38 @@ export default function Listings() {
     return(
         <>
             <h4>Welcome to Listings Page!</h4> 
-            <div style={{display:"flex"}}>
-                {displayCategories()}
-            </div>
-            <div style={{display:"flex"}}>
-                {listings && listings.map(listing => (
-                    <div key = {listing.id}>
-                        <NavLink style={{ textDecoration: 'none'}} to={`/listings/${listing.id}`}>                     
-                                <ListingCard listing = {listing}/>                       
-                        </NavLink>
-                    </div>
-                ))}
-            </div>  
+            <section style={{ padding: "3rem 0 3rem 3rem", width: "90vw", maxWidth: "var(--max-width)", margin: "5 auto"}}>
+                <form style={{ display: "flex"}}>
+                    <input 
+                    style={{ width: "50%", height: "35px" }} 
+                    type="text" placeholder='Where Search destinations'         
+                    value={query} 
+                    onChange={(e => setQuery(e.target.value))} 
+                    />
+                    <button 
+                    type="submit"
+                    onClick={handleSearchSubmit}                    
+                    >
+                        Search
+                    </button>
+                </form>
+            </section>
+            <section>
+                <div style={{display:"flex"}}>
+                    {displayCategories()}
+                </div>
+            </section>
+            <section>
+                <div style={{display:"flex"}}>
+                    {listings && listings.map(listing => (
+                        <article key = {listing.id} >
+                            <NavLink style={{ textDecoration: 'none'}} to={`/listings/${listing.id}`}>                     
+                                    <ListingCard listing = {listing} />                       
+                            </NavLink>
+                        </article>
+                    ))}
+                </div> 
+            </section>
         </>
     )
 }

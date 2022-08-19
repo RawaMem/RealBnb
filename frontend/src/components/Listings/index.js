@@ -125,9 +125,9 @@ export default function Listings() {
                 </div>
             </section>
             <section>
-                <div style={{display:"flex"}}>
+                <div style={{display:"flex", flexWrap: "wrap"}}>
                     {listings && listings.map(listing => (
-                        <article key = {listing.id} >
+                        <article key = {listing.id} style= {{margin:"15px"}} >
                             <NavLink style={{ textDecoration: 'none'}} to={`/listings/${listing.id}`}>                     
                                     <ListingCard listing = {listing} />                       
                             </NavLink>

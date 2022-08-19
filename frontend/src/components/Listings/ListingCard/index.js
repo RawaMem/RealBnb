@@ -46,15 +46,27 @@ export default function ListingCard({listing}) {
     }
 
     return (
-        <>
-            <div key={listing.id} style={{ display: "flex", flexFlow: "column" }}>
-                <img alt="listing" width="300" height="400" src={listing.previewImageUrl}></img>
-                <div>{listing.name}</div>
-                <div>${listing.ListingPrices[0].pricePerDay} night</div>
-                <div>{avaDate()}</div>
-                <div><span className="material-symbols-outlined">star</span> 
-                    {listing?.avgRating ? Number(listing.avgRating).toFixed(2): "New"}</div>
-            </div>
+        <>            
+                <div key={listing.id}>   
+                    <img alt="listing" width="340" height="350" src={listing.previewImageUrl} loading="lazy" style={{ borderRadius: "15px"}} />
+                    <div style={{ display:"flex", justifyContent:"space-between", marginTop:"10px" }}>
+                        <div>
+                            <div style={{color: "#323232", fontWeight: "600", fontSize:"15px"}}>{listing.name}</div>
+                            <div style={{ color:"#7f7f7f", fontSize:"14px" }}>{avaDate()}</div>
+                            <div>
+                                <span style={{color: "#323232", fontWeight: "600", fontSize:"14px"}}>${listing.ListingPrices[0].pricePerDay}
+                                </span> 
+                                <span style={{color: "#4c4c4c"}}> night</span>
+                            </div>                            
+                        </div>
+                        <div>
+                            <div style={{display:"flex",}}>
+                                <span className="material-symbols-outlined" style={{color: "#323232", display:"absolute", marginTop:"-4px"}}>star</span> 
+                                <span style={{color: "#4c4c4c", fontSize:"15px"}}>{listing.avgRating ? Number(listing.avgRating).toFixed(2): "New"}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
         </>
     )
 }

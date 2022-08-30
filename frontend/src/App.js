@@ -135,7 +135,7 @@ function App() {
           <Route path='/listings/:listingId'>
             <SingleListingPage />
           </Route>
-          <Route path="/listings">
+          <Route path="/">
             <Listings />
           </Route>
           <Route path='/testing'>

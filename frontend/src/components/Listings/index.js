@@ -18,13 +18,13 @@ export default function Listings() {
 
     let listings = handleListingsDisplay();
 
-    
+
     function removeSpacePunc(str) {
         let removeSpace = str.replace(/\s/g,'');
         let removePunc = removeSpace.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()']/g,"");
         return removePunc.toLowerCase();
     };
-    
+
 
     function handleSearch() {
         if(listingsObj) {
@@ -40,7 +40,7 @@ export default function Listings() {
                     if(checkList.indexOf(checkedQuery) !== -1 && checkList.startsWith(checkedQuery)) {
                         searchResult.push(list);
                         break;
-                    }                  
+                    }
                 }
             })
             return searchResult;
@@ -66,7 +66,7 @@ export default function Listings() {
                     };
                 });
             }
-            
+
             if(search) {
                 listingsToDispaly = handleSearch();
             };
@@ -91,29 +91,29 @@ export default function Listings() {
     function displayCategories() {
         return categories && categories.map(category => (
             <div key={category.id}>
-                <div style={{marginRight:"10px", cursor:"pointer"}} onClick={() => {setSelectedCategory(category.name); setSorted(true); setSearch(false)}}>                  
-                    {category.name}                 
+                <div style={{marginRight:"10px", cursor:"pointer"}} onClick={() => {setSelectedCategory(category.name); setSorted(true); setSearch(false)}}>
+                    {category.name}
                 </div>
             </div>
         ))
     }
 
     if (!listings) return null
-    
+
     return(
         <>
-            <h4>Welcome to Listings Page!</h4> 
+
             <section style={{ padding: "3rem 0 3rem 3rem", width: "90vw", maxWidth: "var(--max-width)", margin: "5 auto"}}>
                 <form style={{ display: "flex"}}>
-                    <input 
-                    style={{ width: "50%", height: "35px" }} 
-                    type="text" placeholder='Where Search destinations'         
-                    value={query} 
-                    onChange={(e => setQuery(e.target.value))} 
+                    <input
+                    style={{ width: "50%", height: "35px" }}
+                    type="text" placeholder='Where Search destinations'
+                    value={query}
+                    onChange={(e => setQuery(e.target.value))}
                     />
-                    <button 
+                    <button
                     type="submit"
-                    onClick={handleSearchSubmit}                    
+                    onClick={handleSearchSubmit}
                     >
                         Search
                     </button>
@@ -128,12 +128,12 @@ export default function Listings() {
                 <div style={{display:"flex", flexWrap: "wrap"}}>
                     {listings && listings.map(listing => (
                         <article key = {listing.id} style= {{margin:"15px"}} >
-                            <NavLink style={{ textDecoration: 'none'}} to={`/listings/${listing.id}`}>                     
-                                    <ListingCard listing = {listing} />                       
+                            <NavLink style={{ textDecoration: 'none'}} to={`/listings/${listing.id}`}>
+                                    <ListingCard listing = {listing} />
                             </NavLink>
                         </article>
                     ))}
-                </div> 
+                </div>
             </section>
         </>
     )

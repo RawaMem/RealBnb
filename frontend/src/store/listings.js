@@ -45,7 +45,8 @@ export default function listings(state = initialState, action) {
             action.listings.forEach(listing => newState[listing.id] = listing);
             return newState;
         case GET_SINGLE_LISTING:
-            newState = action.listing
+            newState = {...state}
+            newState.currentListing = action.listing
             return newState;
 
         default:

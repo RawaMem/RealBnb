@@ -11,7 +11,7 @@ export default function SingleListingPage() {
     const {listingId} = useParams()
     const dispatch = useDispatch()
 
-    const listing = useSelector(state => state.listings)
+    const listing = useSelector(state => state.listings.currentListing)
 
     useEffect(() => {
         dispatch(getSingleListingThunk(listingId))

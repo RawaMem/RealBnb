@@ -1,13 +1,15 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
 import LoginFormModal from '../LoginFormModal';
 import './Navigation.css';
 import { useState } from 'react';
+import { getListingSearchResultsThunk } from '../../store/listings';
 
 function Navigation({ isLoaded }){
   const sessionUser = useSelector(state => state.session.user);
+  const dispatch = useDispatch()
 
   const [destination, setDestination] = useState('')
   const [checkIn, setCheckIn] = useState('')
@@ -30,7 +32,13 @@ function Navigation({ isLoaded }){
 
   const handleSearch = (e) => {
     e.preventDefault()
-
+    const searchFormValues = {
+      destination,
+      checkIn,
+      checkOut,
+      numGuests
+    }
+    dispatch(getListingSearchResultsThunk(searchFormValues))
   }
 
   return (
@@ -43,6 +51,7 @@ function Navigation({ isLoaded }){
         className="destinations"
         value={destination}
         onChange={(e) => setDestination(e.target.value)}
+        placeholder='Search destinations'
         />
 
         <input
@@ -50,6 +59,7 @@ function Navigation({ isLoaded }){
         className="checkIn"
         value={checkIn}
         onChange={(e) => setCheckIn(e.target.value)}
+        placeholder='Check in'
         />
 
         <input
@@ -57,6 +67,7 @@ function Navigation({ isLoaded }){
         className="checkOut"
         value={checkOut}
         onChange={(e) => setCheckOut(e.target.value)}
+        placeholder='Check out'
         />
 
         <input
@@ -64,6 +75,7 @@ function Navigation({ isLoaded }){
         className="numGuests"
         value={numGuests}
         onChange={(e) => setNumGuests(e.target.value)}
+        placeholder='Add Guests'
         />
 
         <button className="searchBtn">Search</button>

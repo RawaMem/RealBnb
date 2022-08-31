@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { csrfFetch } from '../../store/csrf';
-import { getListings } from '../../store/listings';
+import { getListingsThunk } from '../../store/listings';
 import ListingCard from './ListingCard';
 
 
@@ -76,7 +76,7 @@ export default function Listings() {
 
 
     useEffect(() => {
-        dispatch(getListings());
+        dispatch(getListingsThunk());
      }, [dispatch]);
 
     // fetch all categories

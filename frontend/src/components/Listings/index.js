@@ -90,7 +90,7 @@ export default function Listings() {
     // display all categories
     function displayCategories() {
         return categories && categories.map(category => (
-            <div key={category.id}>
+            <div key={`categoryId-${category.id}`}>
                 <div style={{marginRight:"10px", cursor:"pointer"}} onClick={() => {setSelectedCategory(category.name); setSorted(true); setSearch(false)}}>
                     {category.name}
                 </div>
@@ -127,7 +127,7 @@ export default function Listings() {
             <section>
                 <div style={{display:"flex", flexWrap: "wrap"}}>
                     {listings && listings.map(listing => (
-                        <article key = {listing.id} style= {{margin:"15px"}} >
+                        <article key = {`listingId-${listing.id}`} style= {{margin:"15px"}} >
                             <NavLink style={{ textDecoration: 'none'}} to={`/listings/${listing.id}`}>
                                     <ListingCard listing = {listing} />
                             </NavLink>

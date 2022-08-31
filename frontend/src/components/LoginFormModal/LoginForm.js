@@ -10,6 +10,7 @@ function LoginForm() {
   const [errors, setErrors] = useState([]);
 
   const handleSubmit = (e) => {
+    console.log('FORM IS SUBMITTING')
     e.preventDefault();
     setErrors([]);
     return dispatch(sessionActions.login({ credential, password })).catch(
@@ -19,6 +20,19 @@ function LoginForm() {
       }
     );
   };
+
+  const handleDemoUser = (e) => {
+    e.preventDefault();
+    // await setCredential('demo@user.io');
+    // await setPassword('password');
+    console.log('CURRENT CREDENTIAL STATE', credential, password)
+    return dispatch(sessionActions.login({ credential: 'demo@user.io', password: 'password' })).catch(
+      async (res) => {
+        const data = await res.json();
+        if (data && data.errors) setErrors(data.errors);
+      }
+    )
+  }
 
   return (
     <>
@@ -49,6 +63,9 @@ function LoginForm() {
         </label>
         <button type="submit">Log In</button>
       </form>
+      <button
+        className="demoUserButton"
+        onClick={handleDemoUser}>Demo Log In</button>
     </>
   );
 }

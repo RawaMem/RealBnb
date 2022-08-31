@@ -23,8 +23,6 @@ function LoginForm() {
 
   const handleDemoUser = (e) => {
     e.preventDefault();
-    // await setCredential('demo@user.io');
-    // await setPassword('password');
     console.log('CURRENT CREDENTIAL STATE', credential, password)
     return dispatch(sessionActions.login({ credential: 'demo@user.io', password: 'password' })).catch(
       async (res) => {

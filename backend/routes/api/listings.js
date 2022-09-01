@@ -174,6 +174,82 @@ router.post('/', singleMulterUpload('image'), asyncHandler(async (req, res) => {
     res.json(finalListing);
 }));
 
+
+//search listings on home  page
+router.get('/search', asyncHandler(async (req, res) => {
+  const queryInfo = req.query
+  // let test11
+  let whereListing = {}
+  if (req.query.destination) {
+    whereListing = {[Op.or]:[
+      {name: {[Op.iLike]: `%${req.query.destination}%`}},
+      {address: {[Op.iLike]: `%${req.query.destination}%`}},
+      {city: {[Op.iLike]: `%${req.query.destination}%`}},
+      {state: {[Op.iLike]: `%${req.query.destination}%`}}
+    ]}
+
+    // test11 = {[Op.iLike]: `%${req.query.destination}%`}
+    // whereListing.name = req.query.destination
+    // whereListing.address = req.query.destination
+    // whereListing.city = req.query.destination
+    // whereListing.state = req.query.destination
+  }
+  if (req.query.numGuests) whereListing.maxGuests = {[Op.lte]:req.query.numGuests}
+
+  let whereDates = {}
+  if (req.query.checkIn && !req.query.checkOut) {
+    console.log('CHECKIN DATE BUT NO CHECKOUT')
+    whereDates = { [Op.and]: [
+      {startDate: {[Op.lte]: req.query.checkIn}},
+      {endDate: {[Op.gt]: req.query.checkIn}}
+    ]}
+    // whereDates.startDate = {[Op.lte]:req.query.checkIn}
+  }
+  if (req.query.checkOut && !req.query.checkIn) {
+    console.log('CHECKOUT DATE BUT NO CHECKIN')
+
+    whereDates = { [Op.and]: [
+      {startDate: {[Op.lte]: req.query.checkOut}},
+      {endDate: {[Op.gte]: req.query.checkOut}}
+    ]}
+    // whereDates.endDate = {[Op.gte]:req.query.checkOut}
+  }
+
+  if (req.query.checkIn && req.query.checkOut) {
+    console.log('BOTH CHECKIN AND CHECKOUT')
+
+    whereDates = { [Op.and]: [
+        {startDate: {[Op.lte]: req.query.checkIn}},
+        {endDate: {[Op.gte]: req.query.checkOut}}
+    ]}
+  }
+
+  console.log('THIS IS SEARCH INFO-----------------------', queryInfo, whereListing, whereDates)
+
+  const listings = await Listing.findAll({
+    where: whereListing,
+    attributes: {
+      include: [[Sequelize.fn('AVG', Sequelize.col('Reviews.starRating')), 'avgRating'],]
+    },
+    include: [
+          {model: Review,
+            attributes: []},
+          {model: ListingPrice,
+          where: whereDates},
+          Category
+        ],
+    group: ['Listing.id',
+            'ListingPrices.id',
+            'Categories.id',
+            'Categories->ListingCategory.categoryId',
+            'Categories->ListingCategory.listingId',
+            'Categories->ListingCategory.createdAt',
+            'Categories->ListingCategory.updatedAt']
+});
+
+  res.json(listings)
+}))
+
 //get single listing for listing detail page
 router.get('/:listingId(\\d+)', asyncHandler(async (req, res) => {
   const { listingId } = req.params;

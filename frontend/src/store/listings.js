@@ -3,6 +3,7 @@ import { csrfFetch } from "./csrf";
 const GET_LISTINGS = "listings/GET_listings";
 const GET_SINGLE_LISTING = "listings/GET_SINGLE_LISTING";
 const LISTING_SEARCH_RESULTS = "listings/LISTING_SEARCH_RESULTS";
+const CLEAR_LISTING_STATE = "listings/CLEAR_LISTING_STATE";
 
 
 const getListingsAction = (listings) => ({
@@ -20,6 +21,9 @@ const listingSearchResultsAction = (listings) => ({
     listings
 });
 
+export const clearListingStateAction = () => ({
+    type: CLEAR_LISTING_STATE
+});
 
 export const getListingsThunk = () => async dispatch => {
     const response = await csrfFetch('/api/listings');
@@ -74,6 +78,8 @@ export default function listings(state = initialState, action) {
             newState = {};
             action.listings.forEach(listing => newState[listing.id] = listing);
             return newState;
+        case CLEAR_LISTING_STATE:
+            return null
         default:
             return state;
     }

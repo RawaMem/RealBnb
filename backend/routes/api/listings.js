@@ -19,6 +19,7 @@ const { Listing,
    WishList,
    Amenity,
    User } = require('../../db/models');
+   
 const { singlePublicFileUpload, singleMulterUpload } = require('../../awsS3');
 
 const router = express.Router();

@@ -196,9 +196,33 @@ router.get('/search', asyncHandler(async (req, res) => {
   }
   if (req.query.numGuests) whereListing.maxGuests = {[Op.lte]:req.query.numGuests}
 
-  const whereDates = {}
-  if (req.query.checkIn) whereDates.startDate = {[Op.gte]:req.query.checkIn}
-  if (req.query.checkOut) whereDates.endDate = {[Op.lte]:req.query.checkOut}
+  let whereDates = {}
+  if (req.query.checkIn && !req.query.checkOut) {
+    console.log('CHECKIN DATE BUT NO CHECKOUT')
+    whereDates = { [Op.and]: [
+      {startDate: {[Op.lte]: req.query.checkIn}},
+      {endDate: {[Op.gt]: req.query.checkIn}}
+    ]}
+    // whereDates.startDate = {[Op.lte]:req.query.checkIn}
+  }
+  if (req.query.checkOut && !req.query.checkIn) {
+    console.log('CHECKOUT DATE BUT NO CHECKIN')
+
+    whereDates = { [Op.and]: [
+      {startDate: {[Op.lte]: req.query.checkOut}},
+      {endDate: {[Op.gte]: req.query.checkOut}}
+    ]}
+    // whereDates.endDate = {[Op.gte]:req.query.checkOut}
+  }
+
+  if (req.query.checkIn && req.query.checkOut) {
+    console.log('BOTH CHECKIN AND CHECKOUT')
+
+    whereDates = { [Op.and]: [
+        {startDate: {[Op.lte]: req.query.checkIn}},
+        {endDate: {[Op.gte]: req.query.checkOut}}
+    ]}
+  }
 
   console.log('THIS IS SEARCH INFO-----------------------', queryInfo, whereListing, whereDates)
 
@@ -210,7 +234,8 @@ router.get('/search', asyncHandler(async (req, res) => {
     include: [
           {model: Review,
             attributes: []},
-          ListingPrice,
+          {model: ListingPrice,
+          where: whereDates},
           Category
         ],
     group: ['Listing.id',

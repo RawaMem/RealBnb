@@ -200,9 +200,10 @@ router.get('/search', asyncHandler(async (req, res) => {
   if (req.query.checkIn) whereDates.startDate = {[Op.gte]:req.query.checkIn}
   if (req.query.checkOut) whereDates.endDate = {[Op.lte]:req.query.checkOut}
 
-  console.log('THIS IS SEARCH INFO-----------------------',test11, queryInfo, whereListing, whereDates)
+  console.log('THIS IS SEARCH INFO-----------------------', queryInfo, whereListing, whereDates)
 
   const listings = await Listing.findAll({
+    where: whereListing,
     attributes: {
       include: [[Sequelize.fn('AVG', Sequelize.col('Reviews.starRating')), 'avgRating'],]
     },
@@ -221,9 +222,7 @@ router.get('/search', asyncHandler(async (req, res) => {
             'Categories->ListingCategory.updatedAt']
 });
 
-
-
-
+  res.json(listings)
 }))
 
 //get single listing for listing detail page

@@ -12,7 +12,6 @@ import TestCompontent from './components/TestComponent';
 import GoogleMaps from './components/GoogleMaps';
 import { Wrapper, Status } from '@googlemaps/react-wrapper';
 import Marker from './components/Marker';
-import CreateListing from './components/CreateListing';
 
 
 //websocket setup
@@ -135,9 +134,6 @@ function App() {
           </Route>
           <Route path='/listings/:listingId'>
             <SingleListingPage />
-          </Route>
-          <Route path='/listings/createListing'>
-            <CreateListing />
           </Route>
           <Route path="/">
             <Listings />

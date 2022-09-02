@@ -4,7 +4,7 @@ import './index.css';
 
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { ModalProvider } from './context/Modal';
 import App from './App';
 
@@ -12,8 +12,10 @@ import configureStore from './store';
 import { restoreCSRF, csrfFetch } from "./store/csrf";
 import * as sessionActions from './store/session';
 import CategoryProvider from './context/CategoryContext';
+import CreateListing from './components/CreateListing';
 
 const store = configureStore();
+
 
 if (process.env.NODE_ENV !== "production") {
   restoreCSRF();
@@ -35,7 +37,12 @@ function Root() {
         <Provider store={store}>
           <CategoryProvider>
           <BrowserRouter>
+          <Switch>
+            <Route exact path='/createListing'>
+              <CreateListing />
+            </Route>
             <App />
+          </Switch>
             {/* <Carrot /> */}
           </BrowserRouter>
         </CategoryProvider>

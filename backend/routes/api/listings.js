@@ -7,7 +7,12 @@ const Sequelize = require('sequelize');
 const { requireAuth } = require('../../utils/auth');
 
 const { Op } = require('sequelize');
-
+const {
+  singleMulterUpload,
+  singlePublicFileUpload,
+  multipleMulterUpload,
+  multiplePublicFileUpload,
+} = require('../../awsS3');
 const { Listing,
    ListingPrice,
    ListingAmenity,
@@ -65,14 +70,20 @@ router.get('/', asyncHandler(async (req, res) => {
         //   }).then((res) => console.log(res));
 
 //create listing
-router.post('/', singleMulterUpload('image'), asyncHandler(async (req, res) => {
-  //destucture listing info
-  const { ownerId,
+router.post(
+  '/', 
+  singleMulterUpload('image'), 
+  multipleMulterUpload('image'),
+  asyncHandler(async (req, res) => {
+  const { 
+    ownerId,
     name,
     description,
     serviceFee,
     cleaningFee,
-    numRooms,
+    bedrooms,
+    beds,
+    baths,
     maxGuests,
     address,
     city,
@@ -80,21 +91,26 @@ router.post('/', singleMulterUpload('image'), asyncHandler(async (req, res) => {
     zipCode,
     longitude,
     latitude,
+    imageDescription,
     listingPriceArr,
     amenityArr,
     categoryArr,
-    imageArr
   } = req.body
 
   const previewImageUrl = await singlePublicFileUpload(req.file);
+  // multiplePublicFileUpload returns an array where each element is the url to the s3 bucket.
+  const imageArr = await multiplePublicFileUpload(req.files);
 
-  const newListing = { ownerId,
+
+  const newListing = { 
+    ownerId,
     previewImageUrl,
     name,
     description,
     serviceFee,
     cleaningFee,
-    numRooms,
+    bedrooms,
+    beds,
     maxGuests,
     address,
     city,
@@ -107,49 +123,56 @@ router.post('/', singleMulterUpload('image'), asyncHandler(async (req, res) => {
   const createdListing = await Listing.create(newListing)
 
   //create listing prices using new listing id
+  // userId is called ownerId from req.body
+  // listingPriceArr = [ {pricePerDay: 299, startDate: '', endDate: ''} ]
   if (listingPriceArr.length) {
     for (let i = 0; i < listingPriceArr.length; i++) {
       const listingPriceObj= {
         listingId: createdListing.id,
-        userId,
-        pricePerDay,
-        startDate,
-        endDate
+        userId: ownerId,
+        pricePerDay: listingPriceArr[i].pricePerDay,
+        startDate: listingPriceArr[i].startDate,
+        endDate: listingPriceArr[i].endDate
       }
       await ListingPrice.create(listingPriceObj)
   }}
 
   //create listing amentities using new listing id
+  // amenityArr = [amenityId, amenityId, amenityId]
   if (amenityArr.length) {
     for (let i = 0; i < amenityArr.length; i++) {
       const amenityObj= {
         listingId: createdListing.id,
-        amenityId
+        amenityId: amenityArr[i]
       }
       await ListingAmenity.create(amenityObj)
   }}
 
   //create listing categories using new listing id
+  //categoryArr = [categoryId,categoryId,categoryId]
   if (categoryArr.length) {
     for (let i = 0; i < categoryArr.length; i++) {
       const categoryObj= {
         listingId: createdListing.id,
-        categoryId
+        categoryId:categoryArr[i]
       }
       await ListingCategory.create(categoryObj)
   }}
 
-  //create listing categories using new listing id
+  // imageArr is an array returns from s3, where each element is the url to our s3 bucket.
   if (imageArr.length) {
     for (let i = 0; i < imageArr.length; i++) {
       const imageObj= {
+        userId: ownerId,
         listingId: createdListing.id,
-        userId,
-        url,
-        description
+        url: imageArr[i],
+        description: imageDescription
       }
       await Image.create(imageObj)
-  }}
+    }
+  }
+
+
   const finalListing = await Listing.findByPk(createdListing.id, {
     include: [Image,
         Category,

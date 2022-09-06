@@ -24,9 +24,11 @@ const singlePublicFileUpload = async (file) => {
     Body: buffer,
     ACL: "public-read",
   };
+  //S3 sends back data on the saved file which is saved to the variable result.
   const result = await s3.upload(uploadParams).promise();
 
   // save the name of the file in your bucket as the key in your database to retrieve for later
+  //You will be saving this url link that S3 generates for us to your database which can be extracted from result.Location
   return result.Location;
 };
 

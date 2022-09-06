@@ -6,6 +6,7 @@ import LoginFormModal from '../LoginFormModal';
 import './Navigation.css';
 import { useState } from 'react';
 import { getListingSearchResultsThunk } from '../../store/listings';
+import { useCategory } from '../../context/CategoryContext';
 
 function Navigation({ isLoaded }){
   const sessionUser = useSelector(state => state.session.user);
@@ -15,6 +16,7 @@ function Navigation({ isLoaded }){
   const [checkIn, setCheckIn] = useState('')
   const [checkOut, setCheckOut] = useState('')
   const [numGuests, setNumGuests] = useState('')
+  const {setSorted} = useCategory();
 
   let sessionLinks;
   if (sessionUser) {
@@ -80,9 +82,12 @@ function Navigation({ isLoaded }){
 
         <button className="searchBtn">Search</button>
       </form>
+      <section>
+        <NavLink style={{ textDecoration: 'none', color: "#323232"}}exact to='/listings/createListing'>Become a Host</NavLink>
+      </section>
       <ul>
         <li>
-          <NavLink exact to="/"> Home |</NavLink>
+          <NavLink exact to="/" onClick={()=> setSorted(false)}> Home |</NavLink>
           <NavLink exact to="/maps"> Maps |</NavLink>
           <NavLink exact to="/sockets"> Sockets |</NavLink>
           <NavLink exact to="/testing">AWS |</NavLink>

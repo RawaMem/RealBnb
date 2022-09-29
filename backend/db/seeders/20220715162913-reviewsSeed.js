@@ -79,6 +79,20 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
    },
+//    {
+//     authorId: 3,
+//     listingId: 1,
+//     content: 'Check in took a while but other than that great.',
+//     starRating: 5,
+//     cleanliness: 4,
+//     communication: 5,
+//     checkIn: 2,
+//     accuracy: 3,
+//     location: 4,
+//     value: 5,
+//       createdAt: new Date(),
+//       updatedAt: new Date()
+//  },
     {
       authorId: 2,
       listingId: 3,

@@ -277,13 +277,36 @@ router.get('/:listingId(\\d+)', asyncHandler(async (req, res) => {
   const { listingId } = req.params;
   const singleListing = await Listing.findByPk(listingId, {
     attributes: {
-      include: [[Sequelize.fn('AVG', Sequelize.col('Reviews.starRating')), 'avgRating'],]
+      include: [
+        //attempted to do average aggregate query with sql literal
+      //   [Sequelize.literal(`(
+      //     SELECT AVG(starRating)
+      //     FROM Reviews AS Review
+      //     WHERE
+      //         Review.listingId = ${listingId}
+      // )`),
+      // 'avgRating'],
+
+
+        //aggregate function for average not calculating correctly, will calculate on front end instead
+        // [Sequelize.fn('AVG', Sequelize.col('Reviews.starRating')), 'avgRating'],
+        // [Sequelize.fn('AVG', Sequelize.col('Reviews.cleanliness')), 'aveCleanliness'],
+        // [Sequelize.fn('AVG', Sequelize.col('Reviews.communication')), 'aveCommunication'],
+        // [Sequelize.fn('AVG', Sequelize.col('Reviews.checkIn')), 'aveCheckIn'],
+        // [Sequelize.fn('AVG', Sequelize.col('Reviews.accuracy')), 'aveAccuracy'],
+        // [Sequelize.fn('AVG', Sequelize.col('Reviews.location')), 'aveLocation'],
+        // [Sequelize.fn('AVG', Sequelize.col('Reviews.value')), 'aveValue'],
+      ]
     },
     include: [Image,
         Category,
         ListingPrice,
         Amenity,
-        Review,
+        {model: Review,
+            include: {
+              model: User,
+              attributes: ['username'],
+            }},
         Booking,
         WishList,
         {  model: User,
@@ -296,10 +319,10 @@ router.get('/:listingId(\\d+)', asyncHandler(async (req, res) => {
                       model: Review,
                       attributes: ['id']}}}],
     group: [
+                'Reviews.id',
                 'Listing.id',
                 'ListingPrices.id',
                 'Bookings.id',
-                'Reviews.id',
                 'Images.id',
                 'WishLists.id',
                 'Categories.id',
@@ -319,6 +342,7 @@ router.get('/:listingId(\\d+)', asyncHandler(async (req, res) => {
                 'WishLists->WishListListing.updatedAt',
                 'User.id',
                 'User->Listings.id',
+                'Reviews->User.id'
               ]
   })
   res.json(singleListing);

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { clearListingStateAction, getSingleListingThunk } from "../../store/listings";
 import HostAndSpecs from "./HostAndSpecs";
+import ReviewsContainer from "./ReviewsContainer";
 import SingleListingImages from "./SingleListingImages";
 import SingleListingTitle from "./SingleListingTitle";
 
@@ -13,6 +14,7 @@ export default function SingleListingPage() {
     const allListings = useSelector(state => state.listings)
     let listing;
     if (allListings) listing = allListings.currentListing
+    console.log(' this is listing from SingleListingPage', listing)
 
     useEffect(() => {
         dispatch(getSingleListingThunk(listingId))
@@ -31,9 +33,13 @@ export default function SingleListingPage() {
                 <div className="singleListingImageContainer">
                     <SingleListingImages listing={listing}/>
                 </div>
-                <div className="hostAndSpecs">
+                <div className="hostAndSpecsContainer">
                     <HostAndSpecs listing={listing}/>
                 </div>
+                <div className="reviewContainer">
+                    <ReviewsContainer listing={listing}/>
+                </div>
+
             </div>
         )}
         </div>

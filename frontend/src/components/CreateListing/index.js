@@ -2,8 +2,10 @@ import { useState } from "react"
 import { useSelector } from "react-redux"
 import Introducing from "./Introducing";
 import './createListing.css';
-import GuestBedsForm from "./GuestBedsForm";
+import AddressForm from "./AddressForm";
+import BedGuestForm from "./BedGuestForm";
 import { Route } from "react-router-dom";
+
 
 export default function CreateListing() {
     const listingOwner = useSelector( state => state.session.user);
@@ -20,7 +22,7 @@ export default function CreateListing() {
     const [address, setAddress] = useState('');
     const [city, setCity] = useState('');
     const [state, setState] = useState('');
-    const [zipCode, setZipCode] = useState(0);
+    const [zipCode, setZipCode] = useState('');
     const [longitude, setLongitude] = useState(10);
     const [latitude, setLatitude] = useState(10);
     const [imageDescription, setImageDescription] = useState('');
@@ -28,7 +30,10 @@ export default function CreateListing() {
     const [amenityArr, setAmenityArr] = useState([]);
     const [categoryArr, setCategoryArr] = useState([]);
     const [page, setPage] = useState(1);
-
+    console.log('this is address', address);
+    console.log('this is address city main', city);
+    console.log('this is longitude', longitude);
+    console.log('this is latitude', latitude);
 
     switch(page) {
         case 1:
@@ -36,11 +41,34 @@ export default function CreateListing() {
                 <div className="listingform-container">
                     <Introducing setPage={setPage} />
                 </div>
-            )
+            );
         case 2:
             return (
                 <div className="listingform-container">
-                    <GuestBedsForm maxGuests={maxGuests} setMaxGuests={setMaxGuests} beds={beds} setBeds={setBeds} bedrooms={bedrooms} setBedRooms={setBedRooms} baths={baths} setBaths={setBaths} />
+                    <AddressForm 
+                    address={address}
+                    setAddress={setAddress} 
+                    setCity={setCity} 
+                    city={city} 
+                    state={state} 
+                    setState={setState} 
+                    zipCode={zipCode} 
+                    setZipCode={setZipCode} 
+                    setLongitude={setLongitude} setLatitude={setLatitude} 
+                    setPage={setPage}
+                    />
+                </div>
+            );
+        case 3:
+            return (
+                <div className="listingform-container">
+                    <BedGuestForm 
+                    setMaxGuests={setMaxGuests}
+                    setBeds={setBeds}
+                    setBedRooms={setBedRooms}
+                    setBaths={setBaths}
+                    setPage={setPage}
+                    />
                 </div>
             )
     };

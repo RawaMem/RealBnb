@@ -10,15 +10,52 @@
     background-color: #000;
 }
 
-.guest-beds-form-container {
+.address-form-container {
     height: 100vh;
     display: grid;
-    grid-template-columns: 50% auto;
-    background-color: green;
+    grid-template-columns: 50% 50vw;
 }
 
 .grid-left-container {
-    background-image: linear-gradient(#E61E4D, #BD1E59,#BD1E59, #92174D,#861453, #6C0D63,#59086E,#460479,#440589);
+    background-image: linear-gradient(#E61E4D, #BD1E59,#BD1E59, #92174D,#861453, #59086E,#460479,#440589);
+}
+
+.grid-right-container
+ {
+    display: grid;
+    grid-template-rows: 750px auto;
+    background-color: black;
+}
+
+.grid-right-inner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.grid-right-inner-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    width: 500px;
+    height: 600px;
+    border-radius: 25px;
+}
+
+
+.grid-right-container input {
+    width: 286px;
+    margin-top: 10px;
+    padding: 5px;
+    border: 1px solid lightgrey;
+    border-radius: 10px;
+
+}
+
+.grid-right-container-input-bottom input {
+    width: 143px;
 }
 
 .video-section {
@@ -43,6 +80,34 @@
     position: relative;
 }
 
+.button-layout{
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.addressform-nextpage-button-wrapper {
+    width: 100px;
+    height: 50px;
+    background: linear-gradient(to right, rgb(230, 30, 77) 0%, rgb(227, 28, 95) 50%, rgb(215, 4, 102) 100%) !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+}
+
+.addressform-nextpage-button-wrapper-disabled {
+    width: 100px;
+    height: 50px;
+    background: #DDDDDD;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+}
+
 .nextpage-button-wrapper {
     width: 100px;
     height: 50px;
@@ -50,7 +115,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 20px;
+    border-radius: 15px;
     margin-right: 40px;
     padding-bottom: 0;
     position: absolute;
@@ -70,7 +135,9 @@
     margin-right: 40px;
 }
 
-.grid-2 {
+.grid-2,
+.grid-left-container
+{
     display: flex;
     flex-direction: column;
     justify-content: center;

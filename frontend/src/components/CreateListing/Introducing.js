@@ -45,6 +45,7 @@ export default function Introducing({setPage}) {
                         style={{ 
                             textDecoration: 'none',
                             color: 'white',
+                            cursor:'pointer'
                         }}
                         to='/createListing'
                         onClick={() => setPage(2)}

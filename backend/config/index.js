@@ -11,4 +11,6 @@ module.exports = {
     secret: process.env.JWT_SECRET,
     expiresIn: process.env.JWT_EXPIRES_IN,
   },
+  googleMapsAPIKey: process.env.GOOGLE_MAPS_API_KEY,
+  mapboxAccessToken: process.env.MAPBOX_ACCESS_TOKEN
 };

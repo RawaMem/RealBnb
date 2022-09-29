@@ -6,7 +6,6 @@ import Maps from '../Maps/Maps';
 import { NavLink } from 'react-router-dom';
 
 export default function AddressForm({address, setAddress, city, setCity, state, setState, zipCode, setZipCode, setLongitude, setLatitude, setPage}) {
-    const key = useSelector((state) => state.maps?.key);
     const token = useSelector((state) => state.maps?.token);
     const dispatch = useDispatch();
     const [optionalAdd, setOptionalAdd] = useState('');
@@ -16,14 +15,16 @@ export default function AddressForm({address, setAddress, city, setCity, state, 
     const [handleAutoFillCity, setHandleAutoFillCity] = useState(false);
     const [handleAutoFillState, setHandleAutoFillState] = useState(false);
     const [handleAutoFillZip, setHandleAutoFillZip] = useState(false);
-    console.log('address from addressForm----------', city);
+
+    const containerStyle = {
+        width: '300px',
+        height: '300px',
+      };
+    
     useEffect(() => {
-        if (!key) {
-            dispatch(getKey());
-        }
         if(!token) dispatch(getToken());
 
-    }, [dispatch, key, token]);
+    }, [dispatch, token]);
 
     const handleChange = async (event) => {
         setInputVal(event.target.value);
@@ -69,7 +70,7 @@ export default function AddressForm({address, setAddress, city, setCity, state, 
         };
     };
 
-    if(!key) return null;
+    if(!token) return null;
     return (
         <div className="address-form-container">
             <section className="grid-left-container">
@@ -141,7 +142,7 @@ export default function AddressForm({address, setAddress, city, setCity, state, 
                             </div>
                         </form>
                         <div>
-                            <Maps apiKey={key} coordinates={coordinates} />    
+                            <Maps coordinates={coordinates} containerStyle={containerStyle} />    
                         </div> 
                     </div>
                 </div>

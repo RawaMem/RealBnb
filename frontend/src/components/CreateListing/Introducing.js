@@ -1,8 +1,8 @@
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import './createListing.css';
 
 
-export default function Introducing({setPage}) {
+export default function Introducing() {
     return (
         <div className='list-post-page1'>
             <section className='video-section'>
@@ -47,8 +47,7 @@ export default function Introducing({setPage}) {
                             color: 'white',
                             cursor:'pointer'
                         }}
-                        to='/createListing'
-                        onClick={() => setPage(2)}
+                        to='/createListing/create-address'
                         >Let's go!</NavLink>
                     </div>
                 </div>

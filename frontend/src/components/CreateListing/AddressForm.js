@@ -1,12 +1,18 @@
 import './createListing.css';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getKey, getToken } from '../../store/maps';
-import Maps from '../Maps/Maps';
 import { NavLink } from 'react-router-dom';
+import { getToken, getKey } from '../../store/maps';
+import Maps from '../Maps/Maps';
+import { useListing } from '../../context/ListingContext';
 
-export default function AddressForm({address, setAddress, city, setCity, state, setState, zipCode, setZipCode, setLongitude, setLatitude, setPage}) {
+
+export default function AddressForm() {
+    const { address, setAddress, city, setCity, state, setState, zipCode, setZipCode, longitude,setLongitude, latitude, setLatitude } = useListing();
+
     const token = useSelector((state) => state.maps?.token);
+    const apiKey = useSelector((state) => state.maps?.key);
+
     const dispatch = useDispatch();
     const [optionalAdd, setOptionalAdd] = useState('');
     const [suggestions, setSuggestions] = useState([]);
@@ -16,6 +22,20 @@ export default function AddressForm({address, setAddress, city, setCity, state, 
     const [handleAutoFillState, setHandleAutoFillState] = useState(false);
     const [handleAutoFillZip, setHandleAutoFillZip] = useState(false);
 
+    // console.log('this is from AddressForm city',city)
+    // console.log('this is from AddressForm state',state)
+    // console.log('this is from AddressForm address',address)
+    // console.log('this is from AddressForm zipCode',zipCode)
+    // console.log('this is from AddressForm longitude',longitude)
+    // console.log('this is from AddressForm latitude',latitude)
+
+    useEffect(() => {
+        setInputVal(address)
+        setCity(city)
+        setState(state)
+        setZipCode(zipCode)
+    },[])
+
     const containerStyle = {
         width: '300px',
         height: '300px',
@@ -23,10 +43,12 @@ export default function AddressForm({address, setAddress, city, setCity, state, 
     
     useEffect(() => {
         if(!token) dispatch(getToken());
+        if(!apiKey) dispatch(getKey());
+    }, [dispatch, token, apiKey]);
 
-    }, [dispatch, token]);
 
     const handleChange = async (event) => {
+
         setInputVal(event.target.value);
         setHandleAutoFillCity(false);
         setHandleAutoFillState(false);
@@ -50,19 +72,28 @@ export default function AddressForm({address, setAddress, city, setCity, state, 
         setLongitude(lng);
     };
 
+
     if(address) {
         let addressArr = address?.split(', ');
+        console.log('addressArr', addressArr);
         let stateZip = addressArr[2]?.split(' ');                
         if(addressArr.length && !handleAutoFillCity) setCity(addressArr[1]);
+        // if(addressArr.length) setCity(addressArr[1]);
         if(stateZip.length && !handleAutoFillState) setState(stateZip[0]);
+        // if(stateZip.length) setState(stateZip[0]);
         if(stateZip.length && !handleAutoFillZip) setZipCode(stateZip[1]);
+        // if(stateZip.length) setZipCode(stateZip[1]);
     } 
+
+
+
     if(!inputVal) {
         setCity('');
         setState('');
         setZipCode('');
     };
-
+    
+    // handleAddOptionalAddress needs editing
     const handleAddOptionalAddress = async (event) => {
         await setOptionalAdd(e => setOptionalAdd(event.target?.value))
         if(optionalAdd) {
@@ -70,7 +101,7 @@ export default function AddressForm({address, setAddress, city, setCity, state, 
         };
     };
 
-    if(!token) return null;
+    if(!token || !apiKey) return null;
     return (
         <div className="address-form-container">
             <section className="grid-left-container">
@@ -142,28 +173,29 @@ export default function AddressForm({address, setAddress, city, setCity, state, 
                             </div>
                         </form>
                         <div>
-                            <Maps coordinates={coordinates} containerStyle={containerStyle} />    
+                            <Maps coordinates={coordinates} containerStyle={containerStyle} apiKey={apiKey} />    
                         </div> 
                     </div>
                 </div>
                 <div className='button-layout'>
-                    <div
+                    <NavLink
                         style={{ color: 'black', fontSize: '20px',cursor:'pointer'}}
-                        onClick={() => setPage(1)}
+                        to='/createListing'
                         >
                             Back
-                    </div>
+                    </NavLink>
                     {address && city && state && zipCode ? (
                         <div className='addressform-nextpage-button-wrapper'>
-                            <div
+                            <NavLink
                             style={{ 
+                                textDecoration:'none',
                                 color: 'white',
                                 cursor:'pointer'
                             }}
-                            onClick={() => setPage(3)}
+                            to='/createListing-bedGuestForm'
                             >
                                 Next
-                            </div>
+                            </NavLink>
                         </div>
                         ) : (
                         <div className='addressform-nextpage-button-wrapper-disabled'>

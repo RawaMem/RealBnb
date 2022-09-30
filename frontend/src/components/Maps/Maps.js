@@ -1,7 +1,5 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getKey } from '../../store/maps';
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 
 // const containerStyleExample = {
@@ -9,17 +7,7 @@ import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 //   height: '300px',
 // };
 
-const Maps = ({ coordinates, containerStyle }) => {
-
-  const apiKey = useSelector((state) => state.maps?.key);
-  const dispatch = useDispatch();
-
-
-  useEffect(() => {
-    if (!apiKey) {
-        dispatch(getKey());
-    }
-  }, [dispatch, apiKey]);
+const Maps = ({ coordinates, containerStyle, apiKey}) => {
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
@@ -33,6 +21,7 @@ const Maps = ({ coordinates, containerStyle }) => {
     lat: lat || 40.730610
 };
 
+  if (!apiKey) return null;
   return (
     <>
 

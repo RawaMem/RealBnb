@@ -12,6 +12,7 @@ import configureStore from './store';
 import { restoreCSRF, csrfFetch } from "./store/csrf";
 import * as sessionActions from './store/session';
 import CategoryProvider from './context/CategoryContext';
+import ListingProvider from './context/ListingContext';
 import CreateListing from './components/CreateListing';
 
 const store = configureStore();
@@ -35,17 +36,15 @@ function Root() {
   return (
     <ModalProvider>
         <Provider store={store}>
+          <ListingProvider>
           <CategoryProvider>
           <BrowserRouter>
           <Switch>
-            <Route exact path='/createListing'>
-              <CreateListing />
-            </Route>
             <App />
           </Switch>
-            {/* <Carrot /> */}
           </BrowserRouter>
         </CategoryProvider>
+        </ListingProvider>
         </Provider>
       </ModalProvider>
   );

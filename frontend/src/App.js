@@ -13,7 +13,9 @@ import GoogleMaps from './components/GoogleMaps';
 import { Wrapper, Status } from '@googlemaps/react-wrapper';
 import Marker from './components/Marker';
 import CreateListing from './components/CreateListing';
-
+import AddressForm from './components/CreateListing/AddressForm';
+import BedGuestForm from './components/CreateListing/BedGuestForm';
+import AmenitiForm from './components/CreateListing/AmenitiForm';
 
 //websocket setup
 import { io } from 'socket.io-client'
@@ -127,25 +129,22 @@ function App() {
       )}
       {isLoaded && (
         <Switch>
-          {/* <Route path="/login" >
-            <LoginFormPage />
-          </Route> */}
-          <Route path='/signup'>
+          <Route exact path='/signup'>
             <SignupFormPage />
           </Route>
-          <Route path='/listings/:listingId'>
+          <Route exact path='/createListing/create-address'>
+            <AddressForm />
+          </Route>
+          <Route exact path='/listings/:listingId'>
             <SingleListingPage />
           </Route>
-          <Route path='/listings/createListing'>
-            <CreateListing />
-          </Route>
-          <Route path="/">
-            <Listings />
-          </Route>
-          <Route path='/testing'>
+          <Route exact path='/testing'>
             <TestCompontent />
           </Route>
-          <Route path='/maps'>
+          <Route exact path="/">
+            <Listings />
+          </Route>
+          <Route exact path='/maps'>
             <GoogleMaps center={center} setCenter={setCenter} zoom={zoom} setZoom={setZoom} onClick={onClick} onIdle={onIdle} style={{ height: '30rem', width: '30rem' }} options={{
               zoomControl: true,
               mapTypeControl: true,
@@ -157,9 +156,19 @@ function App() {
               {clicks.map((latLng, i) => (<Marker key={i} position={latLng} />))}
             </GoogleMaps>
           </Route>
-          <Route path='/sockets'>
+          <Route exact path='/sockets'>
             <Socket socket={socket} />
           </Route>
+          <Route exact path='/createListing'>
+              <CreateListing />
+          </Route>
+          <Route exact path='/createListing-bedGuestForm'>
+              <BedGuestForm />
+          </Route>
+          <Route exact path='/createListing-amenitiForm'>
+            <AmenitiForm />
+          </Route>
+
         </Switch>
       )}
     </>

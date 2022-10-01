@@ -3,6 +3,7 @@ const sessionRouter = require("./session.js");
 const usersRouter = require("./users.js");
 const listingsRouter = require("./listings.js");
 const categoriesRouter = require("./categories.js");
+const mapsRouter = require('./maps');
 
 // // GET /api/set-token-cookie
 // const asyncHandler = require('express-async-handler');
@@ -50,11 +51,16 @@ router.use("/listings", listingsRouter);
 
 router.use("/categories", categoriesRouter);
 
+router.use('/maps',mapsRouter);
+
+
 router.get('/maps-key', (req, res) => {
   const apiKey = process.env.GOOGLE_MAPS_API_KEY;
   // console.log('THIS IS THE GOOGLE KEY', apiKey)
   res.json(apiKey);
 });
+
+
 
 
 

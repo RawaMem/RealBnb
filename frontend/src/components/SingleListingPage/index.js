@@ -14,6 +14,7 @@ export default function SingleListingPage() {
     const allListings = useSelector(state => state.listings)
     let listing;
     if (allListings) listing = allListings.currentListing
+    console.log(' this is listing from SingleListingPage', listing)
 
     useEffect(() => {
         dispatch(getSingleListingThunk(listingId))

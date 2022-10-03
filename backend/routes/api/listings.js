@@ -348,6 +348,46 @@ router.get('/:listingId(\\d+)', asyncHandler(async (req, res) => {
   res.json(singleListing);
 }));
 
+router.post('/:listingId/booking', asyncHandler(async (req, res) => {
+  const { userId, totalCost, avePricePerDay, paymentConfirmed, startDate, endDate } = req.body;
+  const { listingId } = req.params;
+
+  const listing = await Listing.findByPk(listingId);
+
+  if (!listing) {
+    res.status(404);
+    res.json({errors: ['No listing found.']});
+  }
+
+  const foundListiings = await Booking.findAll({
+    where: {
+      startDate: {
+        [Op.between]: [new Date(startDate), new Date(endDate)]
+      },
+      endDate: {
+        [Op.between]: [new Date(startDate), new Date(endDate)]
+      }
+    }
+  });
+
+  if (foundListiings.length) {
+    res.status(401);
+    res.json({errors: ['These dates are already booked.']})
+  }
+
+  const booking = await Booking.create({
+    userId,
+    totalCost,
+    avePricePerDay,
+    paymentConfirmed,
+    startDate,
+    endDate,
+    listingId
+  });
+
+  res.json(booking);
+}));
+
 router.post('/testing', singleMulterUpload('image'), asyncHandler(async (req, res) => {
   const url = await singlePublicFileUpload(req.file);
 }));

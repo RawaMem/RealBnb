@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { clearListingStateAction, getSingleListingThunk } from "../../store/listings";
 import HostAndSpecs from "./HostAndSpecs";
+import ReviewFormModal from "./ReviewFormModal";
 import ReviewsContainer from "./ReviewsContainer";
 import SingleListingImages from "./SingleListingImages";
 import SingleListingTitle from "./SingleListingTitle";
@@ -35,6 +36,9 @@ export default function SingleListingPage() {
                 </div>
                 <div className="hostAndSpecsContainer">
                     <HostAndSpecs listing={listing}/>
+                </div>
+                <div className="createReviewBtnContainer">
+                    <ReviewFormModal />
                 </div>
                 <div className="reviewContainer">
                     <ReviewsContainer listing={listing}/>

@@ -8,8 +8,6 @@ import { useState } from "react";
 export default function AmenitiForm() {
     const {amenityArr, setAmenityArr} = useListing();
 
-    console.log('amenityArr', amenityArr)
-
     const handleOnClick = (amenity) => {
         if(amenityArr.includes(amenity)) {
             const amenitiIdx = amenityArr.indexOf(amenity);
@@ -87,7 +85,7 @@ export default function AmenitiForm() {
                             borderRadius:'15px',
                             cursor:'pointer'
                         }}
-                        to='/'
+                        to='/createListing/images'
                         >
                             Next
                         </NavLink>

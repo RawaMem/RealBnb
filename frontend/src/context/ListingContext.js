@@ -19,6 +19,9 @@ export default function ListingProvider({children}) {
     const [zipCode, setZipCode] = useState('');
     const [longitude, setLongitude] = useState(10);
     const [latitude, setLatitude] = useState(10);
+    const [image, setImage] = useState(null);
+    // for multuple file upload
+      const [multiImages, setMultiImages] = useState([]);
     const [imageDescription, setImageDescription] = useState('');
     const [listingPriceArr, setListingPriceArr] = useState([]);
     const [amenityArr, setAmenityArr] = useState([]);
@@ -57,6 +60,10 @@ export default function ListingProvider({children}) {
                 setLongitude,
                 latitude,
                 setLatitude,
+                image, 
+                setImage,
+                multiImages, 
+                setMultiImages,
                 imageDescription,
                 setImageDescription,
                 listingPriceArr,

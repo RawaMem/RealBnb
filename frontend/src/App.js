@@ -16,6 +16,8 @@ import CreateListing from './components/CreateListing';
 import AddressForm from './components/CreateListing/AddressForm';
 import BedGuestForm from './components/CreateListing/BedGuestForm';
 import AmenitiForm from './components/CreateListing/AmenitiForm';
+import ImageForm from './components/CreateListing/ImageForm';
+
 
 //websocket setup
 import { io } from 'socket.io-client'
@@ -167,6 +169,9 @@ function App() {
           </Route>
           <Route exact path='/createListing-amenitiForm'>
             <AmenitiForm />
+          </Route>
+          <Route exact path='/createListing/images'>
+            <ImageForm />
           </Route>
 
         </Switch>

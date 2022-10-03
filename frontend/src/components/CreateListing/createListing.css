@@ -3,15 +3,17 @@
     max-height: 100vh;
 }
 .list-post-page1 {
-    max-height: 100%;
+    height: 100%;
     width: auto;
     display: grid;
     grid-template-columns: 50% auto;
+    grid-template-rows: 100%;
     background-color: #000;
 }
 
 .address-form-container,
-.ameniti-form-container
+.ameniti-form-container,
+.image-form-container
 {
     height: 100vh;
     display: grid;
@@ -30,10 +32,23 @@
 }
 
 .grid-right-container-bedGuestForm,
-.grid-right-container-amenityForm
+.grid-right-container-amenityForm,
+.grid-right-container-image-form
 {
     display: grid;
     grid-template-rows: 750px auto;
+}
+
+.image-form-image-section-container {
+    display: grid;
+    grid-template-rows: 180px auto;
+}
+
+.image-form-image-section-container-upper {
+    border-bottom: 2px solid purple;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
 
 .grid-right-inner-container-top-amentityForm {

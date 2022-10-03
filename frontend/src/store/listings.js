@@ -4,6 +4,9 @@ const GET_LISTINGS = "listings/GET_listings";
 const GET_SINGLE_LISTING = "listings/GET_SINGLE_LISTING";
 const LISTING_SEARCH_RESULTS = "listings/LISTING_SEARCH_RESULTS";
 const CLEAR_LISTING_STATE = "listings/CLEAR_LISTING_STATE";
+const CREATE_REVIEW = 'reviews/CREATE_REVIEW'
+const EDIT_REVIEW = 'reviews/EDIT_REVIEW'
+const DELETE_REVIEW = 'reviews/DELETE_REVIEW'
 
 
 const getListingsAction = (listings) => ({
@@ -71,8 +74,17 @@ export default function listings(state = initialState, action) {
             action.listings.forEach(listing => newState[listing.id] = listing);
             return newState;
         case GET_SINGLE_LISTING:
+            console.log('this is action reviews array', action.listing.Reviews)
             newState = {...state}
             newState.currentListing = action.listing
+            newState.currentListing.Reviews = [...action.listing.Reviews]
+            const normalizedReviews = {}
+            if (action.listing.Reviews) {
+                action.listing.Reviews.forEach(review => {
+                normalizedReviews[review.id] = review
+                })
+            }
+            newState.currentListing.Reviews = normalizedReviews
             return newState;
         case LISTING_SEARCH_RESULTS:
             newState = {};
@@ -80,6 +92,26 @@ export default function listings(state = initialState, action) {
             return newState;
         case CLEAR_LISTING_STATE:
             return null
+        case CREATE_REVIEW:
+            newState = {...state}
+            newState.currentListing = {...state.currentListing}
+            if (state.currentListing.Reviews) {
+                newState.currentListing.Reviews = {...state.currentListing.Reviews}
+            }
+            newState.currentListing.Reviews[action.review.id] = action.review
+            return newState
+        case EDIT_REVIEW:
+            newState = {...state}
+            newState.currentListing = {...state.currentListing}
+            newState.currentListing.Reviews = {...state.currentListing.Reviews}
+            newState.currentListing.Reviews[action.review.id] = action.review
+            return newState
+        case DELETE_REVIEW:
+            newState = {...state}
+            newState.currentListing = {...state.currentListing}
+            newState.currentListing.Reviews = {...state.currentListing.Reviews}
+            delete newState.currentListing.Reviews[action.review.id]
+            return newState
         default:
             return state;
     }

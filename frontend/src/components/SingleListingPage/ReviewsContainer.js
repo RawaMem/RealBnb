@@ -46,8 +46,10 @@ export default function ReviewsContainer({listing}) {
         }
     }
     let averageScores
+    let reviewsArr
     if(listing.Reviews) {
-    averageScores = reviewScoreCalculator(listing.Reviews)
+        reviewsArr = Object.values(listing.Reviews)
+        averageScores = reviewScoreCalculator(reviewsArr)
     // console.log('HERE IS AVERAGE SCORES', averageScores)
     }
 
@@ -99,8 +101,8 @@ export default function ReviewsContainer({listing}) {
             </div>
         </div>
         <div className="listingReviews">
-            {listing.Reviews.map(review => (
-                <div className="reviewCard">
+            {reviewsArr.map(review => (
+                <div key={`review-container-id-${review.id}`} className="reviewCard">
                     <div className="reviewUserName">{review.User.username}</div>
                     <div className="reviewUserName">{calculateMonthAndYear(review.createdAt)}</div>
                     <div className="reviewContent">{review.content}</div>

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { createReviewThunk } from "../../store/reviews";
 
 
 
@@ -13,8 +15,24 @@ function CreateReview({setShowCreateReviewModal}) {
     const [location, setLocation] = useState('')
     const [value, setValue] = useState('')
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         console.log('create review form handle submit funciton running')
+        const dispatch = useDispatch()
+        const review = {
+            content,
+            starRating,
+            cleanliness,
+            communication,
+            checkIn,
+            accuracy,
+            location,
+            value
+        }
+
+        await dispatch(createReviewThunk(review))
+
+        setShowCreateReviewModal(false)
+
     }
 
 

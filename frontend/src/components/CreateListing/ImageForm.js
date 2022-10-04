@@ -1,12 +1,42 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom"
+import {useDropzone} from 'react-dropzone';
 import { useListing } from "../../context/ListingContext"
 import './createListing.css';
 
 
-export default function ImageForm() {
+export default function ImageForm(props) {
     const {imgUrl, setImgUrl,multiImages, setMultiImages, imageDescription, setImageDescription} = useListing();
     const [errors, setErrors] = useState({imageUpload:''})
+
+    const {
+        fileRejections,
+        getRootProps,
+        getInputProps
+      } = useDropzone({
+        accept: {
+          'image/*': []
+        },
+        onDrop: acceptedFiles => {
+            const droppedFiles = acceptedFiles.map(file => Object.assign(file, {
+              preview: URL.createObjectURL(file)
+            }));
+            const droppedFileUrl = droppedFiles.map(file => file.preview);
+            setImgUrl( [...imgUrl, ...droppedFileUrl] );
+        }
+    });
+
+
+    const fileRejectionItems = fileRejections.map(({ errors }) => (
+          <ul>
+            {errors.map(e => (
+              <li key={e.code}>{e.message}</li>
+            ))}
+          </ul>       
+      ));
+
+
+
       //for multiple file upload
     const updateFiles = e => {
         const files = e.target.files;
@@ -61,7 +91,7 @@ export default function ImageForm() {
                                 <span>Drag to reorder</span>
                             </div>
                             <div>
-                                <input type="file" multiple accepts="image/*" onChange={updateFiles} style={{display:'none'}} id="fileElem" />
+                                <input type="file" multiple  {...getInputProps()} onChange={updateFiles} style={{display:'none'}} id="fileElem" />
 
                                 <div id="fileSelect" onClick={buttonEvent} >
                                     <span class="material-symbols-outlined">
@@ -72,7 +102,7 @@ export default function ImageForm() {
                             </div>
                         </div>
 
-                        <div className="image-form-image-section-container-images" style={{overflow:'scroll'}}>
+                        <div className="image-form-image-section-container-images" style={{overflow:'scroll'}}  {...getRootProps({ className: 'dropzone' })} >
                             {imgUrl.length && imgUrl.map((url, idx) => (
                                 <img key={idx} src={url} className="preview-images" style={{height: '200px', width:'180px' }}/>
                             ))}

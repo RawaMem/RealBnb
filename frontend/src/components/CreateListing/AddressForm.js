@@ -22,12 +22,6 @@ export default function AddressForm() {
     const [handleAutoFillState, setHandleAutoFillState] = useState(false);
     const [handleAutoFillZip, setHandleAutoFillZip] = useState(false);
 
-    // console.log('this is from AddressForm city',city)
-    // console.log('this is from AddressForm state',state)
-    // console.log('this is from AddressForm address',address)
-    // console.log('this is from AddressForm zipCode',zipCode)
-    // console.log('this is from AddressForm longitude',longitude)
-    // console.log('this is from AddressForm latitude',latitude)
 
     useEffect(() => {
         setInputVal(address)

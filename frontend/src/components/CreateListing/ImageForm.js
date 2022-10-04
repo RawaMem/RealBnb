@@ -1,25 +1,39 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom"
 import { useListing } from "../../context/ListingContext"
+import './createListing.css';
+
 
 export default function ImageForm() {
-    const {multiImages, setMultiImages, imageDescription, setImageDescription} = useListing();
-    const [imgUrl, setImgUrl] = useState([]); 
-    
+    const {imgUrl, setImgUrl,multiImages, setMultiImages, imageDescription, setImageDescription} = useListing();
+    const [errors, setErrors] = useState({imageUpload:''})
       //for multiple file upload
     const updateFiles = e => {
         const files = e.target.files;
         setMultiImages([...multiImages, files]);
         const fr = new FileReader();
         // e.target.files structure: {0: File, length: 1}
-        fr.readAsDataURL(e.target.files[0]);
-        fr.addEventListener('load', () => {
-            const url = fr.result;
-            setImgUrl([...imgUrl, url])
-        });
+        if(e.target?.files[0] instanceof Blob) {
+            fr.readAsDataURL(e.target?.files[0]);
+            fr.addEventListener('load', () => {
+                const url = fr.result;
+                if(imgUrl.indexOf(url) === -1) {
+                    setImgUrl([...imgUrl, url])
+                } else {
+                    setErrors(prev => ({...prev, imageUpload:'photo already exists, please select another one.'}))
+                };
+            });
+        }
     };
 
-    // console.log('this is multiImages', multiImages); 
+    const buttonEvent = e => {
+        const fileSelect = document.getElementById("fileSelect");
+        const fileElem = document.getElementById("fileElem");
+        fileElem.click();
+    };
+
+
+
     return (
         <>
             <div className="image-form-container">
@@ -46,11 +60,18 @@ export default function ImageForm() {
                                 <h3>Ta-da! How does this look?</h3>
                                 <span>Drag to reorder</span>
                             </div>
-                            <label>
-                                upload
-                                <input type="file" multiple accepts="image/*" onChange={updateFiles} />
-                            </label>
+                            <div>
+                                <input type="file" multiple accepts="image/*" onChange={updateFiles} style={{display:'none'}} id="fileElem" />
+
+                                <div id="fileSelect" onClick={buttonEvent} >
+                                    <span class="material-symbols-outlined">
+                                        file_upload
+                                    </span>
+                                    <span class="upload-button">Upload</span>
+                                </div>
+                            </div>
                         </div>
+
                         <div className="image-form-image-section-container-images" style={{overflow:'scroll'}}>
                             {imgUrl.length && imgUrl.map((url, idx) => (
                                 <img key={idx} src={url} className="preview-images" style={{height: '200px', width:'180px' }}/>

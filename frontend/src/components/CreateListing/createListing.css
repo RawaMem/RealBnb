@@ -58,9 +58,23 @@
     align-items: center;
 }
 
-/* .grid-right-inner-container-top-amentityForm::-webkit-scrollbar {
-    display: none;
-} */
+#fileSelect {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 100px;
+    height: 40px;
+    padding: 7px 15px;
+}
+
+.material-symbols-outlined,
+.upload-button
+{
+    font-weight: 600;
+}
 
 .grid-right-inner-container-top-amentityForm-inner-block h2 {
     font-size: 25px;

@@ -5,19 +5,20 @@ import { createReviewThunk } from "../../store/reviews";
 
 
 
-function CreateReview({setShowCreateReviewModal, currentUser}) {
+function CreateReview({setShowCreateReviewModal, currentUser, listingId}) {
+    const dispatch = useDispatch()
     const [content, setContent] = useState('')
-    const [starRating, setStarRating] = useState('')
-    const [cleanliness, setCleanliness] = useState('')
-    const [communication, setCommunication] = useState('')
-    const [checkIn, setCheckIn] = useState('')
-    const [accuracy, setAccuracy] = useState('')
-    const [location, setLocation] = useState('')
-    const [value, setValue] = useState('')
+    const [starRating, setStarRating] = useState(1)
+    const [cleanliness, setCleanliness] = useState(1)
+    const [communication, setCommunication] = useState(1)
+    const [checkIn, setCheckIn] = useState(1)
+    const [accuracy, setAccuracy] = useState(1)
+    const [location, setLocation] = useState(1)
+    const [value, setValue] = useState(1)
 
     const handleSubmit = async (e) => {
+        e.preventDefault()
         console.log('create review form handle submit funciton running')
-        const dispatch = useDispatch()
         const review = {
             content,
             starRating,
@@ -27,7 +28,8 @@ function CreateReview({setShowCreateReviewModal, currentUser}) {
             accuracy,
             location,
             value,
-            authorId: currentUser.id
+            authorId: currentUser.id,
+            listingId
         }
 
         await dispatch(createReviewThunk(review))

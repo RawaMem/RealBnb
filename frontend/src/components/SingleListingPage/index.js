@@ -40,7 +40,7 @@ export default function SingleListingPage() {
                     <HostAndSpecs listing={listing}/>
                 </div>
                 <div className="createReviewBtnContainer">
-                    <ReviewFormModal currentUser={currentUser}/>
+                    <ReviewFormModal currentUser={currentUser} listingId={listingId}/>
                 </div>
                 <div className="reviewContainer">
                     <ReviewsContainer reviews={reviews}/>

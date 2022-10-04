@@ -3,10 +3,12 @@ import thunk from 'redux-thunk';
 import session from './session';
 import listings from './listings';
 import mapsReducer from './maps';
+import reviews from './reviews';
 
 const rootReducer = combineReducers({
   session,
   listings,
+  reviews,
   maps: mapsReducer
 });
 

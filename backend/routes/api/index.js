@@ -6,6 +6,7 @@ const categoriesRouter = require("./categories.js");
 const mapsRouter = require('./maps');
 const asyncHandler = require('express-async-handler');
 const { Booking } = require('../../db/models')
+const reviewsRouter = require('./reviews')
 
 // // GET /api/set-token-cookie
 // const asyncHandler = require('express-async-handler');
@@ -68,6 +69,7 @@ router.delete('/bookings/:bookingId', asyncHandler(async (req, res) => {
   return res.json({message: 'successfully deleted'})
 }))
 
+router.use('/reviews',reviewsRouter);
 
 router.get('/maps-key', (req, res) => {
   const apiKey = process.env.GOOGLE_MAPS_API_KEY;

@@ -5,7 +5,7 @@ import { createReviewThunk } from "../../store/reviews";
 
 
 
-function CreateReview({setShowCreateReviewModal}) {
+function CreateReview({setShowCreateReviewModal, currentUser}) {
     const [content, setContent] = useState('')
     const [starRating, setStarRating] = useState('')
     const [cleanliness, setCleanliness] = useState('')
@@ -26,7 +26,8 @@ function CreateReview({setShowCreateReviewModal}) {
             checkIn,
             accuracy,
             location,
-            value
+            value,
+            authorId: currentUser.id
         }
 
         await dispatch(createReviewThunk(review))

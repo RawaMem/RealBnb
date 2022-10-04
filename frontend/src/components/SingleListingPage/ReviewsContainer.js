@@ -4,7 +4,7 @@ import ProgressBar from 'react-bootstrap/ProgressBar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-export default function ReviewsContainer({listing}) {
+export default function ReviewsContainer({reviews}) {
     const monthNames = ["January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"
         ];
@@ -47,8 +47,8 @@ export default function ReviewsContainer({listing}) {
     }
     let averageScores
     let reviewsArr
-    if(listing.Reviews) {
-        reviewsArr = Object.values(listing.Reviews)
+    if(reviews) {
+        reviewsArr = Object.values(reviews)
         averageScores = reviewScoreCalculator(reviewsArr)
     // console.log('HERE IS AVERAGE SCORES', averageScores)
     }
@@ -62,7 +62,7 @@ export default function ReviewsContainer({listing}) {
     return (
         <>
         <div className="aveRatingAndNumReviews">
-            <p className="aveReviewText">Star goes here, {averageScores.aveRating}, {listing.Reviews.length} reviews</p>
+            <p className="aveReviewText">Star goes here, {averageScores.aveRating}, {reviewsArr.length} reviews</p>
             <div className="aveRatingBars">
                 <div className="leftRatings">
                     <div className="aveCleanliness">

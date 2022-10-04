@@ -12,7 +12,9 @@ import SingleListingTitle from "./SingleListingTitle";
 export default function SingleListingPage() {
     const {listingId} = useParams()
     const dispatch = useDispatch()
+    const currentUser = useSelector(state => state.session.user)
     const allListings = useSelector(state => state.listings)
+    const reviews = useSelector(state => state.reviews)
     let listing;
     if (allListings) listing = allListings.currentListing
     console.log(' this is listing from SingleListingPage', listing)
@@ -38,10 +40,10 @@ export default function SingleListingPage() {
                     <HostAndSpecs listing={listing}/>
                 </div>
                 <div className="createReviewBtnContainer">
-                    <ReviewFormModal />
+                    <ReviewFormModal currentUser={currentUser}/>
                 </div>
                 <div className="reviewContainer">
-                    <ReviewsContainer listing={listing}/>
+                    <ReviewsContainer reviews={reviews}/>
                 </div>
 
             </div>

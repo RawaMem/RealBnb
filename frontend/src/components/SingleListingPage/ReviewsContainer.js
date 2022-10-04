@@ -4,51 +4,14 @@ import ProgressBar from 'react-bootstrap/ProgressBar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useDispatch } from 'react-redux';
 import { deleteReviewThunk } from '../../store/reviews';
+import { useState } from 'react';
+import { calculateMonthAndYear, reviewScoreCalculator } from '../Utils';
 
 
-export default function ReviewsContainer({reviews, currentUser}) {
-
+export default function ReviewsContainer({reviews, currentUser, showCreateReviewModal, setShowCreateReviewModal}) {
+    const [reviewToEdit, setReviewToEdit] = useState({})
     const dispatch = useDispatch()
-    const monthNames = ["January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
-        ];
-
-
-    const calculateMonthAndYear = (dateString) => {
-        const dateObj = new Date(dateString)
-        const month = dateObj.toLocaleString('default', {month:'long'})
-        const year = dateObj.toLocaleString('default', {year:'numeric'})
-        return `${month} ${year}`
-
-    }
-    const reviewScoreCalculator = (reviewArr) => {
-        let totalRating = 0
-        let totalCleanliness = 0
-        let totalCommunication = 0
-        let totalCheckIn = 0
-        let totalAccuracy = 0
-        let totalLocation = 0
-        let totalValue = 0
-        reviewArr.forEach(review =>{
-            totalRating += +review.starRating
-            totalCleanliness += +review.cleanliness
-            totalCommunication += +review.communication
-            totalCheckIn += +review.checkIn
-            totalAccuracy += +review.accuracy
-            totalLocation += +review.location
-            totalValue += +review.value
-            // console.log('in for each totalRating', review.starRating)
-        })
-        return {
-            aveRating : totalRating/+reviewArr.length,
-            aveCleanliness : totalCleanliness/+reviewArr.length,
-            aveCommunication : totalCommunication/+reviewArr.length,
-            aveCheckIn : totalCheckIn/+reviewArr.length,
-            aveAccuracy : totalAccuracy/+reviewArr.length,
-            aveLocation : totalLocation/+reviewArr.length,
-            aveValue : totalValue/+reviewArr.length,
-        }
-    }
+    
     let averageScores
     let reviewsArr
     if(reviews) {
@@ -60,6 +23,10 @@ export default function ReviewsContainer({reviews, currentUser}) {
 
     const handleDelete = async (id) => {
         await dispatch(deleteReviewThunk(id))
+    }
+
+    const handleEdit = async (review)=>{
+
     }
 
     if (!averageScores) return (
@@ -120,6 +87,9 @@ export default function ReviewsContainer({reviews, currentUser}) {
                     <button
                     onClick={()=>handleDelete(review.id)}
                     className="deleteReviewBtn">Delete Review</button>
+                    <button
+                    onClick={()=>handlEdit(review)}
+                    className="editReviewBtn">Edit Review</button>
                     </>): null}
                 </div>
             ))}

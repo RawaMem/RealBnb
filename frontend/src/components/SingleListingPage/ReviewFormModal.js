@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Modal } from "../../context/Modal";
 import CreateReview from "./CreateReview";
 
-function ReviewFormModal({currentUser, listingId}){
-    const [showCreateReviewModal, setShowCreateReviewModal] = useState(false)
+function ReviewFormModal({currentUser, listingId, showCreateReviewModal, setShowCreateReviewModal}){
+    // const [showCreateReviewModal, setShowCreateReviewModal] = useState(false)
 
     return(
         <>

@@ -3,27 +3,19 @@ import { NavLink } from "react-router-dom"
 import { useListing } from "../../context/ListingContext"
 
 export default function ImageForm() {
-    const {image, setImage, multiImages, setMultiImages, imageDescription, setImageDescription} = useListing();
+    const {multiImages, setMultiImages, imageDescription, setImageDescription} = useListing();
     const [imgUrl, setImgUrl] = useState([]); 
-    // console.log('this is imgUrl', imgUrl);
-    // const updateFile = e => {
-    //     const file = e.target.files[0];
-    //     if (file) setImage(file);
-    //   };
     
       //for multiple file upload
-    const fileInput = document.querySelector('input')
-    console.log(fileInput.files, '++++++++++')
     const updateFiles = e => {
-        // const files = e.target.files;
-        // setMultiImages([...multiImages, files]);
+        const files = e.target.files;
+        setMultiImages([...multiImages, files]);
         const fr = new FileReader();
-        // console.log('fileInput.files[0]',fileInput?.files[0])
-        fr.readAsDataURL(fileInput.files[0]);
+        // e.target.files structure: {0: File, length: 1}
+        fr.readAsDataURL(e.target.files[0]);
         fr.addEventListener('load', () => {
             const url = fr.result;
-            console.log('this is imgUrl', url)
-            // setImgUrl([...imgUrl, url])
+            setImgUrl([...imgUrl, url])
         });
     };
 
@@ -56,11 +48,13 @@ export default function ImageForm() {
                             </div>
                             <label>
                                 upload
-                                <input type="file" multiple onChange={updateFiles} />
+                                <input type="file" multiple accepts="image/*" onChange={updateFiles} />
                             </label>
                         </div>
                         <div className="image-form-image-section-container-images" style={{overflow:'scroll'}}>
- 
+                            {imgUrl.length && imgUrl.map((url, idx) => (
+                                <img key={idx} src={url} className="preview-images" style={{height: '200px', width:'180px' }}/>
+                            ))}
                         </div>
                     </div>
                     <div className='button-layout'>

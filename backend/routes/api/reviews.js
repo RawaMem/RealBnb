@@ -1,14 +1,20 @@
 const express = require('express')
 const asyncHandler =  require('express-async-handler')
-const {Review} = require('../../db/models')
+const {Review, User} = require('../../db/models')
 
 const router = express.Router()
 
 
 router.post('/', asyncHandler(async (req, res) => {
     const newReview = await Review.create(req.body)
-
-    res.json(newReview)
+    const reviewWithUser = await Review.findByPk(newReview.id, {
+        include: [{
+            model: User,
+            attributes: ['username'],
+          }]
+    })
+    console.log('@@@@@@@@@@@@@@@@@', reviewWithUser.User.username)
+    res.json(reviewWithUser)
 }))
 
 router.put('/:reviewId', asyncHandler(async(req, res)=> {
@@ -24,3 +30,5 @@ router.delete('/:reviewId', asyncHandler(async(req, res)=>{
     reviewToDelete.destroy()
     res.json({message: 'Review successfully deleted'})
 }))
+
+module.exports = router

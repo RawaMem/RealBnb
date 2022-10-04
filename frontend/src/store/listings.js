@@ -5,6 +5,7 @@ const GET_SINGLE_LISTING = "listings/GET_SINGLE_LISTING";
 const LISTING_SEARCH_RESULTS = "listings/LISTING_SEARCH_RESULTS";
 const CLEAR_LISTING_STATE = "listings/CLEAR_LISTING_STATE";
 const CREATE_BOOKING = "listings/CREATE_BOOKING";
+const DELETE_BOOKING = "listings/DELETE_BOOKING";
 
 
 const getListingsAction = (listings) => ({
@@ -25,6 +26,11 @@ const listingSearchResultsAction = (listings) => ({
 const createBooking = booking => ({
     type: CREATE_BOOKING,
     booking
+});
+
+const deleteBooking = bookingId => ({
+    type: DELETE_BOOKING,
+    bookingId
 });
 
 export const clearListingStateAction = () => ({
@@ -85,6 +91,16 @@ export const buildBooking = (booking, listingId) => async dispatch => {
     }
 };
 
+export const removeBooking = bookingId => async dispatch => {
+    const response = await csrfFetch(`/api/bookings/${bookingId}`, {
+        method: 'DELETE'
+    });
+
+    if (response.ok) {
+        dispatch(deleteBooking(bookingId));
+    }
+};
+
 const initialState = null;
 export default function listings(state = initialState, action) {
     let newState;
@@ -103,6 +119,12 @@ export default function listings(state = initialState, action) {
             return newState;
         case CREATE_BOOKING: {
             return { ...state, currentListing: { ...state.currentListing, Bookings: [...state.currentListing.Bookings, action.booking] } };
+        }
+        case DELETE_BOOKING: {
+            const newState = { ...state, currentListing: { ...state.currentListing, Bookings: [...state.currentListing.Bookings] } };
+            const filteredBooks = newState.currentListing.Bookings.filter(booking => booking.id !== +action.bookingId);
+            newState.currentListing.Bookings = filteredBooks;
+            return newState;
         }
         case CLEAR_LISTING_STATE:
             return null

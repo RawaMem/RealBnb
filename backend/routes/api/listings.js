@@ -348,6 +348,7 @@ router.get('/:listingId(\\d+)', asyncHandler(async (req, res) => {
   res.json(singleListing);
 }));
 
+// put in own file and include listing id in body
 router.post('/:listingId/booking', asyncHandler(async (req, res) => {
   const { userId, totalCost, avePricePerDay, paymentConfirmed, startDate, endDate } = req.body;
   const { listingId } = req.params;
@@ -356,7 +357,7 @@ router.post('/:listingId/booking', asyncHandler(async (req, res) => {
 
   if (!listing) {
     res.status(404);
-    res.json({errors: ['No listing found.']});
+    return res.json({errors: ['No listing found.']});
   }
 
   const foundListiings = await Booking.findAll({
@@ -372,7 +373,7 @@ router.post('/:listingId/booking', asyncHandler(async (req, res) => {
 
   if (foundListiings.length) {
     res.status(401);
-    res.json({errors: ['These dates are already booked.']})
+    return res.json({errors: ['These dates are already booked.']})
   }
 
   const booking = await Booking.create({
@@ -385,7 +386,7 @@ router.post('/:listingId/booking', asyncHandler(async (req, res) => {
     listingId
   });
 
-  res.json(booking);
+  return res.json(booking);
 }));
 
 router.post('/testing', singleMulterUpload('image'), asyncHandler(async (req, res) => {

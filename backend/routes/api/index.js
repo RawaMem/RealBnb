@@ -4,6 +4,8 @@ const usersRouter = require("./users.js");
 const listingsRouter = require("./listings.js");
 const categoriesRouter = require("./categories.js");
 const mapsRouter = require('./maps');
+const asyncHandler = require('express-async-handler');
+const { Booking } = require('../../db/models')
 
 // // GET /api/set-token-cookie
 // const asyncHandler = require('express-async-handler');
@@ -52,6 +54,19 @@ router.use("/listings", listingsRouter);
 router.use("/categories", categoriesRouter);
 
 router.use('/maps',mapsRouter);
+
+router.delete('/bookings/:bookingId', asyncHandler(async (req, res) => {
+  const bookingToDelete = await Booking.findByPk(req.params.bookingId);
+
+  if (!bookingToDelete) {
+    res.status(404);
+    return res.json({errors: ['Booking not found.']})
+  }
+
+  await bookingToDelete.destroy();
+
+  return res.json({message: 'successfully deleted'})
+}))
 
 
 router.get('/maps-key', (req, res) => {

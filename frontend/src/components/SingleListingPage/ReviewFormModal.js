@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Modal } from "../../context/Modal";
 import CreateReview from "./CreateReview";
 
-function ReviewFormModal({currentUser}){
+function ReviewFormModal({currentUser, listingId}){
     const [showCreateReviewModal, setShowCreateReviewModal] = useState(false)
 
     return(
@@ -12,6 +12,7 @@ function ReviewFormModal({currentUser}){
                 <Modal onClose={()=> setShowCreateReviewModal(false)}>
                     <CreateReview
                     currentUser={currentUser}
+                    listingId={listingId}
                     setShowCreateReviewModal={setShowCreateReviewModal}/>
                 </Modal>
             )}

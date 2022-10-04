@@ -33,7 +33,7 @@ export const createReviewThunk = (review) => async dispatch => {
     })
     if (response.ok) {
         const newReview = await response.json()
-        dispatch(createReviewAction(review))
+        dispatch(createReviewAction(newReview))
     }
 }
 
@@ -44,7 +44,7 @@ export const editReviewThunk = (review) => async dispatch => {
     })
     if (response.ok) {
         const newReview = await response.json()
-        dispatch(editReviewAction(review))
+        dispatch(editReviewAction(newReview))
     }
 }
 

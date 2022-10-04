@@ -2,9 +2,13 @@ import ProgressBar from 'react-bootstrap/ProgressBar';
 
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useDispatch } from 'react-redux';
+import { deleteReviewThunk } from '../../store/reviews';
 
 
-export default function ReviewsContainer({reviews}) {
+export default function ReviewsContainer({reviews, currentUser}) {
+
+    const dispatch = useDispatch()
     const monthNames = ["January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"
         ];
@@ -51,6 +55,11 @@ export default function ReviewsContainer({reviews}) {
         reviewsArr = Object.values(reviews)
         averageScores = reviewScoreCalculator(reviewsArr)
     // console.log('HERE IS AVERAGE SCORES', averageScores)
+    }
+
+
+    const handleDelete = async (id) => {
+        await dispatch(deleteReviewThunk(id))
     }
 
     if (!averageScores) return (
@@ -106,6 +115,12 @@ export default function ReviewsContainer({reviews}) {
                     <div className="reviewUserName">{review.User.username}</div>
                     <div className="reviewUserName">{calculateMonthAndYear(review.createdAt)}</div>
                     <div className="reviewContent">{review.content}</div>
+                    {currentUser.id === review.authorId ?
+                    (<>
+                    <button
+                    onClick={()=>handleDelete(review.id)}
+                    className="deleteReviewBtn">Delete Review</button>
+                    </>): null}
                 </div>
             ))}
         </div>

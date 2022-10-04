@@ -43,7 +43,7 @@ export default function SingleListingPage() {
                     <ReviewFormModal currentUser={currentUser} listingId={listingId}/>
                 </div>
                 <div className="reviewContainer">
-                    <ReviewsContainer reviews={reviews}/>
+                    <ReviewsContainer reviews={reviews} currentUser={currentUser}/>
                 </div>
 
             </div>

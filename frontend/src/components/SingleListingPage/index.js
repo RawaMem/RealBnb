@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { clearListingStateAction, getSingleListingThunk } from "../../store/listings";
 import HostAndSpecs from "./HostAndSpecs";
+import ReviewFormModal from "./ReviewFormModal";
 import ReviewsContainer from "./ReviewsContainer";
 import SingleListingImages from "./SingleListingImages";
 import SingleListingTitle from "./SingleListingTitle";
@@ -11,7 +12,9 @@ import SingleListingTitle from "./SingleListingTitle";
 export default function SingleListingPage() {
     const {listingId} = useParams()
     const dispatch = useDispatch()
+    const currentUser = useSelector(state => state.session.user)
     const allListings = useSelector(state => state.listings)
+    const reviews = useSelector(state => state.reviews)
     let listing;
     if (allListings) listing = allListings.currentListing
     console.log(' this is listing from SingleListingPage', listing)
@@ -36,8 +39,11 @@ export default function SingleListingPage() {
                 <div className="hostAndSpecsContainer">
                     <HostAndSpecs listing={listing}/>
                 </div>
+                <div className="createReviewBtnContainer">
+                    <ReviewFormModal currentUser={currentUser}/>
+                </div>
                 <div className="reviewContainer">
-                    <ReviewsContainer listing={listing}/>
+                    <ReviewsContainer reviews={reviews}/>
                 </div>
 
             </div>

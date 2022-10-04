@@ -4,7 +4,7 @@ import ProgressBar from 'react-bootstrap/ProgressBar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-export default function ReviewsContainer({listing}) {
+export default function ReviewsContainer({reviews}) {
     const monthNames = ["January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"
         ];
@@ -46,8 +46,10 @@ export default function ReviewsContainer({listing}) {
         }
     }
     let averageScores
-    if(listing.Reviews) {
-    averageScores = reviewScoreCalculator(listing.Reviews)
+    let reviewsArr
+    if(reviews) {
+        reviewsArr = Object.values(reviews)
+        averageScores = reviewScoreCalculator(reviewsArr)
     // console.log('HERE IS AVERAGE SCORES', averageScores)
     }
 
@@ -60,7 +62,7 @@ export default function ReviewsContainer({listing}) {
     return (
         <>
         <div className="aveRatingAndNumReviews">
-            <p className="aveReviewText">Star goes here, {averageScores.aveRating}, {listing.Reviews.length} reviews</p>
+            <p className="aveReviewText">Star goes here, {averageScores.aveRating}, {reviewsArr.length} reviews</p>
             <div className="aveRatingBars">
                 <div className="leftRatings">
                     <div className="aveCleanliness">
@@ -99,8 +101,8 @@ export default function ReviewsContainer({listing}) {
             </div>
         </div>
         <div className="listingReviews">
-            {listing.Reviews.map(review => (
-                <div className="reviewCard">
+            {reviewsArr.map(review => (
+                <div key={`review-container-id-${review.id}`} className="reviewCard">
                     <div className="reviewUserName">{review.User.username}</div>
                     <div className="reviewUserName">{calculateMonthAndYear(review.createdAt)}</div>
                     <div className="reviewContent">{review.content}</div>

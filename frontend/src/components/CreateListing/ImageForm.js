@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom"
 import {useDropzone} from 'react-dropzone';
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useListing } from "../../context/ListingContext"
 import './createListing.css';
 
@@ -8,6 +9,25 @@ import './createListing.css';
 export default function ImageForm(props) {
     const {imgUrl, setImgUrl,multiImages, setMultiImages, imageDescription, setImageDescription} = useListing();
     const [errors, setErrors] = useState({imageUpload:''})
+
+    const reorder = (list, startIndex, endIndex) => {
+        const result = Array.from(list);
+        const [removed] = result.splice(startIndex, 1);
+        result.splice(endIndex, 0, removed);
+      
+        return result;
+    };
+
+    const onDragEnd = result => {
+        const { source, destination } = result;
+        // dropped outside the list
+        if (!destination) {
+            return;
+        };
+        const items = reorder(imgUrl, source.index, destination.index);
+        console.log('this is items', items)
+        setImgUrl([...items]);
+    };
 
     const {
         fileRejections,
@@ -21,6 +41,7 @@ export default function ImageForm(props) {
             const droppedFiles = acceptedFiles.map(file => Object.assign(file, {
               preview: URL.createObjectURL(file)
             }));
+            setMultiImages([...multiImages, ...droppedFiles]);
             const droppedFileUrl = droppedFiles.map(file => file.preview);
             setImgUrl( [...imgUrl, ...droppedFileUrl] );
         }
@@ -103,9 +124,35 @@ export default function ImageForm(props) {
                         </div>
 
                         <div className="image-form-image-section-container-images" style={{overflow:'scroll'}}  {...getRootProps({ className: 'dropzone' })} >
-                            {imgUrl.length && imgUrl.map((url, idx) => (
-                                <img key={idx} src={url} className="preview-images" style={{height: '200px', width:'180px' }}/>
-                            ))}
+                            <DragDropContext onDragEnd={onDragEnd}>
+                                {imgUrl.length && imgUrl.map((url, idx) => (
+                                    <Droppable key={idx} droppableId={`${idx}`}>
+                                        {(provided, snapshot)=>(
+                                            <div
+                                            ref={provided.innerRef}
+                                            {...provided.droppableProps}
+                                            >
+                                                <Draggable
+                                                    key={idx}
+                                                    draggableId={idx.toString()}
+                                                    index={idx}
+                                                >
+                                                    {(provided, snapshot) => (
+                                                        <div
+                                                        ref={provided.innerRef}
+                                                        {...provided.draggableProps}
+                                                        {...provided.dragHandleProps}
+                                                        >
+                                                            <img key={idx} src={url} className="preview-images" style={{height: '200px', width:'180px' }}/>
+                                                        </div>
+                                                    )}
+                                                </Draggable>
+                                                {provided.placeholder}
+                                            </div>
+                                        )}           
+                                    </Droppable>
+                                ))}
+                            </DragDropContext>
                         </div>
                     </div>
                     <div className='button-layout'>

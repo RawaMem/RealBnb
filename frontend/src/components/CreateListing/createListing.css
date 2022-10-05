@@ -286,6 +286,27 @@ span.disabled {
     margin-top: 35px;
 }
 
+.image-form-image-section-container-images {
+    display: grid;
+    grid-template-columns: repeat(3, 220px);
+    grid-template-rows: repeat(2, 250px);
+    
+}
+
+#image-drop-zone {
+    position:absolute;
+    top: 150px;
+    height: 80%;
+    width: 45%;
+    right: 40px;
+    border: 1px dashed grey;
+    background-color: rgb(247,247,247);
+    border-radius: 15px;
+    text-align: center;
+    font-size: 40px;
+    font: grey;
+}
+
 video::-webkit-media-controls-fullscreen-button
 {
         display: none !important;

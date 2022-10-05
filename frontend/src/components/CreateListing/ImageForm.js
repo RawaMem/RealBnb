@@ -8,7 +8,7 @@ import './createListing.css';
 
 export default function ImageForm(props) {
     const {imgUrl, setImgUrl,multiImages, setMultiImages, imageDescription, setImageDescription} = useListing();
-    const [errors, setErrors] = useState({imageUpload:''})
+    const [dragZone, setDragZone] = useState(false);
 
     const reorder = (list, startIndex, endIndex) => {
         const result = Array.from(list);
@@ -25,12 +25,12 @@ export default function ImageForm(props) {
             return;
         };
         const items = reorder(imgUrl, source.index, destination.index);
-        console.log('this is items', items)
+        // console.log('this is items', items)
         setImgUrl([...items]);
     };
 
+
     const {
-        fileRejections,
         getRootProps,
         getInputProps
       } = useDropzone({
@@ -43,20 +43,10 @@ export default function ImageForm(props) {
             }));
             setMultiImages([...multiImages, ...droppedFiles]);
             const droppedFileUrl = droppedFiles.map(file => file.preview);
-            setImgUrl( [...imgUrl, ...droppedFileUrl] );
+            setImgUrl([...imgUrl, ...droppedFileUrl]);
+            setDragZone(false);
         }
     });
-
-
-    const fileRejectionItems = fileRejections.map(({ errors }) => (
-          <ul>
-            {errors.map(e => (
-              <li key={e.code}>{e.message}</li>
-            ))}
-          </ul>       
-      ));
-
-
 
       //for multiple file upload
     const updateFiles = e => {
@@ -70,9 +60,7 @@ export default function ImageForm(props) {
                 const url = fr.result;
                 if(imgUrl.indexOf(url) === -1) {
                     setImgUrl([...imgUrl, url])
-                } else {
-                    setErrors(prev => ({...prev, imageUpload:'photo already exists, please select another one.'}))
-                };
+                }
             });
         }
     };
@@ -104,8 +92,30 @@ export default function ImageForm(props) {
                     </video>
                 </section>
 
-                <section className="grid-right-container-image-form">
-                    <div className="image-form-image-section-container">
+                <section 
+                className="grid-right-container-image-form"   
+                onDragEnter={e => {
+                    setDragZone(true)
+                    e.stopPropagation()
+                    e.preventDefault()
+                }}
+                >
+                    <div 
+                    className="image-form-image-section-container"
+                    >
+                        {dragZone && ( <div 
+                        id="image-drop-zone"
+                        {...getRootProps({ className: 'dropzone' })} 
+                        onDragOver={e => {
+                            e.stopPropagation()
+                            e.preventDefault()
+                        }}
+                        onDragLeave={e => {
+                            e.stopPropagation()
+                            e.preventDefault()
+                            setDragZone(false);
+                        }}
+                        >Drop Files Here</div> ) }
                         <div className="image-form-image-section-container-upper">
                             <div>
                                 <h3>Ta-da! How does this look?</h3>
@@ -113,7 +123,6 @@ export default function ImageForm(props) {
                             </div>
                             <div>
                                 <input type="file" multiple  {...getInputProps()} onChange={updateFiles} style={{display:'none'}} id="fileElem" />
-
                                 <div id="fileSelect" onClick={buttonEvent} >
                                     <span class="material-symbols-outlined">
                                         file_upload
@@ -123,14 +132,15 @@ export default function ImageForm(props) {
                             </div>
                         </div>
 
-                        <div className="image-form-image-section-container-images" style={{overflow:'scroll'}}  {...getRootProps({ className: 'dropzone' })} >
+                        <div className="image-form-image-section-container-images" style={{overflow:'scroll'}} 
+                        >
                             <DragDropContext onDragEnd={onDragEnd}>
-                                {imgUrl.length && imgUrl.map((url, idx) => (
+                                {imgUrl.length>0 && imgUrl.map((url, idx) => (
                                     <Droppable key={idx} droppableId={`${idx}`}>
                                         {(provided, snapshot)=>(
                                             <div
-                                            ref={provided.innerRef}
-                                            {...provided.droppableProps}
+                                                ref={provided.innerRef}
+                                                {...provided.droppableProps}
                                             >
                                                 <Draggable
                                                     key={idx}
@@ -142,12 +152,16 @@ export default function ImageForm(props) {
                                                         ref={provided.innerRef}
                                                         {...provided.draggableProps}
                                                         {...provided.dragHandleProps}
+
                                                         >
-                                                            <img key={idx} src={url} className="preview-images" style={{height: '200px', width:'180px' }}/>
+                                                            <img key={idx} 
+                                                            src={url} className="preview-images" style={{height: '200px', width:'170px', borderRadius:'10px' }}
+                                                            draggable='true'
+                                                            />       
                                                         </div>
                                                     )}
                                                 </Draggable>
-                                                {provided.placeholder}
+                                                {/* {provided.placeholder} taking up space */}
                                             </div>
                                         )}           
                                     </Droppable>

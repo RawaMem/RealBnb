@@ -44,6 +44,7 @@ export const editReviewThunk = (review) => async dispatch => {
     })
     if (response.ok) {
         const newReview = await response.json()
+        console.log('this is the response review in the thunk:',newReview)
         dispatch(editReviewAction(newReview))
     }
 }

@@ -4,7 +4,7 @@ export const monthNames = ["January", "February", "March", "April", "May", "June
 "July", "August", "September", "October", "November", "December"
 ];
 
-export const reviewScoreCalculator = (reviewArr) => {
+export const reviewScoreCalculator = (reviewArr, currentUser) => {
     let totalRating = 0
     let totalCleanliness = 0
     let totalCommunication = 0
@@ -12,6 +12,7 @@ export const reviewScoreCalculator = (reviewArr) => {
     let totalAccuracy = 0
     let totalLocation = 0
     let totalValue = 0
+    let showLeaveReviewButton = true
     reviewArr.forEach(review =>{
         totalRating += +review.starRating
         totalCleanliness += +review.cleanliness
@@ -20,6 +21,7 @@ export const reviewScoreCalculator = (reviewArr) => {
         totalAccuracy += +review.accuracy
         totalLocation += +review.location
         totalValue += +review.value
+        if (currentUser && review.authorId === currentUser.id) showLeaveReviewButton = false
         // console.log('in for each totalRating', review.starRating)
     })
     return {
@@ -30,6 +32,7 @@ export const reviewScoreCalculator = (reviewArr) => {
         aveAccuracy : totalAccuracy/+reviewArr.length,
         aveLocation : totalLocation/+reviewArr.length,
         aveValue : totalValue/+reviewArr.length,
+        showLeaveReviewButton
     }
 }
 

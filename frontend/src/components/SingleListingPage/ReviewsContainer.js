@@ -6,17 +6,20 @@ import { useDispatch } from 'react-redux';
 import { deleteReviewThunk } from '../../store/reviews';
 import { useState } from 'react';
 import { calculateMonthAndYear, reviewScoreCalculator } from '../Utils';
+import ReviewFormModal from './ReviewFormModal';
 
 
-export default function ReviewsContainer({reviews, currentUser, showCreateReviewModal, setShowCreateReviewModal}) {
+export default function ReviewsContainer({reviews, currentUser, listingId}) {
     const [reviewToEdit, setReviewToEdit] = useState({})
+    const [showCreateReviewModal, setShowCreateReviewModal] = useState(false)
+
     const dispatch = useDispatch()
-    
+
     let averageScores
     let reviewsArr
     if(reviews) {
         reviewsArr = Object.values(reviews)
-        averageScores = reviewScoreCalculator(reviewsArr)
+        averageScores = reviewScoreCalculator(reviewsArr, currentUser)
     // console.log('HERE IS AVERAGE SCORES', averageScores)
     }
 
@@ -26,6 +29,10 @@ export default function ReviewsContainer({reviews, currentUser, showCreateReview
     }
 
     const handleEdit = async (review)=>{
+        setReviewToEdit(review)
+        setShowCreateReviewModal(true)
+
+        // setReviewToEdit(review)
 
     }
 
@@ -37,6 +44,17 @@ export default function ReviewsContainer({reviews, currentUser, showCreateReview
 
     return (
         <>
+        {listingId &&
+        <div className="createReviewBtnContainer">
+                    <ReviewFormModal
+                    showCreateReviewModal={showCreateReviewModal}
+                    setShowCreateReviewModal={setShowCreateReviewModal}
+                    reviewToEdit={reviewToEdit}
+                    currentUser={currentUser}
+                    showLeaveReviewButton={averageScores.showLeaveReviewButton}
+                    listingId={listingId}/>
+                </div>
+            }
         <div className="aveRatingAndNumReviews">
             <p className="aveReviewText">Star goes here, {averageScores.aveRating}, {reviewsArr.length} reviews</p>
             <div className="aveRatingBars">
@@ -82,13 +100,13 @@ export default function ReviewsContainer({reviews, currentUser, showCreateReview
                     <div className="reviewUserName">{review.User.username}</div>
                     <div className="reviewUserName">{calculateMonthAndYear(review.createdAt)}</div>
                     <div className="reviewContent">{review.content}</div>
-                    {currentUser.id === review.authorId ?
+                    { currentUser && currentUser.id === review.authorId ?
                     (<>
                     <button
                     onClick={()=>handleDelete(review.id)}
                     className="deleteReviewBtn">Delete Review</button>
                     <button
-                    onClick={()=>handlEdit(review)}
+                    onClick={()=>handleEdit(review)}
                     className="editReviewBtn">Edit Review</button>
                     </>): null}
                 </div>

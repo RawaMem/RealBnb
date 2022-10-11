@@ -13,7 +13,7 @@ export default function SingleListingPage() {
     const {listingId} = useParams()
     const dispatch = useDispatch()
 
-    const [showCreateReviewModal, setShowCreateReviewModal] = useState(false)
+    // const [showCreateReviewModal, setShowCreateReviewModal] = useState(false)
 
 
     const currentUser = useSelector(state => state.session.user)
@@ -43,17 +43,18 @@ export default function SingleListingPage() {
                 <div className="hostAndSpecsContainer">
                     <HostAndSpecs listing={listing}/>
                 </div>
-                <div className="createReviewBtnContainer">
+                {/* <div className="createReviewBtnContainer">
                     <ReviewFormModal
                     showCreateReviewModal={showCreateReviewModal}
                     setShowCreateReviewModal={setShowCreateReviewModal}
                     currentUser={currentUser}
                     listingId={listingId}/>
-                </div>
+                </div> */}
                 <div className="reviewContainer">
                     <ReviewsContainer
-                    showCreateReviewModal={showCreateReviewModal}
-                    setShowCreateReviewModal={setShowCreateReviewModal}
+                    // showCreateReviewModal={showCreateReviewModal}
+                    // setShowCreateReviewModal={setShowCreateReviewModal}
+                    listingId={listingId}
                     reviews={reviews}
                     currentUser={currentUser}/>
                 </div>

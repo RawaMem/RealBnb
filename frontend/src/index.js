@@ -11,7 +11,6 @@ import App from './App';
 import configureStore from './store';
 import { restoreCSRF, csrfFetch } from "./store/csrf";
 import * as sessionActions from './store/session';
-import { buildBooking } from './store/listings';
 import CategoryProvider from './context/CategoryContext';
 import ListingProvider from './context/ListingContext';
 import CreateListing from './components/CreateListing';
@@ -25,7 +24,6 @@ if (process.env.NODE_ENV !== "production") {
   window.csrfFetch = csrfFetch;
   window.store = store;
   window.sessionActions = sessionActions;
-  window.buildBooking = buildBooking;
 }
 
 // const Carrot = () => (

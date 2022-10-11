@@ -4,6 +4,7 @@ import session from './session';
 import listings from './listings';
 import mapsReducer from './maps';
 import reviews from './reviews';
+import bookings from './bookings';
 
 const rootReducer = combineReducers({
   session,

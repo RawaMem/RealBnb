@@ -1,0 +1,7 @@
+.booking-container {
+    border: solid 3px red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}

@@ -56,19 +56,6 @@ router.use("/categories", categoriesRouter);
 
 router.use('/maps',mapsRouter);
 
-router.delete('/bookings/:bookingId', asyncHandler(async (req, res) => {
-  const bookingToDelete = await Booking.findByPk(req.params.bookingId);
-
-  if (!bookingToDelete) {
-    res.status(404);
-    return res.json({errors: ['Booking not found.']})
-  }
-
-  await bookingToDelete.destroy();
-
-  return res.json({message: 'successfully deleted'})
-}))
-
 router.use('/reviews',reviewsRouter);
 
 router.get('/maps-key', (req, res) => {

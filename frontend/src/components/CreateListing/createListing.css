@@ -287,15 +287,43 @@ span.disabled {
 }
 
 .image-form-image-section-container-images {
-    display: grid;
-    grid-template-columns: repeat(3, 220px);
-    grid-template-rows: repeat(2, 250px);
-    
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, 200px);
+    grid-template-rows: repeat(auto-fill, 200px);
+    overflow-y: scroll;  
+    gap: 10px 20px; 
+    margin: 1.5em;
+}
+
+.image-section-layout {
+    position: relative;
+}
+
+.delete-image {
+    position: absolute;
+    right: 4%;
+    top: 3%;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 500;
+    color: black;
+}
+
+.delete-image:hover {
+    font-size: 20px;
+}
+
+.dropable-zone{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px dashed lightgrey;
+    border-radius: 5px;
 }
 
 #image-drop-zone {
     position:absolute;
-    top: 150px;
+    top: 20%;
     height: 80%;
     width: 45%;
     right: 40px;

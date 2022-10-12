@@ -2,55 +2,38 @@ import ProgressBar from 'react-bootstrap/ProgressBar';
 
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useDispatch } from 'react-redux';
+import { deleteReviewThunk } from '../../store/reviews';
+import { useState } from 'react';
+import { calculateMonthAndYear, reviewScoreCalculator } from '../Utils';
+import ReviewFormModal from './ReviewFormModal';
 
 
-export default function ReviewsContainer({reviews}) {
-    const monthNames = ["January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
-        ];
+export default function ReviewsContainer({reviews, currentUser, listingId}) {
+    const [reviewToEdit, setReviewToEdit] = useState({})
+    const [showCreateReviewModal, setShowCreateReviewModal] = useState(false)
 
+    const dispatch = useDispatch()
 
-    const calculateMonthAndYear = (dateString) => {
-        const dateObj = new Date(dateString)
-        const month = dateObj.toLocaleString('default', {month:'long'})
-        const year = dateObj.toLocaleString('default', {year:'numeric'})
-        return `${month} ${year}`
-
-    }
-    const reviewScoreCalculator = (reviewArr) => {
-        let totalRating = 0
-        let totalCleanliness = 0
-        let totalCommunication = 0
-        let totalCheckIn = 0
-        let totalAccuracy = 0
-        let totalLocation = 0
-        let totalValue = 0
-        reviewArr.forEach(review =>{
-            totalRating += +review.starRating
-            totalCleanliness += +review.cleanliness
-            totalCommunication += +review.communication
-            totalCheckIn += +review.checkIn
-            totalAccuracy += +review.accuracy
-            totalLocation += +review.location
-            totalValue += +review.value
-            // console.log('in for each totalRating', review.starRating)
-        })
-        return {
-            aveRating : totalRating/+reviewArr.length,
-            aveCleanliness : totalCleanliness/+reviewArr.length,
-            aveCommunication : totalCommunication/+reviewArr.length,
-            aveCheckIn : totalCheckIn/+reviewArr.length,
-            aveAccuracy : totalAccuracy/+reviewArr.length,
-            aveLocation : totalLocation/+reviewArr.length,
-            aveValue : totalValue/+reviewArr.length,
-        }
-    }
     let averageScores
     let reviewsArr
     if(reviews) {
         reviewsArr = Object.values(reviews)
-        averageScores = reviewScoreCalculator(reviewsArr)
+        averageScores = reviewScoreCalculator(reviewsArr, currentUser)
     // console.log('HERE IS AVERAGE SCORES', averageScores)
+    }
+
+
+    const handleDelete = async (id) => {
+        await dispatch(deleteReviewThunk(id))
+    }
+
+    const handleEdit = async (review)=>{
+        setReviewToEdit(review)
+        setShowCreateReviewModal(true)
+
+        // setReviewToEdit(review)
+
     }
 
     if (!averageScores) return (
@@ -61,6 +44,17 @@ export default function ReviewsContainer({reviews}) {
 
     return (
         <>
+        {listingId &&
+        <div className="createReviewBtnContainer">
+                    <ReviewFormModal
+                    showCreateReviewModal={showCreateReviewModal}
+                    setShowCreateReviewModal={setShowCreateReviewModal}
+                    reviewToEdit={reviewToEdit}
+                    currentUser={currentUser}
+                    showLeaveReviewButton={averageScores.showLeaveReviewButton}
+                    listingId={listingId}/>
+                </div>
+            }
         <div className="aveRatingAndNumReviews">
             <p className="aveReviewText">Star goes here, {averageScores.aveRating}, {reviewsArr.length} reviews</p>
             <div className="aveRatingBars">
@@ -106,6 +100,15 @@ export default function ReviewsContainer({reviews}) {
                     <div className="reviewUserName">{review.User.username}</div>
                     <div className="reviewUserName">{calculateMonthAndYear(review.createdAt)}</div>
                     <div className="reviewContent">{review.content}</div>
+                    { currentUser && currentUser.id === review.authorId ?
+                    (<>
+                    <button
+                    onClick={()=>handleDelete(review.id)}
+                    className="deleteReviewBtn">Delete Review</button>
+                    <button
+                    onClick={()=>handleEdit(review)}
+                    className="editReviewBtn">Edit Review</button>
+                    </>): null}
                 </div>
             ))}
         </div>

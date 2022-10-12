@@ -61,9 +61,8 @@ export default function SingleListingPage() {
                     currentUser={currentUser}/>
                 </div>
             </div>
-
-
+        )}
+        </div>
         </>
     )
-
 }

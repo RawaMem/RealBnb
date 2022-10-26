@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { useListing } from "../../context/ListingContext"
 import './createListing.css';
@@ -5,8 +6,11 @@ import './createListing.css';
 
 
 export default function BedGuestForm() {
-
     const { setMaxGuests,maxGuests, setBeds, beds, setBedRooms, bedrooms, baths, setBaths} = useListing();
+
+    useEffect(() => {
+        
+    })
 
 
     function handleAddDecrease(type, setter) {

@@ -8,7 +8,7 @@ import { useListing } from '../../context/ListingContext';
 
 
 export default function AddressForm() {
-    const { address, setAddress, inputVal, setInputVal, city, setCity, state, setState, zipCode, setZipCode,setLongitude, setLatitude } = useListing();
+    const { address, setAddress, inputVal, setInputVal, city, setCity, state, setState, zipCode, setZipCode,setLongitude, setLatitude, latitude, longitude } = useListing();
 
     const token = useSelector((state) => state.maps?.token);
     const apiKey = useSelector((state) => state.maps?.key);
@@ -24,6 +24,9 @@ export default function AddressForm() {
         setCity(localStorage.getItem('city'));
         setState(localStorage.getItem('state'));
         setZipCode(localStorage.getItem('zipCode'));
+        const lng = localStorage.getItem('lng');
+        const lat = localStorage.getItem('lat');
+        setCoordinates([+lng, +lat])
         setInitialAutoFill(true);
 
         return () => setInitialAutoFill(false);
@@ -34,7 +37,9 @@ export default function AddressForm() {
         localStorage.setItem('city', city);
         localStorage.setItem('state', state);
         localStorage.setItem('zipCode', zipCode);
-    },[address,city, state, zipCode])
+        localStorage.setItem('lat', latitude);
+        localStorage.setItem('lng', longitude)
+    },[address,city, state, zipCode, latitude, longitude])
     
     useEffect(() => {
         if(!token) dispatch(getToken());

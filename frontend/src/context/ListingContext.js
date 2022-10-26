@@ -13,13 +13,13 @@ export default function ListingProvider({children}) {
     const [beds, setBeds] = useState(1);//
     const [baths, setBaths] = useState(1);//
     const [maxGuests, setMaxGuests] = useState(1);//
-    const [address, setAddress] = useState(localStorage.getItem('addressInputVal'));//
-    const [inputVal, setInputVal] = useState(localStorage.getItem('addressInputVal'))
-    const [city, setCity] = useState(localStorage.getItem('city'));//
-    const [state, setState] = useState(localStorage.getItem('state'));//
-    const [zipCode, setZipCode] = useState(localStorage.getItem('zipCode'));//
-    const [longitude, setLongitude] = useState(10);//
-    const [latitude, setLatitude] = useState(10);//
+    const [address, setAddress] = useState(localStorage.getItem('addressInputVal')|| '');//
+    const [inputVal, setInputVal] = useState(localStorage.getItem('addressInputVal') || '')
+    const [city, setCity] = useState(localStorage.getItem('city') || '');//
+    const [state, setState] = useState(localStorage.getItem('state') || '');//
+    const [zipCode, setZipCode] = useState(localStorage.getItem('zipCode') || '');//
+    const [longitude, setLongitude] = useState(localStorage.getItem('lng') || 10);//
+    const [latitude, setLatitude] = useState(localStorage.getItem('lat')|| 10);//
     // for multuple file upload
     const [multiImages, setMultiImages] = useState([]);//
     const [imageDescription, setImageDescription] = useState('');// nullable

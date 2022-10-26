@@ -8,7 +8,7 @@ import { useListing } from '../../context/ListingContext';
 
 
 export default function AddressForm() {
-    const { address, setAddress, city, setCity, state, setState, zipCode, setZipCode, longitude,setLongitude, latitude, setLatitude } = useListing();
+    const { address, setAddress, inputVal, setInputVal, city, setCity, state, setState, zipCode, setZipCode,setLongitude, setLatitude } = useListing();
 
     const token = useSelector((state) => state.maps?.token);
     const apiKey = useSelector((state) => state.maps?.key);
@@ -17,36 +17,38 @@ export default function AddressForm() {
     const [optionalAdd, setOptionalAdd] = useState('');
     const [suggestions, setSuggestions] = useState([]);
     const [coordinates, setCoordinates] = useState('');
-    const [inputVal, setInputVal] = useState('')
-    const [handleAutoFillCity, setHandleAutoFillCity] = useState(false);
-    const [handleAutoFillState, setHandleAutoFillState] = useState(false);
-    const [handleAutoFillZip, setHandleAutoFillZip] = useState(false);
-
+    const [initialAutoFill, setInitialAutoFill] = useState(false);
 
     useEffect(() => {
-        setInputVal(address)
-        setCity(city)
-        setState(state)
-        setZipCode(zipCode)
+        setInputVal(localStorage.getItem('addressInputVal'));
+        setCity(localStorage.getItem('city'));
+        setState(localStorage.getItem('state'));
+        setZipCode(localStorage.getItem('zipCode'));
+        setInitialAutoFill(true);
+
+        return () => setInitialAutoFill(false);
     },[])
 
-    const containerStyle = {
-        width: '300px',
-        height: '300px',
-      };
+    useEffect(() => {
+        localStorage.setItem('addressInputVal', inputVal);
+        localStorage.setItem('city', city);
+        localStorage.setItem('state', state);
+        localStorage.setItem('zipCode', zipCode);
+    },[address,city, state, zipCode])
     
     useEffect(() => {
         if(!token) dispatch(getToken());
         if(!apiKey) dispatch(getKey());
     }, [dispatch, token, apiKey]);
-
+    
+    const containerStyle = {
+        width: '300px',
+        height: '300px',
+      };
 
     const handleChange = async (event) => {
 
         setInputVal(event.target.value);
-        setHandleAutoFillCity(false);
-        setHandleAutoFillState(false);
-        setHandleAutoFillZip(false);
         try {
             const endpoint = `http://api.mapbox.com/geocoding/v5/mapbox.places/${event.target.value}.json?access_token=${token}&autocomplete=true`;
     
@@ -67,20 +69,6 @@ export default function AddressForm() {
     };
 
 
-    if(address) {
-        let addressArr = address?.split(', ');
-        console.log('addressArr', addressArr);
-        let stateZip = addressArr[2]?.split(' ');                
-        if(addressArr.length && !handleAutoFillCity) setCity(addressArr[1]);
-        // if(addressArr.length) setCity(addressArr[1]);
-        if(stateZip.length && !handleAutoFillState) setState(stateZip[0]);
-        // if(stateZip.length) setState(stateZip[0]);
-        if(stateZip.length && !handleAutoFillZip) setZipCode(stateZip[1]);
-        // if(stateZip.length) setZipCode(stateZip[1]);
-    } 
-
-
-
     if(!inputVal) {
         setCity('');
         setState('');
@@ -95,7 +83,8 @@ export default function AddressForm() {
         };
     };
 
-    if(!token || !apiKey) return null;
+    if(!token || !apiKey || !initialAutoFill ) return null;
+
     return (
         <div className="address-form-container">
             <section className="grid-left-container">
@@ -123,6 +112,9 @@ export default function AddressForm() {
                                                 setAddress(suggestion.place_name)
                                                 setSuggestions([])
                                                 setInputVal(suggestion.place_name)
+                                                setZipCode(suggestion.context[1].text)
+                                                setCity(suggestion.context[2].text)
+                                                setState(suggestion.context[4].text)
                                             }} 
                                             style={{cursor:'pointer'}}
                                         > 

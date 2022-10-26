@@ -183,6 +183,14 @@ span.disabled {
     position: relative
 }
 
+.video-caption {
+    position: absolute;
+    left: 5%;
+    right: 5%;
+    bottom: 20%;
+
+}
+
 .word-section {
     display: grid;
     grid-template-rows:300px, auto, 300px;
@@ -273,7 +281,8 @@ span.disabled {
     align-items: center;
 }
 
-.word-section-1 {
+.word-section-1,
+.video-caption {
     font-size: 48px;
     color: white;
     font-weight: 48px;
@@ -290,8 +299,8 @@ span.disabled {
     display: grid; 
     grid-template-columns: repeat(auto-fill, 200px);
     grid-template-rows: repeat(auto-fill, 200px);
-    overflow-y: scroll;  
     gap: 10px 20px; 
+    overflow-y: scroll;  
     margin: 1.5em;
 }
 
@@ -324,7 +333,7 @@ span.disabled {
 #image-drop-zone {
     position:absolute;
     top: 20%;
-    height: 80%;
+    height: 90%;
     width: 45%;
     right: 40px;
     border: 1px dashed grey;

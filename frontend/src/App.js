@@ -12,13 +12,12 @@ import TestCompontent from './components/TestComponent';
 import GoogleMaps from './components/GoogleMaps';
 import { Wrapper, Status } from '@googlemaps/react-wrapper';
 import Marker from './components/Marker';
-import CreateListing from './components/CreateListing';
 import AddressForm from './components/CreateListing/AddressForm';
 import BedGuestForm from './components/CreateListing/BedGuestForm';
 import AmenitiForm from './components/CreateListing/AmenitiForm';
 import ImageForm from './components/CreateListing/ImageForm';
-
-
+import Introducing from './components/CreateListing/Introducing';
+import ListingProvider from './context/ListingContext';
 //websocket setup
 import { io } from 'socket.io-client'
 import Socket from './components/Socket';
@@ -134,9 +133,7 @@ function App() {
           <Route exact path='/signup'>
             <SignupFormPage />
           </Route>
-          <Route exact path='/createListing/create-address'>
-            <AddressForm />
-          </Route>
+
           <Route exact path='/listings/:listingId'>
             <SingleListingPage />
           </Route>
@@ -161,19 +158,23 @@ function App() {
           <Route exact path='/sockets'>
             <Socket socket={socket} />
           </Route>
-          <Route exact path='/createListing'>
-              <CreateListing />
-          </Route>
-          <Route exact path='/createListing-bedGuestForm'>
-              <BedGuestForm />
-          </Route>
-          <Route exact path='/createListing-amenitiForm'>
-            <AmenitiForm />
-          </Route>
-          <Route exact path='/createListing/images'>
-            <ImageForm />
-          </Route>
-
+          <ListingProvider>
+            <Route exact path='/createListing'>
+                <Introducing />
+            </Route>
+            <Route exact path='/createListing/create-address'>
+              <AddressForm />
+            </Route>
+            <Route exact path='/createListing-bedGuestForm'>
+                <BedGuestForm />
+            </Route>
+            <Route exact path='/createListing-amenitiForm'>
+              <AmenitiForm />
+            </Route>
+            <Route exact path='/createListing/images'>
+              <ImageForm />
+            </Route>
+          </ListingProvider>
         </Switch>
       )}
     </>

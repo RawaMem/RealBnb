@@ -9,26 +9,25 @@ export default function ListingProvider({children}) {
     const [description, setDescription] = useState('');
     const [serviceFee, setServiceFee] = useState(0);
     const [cleaningFee, setCleaningFee] = useState(0);
-    const [bedrooms, setBedRooms] = useState(1);
-    const [beds, setBeds] = useState(1);
-    const [baths, setBaths] = useState(1);
-    const [maxGuests, setMaxGuests] = useState(1);
-    const [address, setAddress] = useState('');
-    const [city, setCity] = useState('');
-    const [state, setState] = useState('');
-    const [zipCode, setZipCode] = useState('');
-    const [longitude, setLongitude] = useState(10);
-    const [latitude, setLatitude] = useState(10);
-    const [image, setImage] = useState(null);
+    const [bedrooms, setBedRooms] = useState(1);//
+    const [beds, setBeds] = useState(1);//
+    const [baths, setBaths] = useState(1);//
+    const [maxGuests, setMaxGuests] = useState(1);//
+    const [address, setAddress] = useState(localStorage.getItem('addressInputVal'));//
+    const [inputVal, setInputVal] = useState(localStorage.getItem('addressInputVal'))
+    const [city, setCity] = useState(localStorage.getItem('city'));//
+    const [state, setState] = useState(localStorage.getItem('state'));//
+    const [zipCode, setZipCode] = useState(localStorage.getItem('zipCode'));//
+    const [longitude, setLongitude] = useState(10);//
+    const [latitude, setLatitude] = useState(10);//
     // for multuple file upload
-    const [multiImages, setMultiImages] = useState([]);
-    const [imageDescription, setImageDescription] = useState('');
-    const [imgUrl, setImgUrl] = useState([]); 
+    const [multiImages, setMultiImages] = useState([]);//
+    const [imageDescription, setImageDescription] = useState('');// nullable
+    const [imgUrl, setImgUrl] = useState([]);
+    const [previewImageUrl, setPreviewImageUrl] = useState('')
     const [listingPriceArr, setListingPriceArr] = useState([]);
-    const [amenityArr, setAmenityArr] = useState([]);
+    const [amenityArr, setAmenityArr] = useState([]);//
     const [categoryArr, setCategoryArr] = useState([]);
-
-
 
     return (
         <ListingContext.Provider
@@ -51,6 +50,8 @@ export default function ListingProvider({children}) {
                 setMaxGuests,
                 address,
                 setAddress,
+                inputVal, 
+                setInputVal,
                 city,
                 setCity,
                 state,
@@ -61,14 +62,14 @@ export default function ListingProvider({children}) {
                 setLongitude,
                 latitude,
                 setLatitude,
-                image, 
-                setImage,
                 multiImages, 
                 setMultiImages,
-                imgUrl, 
-                setImgUrl,
                 imageDescription,
                 setImageDescription,
+                imgUrl, 
+                setImgUrl,
+                previewImageUrl, 
+                setPreviewImageUrl,
                 listingPriceArr,
                 setListingPriceArr,
                 amenityArr,

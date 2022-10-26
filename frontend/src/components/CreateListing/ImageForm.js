@@ -7,12 +7,12 @@ import './createListing.css';
 
 
 export default function ImageForm(props) {
-    const {imgUrl, setImgUrl,multiImages, setMultiImages, imageDescription, setImageDescription} = useListing();
+    const {imgUrl, setImgUrl,multiImages, setMultiImages, imageDescription, setImageDescription, setPreviewImageUrl} = useListing();
     const [dragZone, setDragZone] = useState(false);
     const [droppedFile, setDroppedFile] = useState([])
-    console.log('this is imgUrl', imgUrl);
-    console.log('this is multiImages', multiImages);
-    console.log('this is droppedFiles', droppedFile);
+    // console.log('this is imgUrl', imgUrl);
+    // console.log('this is multiImages', multiImages);
+    // console.log('this is droppedFiles', droppedFile);
 
     const reorder = (list, startIndex, endIndex) => {
         const result = Array.from(list);
@@ -29,14 +29,13 @@ export default function ImageForm(props) {
         setImgUrl(newState);
 
         const dropFile = droppedFile.find(file => file.preview === url )
-        console.log('droppedFile', dropFile);
         const fileIdx = droppedFile.indexOf(dropFile);
         const newDroppedFile = [...droppedFile];
         newDroppedFile.splice(fileIdx, 1);
         setDroppedFile(newDroppedFile)
 
         const removeFromMultiImageIdx = multiImages.indexOf(dropFile);
-        console.log('removeFromMultiImageIdx',removeFromMultiImageIdx)
+        // console.log('removeFromMultiImageIdx',removeFromMultiImageIdx)
         const copyMultiImages = [...multiImages];
         copyMultiImages.splice(removeFromMultiImageIdx, 1);
         setMultiImages(copyMultiImages);
@@ -76,11 +75,9 @@ export default function ImageForm(props) {
 
       //for multiple file upload
     const updateFiles = e => {
-        console.log('entered................')
         const files = e.target.files;
-        console.log('files', files);
 
-        setMultiImages([...multiImages, files]);
+        setMultiImages([...multiImages, files[0]]);
         const fr = new FileReader();
         // e.target.files structure: {0: File, length: 1}
         if(e.target?.files[0] instanceof Blob) {
@@ -165,6 +162,7 @@ export default function ImageForm(props) {
                     >
                         <source src="https://a0.muscache.com/v/d6/12/d6120feb-75fc-52dd-b5bb-5755913fb756/d6120feb75fc52ddb5bb5755913fb756_4000k_1.mp4" type="video/mp4" />
                     </video>
+                    <span className="video-caption">Next, let's add some photos of your place</span>
                 </section>
 
                 <section 

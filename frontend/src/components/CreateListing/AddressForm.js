@@ -20,8 +20,8 @@ export default function AddressForm() {
     const [initialAutoFill, setInitialAutoFill] = useState(false);
 
     useEffect(() => {
-        setInputVal(localStorage.getItem('addressInputVal'));
-        setCity(localStorage.getItem('city'));
+        setInputVal(localStorage.getItem('addressInputVal').length ? localStorage.getItem('addressInputVal') : '');
+        setCity(localStorage.getItem('city').length ? localStorage.getItem('city') : '');
         setState(localStorage.getItem('state'));
         setZipCode(localStorage.getItem('zipCode'));
         const lng = localStorage.getItem('lng');
@@ -142,7 +142,6 @@ export default function AddressForm() {
                                 type="text" 
                                 placeholder='City' 
                                 value={city}
-                                onClick={() => setHandleAutoFillCity(true)}
                                 onChange={e => setCity(e.target.value)}
                                 />
                             </div>
@@ -151,14 +150,12 @@ export default function AddressForm() {
                                 type="text" 
                                 placeholder='State' 
                                 value={state}
-                                onClick={() => setHandleAutoFillState(true)}
                                 onChange={e => setState(e.target.value)}
                                 />
                                 <input 
                                 type="text" 
                                 placeholder='Zip code' 
                                 value={zipCode}
-                                onClick={() => setHandleAutoFillZip(true)}
                                 onChange={e => setZipCode(e.target.value)}
                                 />
                             </div>

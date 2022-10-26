@@ -9,12 +9,12 @@ export default function ListingProvider({children}) {
     const [description, setDescription] = useState('');
     const [serviceFee, setServiceFee] = useState(0);
     const [cleaningFee, setCleaningFee] = useState(0);
-    const [bedrooms, setBedRooms] = useState(1);//
-    const [beds, setBeds] = useState(1);//
-    const [baths, setBaths] = useState(1);//
-    const [maxGuests, setMaxGuests] = useState(1);//
+    const [bedrooms, setBedRooms] = useState(+localStorage.getItem('bedrooms'));//
+    const [beds, setBeds] = useState(+localStorage.getItem('beds'));//
+    const [baths, setBaths] = useState(+localStorage.getItem('bathrooms'));//
+    const [maxGuests, setMaxGuests] = useState(+localStorage.getItem('maxGuests'));//
     const [address, setAddress] = useState(localStorage.getItem('addressInputVal')|| '');//
-    const [inputVal, setInputVal] = useState(localStorage.getItem('addressInputVal') || '')
+    const [inputVal, setInputVal] = useState(localStorage.getItem('addressInputVal'))
     const [city, setCity] = useState(localStorage.getItem('city') || '');//
     const [state, setState] = useState(localStorage.getItem('state') || '');//
     const [zipCode, setZipCode] = useState(localStorage.getItem('zipCode') || '');//
@@ -26,7 +26,9 @@ export default function ListingProvider({children}) {
     const [imgUrl, setImgUrl] = useState([]);
     const [previewImageUrl, setPreviewImageUrl] = useState('')
     const [listingPriceArr, setListingPriceArr] = useState([]);
-    const [amenityArr, setAmenityArr] = useState([]);//
+    const initalAmenityStr = localStorage.getItem('amenityArr');
+    const amenity = initalAmenityStr.split(',');
+    const [amenityArr, setAmenityArr] = useState([...amenity]);//
     const [categoryArr, setCategoryArr] = useState([]);
 
     return (

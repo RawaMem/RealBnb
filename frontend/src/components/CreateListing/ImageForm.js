@@ -1,26 +1,17 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom"
 import {useDropzone} from 'react-dropzone';
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { useListing } from "../../context/ListingContext"
 import './createListing.css';
 
 
-export default function ImageForm(props) {
+export default function ImageForm() {
     const {imgUrl, setImgUrl,multiImages, setMultiImages, imageDescription, setImageDescription, setPreviewImageUrl} = useListing();
     const [dragZone, setDragZone] = useState(false);
-    const [droppedFile, setDroppedFile] = useState([])
-    // console.log('this is imgUrl', imgUrl);
-    // console.log('this is multiImages', multiImages);
-    // console.log('this is droppedFiles', droppedFile);
-
-    const reorder = (list, startIndex, endIndex) => {
-        const result = Array.from(list);
-        const [removed] = result.splice(startIndex, 1);
-        result.splice(endIndex, 0, removed);
-      
-        return result;
-    };
+    const [droppedFile, setDroppedFile] = useState([]);
+    const [imageDrag, setImageDrag] = useState(false);
+    const [dragStartIndex, setDragStartIndex] = useState(0);
+    const [dragEndIndex, setDragEndIndex] = useState(0);
 
     const handleDeleteImage = url => {
         const urlIdx = imgUrl.indexOf(url);
@@ -33,26 +24,17 @@ export default function ImageForm(props) {
         const newDroppedFile = [...droppedFile];
         newDroppedFile.splice(fileIdx, 1);
         setDroppedFile(newDroppedFile)
-
         const removeFromMultiImageIdx = multiImages.indexOf(dropFile);
-        // console.log('removeFromMultiImageIdx',removeFromMultiImageIdx)
         const copyMultiImages = [...multiImages];
         copyMultiImages.splice(removeFromMultiImageIdx, 1);
         setMultiImages(copyMultiImages);
     };
 
-    const onDragEnd = result => {
-        const { source, destination } = result;
-        // dropped outside the list
-        if (!destination) {
-            return;
-        };
-        const items = reorder(imgUrl, source.index, destination.index);
-        // console.log('this is source.index', source.droppableId)
-        // console.log('this is destination', destination.droppableId)
-        setImgUrl(items);
+    const reorder = (arr, startIndex, endIndex) => {
+        const reorderedImageUrl = Array.from(arr);
+        [reorderedImageUrl[startIndex], reorderedImageUrl[endIndex]] = [reorderedImageUrl[endIndex], reorderedImageUrl[startIndex]]      
+        setImgUrl(reorderedImageUrl);
     };
-
 
     const {
         getRootProps,
@@ -79,7 +61,6 @@ export default function ImageForm(props) {
 
         setMultiImages([...multiImages, files[0]]);
         const fr = new FileReader();
-        // e.target.files structure: {0: File, length: 1}
         if(e.target?.files[0] instanceof Blob) {
             fr.readAsDataURL(e.target?.files[0]);
             fr.addEventListener('load', () => {
@@ -90,6 +71,7 @@ export default function ImageForm(props) {
         }
     };
 
+
     const buttonEvent = e => {
         const fileElem = document.getElementById("fileElem");
         fileElem.click();
@@ -98,51 +80,49 @@ export default function ImageForm(props) {
     function pictureZone() {
         return (
             <div className="image-form-image-section-container-images">
-                <DragDropContext onDragEnd={onDragEnd}>
                     {imgUrl.length>0 && imgUrl.map((url, idx) => (
-                        <Droppable droppableId={idx.toString()} key={idx}>
-                            {(provided, snapshot)=>(
-                                <span
-                                ref={provided.innerRef}
-                                {...provided.droppableProps}
-                                className="dropable-zone"
-                                >
-                                    <Draggable
-                                        draggableId={idx.toString()}
-                                        index={idx}
-                                    >
-                                        {(provided) => (
-                                                <div className="image-section-layout" 
-                                                 ref={provided.innerRef}
-                                                 {...provided.draggableProps}
-                                                 {...provided.dragHandleProps}
-                                                >
-                                                    <span 
-                                                    className="delete-image"
-                                                    onClick={()=>handleDeleteImage(url)}
-                                                    >
-                                                        x
-                                                    </span>
-                                                    <img key={idx} 
-                                                        src={url} className="preview-images" style={{height: '200px', width:'200px', borderRadius:'5px',
-                                                        cursor: 'move',
-                                                        zIndex: '9'
-                                                    }}
-                                                        draggable='true'
-                                                    /> 
-                                                </div>    
-                                        )}
-                                    </Draggable>
-                                    {provided.placeholder}
-                                </span>
-                            )}           
-                        </Droppable>
-                        ))}
-                </DragDropContext>
+                        <div 
+                            className="image-section-layout" 
+                            id="dragableDiv"
+                            key={idx}     
+                            draggable='true' 
+                            onDragOver={e => 
+                                {e.preventDefault();
+                                setDragEndIndex(idx);
+                                }}
+                            onDrop={e => {
+                                e.preventDefault();
+                                reorder(imgUrl, dragStartIndex, dragEndIndex)
+                            }}
+                            onDragEnd={ e => {
+                                e.preventDefault()
+                                setImageDrag(false)
+                                }
+                            }
+                        >
+                            <span 
+                            className="delete-image"
+                            onClick={()=>handleDeleteImage(url)}
+                            >
+                                x
+                            </span>
+                            <img 
+                                src={url} 
+                                className="preview-images" 
+                                style={{height: '200px', width:'200px', borderRadius:'5px',
+                                cursor: 'pointer',
+                                }}
+                                draggable='true' 
+                                onDragStart={() => {                    
+                                    setImageDrag(true);
+                                    setDragStartIndex(idx)
+                                }}
+                            /> 
+                        </div>                  
+                    ))}    
             </div>
         )
     }
-
 
 
     return (
@@ -168,10 +148,11 @@ export default function ImageForm(props) {
                 <section 
                 className="grid-right-container-image-form"   
                 onDragEnter={e => {
-                    setDragZone(true)
+                    imageDrag ? setDragZone(false) : setDragZone(true)
                     e.stopPropagation()
                     e.preventDefault()
-                }}
+                }
+                }
                 >
                     <div 
                     className="image-form-image-section-container"

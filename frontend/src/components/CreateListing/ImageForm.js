@@ -3,10 +3,11 @@ import { NavLink } from "react-router-dom"
 import {useDropzone} from 'react-dropzone';
 import { useListing } from "../../context/ListingContext"
 import './createListing.css';
+import ImageDropDown from "./ImageDropDown";
 
 
 export default function ImageForm() {
-    const {imgUrl, setImgUrl,multiImages, setMultiImages, imageDescription, setImageDescription, setPreviewImageUrl} = useListing();
+    const {imgUrl, setImgUrl,multiImages, setMultiImages, imageDescription, setImageDescription, previewImageUrl, setPreviewImageUrl} = useListing();
     const [dragZone, setDragZone] = useState(false);
     const [droppedFile, setDroppedFile] = useState([]);
     const [imageDrag, setImageDrag] = useState(false);
@@ -15,12 +16,14 @@ export default function ImageForm() {
 
     useEffect(() => {
         const imagesLocalStorage = localStorage.getItem('imgUrls').split(',');
-        setImgUrl(imagesLocalStorage.length>1 ? imagesLocalStorage : [])
+        setImgUrl(imagesLocalStorage.length>1 ? imagesLocalStorage : []);
+        setPreviewImageUrl(localStorage.getItem('previewImageUrl').length ? localStorage.getItem('previewImageUrl') : '');
     },[])
 
     useEffect(() => {
         localStorage.setItem('imgUrls', imgUrl);
-    },[imgUrl.length])
+        localStorage.setItem('previewImageUrl', previewImageUrl);
+    },[imgUrl.length, previewImageUrl])
 
 
     const handleDeleteImage = url => {
@@ -109,17 +112,17 @@ export default function ImageForm() {
                                 setImageDrag(false)
                                 }
                             }
-                        >
-                            <span 
-                            className="delete-image"
-                            onClick={()=>handleDeleteImage(url)}
-                            >
-                                x
-                            </span>
+                        >   
+         
+                            <ImageDropDown 
+                            handleDeleteImage={handleDeleteImage} 
+                            url={url} 
+                            />
+                            {previewImageUrl === url && <div className="cover-photo-logo"> Cover Photo </div> }                  
                             <img 
                                 src={url} 
                                 className="preview-images" 
-                                style={{height: '200px', width:'200px', borderRadius:'5px',
+                                style={{height: '200px', width:'200px', borderRadius:'3px',
                                 cursor: 'pointer',
                                 }}
                                 draggable='true' 

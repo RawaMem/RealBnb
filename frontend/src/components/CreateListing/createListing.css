@@ -308,14 +308,66 @@ span.disabled {
     position: relative;
 }
 
-.delete-image {
+.image-drop-down-button {
     position: absolute;
     right: 4%;
-    top: 3%;
+    top: 5%;
+    padding-bottom: 35px;
+    text-align: center;
     cursor: pointer;
-    font-size: 18px;
-    font-weight: 500;
-    color: black;
+    font-size: 20px;
+    font-weight: 700;
+    color: rgb(104,101,97);
+    width: 36px;
+    height: 30px;
+    /* border: 2px solid black; */
+    border-radius: 180px;
+    background-color: rgb(207,205,201);
+    opacity: 0.8;
+}
+
+.image-drop-down-button:hover {
+    background-color: #EBEBEB;
+}
+
+.image-drop-down-container {
+    position: relative;
+}
+
+.image-drop-down {
+    position: absolute;
+    right: 5%;
+    top: 2.5rem;
+    background-color: white;
+    border-radius: 7px;
+    height: 100px;
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    /* padding-left: 2%; */
+}
+
+.image-drop-down div {
+    font-weight: 600;
+    height: 100%;
+    text-align: center;
+    border-radius: 7px;
+}
+
+.image-drop-down div:hover {
+    background-color: rgb(238,238,238);
+}
+
+.cover-photo-logo {
+    position: absolute;
+    font-size: 15px;
+    top: 4%;
+    left: 1.5%;
+    width: 100px;
+    border-radius: 5px;
+    text-align: center;
+    background-color: white;
 }
 
 .delete-image:hover {

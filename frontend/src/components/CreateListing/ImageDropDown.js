@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import './createListing.css';
 import { useListing } from "../../context/ListingContext";
 
-export default function ImageDropDown({ handleDeleteImage, url }) {
+export default function ImageDropDown({ handleDeleteImage, url, setShowEditModal, setEditedPhotoUrl }) {
     const [showMenu, setShowMenu] = useState(false);
     const {previewImageUrl, setPreviewImageUrl} = useListing();
 
@@ -26,9 +26,9 @@ export default function ImageDropDown({ handleDeleteImage, url }) {
 
     const dropDown = (
       <div className="image-drop-down">
-        <div>Edit</div>
+        <div onClick={() => {setShowEditModal(true); setEditedPhotoUrl(url)}}>Edit</div>
         <div onClick={()=>setPreviewImageUrl(url)}>Make cover photo</div>
-        <div onClick={handleDeleteImage}>Delete</div>
+        <div onClick={() => handleDeleteImage(url)}>Delete</div>
       </div>  
     );
 

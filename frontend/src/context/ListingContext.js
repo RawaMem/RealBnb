@@ -23,7 +23,7 @@ export default function ListingProvider({children}) {
     // for multuple file upload
     const [multiImages, setMultiImages] = useState([]);//
     const [imageDescription, setImageDescription] = useState('');// nullable
-    const [imgUrl, setImgUrl] = useState([]);
+    const [imgUrl, setImgUrl] = useState(localStorage.getItem('imgUrls').split(','));
     const [previewImageUrl, setPreviewImageUrl] = useState('')
     const [listingPriceArr, setListingPriceArr] = useState([]);
     const initalAmenityStr = localStorage.getItem('amenityArr');

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom"
 import {useDropzone} from 'react-dropzone';
 import { useListing } from "../../context/ListingContext"
@@ -12,6 +12,16 @@ export default function ImageForm() {
     const [imageDrag, setImageDrag] = useState(false);
     const [dragStartIndex, setDragStartIndex] = useState(0);
     const [dragEndIndex, setDragEndIndex] = useState(0);
+
+    useEffect(() => {
+        const imagesLocalStorage = localStorage.getItem('imgUrls').split(',');
+        setImgUrl(imagesLocalStorage.length>1 ? imagesLocalStorage : [])
+    },[])
+
+    useEffect(() => {
+        localStorage.setItem('imgUrls', imgUrl);
+    },[imgUrl.length])
+
 
     const handleDeleteImage = url => {
         const urlIdx = imgUrl.indexOf(url);

@@ -1,12 +1,29 @@
+import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { useListing } from "../../context/ListingContext"
 import './createListing.css';
 import { icons } from "../../ui/icons";
 import AmenitiCard from "./AmentitiCard";
-import { useState } from "react";
 
 export default function AmenitiForm() {
     const {amenityArr, setAmenityArr} = useListing();
+    const [initialAutoFill, setInitialAutoFill] = useState(false);
+
+
+    useEffect(() => {  
+        localStorage.setItem('amenityArr', amenityArr);
+    },[amenityArr.length]);
+
+    useEffect(() => {
+        const amenityStr = localStorage.getItem('amenityArr');
+        const amenity = amenityStr.split(',');
+        const amenityFromLocalStorage = amenity.filter(item => item.length)
+        setAmenityArr([...amenityFromLocalStorage]);
+        setInitialAutoFill(true);
+
+        return () => setInitialAutoFill(false);
+    },[])
+
 
     const handleOnClick = (amenity) => {
         if(amenityArr.includes(amenity)) {
@@ -20,7 +37,7 @@ export default function AmenitiForm() {
         }
     };
 
-
+    if (!initialAutoFill) return null
     return (
         <div className="ameniti-form-container">
             <section className="grid-left-container">

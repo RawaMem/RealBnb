@@ -1,16 +1,52 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom"
 import {useDropzone} from 'react-dropzone';
 import { useListing } from "../../context/ListingContext"
 import './createListing.css';
 
 
-export default function ImageForm(props) {
-    const {imgUrl, setImgUrl,multiImages, setMultiImages, imageDescription, setImageDescription} = useListing();
-    const [errors, setErrors] = useState({imageUpload:''})
+export default function ImageForm() {
+    const {imgUrl, setImgUrl,multiImages, setMultiImages, imageDescription, setImageDescription, setPreviewImageUrl} = useListing();
+    const [dragZone, setDragZone] = useState(false);
+    const [droppedFile, setDroppedFile] = useState([]);
+    const [imageDrag, setImageDrag] = useState(false);
+    const [dragStartIndex, setDragStartIndex] = useState(0);
+    const [dragEndIndex, setDragEndIndex] = useState(0);
+
+    useEffect(() => {
+        const imagesLocalStorage = localStorage.getItem('imgUrls').split(',');
+        setImgUrl(imagesLocalStorage.length>1 ? imagesLocalStorage : [])
+    },[])
+
+    useEffect(() => {
+        localStorage.setItem('imgUrls', imgUrl);
+    },[imgUrl.length])
+
+
+    const handleDeleteImage = url => {
+        const urlIdx = imgUrl.indexOf(url);
+        const newState = [...imgUrl];
+        newState.splice(urlIdx, 1);
+        setImgUrl(newState);
+
+        const dropFile = droppedFile.find(file => file.preview === url )
+        const fileIdx = droppedFile.indexOf(dropFile);
+        const newDroppedFile = [...droppedFile];
+        newDroppedFile.splice(fileIdx, 1);
+        setDroppedFile(newDroppedFile)
+        const removeFromMultiImageIdx = multiImages.indexOf(dropFile);
+        const copyMultiImages = [...multiImages];
+        copyMultiImages.splice(removeFromMultiImageIdx, 1);
+        setMultiImages(copyMultiImages);
+    };
+
+    const reorder = (arr, startIndex, endIndex) => {
+        const reorderedImageUrl = Array.from(arr);
+        [reorderedImageUrl[startIndex], reorderedImageUrl[endIndex]] = [reorderedImageUrl[endIndex], reorderedImageUrl[startIndex]]      
+        setImgUrl(reorderedImageUrl);
+    };
 
     const {
-        fileRejections,
         getRootProps,
         getInputProps
       } = useDropzone({
@@ -21,47 +57,82 @@ export default function ImageForm(props) {
             const droppedFiles = acceptedFiles.map(file => Object.assign(file, {
               preview: URL.createObjectURL(file)
             }));
+            setDroppedFile([...droppedFiles]);         
+            setMultiImages([...multiImages, ...droppedFiles]);
             const droppedFileUrl = droppedFiles.map(file => file.preview);
-            setImgUrl( [...imgUrl, ...droppedFileUrl] );
+            setImgUrl([...imgUrl, ...droppedFileUrl]);
+            setDragZone(false);
         }
     });
-
-
-    const fileRejectionItems = fileRejections.map(({ errors }) => (
-          <ul>
-            {errors.map(e => (
-              <li key={e.code}>{e.message}</li>
-            ))}
-          </ul>       
-      ));
-
-
 
       //for multiple file upload
     const updateFiles = e => {
         const files = e.target.files;
-        setMultiImages([...multiImages, files]);
+
+        setMultiImages([...multiImages, files[0]]);
         const fr = new FileReader();
-        // e.target.files structure: {0: File, length: 1}
         if(e.target?.files[0] instanceof Blob) {
             fr.readAsDataURL(e.target?.files[0]);
             fr.addEventListener('load', () => {
-                const url = fr.result;
-                if(imgUrl.indexOf(url) === -1) {
-                    setImgUrl([...imgUrl, url])
-                } else {
-                    setErrors(prev => ({...prev, imageUpload:'photo already exists, please select another one.'}))
-                };
+                const url = fr.result;                
+                setImgUrl([...imgUrl, url])
+                
             });
         }
     };
 
+
     const buttonEvent = e => {
-        const fileSelect = document.getElementById("fileSelect");
         const fileElem = document.getElementById("fileElem");
         fileElem.click();
     };
 
+    function pictureZone() {
+        return (
+            <div className="image-form-image-section-container-images">
+                    {imgUrl.length>0 && imgUrl.map((url, idx) => (
+                        <div 
+                            className="image-section-layout" 
+                            id="dragableDiv"
+                            key={idx}     
+                            draggable='true' 
+                            onDragOver={e => 
+                                {e.preventDefault();
+                                setDragEndIndex(idx);
+                                }}
+                            onDrop={e => {
+                                e.preventDefault();
+                                reorder(imgUrl, dragStartIndex, dragEndIndex)
+                            }}
+                            onDragEnd={ e => {
+                                e.preventDefault()
+                                setImageDrag(false)
+                                }
+                            }
+                        >
+                            <span 
+                            className="delete-image"
+                            onClick={()=>handleDeleteImage(url)}
+                            >
+                                x
+                            </span>
+                            <img 
+                                src={url} 
+                                className="preview-images" 
+                                style={{height: '200px', width:'200px', borderRadius:'5px',
+                                cursor: 'pointer',
+                                }}
+                                draggable='true' 
+                                onDragStart={() => {                    
+                                    setImageDrag(true);
+                                    setDragStartIndex(idx)
+                                }}
+                            /> 
+                        </div>                  
+                    ))}    
+            </div>
+        )
+    }
 
 
     return (
@@ -81,10 +152,34 @@ export default function ImageForm(props) {
                     >
                         <source src="https://a0.muscache.com/v/d6/12/d6120feb-75fc-52dd-b5bb-5755913fb756/d6120feb75fc52ddb5bb5755913fb756_4000k_1.mp4" type="video/mp4" />
                     </video>
+                    <span className="video-caption">Next, let's add some photos of your place</span>
                 </section>
 
-                <section className="grid-right-container-image-form">
-                    <div className="image-form-image-section-container">
+                <section 
+                className="grid-right-container-image-form"   
+                onDragEnter={e => {
+                    imageDrag ? setDragZone(false) : setDragZone(true)
+                    e.stopPropagation()
+                    e.preventDefault()
+                }
+                }
+                >
+                    <div 
+                    className="image-form-image-section-container"
+                    >
+                        {dragZone && ( <div 
+                        id="image-drop-zone"
+                        {...getRootProps({ className: 'dropzone' })} 
+                        onDragOver={e => {
+                            e.stopPropagation()
+                            e.preventDefault()
+                        }}
+                        onDragLeave={e => {
+                            e.stopPropagation()
+                            e.preventDefault()
+                            setDragZone(false);
+                        }}
+                        >Drop Files Here</div> ) }
                         <div className="image-form-image-section-container-upper">
                             <div>
                                 <h3>Ta-da! How does this look?</h3>
@@ -92,7 +187,6 @@ export default function ImageForm(props) {
                             </div>
                             <div>
                                 <input type="file" multiple  {...getInputProps()} onChange={updateFiles} style={{display:'none'}} id="fileElem" />
-
                                 <div id="fileSelect" onClick={buttonEvent} >
                                     <span class="material-symbols-outlined">
                                         file_upload
@@ -101,12 +195,7 @@ export default function ImageForm(props) {
                                 </div>
                             </div>
                         </div>
-
-                        <div className="image-form-image-section-container-images" style={{overflow:'scroll'}}  {...getRootProps({ className: 'dropzone' })} >
-                            {imgUrl.length && imgUrl.map((url, idx) => (
-                                <img key={idx} src={url} className="preview-images" style={{height: '200px', width:'180px' }}/>
-                            ))}
-                        </div>
+                        {pictureZone()}
                     </div>
                     <div className='button-layout'>
                         <NavLink

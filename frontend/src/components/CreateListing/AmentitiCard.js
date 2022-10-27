@@ -1,7 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function AmenitiCard({icon, amenity}) {
-    const [selected, setSelected] = useState(false);
+export default function AmenitiCard({icon, amenity}) {   
+    const selectedAmenity = localStorage.getItem('amenityArr').split(',');
+    const initialSelect = selectedAmenity.filter(item => {
+        return item.toLowerCase() === amenity.toLowerCase()
+    })
+    const [selected, setSelected] = useState(initialSelect.length > 0);
+
 
     const selectedStyle = {
         width:'132px',

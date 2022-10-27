@@ -183,6 +183,14 @@ span.disabled {
     position: relative
 }
 
+.video-caption {
+    position: absolute;
+    left: 5%;
+    right: 5%;
+    bottom: 20%;
+
+}
+
 .word-section {
     display: grid;
     grid-template-rows:300px, auto, 300px;
@@ -273,7 +281,8 @@ span.disabled {
     align-items: center;
 }
 
-.word-section-1 {
+.word-section-1,
+.video-caption {
     font-size: 48px;
     color: white;
     font-weight: 48px;
@@ -284,6 +293,55 @@ span.disabled {
     color: white;
     font-size: 18px;
     margin-top: 35px;
+}
+
+.image-form-image-section-container-images {
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, 200px);
+    grid-template-rows: repeat(auto-fill, 200px);
+    gap: 10px 20px; 
+    overflow-y: scroll;  
+    margin: 1.5em;
+}
+
+.image-section-layout {
+    position: relative;
+}
+
+.delete-image {
+    position: absolute;
+    right: 4%;
+    top: 3%;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 500;
+    color: black;
+}
+
+.delete-image:hover {
+    font-size: 20px;
+}
+
+.dropable-zone{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px dashed lightgrey;
+    border-radius: 5px;
+}
+
+#image-drop-zone {
+    position:absolute;
+    top: 20%;
+    height: 90%;
+    width: 45%;
+    right: 40px;
+    border: 1px dashed grey;
+    background-color: rgb(247,247,247);
+    border-radius: 15px;
+    text-align: center;
+    font-size: 40px;
+    font: grey;
 }
 
 video::-webkit-media-controls-fullscreen-button

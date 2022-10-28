@@ -7,10 +7,12 @@ import ReviewFormModal from "./ReviewFormModal";
 import ReviewsContainer from "./ReviewsContainer";
 import SingleListingImages from "./SingleListingImages";
 import SingleListingTitle from "./SingleListingTitle";
+import BookingsContainer from "./BookingsContainer";
+import './SingleListingPage.css';
 
 
 export default function SingleListingPage() {
-    const {listingId} = useParams()
+    const { listingId } = useParams()
     const dispatch = useDispatch()
 
     // const [showCreateReviewModal, setShowCreateReviewModal] = useState(false)
@@ -58,13 +60,9 @@ export default function SingleListingPage() {
                     reviews={reviews}
                     currentUser={currentUser}/>
                 </div>
-
             </div>
         )}
         </div>
-
-
         </>
     )
-
 }

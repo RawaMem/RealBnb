@@ -27,20 +27,20 @@ module.exports = {
 
       */
 
-      const monthNumberArr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-      const ListingPriceDataArray = []
+      // const monthNumberArr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+      // const todaysMonth = new Date().getMonth()
+      // const cycleMultiplier = 1
+      // const oneWeekInMilliseconds = 7 * oneDayInMilliseconds
+      // let todaysDate = new Date()
+      const listingPriceDataArray = []
       const todaysDateInMilliseconds = new Date().getTime()
-      const todaysMonth = new Date().getMonth()
-      const cycleMultiplier = 1
       const oneDayInMilliseconds =  86400000
       const threeWeeksInMilliseconds = 21 * oneDayInMilliseconds
-      const oneWeekInMilliseconds = 7 * oneDayInMilliseconds
       const fourWeeksInMilliseconds = 28 * oneDayInMilliseconds
       const dateGapBetweenListings =  4 * oneDayInMilliseconds
       let listingId = 1
       let userId = 1
       let pricePerDay = 199.99
-      let todaysDate = new Date()
 
       let whileCycleNumber = 0
       while (userId < 6) {
@@ -62,16 +62,15 @@ module.exports = {
           priceListingObj.startDate = formattedStartDate
           priceListingObj.endDate = formattedEndDate
 
-          ListingPriceDataArray.push(priceListingObj)
+          listingPriceDataArray.push(priceListingObj)
         }
         listingId++
         userId++
         whileCycleNumber++
         pricePerDay += 25
-
       }
-      // console.log('THIS IS THE PRICE LISTING DATA ARRAY', ListingPriceDataArray)
-      return queryInterface.bulkInsert('ListingPrices', ListingPriceDataArray, {})
+      // console.log('THIS IS THE PRICE LISTING DATA ARRAY', listingPriceDataArray)
+      return queryInterface.bulkInsert('ListingPrices', listingPriceDataArray, {})
 
 
    return queryInterface.bulkInsert('ListingPrices', [

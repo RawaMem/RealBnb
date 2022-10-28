@@ -1,4 +1,6 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getListingImagesAction } from '../context/../store/listings';
 
 export const ListingContext = createContext();
 
@@ -22,6 +24,7 @@ export default function ListingProvider({children}) {
     const [latitude, setLatitude] = useState(localStorage.getItem('lat')|| 10);//
     // for multuple file upload
     const [multiImages, setMultiImages] = useState([]);//
+
     const [imageDescription, setImageDescription] = useState({});// nullable
     const [imgUrl, setImgUrl] = useState(localStorage.getItem('imgUrls').split(','));
     const [previewImageUrl, setPreviewImageUrl] = useState(localStorage.getItem('previewImageUrl'))
@@ -30,7 +33,9 @@ export default function ListingProvider({children}) {
     const amenity = initalAmenityStr.split(',');
     const [amenityArr, setAmenityArr] = useState([...amenity]);//
     const [categoryArr, setCategoryArr] = useState([]);
+    const dispatch = useDispatch();
 
+    console.log('multiImages from context', multiImages)
     return (
         <ListingContext.Provider
             value={{

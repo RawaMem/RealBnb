@@ -3,24 +3,32 @@ import { NavLink } from "react-router-dom"
 import {useDropzone} from 'react-dropzone';
 import { useListing } from "../../context/ListingContext"
 import './createListing.css';
+import ImageDropDown from "./ImageDropDown";
+import EditPhotoForm from "./EditPhotoForm";
+import { Modal } from "../../context/Modal";
 
 
 export default function ImageForm() {
-    const {imgUrl, setImgUrl,multiImages, setMultiImages, imageDescription, setImageDescription, setPreviewImageUrl} = useListing();
+    const {imgUrl, setImgUrl,multiImages, setMultiImages, previewImageUrl, setPreviewImageUrl} = useListing();
     const [dragZone, setDragZone] = useState(false);
     const [droppedFile, setDroppedFile] = useState([]);
     const [imageDrag, setImageDrag] = useState(false);
     const [dragStartIndex, setDragStartIndex] = useState(0);
     const [dragEndIndex, setDragEndIndex] = useState(0);
-
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [editedPhotoUrl, setEditedPhotoUrl] = useState('')
+    console.log('this is multiImageurl', multiImages);
+    console.log('this is imgUrl', imgUrl);
     useEffect(() => {
         const imagesLocalStorage = localStorage.getItem('imgUrls').split(',');
-        setImgUrl(imagesLocalStorage.length>1 ? imagesLocalStorage : [])
+        setImgUrl(imagesLocalStorage.length>1 ? imagesLocalStorage : []);
+        setPreviewImageUrl(localStorage.getItem('previewImageUrl').length ? localStorage.getItem('previewImageUrl') : '');
     },[])
 
     useEffect(() => {
         localStorage.setItem('imgUrls', imgUrl);
-    },[imgUrl.length])
+        localStorage.setItem('previewImageUrl', previewImageUrl);
+    },[imgUrl.length, previewImageUrl])
 
 
     const handleDeleteImage = url => {
@@ -109,17 +117,19 @@ export default function ImageForm() {
                                 setImageDrag(false)
                                 }
                             }
-                        >
-                            <span 
-                            className="delete-image"
-                            onClick={()=>handleDeleteImage(url)}
-                            >
-                                x
-                            </span>
+                        >   
+         
+                            <ImageDropDown 
+                                handleDeleteImage={handleDeleteImage} 
+                                url={url} 
+                                setShowEditModal={setShowEditModal}
+                                setEditedPhotoUrl={setEditedPhotoUrl}
+                            />
+                            {previewImageUrl === url && <div className="cover-photo-logo"> Cover Photo </div> }                  
                             <img 
                                 src={url} 
                                 className="preview-images" 
-                                style={{height: '200px', width:'200px', borderRadius:'5px',
+                                style={{height: '200px', width:'200px', borderRadius:'3px',
                                 cursor: 'pointer',
                                 }}
                                 draggable='true' 
@@ -128,11 +138,24 @@ export default function ImageForm() {
                                     setDragStartIndex(idx)
                                 }}
                             /> 
+                            {showEditModal && showEditImageModal(editedPhotoUrl)}
                         </div>                  
                     ))}    
             </div>
-        )
-    }
+        );
+    };
+
+    function showEditImageModal(imgUrl) {
+        return (
+            <Modal onClose={() => setShowEditModal(false)}>
+                <EditPhotoForm 
+                setShowEditModal={setShowEditModal} 
+                url={imgUrl}
+                handleDeleteImage={handleDeleteImage}
+                />
+            </Modal>
+        );
+    };
 
 
     return (

@@ -22,9 +22,9 @@ export default function ListingProvider({children}) {
     const [latitude, setLatitude] = useState(localStorage.getItem('lat')|| 10);//
     // for multuple file upload
     const [multiImages, setMultiImages] = useState([]);//
-    const [imageDescription, setImageDescription] = useState('');// nullable
+    const [imageDescription, setImageDescription] = useState({});// nullable
     const [imgUrl, setImgUrl] = useState(localStorage.getItem('imgUrls').split(','));
-    const [previewImageUrl, setPreviewImageUrl] = useState('')
+    const [previewImageUrl, setPreviewImageUrl] = useState(localStorage.getItem('previewImageUrl'))
     const [listingPriceArr, setListingPriceArr] = useState([]);
     const initalAmenityStr = localStorage.getItem('amenityArr');
     const amenity = initalAmenityStr.split(',');

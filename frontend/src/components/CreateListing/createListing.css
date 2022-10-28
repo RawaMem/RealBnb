@@ -308,14 +308,66 @@ span.disabled {
     position: relative;
 }
 
-.delete-image {
+.image-drop-down-button {
     position: absolute;
     right: 4%;
-    top: 3%;
+    top: 5%;
+    padding-bottom: 35px;
+    text-align: center;
     cursor: pointer;
-    font-size: 18px;
-    font-weight: 500;
-    color: black;
+    font-size: 20px;
+    font-weight: 700;
+    color: rgb(104,101,97);
+    width: 36px;
+    height: 30px;
+    /* border: 2px solid black; */
+    border-radius: 180px;
+    background-color: rgb(207,205,201);
+    opacity: 0.8;
+}
+
+.image-drop-down-button:hover {
+    background-color: #EBEBEB;
+}
+
+.image-drop-down-container {
+    position: relative;
+}
+
+.image-drop-down {
+    position: absolute;
+    right: 5%;
+    top: 2.5rem;
+    background-color: white;
+    border-radius: 7px;
+    height: 100px;
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    /* padding-left: 2%; */
+}
+
+.image-drop-down div {
+    font-weight: 600;
+    height: 100%;
+    text-align: center;
+    border-radius: 7px;
+}
+
+.image-drop-down div:hover {
+    background-color: rgb(238,238,238);
+}
+
+.cover-photo-logo {
+    position: absolute;
+    font-size: 15px;
+    top: 4%;
+    left: 1.5%;
+    width: 100px;
+    border-radius: 5px;
+    text-align: center;
+    background-color: white;
 }
 
 .delete-image:hover {
@@ -343,6 +395,165 @@ span.disabled {
     font-size: 40px;
     font: grey;
 }
+
+.edit-photo-modal-container {
+    display: flex;
+    height: 80vh;
+    width: 90vw;
+    flex-direction: column;
+}
+
+.edit-photo-moal-title {
+    height: 10%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 5%;
+    border-bottom: 1px solid rgb(235,235,235);
+}
+
+.edit-photo-moal-title div {
+    width: 50%;
+    font-weight: 600;
+}
+
+#edit-photo-modal-title-div {
+    font-weight: 400;
+    font-size: 18px;
+    height: 32px;
+    width: 32px;
+    border-radius: 180px;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+}
+
+#edit-photo-modal-title-div:hover {
+    background-color: rgb(247,247,247);
+}
+
+#edit-photo-modal-title-div p {
+    color: rgb(34,34,34);
+}
+
+.edit-photo-modal-photo-container {
+    width: 100%;
+    height: 75%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+}
+
+.edit-photo-image {
+    width: 58%;
+    margin-left:2%;
+    height: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(247,247,247);
+}
+
+.edit-photo-image img {
+    height: 100%;
+    width: 65%;
+}
+
+.edit-photo-caption-container {
+    height: 95%;
+    /* background-color: pink; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.edit-photo-caption-inner-container {
+    width: 80%;
+    height: 65%;
+    /* background-color: yellow; */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 3%;
+}
+
+.edit-photo-caption-inner-container textarea {
+    height: 50%;
+    border: 1px solid rgb(176,176,176);
+    border-radius: 10px;
+}
+
+.edit-photo-caption-inner-container div {
+    font-size: 22px;
+}
+
+.edit-photo-caption-inner-container p {
+    color: rgb(176,176,176);
+}
+
+.edit-photo-modal-button-container {
+    height: 15%;
+    border-top: 1px solid rgb(235,235,235);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5% 0 5%;
+}
+
+
+#edit-photo-modal-delete-button {
+    height: 35px;
+    width: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+}
+
+#edit-photo-modal-delete-button:hover {
+    background-color: rgb(247,247,247);
+}
+
+.edit-photo-modal-button-container u {
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.edit-photo-modal-save-button {
+    width: 84px;
+    height: 48px;
+    background-color: rgb(34,34,34);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.edit-photo-modal-save-button-disabled {
+    width: 84px;
+    height: 48px;
+    background-color: rgb(221,221,221);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: not-allowed
+}
+
+.edit-photo-modal-save-button:hover {
+    background-color: #000;
+}
+
+.edit-photo-modal-save-button div,
+.edit-photo-modal-save-button-disabled div {
+    color: white;
+    font-weight: 600;
+    text-align: center;
+}
+
 
 video::-webkit-media-controls-fullscreen-button
 {

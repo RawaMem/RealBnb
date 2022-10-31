@@ -1,5 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { createContext, useContext, useState } from 'react';
 import { getListingImagesAction } from '../context/../store/listings';
 
 export const ListingContext = createContext();
@@ -7,10 +6,10 @@ export const ListingContext = createContext();
 export const useListing = () => useContext(ListingContext);
 
 export default function ListingProvider({children}) {
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
-    const [serviceFee, setServiceFee] = useState(0);
-    const [cleaningFee, setCleaningFee] = useState(0);
+    const [name, setName] = useState('');// 
+    const [description, setDescription] = useState('');//
+    const [serviceFee, setServiceFee] = useState(10);
+    const [cleaningFee, setCleaningFee] = useState(10);
     const [bedrooms, setBedRooms] = useState(+localStorage.getItem('bedrooms'));//
     const [beds, setBeds] = useState(+localStorage.getItem('beds'));//
     const [baths, setBaths] = useState(+localStorage.getItem('bathrooms'));//
@@ -26,16 +25,16 @@ export default function ListingProvider({children}) {
     const [multiImages, setMultiImages] = useState([]);//
 
     const [imageDescription, setImageDescription] = useState({});// nullable
-    const [imgUrl, setImgUrl] = useState(localStorage.getItem('imgUrls').split(','));
-    const [previewImageUrl, setPreviewImageUrl] = useState(localStorage.getItem('previewImageUrl'))
-    const [listingPriceArr, setListingPriceArr] = useState([]);
+    const [imgUrl, setImgUrl] = useState(localStorage.getItem('imgUrls').split(',')); //
+    const [previewImageUrl, setPreviewImageUrl] = useState(localStorage.getItem('previewImageUrl')) //
+    const [listingPrice, setListingPrice] = useState(10);
     const initalAmenityStr = localStorage.getItem('amenityArr');
     const amenity = initalAmenityStr.split(',');
     const [amenityArr, setAmenityArr] = useState([...amenity]);//
-    const [categoryArr, setCategoryArr] = useState([]);
-    const dispatch = useDispatch();
+    const [categoryArr, setCategoryArr] = useState([]);//
 
-    console.log('multiImages from context', multiImages)
+
+
     return (
         <ListingContext.Provider
             value={{
@@ -77,8 +76,8 @@ export default function ListingProvider({children}) {
                 setImgUrl,
                 previewImageUrl, 
                 setPreviewImageUrl,
-                listingPriceArr,
-                setListingPriceArr,
+                listingPrice,
+                setListingPrice,
                 amenityArr,
                 setAmenityArr,
                 categoryArr,

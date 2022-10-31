@@ -7,16 +7,11 @@ import './createListing.css';
 import ImageDropDown from "./ImageDropDown";
 import EditPhotoForm from "./EditPhotoForm";
 import { Modal } from "../../context/Modal";
-import { getListingImagesAction } from "../../store/listings";
+// import { getListingImagesAction } from "../../store/listings";
 
 export default function ImageForm() {
-    const {imgUrl, setImgUrl,multiImages, setMultiImages, previewImageUrl, setPreviewImageUrl} = useListing();
+    const {imgUrl, setImgUrl, previewImageUrl, setPreviewImageUrl} = useListing();
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        console.log('dispatched')
-        dispatch(getListingImagesAction(multiImages))
-    },[multiImages]);
 
     const [dragZone, setDragZone] = useState(false);
     const [droppedFile, setDroppedFile] = useState([]);
@@ -25,14 +20,21 @@ export default function ImageForm() {
     const [dragEndIndex, setDragEndIndex] = useState(0);
     const [showEditModal, setShowEditModal] = useState(false);
     const [editedPhotoUrl, setEditedPhotoUrl] = useState('');
+    const [multiImages, setMultiImages] = useState([]);//
+
+    // useEffect(() => {
+    //     console.log('dispatched')
+    //     dispatch(getListingImagesAction(multiImages))
+    // },[multiImages]);
         
-    const multiImageFiles = useSelector(state => state.listings);
+    // const multiImageFiles = useSelector(state => state.listings);
 
     useEffect(() => {
         const imagesLocalStorage = localStorage.getItem('imgUrls').split(',');
         setImgUrl(imagesLocalStorage.length>1 ? imagesLocalStorage : []);
         setPreviewImageUrl(localStorage.getItem('previewImageUrl').length ? localStorage.getItem('previewImageUrl') : '');
-        if(multiImageFiles !== null) setMultiImages(multiImageFiles);
+        // if(multiImageFiles) setMultiImages(multiImageFiles);
+        // console.log('this is multiImageFiles from component', multiImageFiles);
     },[])
     
     useEffect(() => {
@@ -41,7 +43,7 @@ export default function ImageForm() {
         // dispatch(getListingImagesAction(multiImages))
     },[imgUrl.length, previewImageUrl, multiImages])
 
-    console.log('this is multiImageFiles from component', multiImageFiles);
+
     
     console.log('multiImages=======> component', multiImages)
 
@@ -179,7 +181,6 @@ export default function ImageForm() {
         );
     };
 
-    if (!multiImageFiles) return null
     return (
         <>
             <div className="image-form-container">
@@ -264,7 +265,7 @@ export default function ImageForm() {
                                     borderRadius:'15px',
                                     cursor:'pointer'
                                 }}
-                                to='/createListing/images'
+                                to='/createListing/titleForm'
                                 >
                                     Next
                                 </NavLink>

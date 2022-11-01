@@ -246,7 +246,7 @@ export default function ImageForm() {
                     <div className='button-layout'>
                         <NavLink
                             style={{ textDecoration:'none', color: 'black', fontSize: '20px',cursor:'pointer'}}
-                            to='/createListing-amenitiForm'
+                            to='/createListing-categoryForm'
                             >
                                 Back
                         </NavLink>

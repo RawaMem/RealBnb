@@ -8,8 +8,8 @@ export const useListing = () => useContext(ListingContext);
 export default function ListingProvider({children}) {
     const [name, setName] = useState('');// 
     const [description, setDescription] = useState('');//
-    const [serviceFee, setServiceFee] = useState(10);
-    const [cleaningFee, setCleaningFee] = useState(10);
+    const [serviceFee, setServiceFee] = useState(1);//
+    const [cleaningFee, setCleaningFee] = useState(1);//
     const [bedrooms, setBedRooms] = useState(+localStorage.getItem('bedrooms'));//
     const [beds, setBeds] = useState(+localStorage.getItem('beds'));//
     const [baths, setBaths] = useState(+localStorage.getItem('bathrooms'));//
@@ -27,11 +27,11 @@ export default function ListingProvider({children}) {
     const [imageDescription, setImageDescription] = useState({});// nullable
     const [imgUrl, setImgUrl] = useState(localStorage.getItem('imgUrls').split(',')); //
     const [previewImageUrl, setPreviewImageUrl] = useState(localStorage.getItem('previewImageUrl')) //
-    const [listingPrice, setListingPrice] = useState(10);
+    const [listingPrice, setListingPrice] = useState(10);//
     const initalAmenityStr = localStorage.getItem('amenityArr');
     const amenity = initalAmenityStr.split(',');
     const [amenityArr, setAmenityArr] = useState([...amenity]);//
-    const [categoryArr, setCategoryArr] = useState([]);//
+    const [categoryArr, setCategoryArr] = useState([]);
 
 
 

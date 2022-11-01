@@ -23,8 +23,8 @@ export default function ListingPriceForm() {
         let errorMsg = {}
         if(listingPrice < 10 || listingPrice > 10000) errorMsg['listingPrice']="Please enter a base price between $10 and $10,000.";
         setError(errorMsg);
-        if(serviceFee < 10) errorMsg['serviceFee'] = "Service fee must be greater than $10";
-        if(cleaningFee < 10) errorMsg['cleaningFee'] = "Cleaning fee must be greater than $10";
+        if(serviceFee < 1) errorMsg['serviceFee'] = "Service fee must be greater than $1";
+        if(cleaningFee < 1) errorMsg['cleaningFee'] = "Cleaning fee must be greater than $1";
         setError(errorMsg)
     },[listingPrice, serviceFee, cleaningFee ])
 
@@ -64,61 +64,89 @@ export default function ListingPriceForm() {
             <section className="price-form-container">
                 <div className="price-content">
                     <div className="price-content-innerContainer">
-                        <div>
-                            
+                        <div id="price-content-innerContainer-id">
+                            <div className="price-section">                            
                                 <label htmlFor="listing-price">Price per night</label>
                                 <div className="price-setting-container">
-                                    <div id="control-button"
-                                    onClick={() => decrement(setListingPrice)}>-</div>
-                                    <div id="dollar-sign">$</div>
-                                    <input 
-                                    type="number" 
-                                    id="listing-price" 
-                                    value={listingPrice}
-                                    onChange={e => setListingPrice(e.target.value)}
-                                    />
-                                    <div id="control-button" 
-                                    onClick={() => increment(setListingPrice)}>+</div>
+                                    <div 
+                                    id="control-button"
+                                    onClick={() => decrement(setListingPrice)}
+                                    style={listingPrice>=10?{cursor:'pointer'}:{cursor:'not-allowed'}}
+                                    >-</div>
+                                    <div id="price-input">
+                                        <div id="dollar-sign">$</div>
+                                        <input 
+                                        type="number" 
+                                        id="listing-price" 
+                                        value={listingPrice}
+                                        onChange={e => setListingPrice(e.target.value)}
+                                        />
+                                    </div>
+                                    <div 
+                                    id="control-button" 
+                                    onClick={() => increment(setListingPrice)}
+                                    style={listingPrice<10000?{cursor:'pointer'}:{cursor:'not-allowed'}}
+                                    >+</div>
                                 </div>
-                          
-                            {error.listingPrice && (<div id="error-message">{error.listingPrice}</div>)}
+                            </div>                          
+                            {error.listingPrice && (<div id="error-message"><span>!</span>{error.listingPrice}</div>)}
                         </div>
 
-                        <div>
-                            <label htmlFor="service-fee">Service fee</label>
-                            <div className="price-setting-container">
-                                <div id="control-button"
-                                onClick={() => decrement(setServiceFee)}>-</div>
-                                <div id="dollar-sign">$</div>
-                                <input 
-                                    type="number" 
-                                    id="service-fee" 
-                                    value={serviceFee}
-                                    onChange={e => setServiceFee(e.target.value)}
-                                />
-                                <div id="control-button"
-                                onClick={() => increment(setServiceFee)}>+</div>
+                        <div id="price-content-innerContainer-id">                       
+                            <div className="price-section">                                           
+                                <label htmlFor="service-fee">Service fee</label>
+                                <div className="price-setting-container">
+                                    <div 
+                                    id="control-button"
+                                    onClick={() => decrement(setServiceFee)}
+                                    style={serviceFee>0?{cursor:'pointer'}:{cursor:'not-allowed'}}
+                                    >-</div>
+                                    <div id="price-input">
+                                        <div id="dollar-sign">$</div>
+                                        <input 
+                                            type="number" 
+                                            id="service-fee" 
+                                            value={serviceFee}
+                                            onChange={e => setServiceFee(e.target.value)}
+                                        />
+                                    </div>
+                                    <div 
+                                    id="control-button"
+                                    onClick={() => increment(setServiceFee)}
+                                    style={serviceFee<10000?{cursor:'pointer'}:{cursor:'not-allowed'}}
+                                    >+</div>
+                                </div>
                             </div>
+                            {error.serviceFee && (<div id="error-message"><span>!</span>{error.serviceFee}</div>)}
                         </div>
-                            {error.serviceFee && (<div>{error.serviceFee}</div>)}
-                        <div>
-                            <label htmlFor="cleaning-fee">Cleaning fee</label>
-                            <div className="price-setting-container">
-                                <div id="control-button"
-                                onClick={() => decrement(setCleaningFee)}>-</div>
-                                <div id="dollar-sign">$</div>
-                                <input 
-                                    type="number" 
-                                    id="cleaning-fee" 
-                                    value={cleaningFee}
-                                    onChange={e => setCleaningFee(e.target.value)}
-                                />
-                                <div id="control-button"
-                                onClick={() => increment(setCleaningFee)}
-                                >+</div>
+
+                        <div id="price-content-innerContainer-id">
+                            <div className="price-section">  
+                                <label htmlFor="cleaning-fee">Cleaning fee</label>
+                                <div className="price-setting-container">
+                                    <div 
+                                    id="control-button"
+                                    onClick={() => decrement(setCleaningFee)}
+                                    style={cleaningFee>0?{cursor:'pointer'}:{cursor:'not-allowed'}}
+                                    >-</div>
+                                    <div id="price-input">
+                                        <div id="dollar-sign">$</div>
+                                        <input 
+                                            type="number" 
+                                            id="cleaning-fee" 
+                                            value={cleaningFee}
+                                            onChange={e => setCleaningFee(e.target.value)}
+                                        />
+                                    </div>
+                                    <div 
+                                    id="control-button"
+                                    onClick={() => increment(setCleaningFee)}
+                                    style={cleaningFee<10000?{cursor:'pointer'}:{cursor:'not-allowed'}}
+                                    >+</div>
+                                </div>
                             </div>
+                            {error.cleaningFee && (<div id="error-message"><span>!</span>{error.cleaningFee}</div>)}
                         </div>
-                            {error.cleaningFee && (<div>{error.cleaningFee}</div>)}
                     </div>
                 </div>
                 <div className="button-container">

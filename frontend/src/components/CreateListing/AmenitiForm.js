@@ -102,7 +102,7 @@ export default function AmenitiForm() {
                             borderRadius:'15px',
                             cursor:'pointer'
                         }}
-                        to='/createListing/images'
+                        to='/createListing-categoryForm'
                         >
                             Next
                         </NavLink>

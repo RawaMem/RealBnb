@@ -21,6 +21,7 @@ import ListingProvider from './context/ListingContext';
 import TitleForm from './components/CreateListing/TitleForm';
 import DescriptionForm from './components/CreateListing/DescriptionForm';
 import ListingPriceForm from './components/CreateListing/ListingPriceForm';
+import CategoryForm from './components/CreateListing/CategoryForm';
 //websocket setup
 import { io } from 'socket.io-client'
 import Socket from './components/Socket';
@@ -173,6 +174,9 @@ function App() {
             </Route>
             <Route exact path='/createListing-amenitiForm'>
               <AmenitiForm />
+            </Route>
+            <Route exact path='/createListing-categoryForm'>
+              <CategoryForm />
             </Route>
             <Route exact path='/createListing/images'>
               <ImageForm />

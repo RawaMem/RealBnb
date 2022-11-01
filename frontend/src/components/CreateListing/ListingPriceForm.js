@@ -6,6 +6,15 @@ import './createListing.css';
 export default function ListingPriceForm() {
     const {listingPrice, setListingPrice, serviceFee, setServiceFee, cleaningFee, setCleaningFee} = useListing();
     const [error, setError] = useState({});
+    const [listingPriceArr, setListingPriceArr] = useState([]);
+    const today = new Date();
+    const date = today.getDate();
+    const month = today.getMonth();
+    const year = today.getFullYear();
+    const [startDate, setStartDate] = useState(`${year}-${month+1}-${date}`);
+    console.log('this is startDate', startDate)
+    const [endDate, setEndDate] = useState(`${year}-${month+1}-${date+1}`);;
+    console.log('this is endDate', endDate)
 
     useEffect(() => {
         setListingPrice(+localStorage.getItem("listing price"));
@@ -146,6 +155,30 @@ export default function ListingPriceForm() {
                                 </div>
                             </div>
                             {error.cleaningFee && (<div id="error-message"><span>!</span>{error.cleaningFee}</div>)}
+                        </div>
+
+                        <div className="price-form-calendar">
+                            <div>
+                                <label htmlFor="start-date">Start date</label>
+                                <input 
+                                type="date" 
+                                id="start-date" 
+                                value={startDate}
+                                onChange={e => setStartDate(e.target.value)}
+                                min={`${new Date().toLocaleDateString('en-ca')}`}
+                                />
+                            </div>
+                            <div>
+                                <label htmlFor="end-date">End date</label>
+                                <input 
+                                type="date" 
+                                id="end-date" 
+                                value={endDate}
+                                onChange={e => setEndDate(e.target.value)}
+                                min={`${new Date(new Date(startDate).getTime() + (1000 * 3600 * 24)).toLocaleDateString('en-ca')}`}
+                                />
+                            </div>
+
                         </div>
                     </div>
                 </div>

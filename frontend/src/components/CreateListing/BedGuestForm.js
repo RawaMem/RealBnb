@@ -40,12 +40,13 @@ export default function BedGuestForm() {
 
     if (!initialAutoFill) return null
     return (
-        <div className="address-form-container">
-            <section className="grid-left-container">
+        <div className="form-container">
+            <section className="bed-guest-left-section">
                 <span className='word-section-1'>How many guests would you like to welcome?</span>
             </section>
-            <section className="grid-right-container-bedGuestForm">
-                <div className='grid-right-inner-container-bedGuestForm'>
+
+            <section className="bedGuest-selection-container">
+                <div className='bedGuest-content-container'>
                     <div className="grid-right-inner-container-bedGuestForm-innerDivContainer">
                         <div className="bedGuestForm-type">
                             Guests
@@ -75,32 +76,21 @@ export default function BedGuestForm() {
                     </div>
                 </div> 
                 <div className='button-layout'>
-                    <NavLink
-                        style={{ textDecoration:'none', color: 'black', fontSize: '20px',cursor:'pointer'}}
-                        to='/createListing/create-address'
-                        >
-                            Back
-                    </NavLink>
-                    <div>
+                    <div className="button-container-div">
                         <NavLink
-                            style={{ 
-                                textDecoration:'none',
-                                color: 'white',
-                                cursor:'pointer',
-                                width:'100px',
-                                height:'50px',
-                                background:'black',
-                                display:'flex',
-                                justifyContent:'center',
-                                alignItems:'center',
-                                borderRadius:'15px',
-                                cursor:'pointer'
-                            }}
+                            style={{color:'rgb(34,34,34)', fontWeight:'600', fontSize:'18px'}}
+                            to='/createListing/create-address'
+                            >
+                                Back
+                        </NavLink>                    
+                        <NavLink
+                            className="edit-photo-modal-save-button"
+                            style={{textDecoration:'none'}}
                             to='/createListing-amenitiForm'
                         >
-                            Next
+                                <div>Next</div>
                         </NavLink>
-                    </div>                    
+                    </div>               
                 </div>         
             </section>
         </div>

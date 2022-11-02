@@ -183,7 +183,7 @@ export default function ImageForm() {
 
     return (
         <>
-            <div className="image-form-container">
+            <div className="form-container">
                 <section className="video-section-container">
                     <video 
                         autoPlay 

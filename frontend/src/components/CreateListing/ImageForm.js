@@ -1,35 +1,51 @@
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom"
+import { NavLink,Link } from "react-router-dom"
 import {useDropzone} from 'react-dropzone';
+import { useDispatch, useSelector } from 'react-redux';
 import { useListing } from "../../context/ListingContext"
 import './createListing.css';
 import ImageDropDown from "./ImageDropDown";
 import EditPhotoForm from "./EditPhotoForm";
 import { Modal } from "../../context/Modal";
-
+// import { getListingImagesAction } from "../../store/listings";
 
 export default function ImageForm() {
-    const {imgUrl, setImgUrl,multiImages, setMultiImages, previewImageUrl, setPreviewImageUrl} = useListing();
+    const {imgUrl, setImgUrl, previewImageUrl, setPreviewImageUrl} = useListing();
+    const dispatch = useDispatch();
+
     const [dragZone, setDragZone] = useState(false);
     const [droppedFile, setDroppedFile] = useState([]);
     const [imageDrag, setImageDrag] = useState(false);
     const [dragStartIndex, setDragStartIndex] = useState(0);
     const [dragEndIndex, setDragEndIndex] = useState(0);
     const [showEditModal, setShowEditModal] = useState(false);
-    const [editedPhotoUrl, setEditedPhotoUrl] = useState('')
-    console.log('this is multiImageurl', multiImages);
-    console.log('this is imgUrl', imgUrl);
+    const [editedPhotoUrl, setEditedPhotoUrl] = useState('');
+    const [multiImages, setMultiImages] = useState([]);//
+
+    // useEffect(() => {
+    //     console.log('dispatched')
+    //     dispatch(getListingImagesAction(multiImages))
+    // },[multiImages]);
+        
+    // const multiImageFiles = useSelector(state => state.listings);
+
     useEffect(() => {
         const imagesLocalStorage = localStorage.getItem('imgUrls').split(',');
         setImgUrl(imagesLocalStorage.length>1 ? imagesLocalStorage : []);
         setPreviewImageUrl(localStorage.getItem('previewImageUrl').length ? localStorage.getItem('previewImageUrl') : '');
+        // if(multiImageFiles) setMultiImages(multiImageFiles);
+        // console.log('this is multiImageFiles from component', multiImageFiles);
     },[])
-
+    
     useEffect(() => {
         localStorage.setItem('imgUrls', imgUrl);
         localStorage.setItem('previewImageUrl', previewImageUrl);
-    },[imgUrl.length, previewImageUrl])
+        // dispatch(getListingImagesAction(multiImages))
+    },[imgUrl.length, previewImageUrl, multiImages])
 
+
+    
+    console.log('multiImages=======> component', multiImages)
 
     const handleDeleteImage = url => {
         const urlIdx = imgUrl.indexOf(url);
@@ -52,6 +68,15 @@ export default function ImageForm() {
         const reorderedImageUrl = Array.from(arr);
         [reorderedImageUrl[startIndex], reorderedImageUrl[endIndex]] = [reorderedImageUrl[endIndex], reorderedImageUrl[startIndex]]      
         setImgUrl(reorderedImageUrl);
+
+        // reorder multiImages
+        const copyMultiImages = [...multiImages];
+        copyMultiImages.sort((file1, file2) => {
+            const url1 = file1.preview;
+            const url2 = file2.preview;
+            return imgUrl.indexOf(url1) - imgUrl.indexOf(url2);
+        })
+        setMultiImages(copyMultiImages)
     };
 
     const {
@@ -83,8 +108,7 @@ export default function ImageForm() {
             fr.readAsDataURL(e.target?.files[0]);
             fr.addEventListener('load', () => {
                 const url = fr.result;                
-                setImgUrl([...imgUrl, url])
-                
+                setImgUrl([...imgUrl, url])                
             });
         }
     };
@@ -104,6 +128,7 @@ export default function ImageForm() {
                             id="dragableDiv"
                             key={idx}     
                             draggable='true' 
+                            onDragStart={() => setImageDrag(true)}
                             onDragOver={e => 
                                 {e.preventDefault();
                                 setDragEndIndex(idx);
@@ -119,12 +144,12 @@ export default function ImageForm() {
                             }
                         >   
          
-                            <ImageDropDown 
+                                <ImageDropDown 
                                 handleDeleteImage={handleDeleteImage} 
                                 url={url} 
                                 setShowEditModal={setShowEditModal}
                                 setEditedPhotoUrl={setEditedPhotoUrl}
-                            />
+                                />
                             {previewImageUrl === url && <div className="cover-photo-logo"> Cover Photo </div> }                  
                             <img 
                                 src={url} 
@@ -134,7 +159,6 @@ export default function ImageForm() {
                                 }}
                                 draggable='true' 
                                 onDragStart={() => {                    
-                                    setImageDrag(true);
                                     setDragStartIndex(idx)
                                 }}
                             /> 
@@ -157,11 +181,10 @@ export default function ImageForm() {
         );
     };
 
-
     return (
         <>
-            <div className="image-form-container">
-                <section className="video-section">
+            <div className="form-container">
+                <section className="video-section-container">
                     <video 
                         autoPlay 
                         controls
@@ -179,7 +202,8 @@ export default function ImageForm() {
                 </section>
 
                 <section 
-                className="grid-right-container-image-form"   
+                className="title-form-container"   
+                id="title-form-container"
                 onDragEnter={e => {
                     imageDrag ? setDragZone(false) : setDragZone(true)
                     e.stopPropagation()
@@ -221,32 +245,24 @@ export default function ImageForm() {
                         {pictureZone()}
                     </div>
                     <div className='button-layout'>
-                        <NavLink
-                            style={{ textDecoration:'none', color: 'black', fontSize: '20px',cursor:'pointer'}}
-                            to='/createListing-amenitiForm'
-                            >
-                                Back
-                        </NavLink>
-                        <div>
+                        <div className="button-container-div">
                             <NavLink
-                                style={{ 
-                                    textDecoration:'none',
-                                    color: 'white',
-                                    cursor:'pointer',
-                                    width:'100px',
-                                    height:'50px',
-                                    background:'black',
-                                    display:'flex',
-                                    justifyContent:'center',
-                                    alignItems:'center',
-                                    borderRadius:'15px',
-                                    cursor:'pointer'
-                                }}
-                                to='/createListing/images'
+                                style={{color:'rgb(34,34,34)', fontWeight:'600', fontSize:'18px'}}
+                                to='/createListing-categoryForm'
                                 >
-                                    Next
-                                </NavLink>
+                                    Back
+                            </NavLink>
+                            <div>
+                                <Link
+                                    className={imgUrl.length ? "edit-photo-modal-save-button" : "edit-photo-modal-save-button-disabled"}
+                                    style={{textDecoration:'none'}}
+                                    to='/createListing/titleForm'
+                                    >
+                                        <div>Next</div>
+                                        
+                                </Link>
                             </div> 
+                        </div>
                     </div>
                 </section>
 

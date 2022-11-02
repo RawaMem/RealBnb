@@ -91,13 +91,13 @@ export default function AddressForm() {
     if(!token || !apiKey || !initialAutoFill ) return null;
 
     return (
-        <div className="address-form-container">
-            <section className="grid-left-container">
+        <div className="form-container">
+            <section className="address-form-left-section">
                 <span className='word-section-1'>Where's your place located?</span>
             </section>
                           
-            <section className="grid-right-container">
-                <div className='grid-right-inner-container'>   
+            <section className="addressForm-right-selection">
+                <div className='addressForm-content-container'>   
                     <div className='grid-right-inner-page'>
                         <form>
                             <h3>Confirm your address</h3>
@@ -166,37 +166,39 @@ export default function AddressForm() {
                     </div>
                 </div>
                 <div className='button-layout'>
-                    <NavLink
-                        style={{ color: 'black', fontSize: '20px',cursor:'pointer'}}
-                        to='/createListing'
-                        >
-                            Back
-                    </NavLink>
-                    {address && city && state && zipCode ? (
-                        <div className='addressform-nextpage-button-wrapper'>
-                            <NavLink
-                            style={{ 
-                                textDecoration:'none',
-                                color: 'white',
-                                cursor:'pointer'
-                            }}
-                            to='/createListing-bedGuestForm'
+                    <div className="button-container-div">
+                        <NavLink
+                            style={{color:'rgb(34,34,34)', fontWeight:'600', fontSize:'18px'}}
+                            to='/createListing'
                             >
-                                Next
-                            </NavLink>
-                        </div>
-                        ) : (
-                        <div className='addressform-nextpage-button-wrapper-disabled'>
-                            <div
-                            style={{ 
-                                color: 'white',
-                                cursor:'pointer'
-                            }}
-                            >
-                                Next
+                                Back
+                        </NavLink>
+                        {address && city && state && zipCode ? (
+                            <div className='addressform-nextpage-button-wrapper'>
+                                <NavLink
+                                style={{ 
+                                    textDecoration:'none',
+                                    color: 'white',
+                                    cursor:'pointer'
+                                }}
+                                to='/createListing-bedGuestForm'
+                                >
+                                    Next
+                                </NavLink>
                             </div>
-                        </div>)
-                    }
+                            ) : (
+                            <div className='addressform-nextpage-button-wrapper-disabled'>
+                                <div
+                                style={{ 
+                                    color: 'white',
+                                    cursor:'pointer'
+                                }}
+                                >
+                                    Next
+                                </div>
+                            </div>)
+                        }
+                    </div>
                 </div>          
             </section>
         </div>

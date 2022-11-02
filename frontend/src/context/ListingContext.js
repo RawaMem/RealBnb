@@ -1,14 +1,15 @@
 import { createContext, useContext, useState } from 'react';
+import { getListingImagesAction } from '../context/../store/listings';
 
 export const ListingContext = createContext();
 
 export const useListing = () => useContext(ListingContext);
 
 export default function ListingProvider({children}) {
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
-    const [serviceFee, setServiceFee] = useState(0);
-    const [cleaningFee, setCleaningFee] = useState(0);
+    const [name, setName] = useState('');// 
+    const [description, setDescription] = useState('');//
+    const [serviceFee, setServiceFee] = useState(1);//
+    const [cleaningFee, setCleaningFee] = useState(1);//
     const [bedrooms, setBedRooms] = useState(+localStorage.getItem('bedrooms'));//
     const [beds, setBeds] = useState(+localStorage.getItem('beds'));//
     const [baths, setBaths] = useState(+localStorage.getItem('bathrooms'));//
@@ -22,14 +23,18 @@ export default function ListingProvider({children}) {
     const [latitude, setLatitude] = useState(localStorage.getItem('lat')|| 10);//
     // for multuple file upload
     const [multiImages, setMultiImages] = useState([]);//
+
     const [imageDescription, setImageDescription] = useState({});// nullable
-    const [imgUrl, setImgUrl] = useState(localStorage.getItem('imgUrls').split(','));
-    const [previewImageUrl, setPreviewImageUrl] = useState(localStorage.getItem('previewImageUrl'))
+    const [imgUrl, setImgUrl] = useState(localStorage.getItem('imgUrls').split(',')); //
+    const [previewImageUrl, setPreviewImageUrl] = useState(localStorage.getItem('previewImageUrl')) //
+
     const [listingPriceArr, setListingPriceArr] = useState([]);
     const initalAmenityStr = localStorage.getItem('amenityArr');
     const amenity = initalAmenityStr.split(',');
     const [amenityArr, setAmenityArr] = useState([...amenity]);//
     const [categoryArr, setCategoryArr] = useState([]);
+
+
 
     return (
         <ListingContext.Provider
@@ -72,7 +77,7 @@ export default function ListingProvider({children}) {
                 setImgUrl,
                 previewImageUrl, 
                 setPreviewImageUrl,
-                listingPriceArr,
+                listingPriceArr, 
                 setListingPriceArr,
                 amenityArr,
                 setAmenityArr,

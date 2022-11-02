@@ -24,10 +24,14 @@ export default function ImageDropDown({ handleDeleteImage, url, setShowEditModal
         return () => document.removeEventListener("click", closeMenu);
       }, [showMenu]);
 
+    function handlePreviewImage () {
+      previewImageUrl !== url ? setPreviewImageUrl(url) : setPreviewImageUrl('')
+    }
+
     const dropDown = (
       <div className="image-drop-down">
         <div onClick={() => {setShowEditModal(true); setEditedPhotoUrl(url)}}>Edit</div>
-        <div onClick={()=>setPreviewImageUrl(url)}>Make cover photo</div>
+        <div onClick={handlePreviewImage}>{previewImageUrl === url ? 'Remove Cover Photo' : 'Make cover photo' }</div>
         <div onClick={() => handleDeleteImage(url)}>Delete</div>
       </div>  
     );

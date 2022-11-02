@@ -5,6 +5,13 @@ const GET_LISTINGS = "listings/GET_listings";
 const GET_SINGLE_LISTING = "listings/GET_SINGLE_LISTING";
 const LISTING_SEARCH_RESULTS = "listings/LISTING_SEARCH_RESULTS";
 const CLEAR_LISTING_STATE = "listings/CLEAR_LISTING_STATE";
+const STORE_LISTING_IMAGES_FILES="listings/STORE_LISTING_IMAGES_FILES";
+
+export const getListingImagesAction = multiImagesFilesArr => {
+    console.log('from action', multiImagesFilesArr)
+    return {type: STORE_LISTING_IMAGES_FILES,
+            multiImagesFilesArr}
+};
 
 const getListingsAction = (listings) => ({
     type: GET_LISTINGS,
@@ -87,6 +94,9 @@ export default function listings(state = initialState, action) {
             newState = {};
             action.listings.forEach(listing => newState[listing.id] = listing);
             return newState;
+        case STORE_LISTING_IMAGES_FILES:
+            newState=[]
+            return [...newState, ...action.multiImagesFilesArr];
         case CLEAR_LISTING_STATE:
             return null
         default:

@@ -27,7 +27,8 @@ export default function ListingProvider({children}) {
     const [imageDescription, setImageDescription] = useState({});// nullable
     const [imgUrl, setImgUrl] = useState(localStorage.getItem('imgUrls').split(',')); //
     const [previewImageUrl, setPreviewImageUrl] = useState(localStorage.getItem('previewImageUrl')) //
-    const [listingPrice, setListingPrice] = useState(10);//
+
+    const [listingPriceArr, setListingPriceArr] = useState([]);
     const initalAmenityStr = localStorage.getItem('amenityArr');
     const amenity = initalAmenityStr.split(',');
     const [amenityArr, setAmenityArr] = useState([...amenity]);//
@@ -76,8 +77,8 @@ export default function ListingProvider({children}) {
                 setImgUrl,
                 previewImageUrl, 
                 setPreviewImageUrl,
-                listingPrice,
-                setListingPrice,
+                listingPriceArr, 
+                setListingPriceArr,
                 amenityArr,
                 setAmenityArr,
                 categoryArr,

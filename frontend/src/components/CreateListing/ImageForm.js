@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom"
+import { NavLink,Link } from "react-router-dom"
 import {useDropzone} from 'react-dropzone';
 import { useDispatch, useSelector } from 'react-redux';
 import { useListing } from "../../context/ListingContext"
@@ -184,7 +184,7 @@ export default function ImageForm() {
     return (
         <>
             <div className="image-form-container">
-                <section className="video-section">
+                <section className="video-section-container">
                     <video 
                         autoPlay 
                         controls
@@ -202,7 +202,8 @@ export default function ImageForm() {
                 </section>
 
                 <section 
-                className="grid-right-container-image-form"   
+                className="title-form-container"   
+                id="title-form-container"
                 onDragEnter={e => {
                     imageDrag ? setDragZone(false) : setDragZone(true)
                     e.stopPropagation()
@@ -244,32 +245,24 @@ export default function ImageForm() {
                         {pictureZone()}
                     </div>
                     <div className='button-layout'>
-                        <NavLink
-                            style={{ textDecoration:'none', color: 'black', fontSize: '20px',cursor:'pointer'}}
-                            to='/createListing-categoryForm'
-                            >
-                                Back
-                        </NavLink>
-                        <div>
+                        <div className="button-container-div">
                             <NavLink
-                                style={{ 
-                                    textDecoration:'none',
-                                    color: 'white',
-                                    cursor:'pointer',
-                                    width:'100px',
-                                    height:'50px',
-                                    background:'black',
-                                    display:'flex',
-                                    justifyContent:'center',
-                                    alignItems:'center',
-                                    borderRadius:'15px',
-                                    cursor:'pointer'
-                                }}
-                                to='/createListing/titleForm'
+                                style={{color:'rgb(34,34,34)', fontWeight:'600', fontSize:'18px'}}
+                                to='/createListing-categoryForm'
                                 >
-                                    Next
-                                </NavLink>
+                                    Back
+                            </NavLink>
+                            <div>
+                                <Link
+                                    className={imgUrl.length ? "edit-photo-modal-save-button" : "edit-photo-modal-save-button-disabled"}
+                                    style={{textDecoration:'none'}}
+                                    to='/createListing/titleForm'
+                                    >
+                                        <div>Next</div>
+                                        
+                                </Link>
                             </div> 
+                        </div>
                     </div>
                 </section>
 

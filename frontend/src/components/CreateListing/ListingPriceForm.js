@@ -1,32 +1,35 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import 'react-dates/initialize';
+import { DateRangePicker } from 'react-dates';
 import { useListing } from "../../context/ListingContext";
+import 'react-dates/lib/css/_datepicker.css';
+import './react_dates_overrides.css';
 import './createListing.css';
 
 export default function ListingPriceForm() {
-    const {listingPrice, setListingPrice, serviceFee, setServiceFee, cleaningFee, setCleaningFee} = useListing();
+    const {listingPriceArr, setListingPriceArr,serviceFee, setServiceFee, cleaningFee, setCleaningFee} = useListing();
     const [error, setError] = useState({});
-    const [listingPriceArr, setListingPriceArr] = useState([]);
-    const today = new Date();
-    const date = today.getDate();
-    const month = today.getMonth();
-    const year = today.getFullYear();
-    const [startDate, setStartDate] = useState(`${year}-${month+1}-${date}`);
-    console.log('this is startDate', startDate)
-    const [endDate, setEndDate] = useState(`${year}-${month+1}-${date+1}`);;
-    console.log('this is endDate', endDate)
+    const [startingDate, setStartingDate] = useState(null);
+
+    const [endingDate, setEndingDate] = useState(null);;
+    const [focusedInput, setFocusedInput] = useState(null);
+    const [listingPrice, setListingPrice] = useState(10);//
+    const [startDateError, setStartDateError] = useState(false)
+    const [endDateError, setEndDateError] = useState(false)
 
     useEffect(() => {
         setListingPrice(+localStorage.getItem("listing price"));
         setServiceFee(+localStorage.getItem("service fee"));
-        setCleaningFee(+localStorage.getItem("cleanning fee"))
+        setCleaningFee(+localStorage.getItem("cleanning fee"));
     },[]);
 
     useEffect(() => {
         localStorage.setItem("listing price", listingPrice);
         localStorage.setItem("service fee", serviceFee);
         localStorage.setItem("cleanning fee", cleaningFee);
-    },[listingPrice, serviceFee, cleaningFee]);
+        return () => console.log('this is listingPriceArr', listingPriceArr)
+    },[listingPrice, serviceFee, cleaningFee, startingDate, endingDate]);
 
     useEffect(() => {
         let errorMsg = {}
@@ -35,7 +38,13 @@ export default function ListingPriceForm() {
         if(serviceFee < 1) errorMsg['serviceFee'] = "Service fee must be greater than $1";
         if(cleaningFee < 1) errorMsg['cleaningFee'] = "Cleaning fee must be greater than $1";
         setError(errorMsg)
-    },[listingPrice, serviceFee, cleaningFee ])
+        if(!startingDate) setStartDateError(true)
+        else setStartDateError(false)
+        
+        if(!endingDate) setEndDateError(true)
+        else setEndDateError(false)
+
+    },[listingPrice, serviceFee, cleaningFee, startingDate, endingDate])
 
     function increment(setter) {
         console.log('in the setter ')
@@ -51,6 +60,11 @@ export default function ListingPriceForm() {
             else return prev
         })
     }
+
+    function handleNext() {      
+        const listPriceObj = {pricePerDay:listingPrice, startDate: startingDate, endDate: endingDate}
+        setListingPriceArr(listPriceObj);        
+    };
 
     return (
         <div className="form-container">
@@ -99,6 +113,27 @@ export default function ListingPriceForm() {
                                 </div>
                             </div>                          
                             {error.listingPrice && (<div id="error-message"><span>!</span>{error.listingPrice}</div>)}
+                        </div>
+
+                        <div id="price-content-innerContainer-id">
+                            <div className="price-section">  
+                                <div className="price-form-calendar">
+                                    <p style={{color: 'rgb(113,113,113)'}}>Please select a date range for your property, your property will be listed at the current set price during this time frame </p>
+                                    <DateRangePicker 
+                                        startDate={startingDate}
+                                        startDateId="your_unique_start_date_id"
+                                        endDate={endingDate}
+                                        endDateId="your_unique_start_date_id"
+                                        onDatesChange={({ startDate, endDate }) => {
+                                            setStartingDate(startDate);
+                                            setEndingDate(endDate)
+                                        }} 
+                                        focusedInput={focusedInput}
+                                        onFocusChange={focusedInput => setFocusedInput(focusedInput)}
+                                        // withPortal 
+                                    />
+                                </div>
+                            </div>
                         </div>
 
                         <div id="price-content-innerContainer-id">                       
@@ -157,39 +192,16 @@ export default function ListingPriceForm() {
                             {error.cleaningFee && (<div id="error-message"><span>!</span>{error.cleaningFee}</div>)}
                         </div>
 
-                        <div className="price-form-calendar">
-                            <div>
-                                <label htmlFor="start-date">Start date</label>
-                                <input 
-                                type="date" 
-                                id="start-date" 
-                                value={startDate}
-                                onChange={e => setStartDate(e.target.value)}
-                                min={`${new Date().toLocaleDateString('en-ca')}`}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="end-date">End date</label>
-                                <input 
-                                type="date" 
-                                id="end-date" 
-                                value={endDate}
-                                onChange={e => setEndDate(e.target.value)}
-                                min={`${new Date(new Date(startDate).getTime() + (1000 * 3600 * 24)).toLocaleDateString('en-ca')}`}
-                                />
-                            </div>
-
-                        </div>
                     </div>
                 </div>
                 <div className="button-container">
                     <div className="button-container-div">
                         <Link to="/createListing/descriptionForm" style={{color:'rgb(34,34,34)', fontWeight:'600', fontSize:'18px'}}>Back</Link>
                         <Link 
-                            className={!Object.values(error).length ? "edit-photo-modal-save-button" : "edit-photo-modal-save-button-disabled"}
+                            className={(Object.values(error).length || startDateError || endDateError) ? "edit-photo-modal-save-button-disabled" :"edit-photo-modal-save-button"}
                             style={{textDecoration:'none'}}
                             to="/createListing/descriptionForm"
-
+                            onClick={handleNext}
                         >
                             <div>Next</div>
                         </Link>

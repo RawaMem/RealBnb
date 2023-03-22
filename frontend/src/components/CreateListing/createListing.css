@@ -351,24 +351,70 @@ span.disabled {
     justify-content: center;
     align-items: center;
     background-color: white;
-    width: 500px;
-    height: 600px;
+    width: 80%;
+    height: 95%;
     border-radius: 25px;
+
+}
+
+.grid-right-inner-page>form {
+    height: 45%;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* background-color: pink; */
+}
+
+.grid-right-inner-page>div {
+    height: 55%;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+}
+
+.grid-right-container-input {
+    width: 100%;
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* background-color: pink; */
 }
 
 
-.addressForm-right-selection input {
-    width: 286px;
-    margin-top: 10px;
-    padding: 5px;
+.grid-right-container-input>input {
+    width: 70%;
+    padding: .3rem;
     border: 1px solid lightgrey;
     border-radius: 10px;
-
 }
 
 .grid-right-container-input-bottom input {
     width: 143px;
 }
+
+#address-input{
+    position: relative;
+}
+
+.address-suggestion-container {
+    position: absolute;
+    background-color: pink;
+    border-radius: 5px;
+    top: 78%;
+    width: 70%;
+    overflow-y: scroll;
+    height: 9em;
+    display: flex;
+    flex-direction: column;
+    padding: 2%;
+}
+
+.address-suggestion-container
+
 
 .video-caption {
     position: absolute;

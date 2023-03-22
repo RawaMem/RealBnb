@@ -77,11 +77,11 @@ function App() {
     setClicks([...clicks, e.latLng]);
   };
 
-  const onIdle = (m) => {
-    console.log("onIdle");
-    setZoom(m.getZoom());
-    setCenter(m.getCenter().toJSON());
-  };
+  // const onIdle = (m) => {
+  //   console.log("onIdle");
+  //   setZoom(m.getZoom());
+  //   setCenter(m.getCenter().toJSON());
+  // };
 
   // const render = (status) => {
   //   switch (status) {
@@ -105,22 +105,22 @@ function App() {
   //   }
   // };
 
-  const initMapScript = (data) => {
-    if (window.google) {
-      return Promise.resolve()
-    }
-    const src = `${mapApiJs}?key=${data}&libraries=places`;
-    return loadAsyncScript(src)
-  };
+  // const initMapScript = (data) => {
+  //   if (window.google) {
+  //     return Promise.resolve()
+  //   }
+  //   const src = `${mapApiJs}?key=${data}&libraries=places`;
+  //   return loadAsyncScript(src)
+  // };
 
   // end of setup
 
   useEffect(() => {
     dispatch(sessionActions.restoreUser())
-    fetch('/api/maps-key')
-      .then(res => res.json())
-      .then(data => initMapScript(data))
-      .then(() => setIsLoaded(true));
+    // fetch('/api/maps-key')
+    //   .then(res => res.json())
+    //   .then(data => initMapScript(data))
+    .then(() => setIsLoaded(true));
   }, [dispatch]);
 
   return (
@@ -147,7 +147,7 @@ function App() {
           <Route exact path="/">
             <Listings />
           </Route>
-          <Route exact path='/maps'>
+          {/* <Route exact path='/maps'>
             <GoogleMaps center={center} setCenter={setCenter} zoom={zoom} setZoom={setZoom} onClick={onClick} onIdle={onIdle} style={{ height: '30rem', width: '30rem' }} options={{
               zoomControl: true,
               mapTypeControl: true,
@@ -158,7 +158,7 @@ function App() {
             }}>
               {clicks.map((latLng, i) => (<Marker key={i} position={latLng} />))}
             </GoogleMaps>
-          </Route>
+          </Route> */}
           <Route exact path='/sockets'>
             <Socket socket={socket} />
           </Route>

@@ -14,19 +14,13 @@ export default function ListingProvider({children}) {
     const [beds, setBeds] = useState(+localStorage.getItem('beds'));//
     const [baths, setBaths] = useState(+localStorage.getItem('bathrooms'));//
     const [maxGuests, setMaxGuests] = useState(+localStorage.getItem('maxGuests'));//
-    const [address, setAddress] = useState(localStorage.getItem('addressInputVal')|| '');//
-    const [inputVal, setInputVal] = useState(localStorage.getItem('addressInputVal'))
-    const [city, setCity] = useState(localStorage.getItem('city') || '');//
-    const [state, setState] = useState(localStorage.getItem('state') || '');//
-    const [zipCode, setZipCode] = useState(localStorage.getItem('zipCode') || '');//
-    const [longitude, setLongitude] = useState(localStorage.getItem('lng') || 10);//
-    const [latitude, setLatitude] = useState(localStorage.getItem('lat')|| 10);//
+
     // for multuple file upload
     const [multiImages, setMultiImages] = useState([]);//
 
     const [imageDescription, setImageDescription] = useState({});// nullable
-    const [imgUrl, setImgUrl] = useState(localStorage.getItem('imgUrls').split(',')); //
-    const [previewImageUrl, setPreviewImageUrl] = useState(localStorage.getItem('previewImageUrl')) //
+    const [imgUrl, setImgUrl] = useState(''); //
+    const [previewImageUrl, setPreviewImageUrl] = useState('') //
 
     const [listingPriceArr, setListingPriceArr] = useState([]);
     const initalAmenityStr = localStorage.getItem('amenityArr');
@@ -55,20 +49,6 @@ export default function ListingProvider({children}) {
                 setBaths,
                 maxGuests,
                 setMaxGuests,
-                address,
-                setAddress,
-                inputVal, 
-                setInputVal,
-                city,
-                setCity,
-                state,
-                setState,
-                zipCode,
-                setZipCode,
-                longitude,
-                setLongitude,
-                latitude,
-                setLatitude,
                 multiImages, 
                 setMultiImages,
                 imageDescription,

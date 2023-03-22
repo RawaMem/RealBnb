@@ -44,18 +44,18 @@ socket.on("connect", () => {
 //end websocket code
 
 // load google map api js
-function loadAsyncScript(src) {
-  return new Promise(resolve => {
-    const script = document.createElement('script');
-    Object.assign(script, {
-      type: 'text/javascript',
-      async: true,
-      src
-    });
-    script.addEventListener('load', () => resolve(script));
-    document.head.appendChild(script);
-  });
-}
+// function loadAsyncScript(src) {
+//   return new Promise(resolve => {
+//     const script = document.createElement('script');
+//     Object.assign(script, {
+//       type: 'text/javascript',
+//       async: true,
+//       src
+//     });
+//     script.addEventListener('load', () => resolve(script));
+//     document.head.appendChild(script);
+//   });
+// }
 
 function App() {
   const dispatch = useDispatch();
@@ -117,9 +117,6 @@ function App() {
 
   useEffect(() => {
     dispatch(sessionActions.restoreUser())
-    // fetch('/api/maps-key')
-    //   .then(res => res.json())
-    //   .then(data => initMapScript(data))
     .then(() => setIsLoaded(true));
   }, [dispatch]);
 
@@ -147,22 +144,10 @@ function App() {
           <Route exact path="/">
             <Listings />
           </Route>
-          {/* <Route exact path='/maps'>
-            <GoogleMaps center={center} setCenter={setCenter} zoom={zoom} setZoom={setZoom} onClick={onClick} onIdle={onIdle} style={{ height: '30rem', width: '30rem' }} options={{
-              zoomControl: true,
-              mapTypeControl: true,
-              scaleControl: true,
-              streetViewControl: true,
-              rotateControl: true,
-              fullscreenControl: true
-            }}>
-              {clicks.map((latLng, i) => (<Marker key={i} position={latLng} />))}
-            </GoogleMaps>
-          </Route> */}
           <Route exact path='/sockets'>
             <Socket socket={socket} />
           </Route>
-          <ListingProvider>
+          {/* <ListingProvider> */}
             <Route exact path='/createListing'>
                 <Introducing />
             </Route>
@@ -189,8 +174,8 @@ function App() {
             </Route>
             <Route exact path='/createListing/listingPriceForm'>
               <ListingPriceForm />
-            </Route>
-          </ListingProvider>
+            </Route> */}
+          {/* </ListingProvider> */}
         </Switch>
       )}
     </>

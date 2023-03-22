@@ -1,21 +1,22 @@
 import './createListing.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { getToken } from '../../store/maps';
-import { useListing } from '../../context/ListingContext';
 import { MapBox } from '../Maps/Mapbox';
 
 
 export default function AddressForm() {
-    const { address, setAddress, inputVal, setInputVal, city, setCity, state, setState, zipCode, setZipCode,setLongitude, setLatitude, latitude, longitude } = useListing();
-
     const dispatch = useDispatch();
-
-    const [optionalAdd, setOptionalAdd] = useState('');
+    const [address, setAddress] = useState('');
+    const [inputVal, setInputVal] = useState(localStorage.getItem('addressInputVal') || '');
+    const [city, setCity] = useState(localStorage.getItem('city') || '');
+    const [state, setState] = useState(localStorage.getItem('state') || '');
+    const [zipCode, setZipCode] = useState(localStorage.getItem('zipCode') || null);
+    const [longitude, setLongitude] = useState(localStorage.getItem('lng') || 10);
+    const [latitude, setLatitude] = useState(localStorage.getItem('lat') || 10);
+    const optinalAddress = useRef(null);
     const [suggestions, setSuggestions] = useState([]);
-    const [coordinates, setCoordinates] = useState([]);
-
 
     const token = useSelector((state) => state.maps?.token);
 
@@ -23,31 +24,24 @@ export default function AddressForm() {
         if(!token) dispatch(getToken());
     }, [dispatch]);
 
-    useEffect(() => {
-        setInputVal(localStorage.getItem('addressInputVal').length ? localStorage.getItem('addressInputVal') : '');
-        setCity(localStorage.getItem('city').length ? localStorage.getItem('city') : '');
-        setState(localStorage.getItem('state'));
-        setZipCode(localStorage.getItem('zipCode'));
-        const lng = localStorage.getItem('lng');
-        const lat = localStorage.getItem('lat');
-        setCoordinates([+lng, +lat])
-    },[])
-
-    useEffect(() => {
+    function handleClickingNext() {
+        if (optinalAddress.current.value) {
+            setAddress(optinalAddress.current.value + address)
+            localStorage.setItem('address', address);
+            localStorage.setItem('optinalAddress', optinalAddress.current.value);
+        };
         localStorage.setItem('addressInputVal', inputVal);
         localStorage.setItem('city', city);
         localStorage.setItem('state', state);
         localStorage.setItem('zipCode', zipCode);
         localStorage.setItem('lat', latitude);
         localStorage.setItem('lng', longitude)
-    },[address,city, state, zipCode, latitude, longitude])
-    
+    };
 
-    
     const containerStyle = {
         width: '90%',
         height: '95%',
-      };
+    };
 
     const handleChange = async (event) => {
 
@@ -63,22 +57,6 @@ export default function AddressForm() {
         }  
     };
     
-    useEffect(() => {
-        const [lng, lat] = coordinates;
-        setLatitude(lat);
-        setLongitude(lng);
-    }, [coordinates])
-
-    if(!inputVal) {
-        setCity('');
-        setState('');
-        setZipCode('');
-    };
-    
-    function handleClickingNext() {
-
-    };
-
     if(!token) return null;
 
     return (
@@ -105,7 +83,8 @@ export default function AddressForm() {
                                                 <div 
                                                     key={suggestion.place_name} 
                                                     onClick={() => {
-                                                        setCoordinates(suggestion.geometry.coordinates);
+                                                        setLatitude(suggestion.geometry.coordinates[1])
+                                                        setLongitude(suggestion.geometry.coordinates[0])
                                                         setAddress(suggestion.place_name)
                                                         setSuggestions([])
                                                         setInputVal(suggestion.place_name)
@@ -125,7 +104,8 @@ export default function AddressForm() {
                                 <input 
                                     type="text" 
                                     placeholder='Apt, suite, etc. (Optional)' 
-                                    defaultValue=''
+                                    defaultValue={localStorage.getItem('optinalAddress') || ''}
+                                    ref={optinalAddress}
                                 />
                             </div>
                             <div className='grid-right-container-input'>
@@ -164,7 +144,7 @@ export default function AddressForm() {
                             >
                                 Back
                         </NavLink>
-                        {address && city && state && zipCode ? (
+                        {inputVal && city && state && zipCode ? (
                             <div className='addressform-nextpage-button-wrapper'>
                                 <NavLink
                                 style={{ 

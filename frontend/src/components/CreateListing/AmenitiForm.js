@@ -1,28 +1,28 @@
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { useListing } from "../../context/ListingContext"
 import './createListing.css';
 import { icons } from "../../ui/icons";
 import AmenitiCard from "./AmentitiCard";
 
-export default function AmenitiForm() {
-    const {amenityArr, setAmenityArr} = useListing();
-    const [initialAutoFill, setInitialAutoFill] = useState(false);
+export function resetAmenity(localStorageKey) {
+    const listOfItemsInStr = localStorage.getItem(localStorageKey);
+    if(listOfItemsInStr) {
+        const convertToArr = listOfItemsInStr.split(',');
+        const listFromLocalStorage = convertToArr.filter(item => item.length);
+        return listFromLocalStorage
+    } else {
+        return []
+    };
+};
 
+export default function AmenitiForm() {
+
+
+    const [amenityArr, setAmenityArr] = useState(resetAmenity('amenityArr'));
 
     useEffect(() => {  
         localStorage.setItem('amenityArr', amenityArr);
     },[amenityArr.length]);
-
-    useEffect(() => {
-        const amenityStr = localStorage.getItem('amenityArr');
-        const amenity = amenityStr.split(',');
-        const amenityFromLocalStorage = amenity.filter(item => item.length)
-        setAmenityArr([...amenityFromLocalStorage]);
-        setInitialAutoFill(true);
-
-        return () => setInitialAutoFill(false);
-    },[])
 
 
     const handleOnClick = (amenity) => {
@@ -37,7 +37,6 @@ export default function AmenitiForm() {
         }
     };
 
-    if (!initialAutoFill) return null
     return (
         <div className="form-container">
             <section className="ameniti-left-section">

@@ -10,10 +10,7 @@ export default function ListingProvider({children}) {
     const [description, setDescription] = useState('');//
     const [serviceFee, setServiceFee] = useState(1);//
     const [cleaningFee, setCleaningFee] = useState(1);//
-    const [bedrooms, setBedRooms] = useState(+localStorage.getItem('bedrooms'));//
-    const [beds, setBeds] = useState(+localStorage.getItem('beds'));//
-    const [baths, setBaths] = useState(+localStorage.getItem('bathrooms'));//
-    const [maxGuests, setMaxGuests] = useState(+localStorage.getItem('maxGuests'));//
+
 
     // for multuple file upload
     const [multiImages, setMultiImages] = useState([]);//
@@ -23,9 +20,7 @@ export default function ListingProvider({children}) {
     const [previewImageUrl, setPreviewImageUrl] = useState('') //
 
     const [listingPriceArr, setListingPriceArr] = useState([]);
-    const initalAmenityStr = localStorage.getItem('amenityArr');
-    const amenity = initalAmenityStr.split(',');
-    const [amenityArr, setAmenityArr] = useState([...amenity]);//
+
     const [categoryArr, setCategoryArr] = useState([]);
 
 
@@ -41,14 +36,6 @@ export default function ListingProvider({children}) {
                 setServiceFee,
                 cleaningFee,
                 setCleaningFee,
-                bedrooms,
-                setBedRooms,
-                beds,
-                setBeds,
-                baths,
-                setBaths,
-                maxGuests,
-                setMaxGuests,
                 multiImages, 
                 setMultiImages,
                 imageDescription,
@@ -59,8 +46,6 @@ export default function ListingProvider({children}) {
                 setPreviewImageUrl,
                 listingPriceArr, 
                 setListingPriceArr,
-                amenityArr,
-                setAmenityArr,
                 categoryArr,
                 setCategoryArr                
             }}

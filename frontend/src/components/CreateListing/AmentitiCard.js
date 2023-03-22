@@ -1,11 +1,20 @@
 import { useState } from "react";
 
-export default function AmenitiCard({icon, amenity}) {   
-    const selectedAmenity = localStorage.getItem('amenityArr').split(',');
-    const initialSelect = selectedAmenity.filter(item => {
-        return item.toLowerCase() === amenity.toLowerCase()
-    })
-    const [selected, setSelected] = useState(initialSelect.length > 0);
+export function handleInitialSelect(localStorageKey, checkAgainst) {
+    const listFromLocalStorage = localStorage.getItem(localStorageKey);
+    if (listFromLocalStorage) {
+        const convertToArr = listFromLocalStorage.split(',');
+        const initialSelect = convertToArr.find(item => item.toLowerCase() === checkAgainst.toLowerCase()
+        );
+        return initialSelect !== undefined;
+    } else {
+        return false;
+    };
+};
+
+export default function AmenitiCard({icon, amenity}) {  
+
+    const [selected, setSelected] = useState(handleInitialSelect('amenityArr', amenity));
 
 
     const selectedStyle = {

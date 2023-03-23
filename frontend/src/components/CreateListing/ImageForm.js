@@ -2,16 +2,18 @@ import { useEffect, useState } from "react";
 import { NavLink,Link } from "react-router-dom"
 import {useDropzone} from 'react-dropzone';
 import { useDispatch, useSelector } from 'react-redux';
-import { useListing } from "../../context/ListingContext"
+
 import './createListing.css';
 import ImageDropDown from "./ImageDropDown";
 import EditPhotoForm from "./EditPhotoForm";
 import { Modal } from "../../context/Modal";
-// import { getListingImagesAction } from "../../store/listings";
 
 export default function ImageForm() {
-    const {imgUrl, setImgUrl, previewImageUrl, setPreviewImageUrl} = useListing();
     const dispatch = useDispatch();
+
+    const [previewImageUrl, setPreviewImageUrl] = useState('')
+    const [imgUrl, setImgUrl] = useState(''); 
+    const [multiImages, setMultiImages] = useState([]);
 
     const [dragZone, setDragZone] = useState(false);
     const [droppedFile, setDroppedFile] = useState([]);
@@ -20,63 +22,42 @@ export default function ImageForm() {
     const [dragEndIndex, setDragEndIndex] = useState(0);
     const [showEditModal, setShowEditModal] = useState(false);
     const [editedPhotoUrl, setEditedPhotoUrl] = useState('');
-    const [multiImages, setMultiImages] = useState([]);//
 
-    // useEffect(() => {
-    //     console.log('dispatched')
-    //     dispatch(getListingImagesAction(multiImages))
-    // },[multiImages]);
-        
-    // const multiImageFiles = useSelector(state => state.listings);
-
-    useEffect(() => {
-        const imagesLocalStorage = localStorage.getItem('imgUrls').split(',');
-        setImgUrl(imagesLocalStorage.length>1 ? imagesLocalStorage : []);
-        setPreviewImageUrl(localStorage.getItem('previewImageUrl').length ? localStorage.getItem('previewImageUrl') : '');
-        // if(multiImageFiles) setMultiImages(multiImageFiles);
-        // console.log('this is multiImageFiles from component', multiImageFiles);
-    },[])
-    
-    useEffect(() => {
-        localStorage.setItem('imgUrls', imgUrl);
-        localStorage.setItem('previewImageUrl', previewImageUrl);
-        // dispatch(getListingImagesAction(multiImages))
-    },[imgUrl.length, previewImageUrl, multiImages])
-
-
-    
-    console.log('multiImages=======> component', multiImages)
+    // console.log('imgUrl---------------', imgUrl);
+    // console.log('multiImages------------', multiImages)
 
     const handleDeleteImage = url => {
-        const urlIdx = imgUrl.indexOf(url);
-        const newState = [...imgUrl];
-        newState.splice(urlIdx, 1);
-        setImgUrl(newState);
 
-        const dropFile = droppedFile.find(file => file.preview === url )
-        const fileIdx = droppedFile.indexOf(dropFile);
-        const newDroppedFile = [...droppedFile];
-        newDroppedFile.splice(fileIdx, 1);
-        setDroppedFile(newDroppedFile)
-        const removeFromMultiImageIdx = multiImages.indexOf(dropFile);
+        const urlIdx = imgUrl.indexOf(url);
+        const newImageUrlArr = [...imgUrl];
+        newImageUrlArr.splice(urlIdx, 1);
+        setImgUrl(newImageUrlArr);
+
+        const findObj = multiImages.find(file => file.preview === url);
+        const removeFromMultiImageIdx = multiImages.indexOf(findObj);
         const copyMultiImages = [...multiImages];
         copyMultiImages.splice(removeFromMultiImageIdx, 1);
         setMultiImages(copyMultiImages);
     };
 
+// reorder function is used to order imageUrl array, so we can display reordered result on the DOM. 
     const reorder = (arr, startIndex, endIndex) => {
         const reorderedImageUrl = Array.from(arr);
-        [reorderedImageUrl[startIndex], reorderedImageUrl[endIndex]] = [reorderedImageUrl[endIndex], reorderedImageUrl[startIndex]]      
+        [reorderedImageUrl[startIndex], reorderedImageUrl[endIndex]] = [reorderedImageUrl[endIndex], reorderedImageUrl[startIndex]];     
         setImgUrl(reorderedImageUrl);
-
-        // reorder multiImages
-        const copyMultiImages = [...multiImages];
-        copyMultiImages.sort((file1, file2) => {
-            const url1 = file1.preview;
-            const url2 = file2.preview;
-            return imgUrl.indexOf(url1) - imgUrl.indexOf(url2);
-        })
-        setMultiImages(copyMultiImages)
+    };
+    
+    const handleReorderMultiImages = () => {
+        const reorderedMultiImages = [];
+        for(let url of imgUrl) {
+            for(let file of multiImages) {
+                const {preview} = file;
+                if(preview === url) {
+                    reorderedMultiImages.push(file);
+                };
+            };
+        };
+        setMultiImages(reorderedMultiImages);
     };
 
     const {
@@ -90,31 +71,36 @@ export default function ImageForm() {
             const droppedFiles = acceptedFiles.map(file => Object.assign(file, {
               preview: URL.createObjectURL(file)
             }));
-            setDroppedFile([...droppedFiles]);         
+            setDroppedFile([...droppedFiles]);
+
+            // multiImages is used to update s3 bucket, the images updated has to be File type.         
             setMultiImages([...multiImages, ...droppedFiles]);
+
+            // droppedFiles is an array of objects of File data type, the blob type url of each image url is stored in the preview key of each object.
             const droppedFileUrl = droppedFiles.map(file => file.preview);
             setImgUrl([...imgUrl, ...droppedFileUrl]);
             setDragZone(false);
-        }
+        },
     });
 
       //for multiple file upload
     const updateFiles = e => {
         const files = e.target.files;
-
-        setMultiImages([...multiImages, files[0]]);
+        const inputFile = files[0];
         const fr = new FileReader();
         if(e.target?.files[0] instanceof Blob) {
             fr.readAsDataURL(e.target?.files[0]);
             fr.addEventListener('load', () => {
                 const url = fr.result;                
-                setImgUrl([...imgUrl, url])                
+                setImgUrl([...imgUrl, url])  
+                // File object returned from input event target doesn't have a url, set the newly generated image url to the File object, so all File object stored in multiImages state have a key of preview and value of image url, this image url is used to reorder the files stored in multiImages state after user reordered images.
+                inputFile.preview = url;
+                setMultiImages([...multiImages, inputFile]);
             });
-        }
+        };
     };
 
-
-    const buttonEvent = e => {
+    const buttonEvent = () => {
         const fileElem = document.getElementById("fileElem");
         fileElem.click();
     };
@@ -126,7 +112,7 @@ export default function ImageForm() {
                         <div 
                             className="image-section-layout" 
                             id="dragableDiv"
-                            key={idx}     
+                            key={url}     
                             draggable='true' 
                             onDragStart={() => setImageDrag(true)}
                             onDragOver={e => 
@@ -135,20 +121,23 @@ export default function ImageForm() {
                                 }}
                             onDrop={e => {
                                 e.preventDefault();
-                                reorder(imgUrl, dragStartIndex, dragEndIndex)
+                                reorder(imgUrl, dragStartIndex, dragEndIndex);
                             }}
                             onDragEnd={ e => {
                                 e.preventDefault()
+                                handleReorderMultiImages();
                                 setImageDrag(false)
                                 }
                             }
                         >   
          
                                 <ImageDropDown 
-                                handleDeleteImage={handleDeleteImage} 
-                                url={url} 
-                                setShowEditModal={setShowEditModal}
-                                setEditedPhotoUrl={setEditedPhotoUrl}
+                                    handleDeleteImage={handleDeleteImage} 
+                                    url={url} 
+                                    setShowEditModal={setShowEditModal}
+                                    setEditedPhotoUrl={setEditedPhotoUrl}
+                                    previewImageUrl={previewImageUrl}
+                                    setPreviewImageUrl={setPreviewImageUrl}
                                 />
                             {previewImageUrl === url && <div className="cover-photo-logo"> Cover Photo </div> }                  
                             <img 

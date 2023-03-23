@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { useListing } from "../../context/ListingContext";
 import './createListing.css';
 
 export default function EditPhotoForm({setShowEditModal, url, handleDeleteImage}) {
-    const {imageDescription, setImageDescription} = useListing();
+    const [imageDescription, setImageDescription] = useState({});
     const [caption, setCaption] = useState('');
-    console.log("imageDescription", imageDescription)
-    console.log("caption", caption)
+    // console.log("imageDescription", imageDescription)
+    // console.log("caption", caption)
 
     useEffect(() => {
        setCaption(localStorage.getItem('image caption'))

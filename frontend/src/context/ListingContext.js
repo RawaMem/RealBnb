@@ -11,17 +11,11 @@ export default function ListingProvider({children}) {
     const [serviceFee, setServiceFee] = useState(1);//
     const [cleaningFee, setCleaningFee] = useState(1);//
 
-
-    // for multuple file upload
-    const [multiImages, setMultiImages] = useState([]);//
-
     const [imageDescription, setImageDescription] = useState({});// nullable
-    const [imgUrl, setImgUrl] = useState(''); //
-    const [previewImageUrl, setPreviewImageUrl] = useState('') //
+
 
     const [listingPriceArr, setListingPriceArr] = useState([]);
 
-    const [categoryArr, setCategoryArr] = useState([]);
 
 
 
@@ -45,9 +39,7 @@ export default function ListingProvider({children}) {
                 previewImageUrl, 
                 setPreviewImageUrl,
                 listingPriceArr, 
-                setListingPriceArr,
-                categoryArr,
-                setCategoryArr                
+                setListingPriceArr,             
             }}
         >
             {children}

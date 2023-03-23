@@ -22,9 +22,7 @@ export default function ImageForm() {
     const [dragEndIndex, setDragEndIndex] = useState(0);
     const [showEditModal, setShowEditModal] = useState(false);
     const [editedPhotoUrl, setEditedPhotoUrl] = useState('');
-
-    // console.log('imgUrl---------------', imgUrl);
-    // console.log('multiImages------------', multiImages)
+    const [imageDescription, setImageDescription] = useState({});
 
     const handleDeleteImage = url => {
 
@@ -164,7 +162,8 @@ export default function ImageForm() {
                 <EditPhotoForm 
                 setShowEditModal={setShowEditModal} 
                 url={imgUrl}
-                handleDeleteImage={handleDeleteImage}
+                handleDeleteImage={handleDeleteImage}setImageDescription={setImageDescription}
+                imageDescription={imageDescription}
                 />
             </Modal>
         );

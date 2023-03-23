@@ -1,37 +1,30 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import './createListing.css';
 
-export default function EditPhotoForm({setShowEditModal, url, handleDeleteImage}) {
-    const [imageDescription, setImageDescription] = useState({});
-    const [caption, setCaption] = useState('');
-    // console.log("imageDescription", imageDescription)
-    // console.log("caption", caption)
-
-    useEffect(() => {
-       setCaption(localStorage.getItem('image caption'))
-    },[]);
-
-    useEffect(() => {
-        localStorage.setItem('image caption', caption);
-    },[caption]);
+export default function EditPhotoForm({setShowEditModal, url, handleDeleteImage, setImageDescription}) {
+    const [caption, setCaption] = useState(localStorage.getItem('image caption') || '')
 
     function handleDelete() {
         handleDeleteImage(url);
-        if (caption.length) setCaption('')
+        setImageDescription(prev => {
+            const copiedPrev = {...prev};
+            delete copiedPrev[url];
+            return copiedPrev
+        });
+        localStorage.removeItem('image caption');
         setShowEditModal(false);
     };
 
     function handleSave() {
-        if(caption.length) {
-            setImageDescription(prev => {
-            const updateImageDescription = {...prev};
-            updateImageDescription[url] = caption;
-            return updateImageDescription;
-            })
-            setShowEditModal(false);
-        }
-        else return;
-    }
+        setImageDescription(prev => {
+        const updateImageDescription = {...prev};
+        updateImageDescription[url] = caption;
+        return updateImageDescription;
+        });
+
+        localStorage.setItem('image caption', caption);
+        setShowEditModal(false);
+    };
     
     return (
         <div className="edit-photo-modal-container">
@@ -62,9 +55,10 @@ export default function EditPhotoForm({setShowEditModal, url, handleDeleteImage}
                         <p>Mention what's special about this space like comfortable furniture or favorite details.
                         </p>
                         <textarea 
-                            spellCheck="true" 
+                            spellCheck="true"                            
                             value={caption}
                             onChange={e => setCaption(e.target.value)}
+                            defaultValue={localStorage.getItem('image caption')}
                         />
                     </div>
                 </div>
@@ -73,7 +67,7 @@ export default function EditPhotoForm({setShowEditModal, url, handleDeleteImage}
                 <div id="edit-photo-modal-delete-button">
                     <u onClick={handleDelete}>Delete photo</u>
                 </div>
-                <div className={caption.length ? "edit-photo-modal-save-button" : "edit-photo-modal-save-button-disabled"}
+                <div className={caption ? "edit-photo-modal-save-button" : "edit-photo-modal-save-button-disabled"}
                 onClick={handleSave}
                 >
                     <div>Save</div>

@@ -1,18 +1,14 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useListing } from "../../context/ListingContext";
 
 
 export default function DescriptionForm() {
-    const {description, setDescription} = useListing();
+    const [description, setDescription] = useState(localStorage.getItem("listing description") || '');
     const [descriptionLength, setDescriptionLength] = useState(0);
+        
+    const handlePageChange = () => localStorage.setItem("listing description", description);
 
     useEffect(() => {
-        setDescription(localStorage.getItem("listing description"))
-    },[])
-
-    useEffect(() => {
-        localStorage.setItem("listing description", description);
         setDescriptionLength(description.length);
     },[description]);
 
@@ -49,11 +45,16 @@ export default function DescriptionForm() {
                 </div>
                 <div className="button-container">
                     <div className="button-container-div">
-                        <Link to="/createListing/titleForm" style={{color:'rgb(34,34,34)', fontWeight:'600', fontSize:'18px'}}>Back</Link>
                         <Link 
-                            className={description.length ? "edit-photo-modal-save-button" : "edit-photo-modal-save-button-disabled"}
+                            to="/createListing/titleForm" 
+                            style={{color:'rgb(34,34,34)', fontWeight:'600', fontSize:'18px'}}
+                            onClick={handlePageChange}
+                        >Back</Link>
+                        <Link 
+                            className={description.length>0 ? "edit-photo-modal-save-button" : "edit-photo-modal-save-button-disabled"}
                             style={{textDecoration:'none'}}
                             to="/createListing/listingPriceForm"
+                            onClick={handlePageChange}
                         >
                             <div>Next</div>
                         </Link>

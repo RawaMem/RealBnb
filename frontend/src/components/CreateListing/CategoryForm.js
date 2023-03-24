@@ -97,7 +97,7 @@ export default function CategoryForm() {
                         <Link 
                             className={categoryArr.length ? "edit-photo-modal-save-button" : "edit-photo-modal-save-button-disabled"}
                             style={{textDecoration:'none'}}
-                            to="/createListing/images"
+                            to="/createListing/titleForm"
                         >
                             <div>Next</div>
                         </Link>

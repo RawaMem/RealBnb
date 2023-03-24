@@ -1,22 +1,19 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useListing } from "../../context/ListingContext";
 
 export default function TitleForm() {
-    const {name, setName} = useListing();
+    const [name, setName] = useState(localStorage.getItem('listing_name') || '');// 
     const [nameLength, setNameLength] = useState(0);
     const bedroomQty = localStorage.getItem('bedrooms');
     const city = localStorage.getItem('city');
-    console.log("name", typeof name)
 
-    useEffect(() => {
-        setName(localStorage.getItem('listing_name'))
-    },[])
-
-    useEffect(() => {
+    const handlePageChange = () => {
         localStorage.setItem('listing_name', name);
+    };
+
+    useEffect(() => {
         setNameLength(name.length);
-    }, [name]);
+    },[name]);
 
     return (
         <div className="form-container">
@@ -53,12 +50,16 @@ export default function TitleForm() {
                 </div>
                 <div className="button-container">
                     <div className="button-container-div">
-                        <Link to="/createListing/images" style={{color:'rgb(34,34,34)', fontWeight:'600', fontSize:'18px'}}>Back</Link>
                         <Link 
-                            className={name.length ? "edit-photo-modal-save-button" : "edit-photo-modal-save-button-disabled"}
+                            to="/createListing-categoryForm" 
+                            style={{color:'rgb(34,34,34)', fontWeight:'600', fontSize:'18px'}}
+                            onClick={handlePageChange}
+                        >Back</Link>
+                        <Link 
+                            className={name.length>0 ? "edit-photo-modal-save-button" : "edit-photo-modal-save-button-disabled"}
                             style={{textDecoration:'none'}}
+                            onClick={handlePageChange}
                             to="/createListing/descriptionForm"
-
                         >
                             <div>Next</div>
                         </Link>

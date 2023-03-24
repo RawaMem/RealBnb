@@ -17,7 +17,6 @@ import BedGuestForm from './components/CreateListing/BedGuestForm';
 import AmenitiForm from './components/CreateListing/AmenitiForm';
 import ImageForm from './components/CreateListing/ImageForm';
 import Introducing from './components/CreateListing/Introducing';
-import ListingProvider from './context/ListingContext';
 import TitleForm from './components/CreateListing/TitleForm';
 import DescriptionForm from './components/CreateListing/DescriptionForm';
 import ListingPriceForm from './components/CreateListing/ListingPriceForm';
@@ -146,36 +145,34 @@ function App() {
           </Route>
           <Route exact path='/sockets'>
             <Socket socket={socket} />
+        </Route>
+          <Route exact path='/createListing'>
+              <Introducing />
           </Route>
-          {/* <ListingProvider> */}
-            <Route exact path='/createListing'>
-                <Introducing />
-            </Route>
-            <Route exact path='/createListing/create-address'>
-              <AddressForm />
-            </Route>
-            <Route exact path='/createListing-bedGuestForm'>
-                <BedGuestForm />
-            </Route>
-            <Route exact path='/createListing-amenitiForm'>
-              <AmenitiForm />
-            </Route>
-            <Route exact path='/createListing-categoryForm'>
-              <CategoryForm />
-            </Route>
-            <Route exact path='/createListing/images'>
-              <ImageForm />
-            </Route>
-            <Route exact path='/createListing/titleForm'>
-              <TitleForm />
-            </Route>
-            <Route exact path='/createListing/descriptionForm'>
-              <DescriptionForm />
-            </Route>
-            <Route exact path='/createListing/listingPriceForm'>
-              <ListingPriceForm />
-            </Route> */}
-          {/* </ListingProvider> */}
+          <Route exact path='/createListing/create-address'>
+            <AddressForm />
+          </Route>
+          <Route exact path='/createListing-bedGuestForm'>
+              <BedGuestForm />
+          </Route>
+          <Route exact path='/createListing-amenitiForm'>
+            <AmenitiForm />
+          </Route>
+          <Route exact path='/createListing-categoryForm'>
+            <CategoryForm />
+          </Route>
+          <Route exact path='/createListing/titleForm'>
+            <TitleForm />
+          </Route>
+          <Route exact path='/createListing/descriptionForm'>
+            <DescriptionForm />
+          </Route>
+          <Route exact path='/createListing/listingPriceForm'>
+            <ListingPriceForm />
+          </Route>
+          <Route exact path='/createListing/images'>
+            <ImageForm />
+          </Route>
         </Switch>
       )}
     </>

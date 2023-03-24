@@ -236,7 +236,7 @@ export default function ImageForm() {
                         <div className="button-container-div">
                             <NavLink
                                 style={{color:'rgb(34,34,34)', fontWeight:'600', fontSize:'18px'}}
-                                to='/createListing-categoryForm'
+                                to='/createListing/listingPriceForm'
                                 >
                                     Back
                             </NavLink>
@@ -244,7 +244,7 @@ export default function ImageForm() {
                                 <Link
                                     className={imgUrl.length ? "edit-photo-modal-save-button" : "edit-photo-modal-save-button-disabled"}
                                     style={{textDecoration:'none'}}
-                                    to='/createListing/titleForm'
+                                    to='/createListing/listingPriceForm'
                                     >
                                         <div>Next</div>
                                         

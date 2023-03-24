@@ -18,8 +18,6 @@ export default function ConfirmFirm() {
     const zipCode = localStorage.getItem("zipCode");
     const longitude = +localStorage.getItem('lng');
     const latitude = +localStorage.getItem('lat');
-    const createdAt = new Date();
-    const updatedAt = new Date();
 
     const listPrice = +localStorage.getItem('listing price');
 

@@ -133,20 +133,7 @@ function App() {
           <Route exact path='/signup'>
             <SignupFormPage />
           </Route>
-
-          <Route exact path='/listings/:listingId'>
-            <SingleListingPage />
-          </Route>
-          <Route exact path='/testing'>
-            <TestCompontent />
-          </Route>
-          <Route exact path="/">
-            <Listings />
-          </Route>
-          <Route exact path='/sockets'>
-            <Socket socket={socket} />
-        </Route>
-          <Route exact path='/createListing'>
+          <Route exact path='/createListing/introduction'>
               <Introducing />
           </Route>
           <Route exact path='/createListing/create-address'>
@@ -172,6 +159,18 @@ function App() {
           </Route>
           <Route exact path='/createListing/images'>
             <ImageForm />
+          </Route>
+          <Route exact path="/">
+          <Route exact path='/listings/:listingId'>
+            <SingleListingPage />
+          </Route>
+          <Route exact path='/testing'>
+            <TestCompontent />
+          </Route>
+            <Listings />
+          </Route>
+          <Route exact path='/sockets'>
+            <Socket socket={socket} />
           </Route>
         </Switch>
       )}

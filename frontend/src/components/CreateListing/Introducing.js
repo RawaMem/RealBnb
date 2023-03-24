@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { VideoPlayer } from '../../ui/VideoPlayer';
-import './createListing.css';
+// import './createListing.css';
 
 
 export default function Introducing() {

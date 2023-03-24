@@ -83,7 +83,7 @@ function Navigation({ isLoaded }){
         <button className="searchBtn">Search</button>
       </form>
       <section>
-        <NavLink style={{ textDecoration: 'none', color: "#323232"}} exact to='/createListing'>Become a Host</NavLink>
+        <NavLink style={{ textDecoration: 'none', color: "#323232"}} to='/createListing/introduction'>Become a Host</NavLink>
       </section>
       <ul>
         <li>

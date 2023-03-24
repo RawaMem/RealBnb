@@ -246,7 +246,7 @@ export default function ImageForm() {
                                     style={{textDecoration:'none'}}
                                     to='/createListing/listingPriceForm'
                                     >
-                                        <div>Next</div>
+                                        <div>Host</div>
                                         
                                 </Link>
                             </div> 

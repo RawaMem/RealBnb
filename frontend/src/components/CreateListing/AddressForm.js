@@ -140,7 +140,7 @@ export default function AddressForm() {
                     <div className="button-container-div">
                         <NavLink
                             style={{color:'rgb(34,34,34)', fontWeight:'600', fontSize:'18px'}}
-                            to='/createListing'
+                            to='/createListing/introduction'
                             >
                                 Back
                         </NavLink>

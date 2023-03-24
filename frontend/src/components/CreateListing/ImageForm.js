@@ -1,15 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { NavLink,Link } from "react-router-dom"
 import {useDropzone} from 'react-dropzone';
-import { useDispatch, useSelector } from 'react-redux';
-
 import './createListing.css';
 import ImageDropDown from "./ImageDropDown";
 import EditPhotoForm from "./EditPhotoForm";
 import { Modal } from "../../context/Modal";
+import ConfirmForm from "./ConfirmForm";
 
 export default function ImageForm() {
-    const dispatch = useDispatch();
 
     const [previewImageUrl, setPreviewImageUrl] = useState('')
     const [imgUrl, setImgUrl] = useState(''); 
@@ -21,6 +19,7 @@ export default function ImageForm() {
     const [dragStartIndex, setDragStartIndex] = useState(0);
     const [dragEndIndex, setDragEndIndex] = useState(0);
     const [showEditModal, setShowEditModal] = useState(false);
+    const [showConformationForm, setShowConformationForm] = useState(false);
     const [editedPhotoUrl, setEditedPhotoUrl] = useState('');
     const [imageDescription, setImageDescription] = useState({});
 
@@ -169,6 +168,19 @@ export default function ImageForm() {
         );
     };
 
+    function showConformationModal() {
+        return (
+            <Modal onClose={() => setShowConformationForm(false)}>
+                <ConfirmForm 
+                    previewImageUrl={previewImageUrl}
+                    multiImages={multiImages}
+                    setShowConformationForm={setShowConformationForm}
+                    imageDescription={imageDescription}
+                />
+            </Modal>
+        );
+    };
+
     return (
         <>
             <div className="form-container">
@@ -223,7 +235,7 @@ export default function ImageForm() {
                             <div>
                                 <input type="file" multiple  {...getInputProps()} onChange={updateFiles} style={{display:'none'}} id="fileElem" />
                                 <div id="fileSelect" onClick={buttonEvent} >
-                                    <span class="material-symbols-outlined">
+                                    <span className="material-symbols-outlined">
                                         file_upload
                                     </span>
                                     <span class="upload-button">Upload</span>
@@ -231,6 +243,7 @@ export default function ImageForm() {
                             </div>
                         </div>
                         {pictureZone()}
+                        {showConformationForm && showConformationModal()}
                     </div>
                     <div className='button-layout'>
                         <div className="button-container-div">
@@ -241,14 +254,13 @@ export default function ImageForm() {
                                     Back
                             </NavLink>
                             <div>
-                                <Link
+                                <div
                                     className={imgUrl.length ? "edit-photo-modal-save-button" : "edit-photo-modal-save-button-disabled"}
-                                    style={{textDecoration:'none'}}
-                                    to='/createListing/listingPriceForm'
+                                    onClick={() => setShowConformationForm(true)}
                                     >
                                         <div>Host</div>
                                         
-                                </Link>
+                                </div>
                             </div> 
                         </div>
                     </div>

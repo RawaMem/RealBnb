@@ -34,11 +34,10 @@ export default function Listings() {
      }, [dispatch]);
 
     // fetch all categories
-    useEffect( async() => {
-       const response = await csrfFetch('/api/categories');
-       if (response.ok) {
-        setCategories(await response.json())
-        }
+    useEffect(() => {
+       csrfFetch('/api/categories')
+       .then(res => res.json())
+       .then(data => setCategories(data))
     },[])
 
     //display all categories

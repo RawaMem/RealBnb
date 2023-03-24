@@ -141,6 +141,7 @@ export default function AddressForm() {
                         <NavLink
                             style={{color:'rgb(34,34,34)', fontWeight:'600', fontSize:'18px'}}
                             to='/createListing/introduction'
+                            onClick={handleClickingNext}
                             >
                                 Back
                         </NavLink>

@@ -29,26 +29,35 @@ const router = express.Router();
 
 // get all listings
 //when wishlist is implemented, include wishlist so that we know which hearts are filled in
+
 router.get('/', asyncHandler(async (req, res) => {
   const listings = await Listing.findAll({
-    attributes: {
-      include: [[Sequelize.fn('AVG', Sequelize.col('Reviews.starRating')), 'avgRating'],]
-    },
     include: [
       {
         model: Review,
         attributes: []
       },
-      ListingPrice,
-      Category
+      {
+        model: ListingPrice,
+        attributes: ['pricePerDay', 'startDate', 'endDate']
+      },
+      {
+        model: Category,
+        attributes: ['name']
+      }
     ],
-    group: ['Listing.id',
-      'ListingPrices.id',
-      'Categories.id',
-      'Categories->ListingCategory.categoryId',
-      'Categories->ListingCategory.listingId',
-      'Categories->ListingCategory.createdAt',
-      'Categories->ListingCategory.updatedAt']
+    attributes: {
+      include:[[
+        Sequelize.fn('AVG', Sequelize.col('Reviews.starRating')), 'avgRating'
+      ]],
+    },
+    group: [
+      'Listing.id',
+      "ListingPrices.id",
+      "Categories.id",
+      "Categories->ListingCategory.listingId",
+      'Categories->ListingCategory.id',
+    ]  
   });
   return res.json(listings);
 }));

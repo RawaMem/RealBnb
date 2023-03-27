@@ -11,20 +11,24 @@ module.exports = {
       categoryId: {
         allowNull: false,
         type: Sequelize.INTEGER,
-        references: { model: 'Categories' }
+        references: { model: 'Categories' },
+        onDelete: 'CASCADE'
       },
       listingId: {
         allowNull: false,
         type: Sequelize.INTEGER,
-        references: { model: 'Listings' }
+        references: { model: 'Listings' },
+        onDelete: 'CASCADE'
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     });
   },

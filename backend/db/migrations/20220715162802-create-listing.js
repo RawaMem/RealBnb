@@ -11,19 +11,20 @@ module.exports = {
       ownerId: {
         allowNull: false,
         type: Sequelize.INTEGER,
-        references: { model: 'Users' }
+        references: { model: 'Users' },
+        onDelete: "CASCADE"
       },
       previewImageUrl: {
-        allowNull: true,
-        type: Sequelize.STRING
+        allowNull: false,
+        type: Sequelize.TEXT
       },
       name: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING(50)
       },
       description: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       serviceFee: {
         allowNull: false,
@@ -63,7 +64,7 @@ module.exports = {
       },
       zipCode: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING(10)
       },
       longitude: {
         allowNull: false,
@@ -75,11 +76,13 @@ module.exports = {
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     });
   },

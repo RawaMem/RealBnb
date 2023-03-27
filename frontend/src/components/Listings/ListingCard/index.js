@@ -2,48 +2,46 @@
 
 export default function ListingCard({listing}) {
 
-    // const avgReviewRating = () => {
-    //     let totalRating = 0;
-    //     if (listing.Reviews) {
-    //         const reviews = listing.Reviews;
-    //         reviews.map((review) => {
-    //             totalRating += review.starRating
-    //         })
-
-    //         const rounded = Math.round(totalRating / reviews.length * 10) / 10
-    //         var fixed = rounded.toFixed(1)
-    //         return fixed
-    //     } else {
-    //         return "New"
-    //     }
-    // }
-
     const avaDate = () => {
-        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        
         let avaDateRes, startMonth, endMonth, startDate, endDate;
-        if (listing?.ListingPrices[0]) {
+        if(listing.ListingPrices[0]) {
             // "2022-09-01T00:00:00.000Z"
-            const startDateString = listing.ListingPrices[0].startDate
+            const startDateString = listing.ListingPrices[0].startDate;
+            const getStartMonth = new Date(startDateString).getMonth();
+            
+            // if date is Jan 1st, getMonth() returns 11, monthNames[12] is out of range.
+            // if the date is the 1st, getMonth() returns current month - 2.
             if (startDateString.substr(8, 2) === "01") {
-                // 9-2+1 = 8
-                startMonth = monthNames[(new Date(startDateString).getMonth()) + 1]
+                if(getStartMonth === 11) startMonth = monthNames[0];
+                else startMonth = monthNames[getStartMonth + 1];
                 startDate = startMonth + " 1"
             } else {
-                startDate = monthNames[new Date(startDateString).getMonth()] + " " + new Date(startDateString).getDate()
-            }
+                if(getStartMonth === 11) startMonth = monthNames[0];
+                else startMonth = monthNames[getStartMonth];                    
+                startDate = startMonth + " " + (new Date(startDateString).getDate()+1)
+            };
+            
 
-            const endDateString = listing.ListingPrices[0].endDate
+            const endDateString = listing.ListingPrices[0].endDate;
+            const getEndMonth = new Date(endDateString).getMonth();
+
             if (endDateString.substr(8, 2) === "01") {
-                endMonth = monthNames[(new Date(endDateString).getMonth()) + 1]
+                if(getEndMonth === 11) endMonth = monthNames[0];
+                else endMonth = monthNames[(new Date(endDateString).getMonth()) + 1];
                 endDate = endMonth + " 1"
             } else {
-                if (startMonth === endMonth) endDate = new Date(endDateString).getDate()
-                else endDate = monthNames[new Date(endDateString).getMonth()] + " " + new Date(endDateString).getDate()
-            }
-            avaDateRes = startDate + " - " + endDate
-        }
-        return avaDateRes
-    }
+                if(getEndMonth === 11) endMonth = monthNames[0];
+                if (startMonth === endMonth) endDate = new Date(endDateString).getDate()+1;
+                else {
+                    endDate = monthNames[getEndMonth] + " " + (new Date(endDateString).getDate()+1)
+                };
+            };
+        };
+        avaDateRes = startDate + " - " + endDate ;      
+        return avaDateRes;
+    };
 
     return (
         <>            

@@ -1,39 +1,98 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Listing = sequelize.define('Listing', {
-    ownerId: DataTypes.INTEGER,
-    previewImageUrl: DataTypes.STRING,
-    name: DataTypes.STRING,
-    description: DataTypes.STRING,
-    serviceFee: DataTypes.DECIMAL,
-    cleaningFee: DataTypes.DECIMAL,
-    bedrooms: DataTypes.INTEGER,
-    beds: DataTypes.INTEGER,
-    baths: DataTypes.INTEGER,
-    maxGuests: DataTypes.INTEGER,
-    address: DataTypes.STRING,
-    city: DataTypes.STRING,
-    state: DataTypes.STRING,
-    zipCode: DataTypes.INTEGER,
-    longitude: DataTypes.DECIMAL,
-    latitude: DataTypes.DECIMAL
+    ownerId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    }, 
+    previewImageUrl: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull:false,
+      validate: {
+        max: 50
+      },
+    },
+    description: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        len: {
+          args: [1, 500],
+          msg: "Description must be between 1 and 500 characters"
+        }
+      },
+    },
+    serviceFee: {
+      type: DataTypes.DECIMAL,
+      allowNull: false
+    },
+    cleaningFee: {
+      type: DataTypes.DECIMAL,
+      allowNull: false
+    },
+    bedrooms: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    beds: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    baths: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    maxGuests: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    city: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    state: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    zipCode: {
+      type: DataTypes.STRING,
+      validate: {
+        max: 10
+      },
+    },
+    longitude: {
+      type: DataTypes.DECIMAL,
+      allowNull: false
+    },
+    latitude: {
+      type: DataTypes.DECIMAL,
+      allowNull: false
+    }
   }, {});
+
   Listing.associate = function(models) {
     //need to figure out onCascade delete for listings and images also with previewimage, might lead to circular delete, possible solition is make listingId nullable on image and for preview image leave it blank
     Listing.belongsTo(models.User, { foreignKey: 'ownerId' });
-    Listing.hasMany(models.Review, { foreignKey: 'listingId', onDelete: 'cascade', hooks: 'true'})
+    Listing.hasMany(models.Review, { foreignKey: 'listingId', onDelete: 'CASCADE', hooks: 'true'})
     //docs say to use singular for belongsTo aliases and plural for hasMany aliases
-    Listing.hasMany(models.Image, { foreignKey: 'listingId', onDelete: 'cascade', hooks: 'true' }); //has alias
-    Listing.hasMany(models.ListingBrowseHistory, { foreignKey: 'listingId', onDelete: 'cascade', hooks: 'true' });
-    Listing.hasMany(models.ListingPrice, { foreignKey: 'listingId', onDelete: 'cascade', hooks: 'true' });
-    Listing.hasMany(models.Booking, { foreignKey: 'listingId', onDelete: 'cascade', hooks: 'true' });
-    Listing.hasMany(models.WishListListing, { foreignKey: 'listingId', onDelete: 'cascade', hooks: 'true' });
-    Listing.hasMany(models.ListingCategory, { foreignKey: 'listingId', onDelete: 'cascade', hooks: 'true' });
-    Listing.hasMany(models.ListingAmenity, { foreignKey: 'listingId', onDelete: 'cascade', hooks: 'true' });
-
+    Listing.hasMany(models.Image, { foreignKey: 'listingId', onDelete: 'CASCADE', hooks: 'true' }); //has alias
+    Listing.hasMany(models.ListingBrowseHistory, { foreignKey: 'listingId', onDelete: 'CASCADE', hooks: 'true' });
+    Listing.hasMany(models.ListingPrice, { foreignKey: 'listingId', onDelete: 'CASCADE', hooks: 'true' });
+    Listing.hasMany(models.Booking, { foreignKey: 'listingId', onDelete: 'CASCADE', hooks: 'true' });
+    Listing.hasMany(models.WishListListing, { foreignKey: 'listingId', onDelete: 'CASCADE', hooks: 'true' });
+    // Listing.hasMany(models.ListingCategory, { foreignKey: 'listingId', onDelete: 'CASCADE', hooks: 'true' });
+    // TO BE CONTINUED
 
     const columnMap1 = {
-      through: 'ListingCategory',
+      through: models.ListingCategory,
       foreignKey: 'listingId',
       otherKey: 'categoryId'
     }

@@ -1,11 +1,26 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const ListingPrice = sequelize.define('ListingPrice', {
-    listingId: DataTypes.INTEGER,
-    userId: DataTypes.INTEGER,
-    pricePerDay: DataTypes.DECIMAL,
-    startDate: DataTypes.DATE,
-    endDate: DataTypes.DATE
+    listingId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    pricePerDay: {
+      type: DataTypes.DECIMAL,
+      allowNull: false
+    },
+    startDate: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    endDate: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
   }, {});
   ListingPrice.associate = function(models) {
     // associations can be defined here

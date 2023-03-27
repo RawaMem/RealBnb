@@ -1,13 +1,15 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Category = sequelize.define('Category', {
-    name: DataTypes.STRING,
-    // iconUrl: DataTypes.STRING do not need
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
   }, {});
   Category.associate = function(models) {
     // associations can be defined here
     const columnMap = {
-      through: 'ListingCategory',
+      through: models.ListingCategory,
       foreignKey: 'categoryId',
       otherKey: 'listingId'
     }

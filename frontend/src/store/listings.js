@@ -78,6 +78,38 @@ export const getSingleListingThunk = (listingId) => async dispatch => {
     }
 };
 
+export const createNewListingThunk = (newListing, newListingImages) => async dispatch => {
+    const [multiImages, imageDescription] = newListingImages;
+
+    const newListingResponse = await csrfFetch("/api/listings", {
+        method: 'POST',
+        body: JSON.stringify(newListing)
+    });
+    // console.log('from thunk newListingResponse', newListingResponse.json())  
+
+    if(newListingResponse.ok) {  
+        const newList = await newListingResponse.json();   
+        for(let imageFile of multiImages) {
+            const formData = new FormData();
+            if(imageFile.preview in imageDescription) {
+                formData.append('description', imageDescription[imageFile.preview]);
+            };
+            formData.append('image', imageFile);
+
+            const newImages = await csrfFetch(`/api/listings/${newList.id}/images`, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                  },
+                  body: formData,
+            });
+        }; 
+
+        return newList;        
+    };
+
+};
+
 const initialState = null;
 export default function listings(state = initialState, action) {
     let newState;

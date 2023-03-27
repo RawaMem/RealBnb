@@ -58,7 +58,6 @@ export default function EditPhotoForm({setShowEditModal, url, handleDeleteImage,
                             spellCheck="true"                            
                             value={caption}
                             onChange={e => setCaption(e.target.value)}
-                            defaultValue={localStorage.getItem('image caption')}
                         />
                     </div>
                 </div>

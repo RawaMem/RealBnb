@@ -64,9 +64,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     zipCode: {
       type: DataTypes.STRING,
-      validate: {
-        max: 10
-      },
     },
     longitude: {
       type: DataTypes.DECIMAL,

@@ -39,7 +39,7 @@ export default function TitleForm() {
                         <h5 style={{fontSize:'22px'}}>Create your title</h5>
                         <div style={{color:'rgb(118,118,118)'}}>Your listing title should highlight what makes your place special.</div>
                         <textarea 
-                            placeHolder={`Cheerful ${bedroomQty}-bedroom home in ${city}`}
+                            placeholder={`Cheerful ${bedroomQty}-bedroom home in ${city}`}
                             maxLength="50"
                             value={name}
                             onChange={e => setName(e.target.value)}

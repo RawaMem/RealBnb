@@ -1,6 +1,12 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const ListingAmenity = sequelize.define('ListingAmenity', {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+      allowNull: false
+    },
     amenityId: {
       type: DataTypes.INTEGER,
       allowNull: false

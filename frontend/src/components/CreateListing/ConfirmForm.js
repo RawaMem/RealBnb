@@ -1,9 +1,12 @@
-import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { resetAmenity } from './AmenitiForm';
+import { createNewListingThunk } from '../../store/listings';
+import { getSingleListingThunk } from '../../store/listings';
+import { useHistory } from 'react-router-dom';
 
 export default function ConfirmForm({previewImageUrl, multiImages, setShowConformationForm, imageDescription}) {
+    const dispatch = useDispatch();
     // for listing table
-    const owner = useSelector(state => state.session.user)
     const name = localStorage.getItem('listing_name');
     const description = localStorage.getItem('listing description');
     const serviceFee = localStorage.getItem('service fee');
@@ -23,12 +26,57 @@ export default function ConfirmForm({previewImageUrl, multiImages, setShowConfor
     const listPrice = +localStorage.getItem('listing price');
     const startDate = localStorage.getItem('startingDate');
     const endDate = localStorage.getItem('endingDate');
+    const history = useHistory()
 
     // for amenity
     const amenityArr = resetAmenity('amenityArr'); 
 
     // for category
     const categoryArr = resetAmenity('categoryArr');
+
+
+    const handleSubmitCreateForm = async() => {
+        const newListingObj = {
+            previewImageUrl,
+            name,
+            description,
+            serviceFee,
+            cleaningFee,
+            bedrooms,
+            beds,
+            baths,
+            maxGuests,
+            address,
+            city,
+            state,
+            zipCode,
+            longitude,
+            latitude
+        };
+
+        const listingImages = [multiImages, imageDescription];
+
+        const amenities = amenityArr;
+
+        const categories = categoryArr;
+
+        const listingPricing = {
+            pricePerDay: listPrice,
+            startDate,
+            endDate
+        };
+
+        const newListingRes = await dispatch(createNewListingThunk({newListingObj, amenities, categories, listingPricing}, listingImages));
+
+        console.log('this is newListingres', newListingRes)
+        if(newListingRes) {
+            const newListing = await newListingRes.json();
+            // localStorage.clear()
+            dispatch(getSingleListingThunk(newListing.id))
+            .then(() => history.push(`/listings/${newListing.id}`))
+            .then(() => setShowConformationForm(false))
+        }
+    };
 
     return (
         <div id='confirmation-form-container'>
@@ -45,7 +93,11 @@ export default function ConfirmForm({previewImageUrl, multiImages, setShowConfor
             <div className='confirmation-form-bottom'>
                 <div className="confirmation-form-bottom-inner-container">
                     <div id="edit-photo-modal-delete-button" style={{cursor:"pointer"}}><u onClick={()=>setShowConformationForm(false)}>Cancel</u></div>
-                    <div className='edit-photo-modal-save-button' style={{color:"white"}}>Confirm</div>
+                    <div 
+                        className='edit-photo-modal-save-button' 
+                        style={{color:"white"}}
+                        onClick={handleSubmitCreateForm}
+                    >Confirm</div>
                 </div>
             </div>
         </div>

@@ -25,11 +25,15 @@ export default function AddressForm() {
     }, [dispatch]);
 
     function handleClickingNext() {
+
         if (optinalAddress.current.value) {
             setAddress(optinalAddress.current.value + address)
             localStorage.setItem('address', address);
             localStorage.setItem('optinalAddress', optinalAddress.current.value);
-        };
+        } else {
+            localStorage.setItem('optinalAddress', '');
+        }; 
+
         localStorage.setItem('addressInputVal', inputVal);
         localStorage.setItem('city', city);
         localStorage.setItem('state', state);

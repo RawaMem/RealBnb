@@ -22,7 +22,9 @@ export default function ImageForm() {
     const [showConformationForm, setShowConformationForm] = useState(false);
     const [editedPhotoUrl, setEditedPhotoUrl] = useState('');
     const [imageDescription, setImageDescription] = useState({});
-
+    // console.log('multiImages', multiImages);
+    // console.log('imageDescription', imageDescription);
+    
     const handleDeleteImage = url => {
 
         const urlIdx = imgUrl.indexOf(url);
@@ -88,7 +90,7 @@ export default function ImageForm() {
         if(e.target?.files[0] instanceof Blob) {
             fr.readAsDataURL(e.target?.files[0]);
             fr.addEventListener('load', () => {
-                const url = fr.result;                
+                const url = fr.result;              
                 setImgUrl([...imgUrl, url])  
                 // File object returned from input event target doesn't have a url, set the newly generated image url to the File object, so all File object stored in multiImages state have a key of preview and value of image url, this image url is used to reorder the files stored in multiImages state after user reordered images.
                 inputFile.preview = url;
@@ -238,7 +240,7 @@ export default function ImageForm() {
                                     <span className="material-symbols-outlined">
                                         file_upload
                                     </span>
-                                    <span class="upload-button">Upload</span>
+                                    <span className="upload-button">Upload</span>
                                 </div>
                             </div>
                         </div>

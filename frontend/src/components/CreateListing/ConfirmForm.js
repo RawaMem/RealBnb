@@ -66,16 +66,12 @@ export default function ConfirmForm({previewImageUrl, multiImages, setShowConfor
             endDate
         };
 
-        const newListingRes = await dispatch(createNewListingThunk({newListingObj, amenities, categories, listingPricing}, listingImages));
-
-        console.log('this is newListingres', newListingRes)
-        if(newListingRes) {
+        const newListingRes = await dispatch(createNewListingThunk({newListingObj,  listingPricing}, {amenities, categories}, listingImages));
+        if(newListingRes.ok) {
             const newListing = await newListingRes.json();
-            // localStorage.clear()
-            dispatch(getSingleListingThunk(newListing.id))
-            .then(() => history.push(`/listings/${newListing.id}`))
-            .then(() => setShowConformationForm(false))
-        }
+            history.push(`/listings/${newListing.id}`)
+            setShowConformationForm(false)
+        } 
     };
 
     return (

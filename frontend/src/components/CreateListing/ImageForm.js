@@ -22,8 +22,7 @@ export default function ImageForm() {
     const [showConformationForm, setShowConformationForm] = useState(false);
     const [editedPhotoUrl, setEditedPhotoUrl] = useState('');
     const [imageDescription, setImageDescription] = useState({});
-    // console.log('multiImages', multiImages);
-    // console.log('imageDescription', imageDescription);
+
     
     const handleDeleteImage = url => {
 

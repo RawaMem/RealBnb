@@ -63,12 +63,12 @@ router.get('/', asyncHandler(async (req, res) => {
 }));
 
 
-//create listing
+//create new listing and listing price.
 router.post(
   '/',
   requireAuth,
   asyncHandler(async (req, res) => {
-    const {newListingObj, amenities, categories, listingPricing} = req.body;
+    const {newListingObj, listingPricing} = req.body;
     
     const ownerId = req.user.id;
 
@@ -81,8 +81,22 @@ router.post(
         listingId: createdListing.id,
         userId: ownerId
       });
+    };
 
-      const findNewListing = await Listing.findByPk(createdListing.id);
+    return res.json(createdListing);
+  }));
+
+  // create new listing amenities and categories
+  router.post(
+    '/:listingId/amenity-category',
+    requireAuth,
+    asyncHandler(async(req, res) => {
+      const listingId = req.params.listingId;
+      console.log('in the amenity route', req.body)
+      const {amenities, categories} = req.body;
+
+      const findNewListing = await Listing.findByPk(listingId);
+
       if(findNewListing) {
         for(let amenity of amenities) {
           const newAmenity = await Amenity.create({
@@ -90,18 +104,17 @@ router.post(
           });
           await newAmenity.addListing(findNewListing);
         };
+
         for(let category of categories) {
           const newCategory = await Category.create({
             name: category
           })
           await findNewListing.addCategories(newCategory);
         };
-
       };
-    };
-
-    res.json(createdListing);
-  }));
+      res.json(findNewListing)  
+    })
+  );
 
   // creating listing images
   router.post(
@@ -120,6 +133,10 @@ router.post(
       url,
       description
     });
+
+    if(newImage) {
+      res.json({'newImage': newImage })
+    }
   }));
 
 

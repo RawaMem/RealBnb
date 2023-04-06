@@ -78,36 +78,48 @@ export const getSingleListingThunk = (listingId) => async dispatch => {
     }
 };
 
-export const createNewListingThunk = (newListing, newListingImages) => async dispatch => {
+export const createNewListingThunk = (newListing, amenityAndCategory, newListingImages) => async dispatch => {
     const [multiImages, imageDescription] = newListingImages;
 
     const newListingResponse = await csrfFetch("/api/listings", {
         method: 'POST',
         body: JSON.stringify(newListing)
     });
-    // console.log('from thunk newListingResponse', newListingResponse.json())  
 
     if(newListingResponse.ok) {  
         const newList = await newListingResponse.json();   
+        const requests = [];
+
         for(let imageFile of multiImages) {
             const formData = new FormData();
             if(imageFile.preview in imageDescription) {
                 formData.append('description', imageDescription[imageFile.preview]);
             };
-            formData.append('image', imageFile);
 
-            const newImages = await csrfFetch(`/api/listings/${newList.id}/images`, {
+            formData.append('image', imageFile);
+            requests.push(csrfFetch(`/api/listings/${newList.id}/images`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "multipart/form-data",
                   },
                   body: formData,
-            });
+            }));
         }; 
+        
+        try {
+            const response = await Promise.all(requests);
+        } catch(error) {
+            console.log('Error in Promise.all():', error)
+            return
+        }
 
-        return newList;        
-    };
+        const listingRes = await csrfFetch(`/api/listings/${newList.id}/amenity-category`, {
+            method: 'POST',
+            body: JSON.stringify(amenityAndCategory)
+        }).catch(e => console.error(e))
 
+        if(listingRes) return listingRes        
+    };       
 };
 
 const initialState = null;

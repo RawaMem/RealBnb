@@ -34,10 +34,14 @@ export default function ConfirmForm({previewImageUrl, multiImages, setShowConfor
     // for category
     const categoryArr = resetAmenity('categoryArr');
 
+    const previewImageFile = multiImages.find(file => file.preview === previewImageUrl)
+
+    // console.log('previewImageFile', previewImageFile)
+
 
     const handleSubmitCreateForm = async() => {
         const newListingObj = {
-            previewImageUrl,
+            previewImageFile,
             name,
             description,
             serviceFee,

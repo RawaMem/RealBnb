@@ -66,15 +66,64 @@ router.get('/', asyncHandler(async (req, res) => {
 //create new listing and listing price.
 router.post(
   '/',
+  singleMulterUpload("previewImageFile"),
   requireAuth,
   asyncHandler(async (req, res) => {
-    const {newListingObj, listingPricing} = req.body;
+    const {
+      name,
+      description,
+      serviceFee,
+      cleaningFee,
+      bedrooms,
+      beds,
+      baths,
+      maxGuests,
+      address,
+      city,
+      state,
+      zipCode,
+      longitude,
+      latitude
+      } = req.body;
+
+    const {
+      pricePerDay,
+      startDate,
+      endDate
+      } = req.body;
+    
+    const listingPricing = {
+      pricePerDay,
+      startDate,
+      endDate
+    };
+    
+    const newListing = {
+      name,
+      description,
+      serviceFee,
+      cleaningFee,
+      bedrooms,
+      beds,
+      baths,
+      maxGuests,
+      address,
+      city,
+      state,
+      zipCode,
+      longitude,
+      latitude
+    };
+   
+    const previewImageUrl = await singlePublicFileUpload(req.file);
     
     const ownerId = req.user.id;
 
-    newListingObj.ownerId = ownerId;
+    newListing.ownerId = ownerId;
+    newListing.previewImageUrl = previewImageUrl
     //create new listing to generate id
-    const createdListing = await Listing.create(newListingObj)
+    const createdListing = await Listing.create(newListing)
+
     if(createdListing) {
       await ListingPrice.create({
         ...listingPricing,

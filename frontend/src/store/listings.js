@@ -80,10 +80,25 @@ export const getSingleListingThunk = (listingId) => async dispatch => {
 
 export const createNewListingThunk = (newListing, amenityAndCategory, newListingImages) => async dispatch => {
     const [multiImages, imageDescription] = newListingImages;
+    const {newListingObj,  listingPricing} = newListing;
+    console.log('receiving newListingObj', newListingObj)
+    console.log('receiving newlistingpricing', listingPricing)
+    const formData = new FormData();
+
+    for(const info in newListingObj) {
+        formData.append(info, newListingObj[info]);
+    };
+
+    for(const priceInfo in listingPricing) {
+        formData.append(priceInfo, listingPricing[priceInfo]);
+    };
 
     const newListingResponse = await csrfFetch("/api/listings", {
         method: 'POST',
-        body: JSON.stringify(newListing)
+        headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        body: formData,
     });
 
     if(newListingResponse.ok) {  

@@ -72,6 +72,7 @@ export default function ConfirmForm({previewImageUrl, multiImages, setShowConfor
 
         const newListingRes = await dispatch(createNewListingThunk({newListingObj,  listingPricing}, {amenities, categories}, listingImages));
         if(newListingRes.ok) {
+            localStorage.clear();
             const newListing = await newListingRes.json();
             history.push(`/listings/${newListing.id}`)
             setShowConformationForm(false)

@@ -1,36 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import ProfileButton from './ProfileButton';
-import LoginFormModal from '../LoginFormModal';
+import LoginForm from '../LoginFormModal';
+import SignupForm from '../SignupFormPage';
 import './Navigation.css';
-import { useState } from 'react';
 import { getListingSearchResultsThunk } from '../../store/listings';
+import { Modal } from '../../context/Modal';
 import { useCategory } from '../../context/CategoryContext';
 
 function Navigation({ isLoaded }){
-  const sessionUser = useSelector(state => state.session.user);
-  const dispatch = useDispatch()
+
+  const dispatch = useDispatch();
+  const [showLogInModal, setShowLogInModal] = useState(false);
+  const [showSignUpModal, setShowSignUpModal] = useState(false);
 
   const [destination, setDestination] = useState('')
   const [checkIn, setCheckIn] = useState('')
   const [checkOut, setCheckOut] = useState('')
   const [numGuests, setNumGuests] = useState('')
+
   const {setSorted} = useCategory();
 
-  let sessionLinks;
-  if (sessionUser) {
-    sessionLinks = (
-      <ProfileButton user={sessionUser} />
-    );
-  } else {
-    sessionLinks = (
-      <>
-        <LoginFormModal />
-        <NavLink to="/signup">Sign Up</NavLink>
-      </>
-    );
-  }
+  let sessionLinks = (
+    <ProfileButton 
+      isLoaded={isLoaded}
+      setShowLogInModal={setShowLogInModal}
+      setShowSignUpModal={setShowSignUpModal}
+    />
+  );
 
   const handleSearch = (e) => {
     e.preventDefault()
@@ -44,57 +42,75 @@ function Navigation({ isLoaded }){
   }
 
   return (
-    <>
-      <form className="listingsSearch"
-        onSubmit={handleSearch}>
+    <div className='nav-container'>
+      <div className='nav-inner-container'>
+        <div className='logo-container'>
+          <NavLink exact to="/" onClick={()=> setSorted(false)} id="logo-text"> RealBnB </NavLink>
+        </div>
 
-        <input
-        type="text"
-        className="destinations"
-        value={destination}
-        onChange={(e) => setDestination(e.target.value)}
-        placeholder='Search destinations'
-        />
+        <div className='search-bar-container'>
+          <form className="listingsSearch"
+            onSubmit={handleSearch}>
 
-        <input
-        type="date"
-        className="checkIn"
-        value={checkIn}
-        onChange={(e) => setCheckIn(e.target.value)}
-        placeholder='Check in'
-        />
+            <input
+            type="text"
+            className="destinations"
+            value={destination}
+            onChange={(e) => setDestination(e.target.value)}
+            placeholder='Search destinations'
+            />
 
-        <input
-        type="date"
-        className="checkOut"
-        value={checkOut}
-        onChange={(e) => setCheckOut(e.target.value)}
-        placeholder='Check out'
-        />
+            <input
+            type="date"
+            className="checkIn"
+            value={checkIn}
+            onChange={(e) => setCheckIn(e.target.value)}
+            placeholder='Check in'
+            />
 
-        <input
-        type="number"
-        className="numGuests"
-        value={numGuests}
-        onChange={(e) => setNumGuests(e.target.value)}
-        placeholder='Add Guests'
-        />
+            <input
+            type="date"
+            className="checkOut"
+            value={checkOut}
+            onChange={(e) => setCheckOut(e.target.value)}
+            placeholder='Check out'
+            />
 
-        <button className="searchBtn">Search</button>
-      </form>
-      <section>
-        <NavLink style={{ textDecoration: 'none', color: "#323232"}} to='/createListing/introduction'>Become a Host</NavLink>
-      </section>
-      <ul>
-        <li>
-          <NavLink exact to="/" onClick={()=> setSorted(false)}> Home |</NavLink>
-          <NavLink exact to="/maps"> Maps |</NavLink>
-          <NavLink exact to="/sockets"> Sockets |</NavLink>
-          <NavLink exact to="/testing">AWS |</NavLink>
-          {isLoaded && sessionLinks}
-        </li>
-      </ul>
-    </>
+            <input
+            type="number"
+            className="numGuests"
+            value={numGuests}
+            onChange={(e) => setNumGuests(e.target.value)}
+            placeholder='Add Guests'
+            />
+
+            <button className="searchBtn">Search</button>
+          </form>
+
+        </div>
+
+        <div className='right-section'>
+          <div className='become-host-btn-container'>
+            <NavLink id="become-host-link-id" to='/createListing/introduction'>Become a Host</NavLink>
+          </div>
+          <div>
+            {isLoaded && sessionLinks}
+          </div>
+        </div>
+
+        {showLogInModal && (
+        <Modal onClose={() => setShowLogInModal(false)}>
+          <LoginForm setShowLogInModal={setShowLogInModal} />
+        </Modal>
+        )}
+        {showSignUpModal && (
+        <Modal onClose={() => setShowSignUpModal(false)}>
+          <SignupForm setShowSignUpModal={setShowSignUpModal} />
+        </Modal>
+        )}
+
+      </div>
+    </div>
 
   );
 }

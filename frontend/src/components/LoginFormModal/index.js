@@ -1,20 +1,73 @@
-import React, { useState } from 'react';
-import { Modal } from '../../context/Modal';
-import LoginForm from './LoginForm';
+import React, { useState } from "react";
+import * as sessionActions from "../../store/session";
+import { useDispatch } from "react-redux";
+import "./LoginForm.css";
 
-function LoginFormModal() {
-  const [showModal, setShowModal] = useState(false);
+function LoginForm( {setShowLogInModal} ) {
+  const dispatch = useDispatch();
+  const [credential, setCredential] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState([]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setErrors([]);
+    return dispatch(sessionActions.login({ credential, password }))
+    .then(setShowLogInModal(false))
+    .catch(
+      async (res) => {
+        const data = await res.json();
+        if (data && data.errors) setErrors(data.errors);
+      }
+    );
+  };
+
+  const handleDemoUser = (e) => {
+    e.preventDefault();
+    return dispatch(sessionActions.login({ credential: 'demo@user.io', password: 'password' }))
+    .then(setShowLogInModal(false))
+    .catch(
+      async (res) => {
+        const data = await res.json();
+        if (data && data.errors) setErrors(data.errors);
+      }
+    )
+  }
 
   return (
     <>
-      <button onClick={() => setShowModal(true)}>Log In</button>
-      {showModal && (
-        <Modal onClose={() => setShowModal(false)}>
-          <LoginForm />
-        </Modal>
-      )}
+      <h1>Log In</h1>
+      <form onSubmit={handleSubmit}>
+        <ul>
+          {errors.map((error, idx) => (
+            <li key={idx}>{error}</li>
+          ))}
+        </ul>
+        <label>
+          Username or Email
+          <input
+            type="text"
+            value={credential}
+            onChange={(e) => setCredential(e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          Password
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </label>
+        <button type="submit">Log In</button>
+      </form>
+      <button
+        className="demoUserButton"
+        onClick={handleDemoUser}>Demo Log In</button>
     </>
   );
 }
 
-export default LoginFormModal;
+export default LoginForm;

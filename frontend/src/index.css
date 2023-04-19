@@ -1,1 +1,23 @@
 /* TODO Add site wide styles */
+:root {
+    --navbar-height: 15%;
+    --navbar-width: 100%;
+    --inner-navbar-height: 100%;
+    --inner-navbar-width: 95%;
+    --logo-color: rgb(255,56,92);
+    --logo-font-size: 1.5em;
+    --logo-font-weight: 700;
+
+    --profile-dropdown-border: 1.5px solid rgb(226,226,226);
+    --profile-dropdown-height: 45px;
+    --profile-dropdown-width: 70px;
+    --profile-dropdown-borderRadius: 21px;
+    --profile-dropdown-icon-color: rgb(98,98,98);
+    --profile-dropdown-box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.2);
+
+    --navbar-right-section-width: 15%;
+    --become-host-btn-color: rgb(34,34,34);
+    --become-host-btn-text-size: 14px;
+    --become-host-btn-hover-color: rgb(247,247,247);
+}
+

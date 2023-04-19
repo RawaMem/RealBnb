@@ -14,7 +14,8 @@
     "dbcm": "npx dotenv sequelize db:create && npx dotenv sequelize db:migrate",
     "dbcms": "npx dotenv sequelize db:create && npx dotenv sequelize db:migrate && npx dotenv sequelize db:seed:all",
     "drop": "npx dotenv sequelize db:drop",
-    "reseed": "npx dotenv sequelize db:create && npx dotenv sequelize db:migrate && npx dotenv sequelize db:seed:all"
+    "reseed": "npx dotenv sequelize db:create && npx dotenv sequelize db:migrate && npx dotenv sequelize db:seed:all",
+    "build": "node psql-setup-script.js"
   },
   "keywords": [],
   "author": "",

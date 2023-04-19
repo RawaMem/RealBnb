@@ -8,7 +8,7 @@ import { useCategory } from '../../context/CategoryContext';
 
 export default function Listings() {
     const dispatch = useDispatch();
-    const listingsObj = useSelector(state => state.listings);
+    const listingsObj = useSelector(state => state.listings.allListings);
 
     const {categories, setCategories, sorted, setSorted, selectedCategory, setSelectedCategory} = useCategory();
 

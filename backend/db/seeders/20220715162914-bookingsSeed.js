@@ -1,5 +1,12 @@
 'use strict';
 
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;  // define your schema in options object
+}
+
+options.tableName = 'Bookings'
+
 module.exports = {
   up: (queryInterface, Sequelize) => {
     /*
@@ -57,33 +64,33 @@ module.exports = {
       }
       // console.log('THIS IS THE BOOKINGS DATA ARRAY', bookingsDataArray)
 
-      return queryInterface.bulkInsert('Bookings', bookingsDataArray, {})
+      return queryInterface.bulkInsert(options, bookingsDataArray, {})
 
 
-      return queryInterface.bulkInsert('Bookings', [
-        {
-          userId: 1,
-          listingId: 2,
-          totalCost:399.96,
-          avePricePerDay:99.99,
-          paymentConfirmed: true,
-          startDate: "2022-09-10",
-          endDate:"2022-09-14",
-        createdAt: new Date(),
-        updatedAt: new Date()
-        },
-        {
-          userId: 1,
-          listingId: 2,
-          totalCost:479.97,
-          avePricePerDay:159.99,
-          paymentConfirmed: true,
-          startDate: "2022-11-06",
-          endDate:"2022-11-09",
-        createdAt: new Date(),
-        updatedAt: new Date()
-        },
-    ], {});
+    //   return queryInterface.bulkInsert(options, [
+    //     {
+    //       userId: 1,
+    //       listingId: 2,
+    //       totalCost:399.96,
+    //       avePricePerDay:99.99,
+    //       paymentConfirmed: true,
+    //       startDate: "2022-09-10",
+    //       endDate:"2022-09-14",
+    //     createdAt: new Date(),
+    //     updatedAt: new Date()
+    //     },
+    //     {
+    //       userId: 1,
+    //       listingId: 2,
+    //       totalCost:479.97,
+    //       avePricePerDay:159.99,
+    //       paymentConfirmed: true,
+    //       startDate: "2022-11-06",
+    //       endDate:"2022-11-09",
+    //     createdAt: new Date(),
+    //     updatedAt: new Date()
+    //     },
+    // ], {});
   },
 
   down: (queryInterface, Sequelize) => {
@@ -93,6 +100,6 @@ module.exports = {
 
       Example:
       */
-      return queryInterface.bulkDelete('Bookings', null, {});
+      return queryInterface.bulkDelete(options, null, {});
   }
 };

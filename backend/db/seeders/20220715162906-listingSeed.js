@@ -1,5 +1,12 @@
 'use strict';
 
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;  // define your schema in options object
+}
+
+options.tableName = 'Listings'
+
 module.exports = {
   up: (queryInterface, Sequelize) => {
     /*
@@ -8,7 +15,7 @@ module.exports = {
 
       Example:
       */
-   return queryInterface.bulkInsert('Listings', [
+   return queryInterface.bulkInsert(options, [
     {
       ownerId: '1',
       previewImageUrl: 'https://media-cdn.tripadvisor.com/media/photo-s/1c/7d/2c/b5/hotel-california.jpg',
@@ -119,6 +126,6 @@ module.exports = {
 
       Example:
       */
-   return queryInterface.bulkDelete('Listings', null, {});
+   return queryInterface.bulkDelete(options, null, {});
   }
 };

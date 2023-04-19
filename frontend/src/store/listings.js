@@ -101,8 +101,8 @@ export const createNewListingThunk = (newListing, amenityAndCategory, newListing
         body: formData,
     });
 
-    if(newListingResponse.ok) {  
-        const newList = await newListingResponse.json();   
+    if(newListingResponse.ok) {
+        const newList = await newListingResponse.json();
         const requests = [];
 
         for(let imageFile of multiImages) {
@@ -119,8 +119,8 @@ export const createNewListingThunk = (newListing, amenityAndCategory, newListing
                   },
                   body: formData,
             }));
-        }; 
-        
+        };
+
         try {
             const response = await Promise.all(requests);
         } catch(error) {
@@ -133,31 +133,28 @@ export const createNewListingThunk = (newListing, amenityAndCategory, newListing
             body: JSON.stringify(amenityAndCategory)
         }).catch(e => console.error(e))
 
-        if(listingRes) return listingRes        
-    };       
+        if(listingRes) return listingRes
+    };
 };
 
-const initialState = null;
+const initialState = {allListings:{}, singleListing: {}};
 export default function listings(state = initialState, action) {
     let newState;
     switch (action.type) {
         case GET_LISTINGS:
-            newState = {};
-            action.listings.forEach(listing => newState[listing.id] = listing);
+            newState = {allListings:{}, singleListing: {}};
+            action.listings.forEach(listing => newState.allListings[listing.id] = listing);
             return newState;
         case GET_SINGLE_LISTING:
-            newState = { ...state }
-            newState.currentListing = action.listing
+            newState = {allListings:{}, singleListing: {}}
+            newState.singleListing = action.listing
             return newState;
         case LISTING_SEARCH_RESULTS:
-            newState = {};
-            action.listings.forEach(listing => newState[listing.id] = listing);
+            newState = {allListings:{}, singleListing: {}};
+            action.listings.forEach(listing => newState.allListings[listing.id] = listing);
             return newState;
-        case STORE_LISTING_IMAGES_FILES:
-            newState=[]
-            return [...newState, ...action.multiImagesFilesArr];
         case CLEAR_LISTING_STATE:
-            return null
+            return {allListings:{}, singleListing: {}}
         default:
             return state;
     }

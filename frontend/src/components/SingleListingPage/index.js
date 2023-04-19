@@ -19,11 +19,9 @@ export default function SingleListingPage() {
 
 
     const currentUser = useSelector(state => state.session.user)
-    const allListings = useSelector(state => state.listings)
+    const listing = useSelector(state => state.listings.singleListing)
     const reviews = useSelector(state => state.reviews)
-    let listing;
-    if (allListings) listing = allListings.currentListing
-    console.log(' this is listing from SingleListingPage', listing)
+
 
     useEffect(() => {
         dispatch(getSingleListingThunk(listingId))
@@ -31,6 +29,10 @@ export default function SingleListingPage() {
         return () => dispatch(clearListingStateAction())
     }, [dispatch, listingId])
 
+
+    if (!listing.Images) return <div className="loading">Loading...</div>
+
+    
     return (
         <>
         <div className="singleListingPageContainer">

@@ -57,7 +57,7 @@ router.get('/', asyncHandler(async (req, res) => {
       "Categories.id",
       "Categories->ListingCategory.listingId",
       'Categories->ListingCategory.id',
-    ]  
+    ]
   });
   return res.json(listings);
 }));
@@ -91,13 +91,13 @@ router.post(
       startDate,
       endDate
       } = req.body;
-    
+
     const listingPricing = {
       pricePerDay,
       startDate,
       endDate
     };
-    
+
     const newListing = {
       name,
       description,
@@ -114,9 +114,9 @@ router.post(
       longitude,
       latitude
     };
-   
+
     const previewImageUrl = await singlePublicFileUpload(req.file);
-    
+
     const ownerId = req.user.id;
 
     newListing.ownerId = ownerId;
@@ -161,7 +161,7 @@ router.post(
           await findNewListing.addCategories(newCategory);
         };
       };
-      res.json(findNewListing)  
+      res.json(findNewListing)
     })
   );
 
@@ -338,11 +338,13 @@ router.get('/:listingId(\\d+)', asyncHandler(async (req, res) => {
       'WishLists.id',
       'Categories.id',
       'User->Listings->Reviews.id',
+      'Categories->ListingCategory.id',
       'Categories->ListingCategory.categoryId',
       'Categories->ListingCategory.listingId',
       'Categories->ListingCategory.createdAt',
       'Categories->ListingCategory.updatedAt',
       'Amenities.id',
+      'Amenities->ListingAmenity.id',
       'Amenities->ListingAmenity.amenityId',
       'Amenities->ListingAmenity.listingId',
       'Amenities->ListingAmenity.createdAt',

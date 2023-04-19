@@ -29,54 +29,47 @@ const router = express.Router();
 
 // get all listings
 //when wishlist is implemented, include wishlist so that we know which hearts are filled in
+
 router.get('/', asyncHandler(async (req, res) => {
   const listings = await Listing.findAll({
-    attributes: {
-      include: [[Sequelize.fn('AVG', Sequelize.col('Reviews.starRating')), 'avgRating'],]
-    },
     include: [
       {
         model: Review,
         attributes: []
       },
-      ListingPrice,
-      Category
+      {
+        model: ListingPrice,
+        attributes: ['pricePerDay', 'startDate', 'endDate']
+      },
+      {
+        model: Category,
+        attributes: ['name']
+      }
     ],
-    group: ['Listing.id',
-      'ListingPrices.id',
-      'Categories.id',
-      'Categories->ListingCategory.categoryId',
-      'Categories->ListingCategory.listingId',
-      'Categories->ListingCategory.createdAt',
-      'Categories->ListingCategory.updatedAt']
+    attributes: {
+      include:[[
+        Sequelize.fn('AVG', Sequelize.col('Reviews.starRating')), 'avgRating'
+      ]],
+    },
+    group: [
+      'Listing.id',
+      "ListingPrices.id",
+      "Categories.id",
+      "Categories->ListingCategory.listingId",
+      'Categories->ListingCategory.id',
+    ]  
   });
   return res.json(listings);
 }));
 
-// Model.User.findOne({
-//     where: { id: 7 },
-//     attributes: [
-//       [Sequelize.fn('AVG', Sequelize.col('seller_rating.stars')), 'avgRating'],
-//     ],
-//     include: [
-//       {
-//         model: Model.Rating,
-//         as: 'seller_rating',
-//         attributes: [],
-//       },
-//     ],
-//     raw: true,
-//     group: ['User.id'],
-//   }).then((res) => console.log(res));
 
-//create listing
+//create new listing and listing price.
 router.post(
   '/',
-  singleMulterUpload('image'),
-  multipleMulterUpload('image'),
+  singleMulterUpload("previewImageFile"),
+  requireAuth,
   asyncHandler(async (req, res) => {
     const {
-      ownerId,
       name,
       description,
       serviceFee,
@@ -90,27 +83,29 @@ router.post(
       state,
       zipCode,
       longitude,
-      latitude,
-      imageDescription,
-      listingPriceArr,
-      amenityArr,
-      categoryArr,
-    } = req.body
+      latitude
+      } = req.body;
 
-    const previewImageUrl = await singlePublicFileUpload(req.file);
-    // multiplePublicFileUpload returns an array where each element is the url to the s3 bucket.
-    const imageArr = await multiplePublicFileUpload(req.files);
-
-
+    const {
+      pricePerDay,
+      startDate,
+      endDate
+      } = req.body;
+    
+    const listingPricing = {
+      pricePerDay,
+      startDate,
+      endDate
+    };
+    
     const newListing = {
-      ownerId,
-      previewImageUrl,
       name,
       description,
       serviceFee,
       cleaningFee,
       bedrooms,
       beds,
+      baths,
       maxGuests,
       address,
       city,
@@ -118,89 +113,79 @@ router.post(
       zipCode,
       longitude,
       latitude
-    }
+    };
+   
+    const previewImageUrl = await singlePublicFileUpload(req.file);
+    
+    const ownerId = req.user.id;
+
+    newListing.ownerId = ownerId;
+    newListing.previewImageUrl = previewImageUrl
     //create new listing to generate id
     const createdListing = await Listing.create(newListing)
 
-    //create listing prices using new listing id
-    // userId is called ownerId from req.body
-    // listingPriceArr = [ {pricePerDay: 299, startDate: '', endDate: ''} ]
-    if (listingPriceArr.length) {
-      for (let i = 0; i < listingPriceArr.length; i++) {
-        const listingPriceObj = {
-          listingId: createdListing.id,
-          userId: ownerId,
-          pricePerDay: listingPriceArr[i].pricePerDay,
-          startDate: listingPriceArr[i].startDate,
-          endDate: listingPriceArr[i].endDate
-        }
-        await ListingPrice.create(listingPriceObj)
-      }
-    }
+    if(createdListing) {
+      await ListingPrice.create({
+        ...listingPricing,
+        listingId: createdListing.id,
+        userId: ownerId
+      });
+    };
 
-    //create listing amentities using new listing id
-    // amenityArr = [amenityId, amenityId, amenityId]
-    if (amenityArr.length) {
-      for (let i = 0; i < amenityArr.length; i++) {
-        const amenityObj = {
-          listingId: createdListing.id,
-          amenityId: amenityArr[i]
-        }
-        await ListingAmenity.create(amenityObj)
-      }
-    }
+    return res.json(createdListing);
+  }));
 
-    //create listing categories using new listing id
-    //categoryArr = [categoryId,categoryId,categoryId]
-    if (categoryArr.length) {
-      for (let i = 0; i < categoryArr.length; i++) {
-        const categoryObj = {
-          listingId: createdListing.id,
-          categoryId: categoryArr[i]
-        }
-        await ListingCategory.create(categoryObj)
-      }
-    }
+  // create new listing amenities and categories
+  router.post(
+    '/:listingId/amenity-category',
+    requireAuth,
+    asyncHandler(async(req, res) => {
+      const listingId = req.params.listingId;
+      console.log('in the amenity route', req.body)
+      const {amenities, categories} = req.body;
 
-    // imageArr is an array returns from s3, where each element is the url to our s3 bucket.
-    if (imageArr.length) {
-      for (let i = 0; i < imageArr.length; i++) {
-        const imageObj = {
-          userId: ownerId,
-          listingId: createdListing.id,
-          url: imageArr[i],
-          description: imageDescription
-        }
-        await Image.create(imageObj)
-      }
-    }
+      const findNewListing = await Listing.findByPk(listingId);
 
+      if(findNewListing) {
+        for(let amenity of amenities) {
+          const newAmenity = await Amenity.create({
+            name:amenity
+          });
+          await newAmenity.addListing(findNewListing);
+        };
 
-    const finalListing = await Listing.findByPk(createdListing.id, {
-      include: [Image,
-        Category,
-        ListingPrice,
-        Amenity,
-        Review,
-        Booking,
-        WishList,
-        {
-          model: User,
-          attributes: {
-            exclude: ['hashedPassword', 'email', 'createdAt', 'updatedAt'],
-          },
-          include: {
-            model: Listing,
-            attributes: ['id'],
-            include: {
-              model: Review,
-              attributes: ['id']
-            }
-          }
-        }
-      ]
+        for(let category of categories) {
+          const newCategory = await Category.create({
+            name: category
+          })
+          await findNewListing.addCategories(newCategory);
+        };
+      };
+      res.json(findNewListing)  
     })
-    res.json(finalListing);
+  );
+
+  // creating listing images
+  router.post(
+    '/:listingId/images',
+    singleMulterUpload('image'),
+    requireAuth,
+    asyncHandler(async(req, res) => {
+    const userId = req.user.id;
+    const listingId = req.params.listingId
+    const {description} = req.body;
+    const url = await singlePublicFileUpload(req.file);
+
+    const newImage = await Image.create({
+      userId,
+      listingId,
+      url,
+      description
+    });
+
+    if(newImage) {
+      res.json({'newImage': newImage })
+    }
   }));
 
 

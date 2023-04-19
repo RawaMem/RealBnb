@@ -78,6 +78,65 @@ export const getSingleListingThunk = (listingId) => async dispatch => {
     }
 };
 
+export const createNewListingThunk = (newListing, amenityAndCategory, newListingImages) => async dispatch => {
+    const [multiImages, imageDescription] = newListingImages;
+    const {newListingObj,  listingPricing} = newListing;
+    console.log('receiving newListingObj', newListingObj)
+    console.log('receiving newlistingpricing', listingPricing)
+    const formData = new FormData();
+
+    for(const info in newListingObj) {
+        formData.append(info, newListingObj[info]);
+    };
+
+    for(const priceInfo in listingPricing) {
+        formData.append(priceInfo, listingPricing[priceInfo]);
+    };
+
+    const newListingResponse = await csrfFetch("/api/listings", {
+        method: 'POST',
+        headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        body: formData,
+    });
+
+    if(newListingResponse.ok) {  
+        const newList = await newListingResponse.json();   
+        const requests = [];
+
+        for(let imageFile of multiImages) {
+            const formData = new FormData();
+            if(imageFile.preview in imageDescription) {
+                formData.append('description', imageDescription[imageFile.preview]);
+            };
+
+            formData.append('image', imageFile);
+            requests.push(csrfFetch(`/api/listings/${newList.id}/images`, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                  },
+                  body: formData,
+            }));
+        }; 
+        
+        try {
+            const response = await Promise.all(requests);
+        } catch(error) {
+            console.log('Error in Promise.all():', error)
+            return
+        }
+
+        const listingRes = await csrfFetch(`/api/listings/${newList.id}/amenity-category`, {
+            method: 'POST',
+            body: JSON.stringify(amenityAndCategory)
+        }).catch(e => console.error(e))
+
+        if(listingRes) return listingRes        
+    };       
+};
+
 const initialState = null;
 export default function listings(state = initialState, action) {
     let newState;

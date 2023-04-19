@@ -2,34 +2,47 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import 'react-dates/initialize';
 import { DateRangePicker } from 'react-dates';
-import { useListing } from "../../context/ListingContext";
 import 'react-dates/lib/css/_datepicker.css';
 import './react_dates_overrides.css';
+import moment from 'moment';
 import './createListing.css';
 
 export default function ListingPriceForm() {
-    const {listingPriceArr, setListingPriceArr,serviceFee, setServiceFee, cleaningFee, setCleaningFee} = useListing();
+
+    const getInitalPrice = (localStorageKey, amount) => {
+        const val = localStorage.getItem(localStorageKey);
+        if (val) return +val;
+        else return amount;
+    };
+
+    const getInitalDate = (localStorageKey) => {
+        const dateStr = localStorage.getItem(localStorageKey);
+        if(dateStr) return moment.utc(dateStr);
+        else return null;
+    };
+
+    const [serviceFee, setServiceFee] = useState(getInitalPrice("service fee", 1));
+    const [cleaningFee, setCleaningFee] = useState(getInitalPrice("cleanning fee", 1));
+
     const [error, setError] = useState({});
-    const [startingDate, setStartingDate] = useState(null);
+    const [startingDate, setStartingDate] = useState(getInitalDate('startingDate'));
+    const [endingDate, setEndingDate] = useState(getInitalDate("endingDate"));;
 
-    const [endingDate, setEndingDate] = useState(null);;
     const [focusedInput, setFocusedInput] = useState(null);
-    const [listingPrice, setListingPrice] = useState(10);//
-    const [startDateError, setStartDateError] = useState(false)
-    const [endDateError, setEndDateError] = useState(false)
-
-    useEffect(() => {
-        setListingPrice(+localStorage.getItem("listing price"));
-        setServiceFee(+localStorage.getItem("service fee"));
-        setCleaningFee(+localStorage.getItem("cleanning fee"));
-    },[]);
-
-    useEffect(() => {
+    const [listingPrice, setListingPrice] = useState(getInitalPrice("listing price", 10));
+    const [startDateError, setStartDateError] = useState(false);
+    const [endDateError, setEndDateError] = useState(false);
+    
+    const handlePageChange = () => {
+        function convertDateObjToStr(date) {
+            return date.toISOString().slice(0, 19).replace('T', ' ')
+        };
         localStorage.setItem("listing price", listingPrice);
         localStorage.setItem("service fee", serviceFee);
         localStorage.setItem("cleanning fee", cleaningFee);
-        return () => console.log('this is listingPriceArr', listingPriceArr)
-    },[listingPrice, serviceFee, cleaningFee, startingDate, endingDate]);
+        localStorage.setItem("startingDate", convertDateObjToStr(startingDate));
+        localStorage.setItem("endingDate", convertDateObjToStr(endingDate));
+    };
 
     useEffect(() => {
         let errorMsg = {}
@@ -46,24 +59,18 @@ export default function ListingPriceForm() {
 
     },[listingPrice, serviceFee, cleaningFee, startingDate, endingDate])
 
-    function increment(setter) {
-        console.log('in the setter ')
+    function increment(setter, num1, num2) {
         return setter(prev => {
-            if(prev + 5 <= 10000) return +prev+5;
+            if(prev + num1 <= num2) return +prev+num1;
             else return prev
         });
     };
 
-    function decrement(setter) {
+    function decrement(setter, num1, num2) {
         return setter (prev => {
-            if(prev - 5 >= 0) return +prev-5;
-            else return prev
-        })
-    }
-
-    function handleNext() {      
-        const listPriceObj = {pricePerDay:listingPrice, startDate: startingDate, endDate: endingDate}
-        setListingPriceArr(listPriceObj);        
+            if(prev - num1 >= num2) return +prev-num1;
+            else return prev;
+        });
     };
 
     return (
@@ -93,8 +100,8 @@ export default function ListingPriceForm() {
                                 <div className="price-setting-container">
                                     <div 
                                     id="control-button"
-                                    onClick={() => decrement(setListingPrice)}
-                                    style={listingPrice>=10?{cursor:'pointer'}:{cursor:'not-allowed'}}
+                                    onClick={() => decrement(setListingPrice, 5, 1)}
+                                    style={listingPrice>10?{cursor:'pointer'}:{cursor:'not-allowed'}}
                                     >-</div>
                                     <div id="price-input">
                                         <div id="dollar-sign">$</div>
@@ -107,8 +114,8 @@ export default function ListingPriceForm() {
                                     </div>
                                     <div 
                                     id="control-button" 
-                                    onClick={() => increment(setListingPrice)}
-                                    style={listingPrice<10000?{cursor:'pointer'}:{cursor:'not-allowed'}}
+                                    onClick={() => increment(setListingPrice, 5, 10000)}
+                                    style={listingPrice+5<10000?{cursor:'pointer'}:{cursor:'not-allowed'}}
                                     >+</div>
                                 </div>
                             </div>                          
@@ -142,8 +149,8 @@ export default function ListingPriceForm() {
                                 <div className="price-setting-container">
                                     <div 
                                     id="control-button"
-                                    onClick={() => decrement(setServiceFee)}
-                                    style={serviceFee>0?{cursor:'pointer'}:{cursor:'not-allowed'}}
+                                    onClick={() => decrement(setServiceFee, 1, 1)}
+                                    style={serviceFee>1?{cursor:'pointer'}:{cursor:'not-allowed'}}
                                     >-</div>
                                     <div id="price-input">
                                         <div id="dollar-sign">$</div>
@@ -156,8 +163,8 @@ export default function ListingPriceForm() {
                                     </div>
                                     <div 
                                     id="control-button"
-                                    onClick={() => increment(setServiceFee)}
-                                    style={serviceFee<10000?{cursor:'pointer'}:{cursor:'not-allowed'}}
+                                    onClick={() => increment(setServiceFee, 1, 1000)}
+                                    style={serviceFee<1000?{cursor:'pointer'}:{cursor:'not-allowed'}}
                                     >+</div>
                                 </div>
                             </div>
@@ -170,7 +177,7 @@ export default function ListingPriceForm() {
                                 <div className="price-setting-container">
                                     <div 
                                     id="control-button"
-                                    onClick={() => decrement(setCleaningFee)}
+                                    onClick={() => decrement(setCleaningFee, 1, 1)}
                                     style={cleaningFee>0?{cursor:'pointer'}:{cursor:'not-allowed'}}
                                     >-</div>
                                     <div id="price-input">
@@ -184,8 +191,8 @@ export default function ListingPriceForm() {
                                     </div>
                                     <div 
                                     id="control-button"
-                                    onClick={() => increment(setCleaningFee)}
-                                    style={cleaningFee<10000?{cursor:'pointer'}:{cursor:'not-allowed'}}
+                                    onClick={() => increment(setCleaningFee, 1, 1000)}
+                                    style={cleaningFee<1000?{cursor:'pointer'}:{cursor:'not-allowed'}}
                                     >+</div>
                                 </div>
                             </div>
@@ -196,12 +203,16 @@ export default function ListingPriceForm() {
                 </div>
                 <div className="button-container">
                     <div className="button-container-div">
-                        <Link to="/createListing/descriptionForm" style={{color:'rgb(34,34,34)', fontWeight:'600', fontSize:'18px'}}>Back</Link>
+                        <Link 
+                            to="/createListing/descriptionForm" 
+                            style={{color:'rgb(34,34,34)', fontWeight:'600', fontSize:'18px'}}
+                            onClick={handlePageChange}
+                        >Back</Link>
                         <Link 
                             className={(Object.values(error).length || startDateError || endDateError) ? "edit-photo-modal-save-button-disabled" :"edit-photo-modal-save-button"}
                             style={{textDecoration:'none'}}
-                            to="/createListing/descriptionForm"
-                            onClick={handleNext}
+                            to="/createListing/images"
+                            onClick={handlePageChange}
                         >
                             <div>Next</div>
                         </Link>

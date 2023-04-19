@@ -1,11 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
-import SignupFormPage from './components/SignupFormPage';
-// import LoginFormPage from "./components/LoginFormPage";
 import * as sessionActions from './store/session';
 import Navigation from './components/Navigation';
-import { Modal } from './context/Modal';
 import SingleListingPage from './components/SingleListingPage';
 import Listings from './components/Listings';
 import TestCompontent from './components/TestComponent';
@@ -17,11 +14,11 @@ import BedGuestForm from './components/CreateListing/BedGuestForm';
 import AmenitiForm from './components/CreateListing/AmenitiForm';
 import ImageForm from './components/CreateListing/ImageForm';
 import Introducing from './components/CreateListing/Introducing';
-import ListingProvider from './context/ListingContext';
 import TitleForm from './components/CreateListing/TitleForm';
 import DescriptionForm from './components/CreateListing/DescriptionForm';
 import ListingPriceForm from './components/CreateListing/ListingPriceForm';
 import CategoryForm from './components/CreateListing/CategoryForm';
+import CreateNewList from './components/CreateListing';
 //websocket setup
 import { io } from 'socket.io-client'
 import Socket from './components/Socket';
@@ -44,18 +41,18 @@ socket.on("connect", () => {
 //end websocket code
 
 // load google map api js
-function loadAsyncScript(src) {
-  return new Promise(resolve => {
-    const script = document.createElement('script');
-    Object.assign(script, {
-      type: 'text/javascript',
-      async: true,
-      src
-    });
-    script.addEventListener('load', () => resolve(script));
-    document.head.appendChild(script);
-  });
-}
+// function loadAsyncScript(src) {
+//   return new Promise(resolve => {
+//     const script = document.createElement('script');
+//     Object.assign(script, {
+//       type: 'text/javascript',
+//       async: true,
+//       src
+//     });
+//     script.addEventListener('load', () => resolve(script));
+//     document.head.appendChild(script);
+//   });
+// }
 
 function App() {
   const dispatch = useDispatch();
@@ -77,11 +74,11 @@ function App() {
     setClicks([...clicks, e.latLng]);
   };
 
-  const onIdle = (m) => {
-    console.log("onIdle");
-    setZoom(m.getZoom());
-    setCenter(m.getCenter().toJSON());
-  };
+  // const onIdle = (m) => {
+  //   console.log("onIdle");
+  //   setZoom(m.getZoom());
+  //   setCenter(m.getCenter().toJSON());
+  // };
 
   // const render = (status) => {
   //   switch (status) {
@@ -105,39 +102,53 @@ function App() {
   //   }
   // };
 
-  const initMapScript = (data) => {
-    if (window.google) {
-      return Promise.resolve()
-    }
-    const src = `${mapApiJs}?key=${data}&libraries=places`;
-    return loadAsyncScript(src)
-  };
+  // const initMapScript = (data) => {
+  //   if (window.google) {
+  //     return Promise.resolve()
+  //   }
+  //   const src = `${mapApiJs}?key=${data}&libraries=places`;
+  //   return loadAsyncScript(src)
+  // };
 
   // end of setup
 
   useEffect(() => {
     dispatch(sessionActions.restoreUser())
-    fetch('/api/maps-key')
-      .then(res => res.json())
-      .then(data => initMapScript(data))
-      .then(() => setIsLoaded(true));
+    .then(() => setIsLoaded(true));
   }, [dispatch]);
 
   return (
     <>
       <Navigation isLoaded={isLoaded} />
-      <button onClick={() => setShowModal(true)}>Modal</button>
-      {showModal && (
-        <Modal onClose={() => setShowModal(false)}>
-          <h1>Hello I am a Modal</h1>
-        </Modal>
-      )}
       {isLoaded && (
         <Switch>
-          <Route exact path='/signup'>
-            <SignupFormPage />
+          <Route exact path='/createListing/introduction'>
+              <Introducing />
           </Route>
-
+          <Route exact path='/createListing/create-address'>
+            <AddressForm />
+          </Route>
+          <Route exact path='/createListing-bedGuestForm'>
+              <BedGuestForm />
+          </Route>
+          <Route exact path='/createListing-amenitiForm'>
+            <AmenitiForm />
+          </Route>
+          <Route exact path='/createListing-categoryForm'>
+            <CategoryForm />
+          </Route>
+          <Route exact path='/createListing/titleForm'>
+            <TitleForm />
+          </Route>
+          <Route exact path='/createListing/descriptionForm'>
+            <DescriptionForm />
+          </Route>
+          <Route exact path='/createListing/listingPriceForm'>
+            <ListingPriceForm />
+          </Route>
+          <Route exact path='/createListing/images'>
+            <ImageForm />
+          </Route>
           <Route exact path='/listings/:listingId'>
             <SingleListingPage />
           </Route>
@@ -147,50 +158,9 @@ function App() {
           <Route exact path="/">
             <Listings />
           </Route>
-          <Route exact path='/maps'>
-            <GoogleMaps center={center} setCenter={setCenter} zoom={zoom} setZoom={setZoom} onClick={onClick} onIdle={onIdle} style={{ height: '30rem', width: '30rem' }} options={{
-              zoomControl: true,
-              mapTypeControl: true,
-              scaleControl: true,
-              streetViewControl: true,
-              rotateControl: true,
-              fullscreenControl: true
-            }}>
-              {clicks.map((latLng, i) => (<Marker key={i} position={latLng} />))}
-            </GoogleMaps>
-          </Route>
           <Route exact path='/sockets'>
             <Socket socket={socket} />
           </Route>
-          <ListingProvider>
-            <Route exact path='/createListing'>
-                <Introducing />
-            </Route>
-            <Route exact path='/createListing/create-address'>
-              <AddressForm />
-            </Route>
-            <Route exact path='/createListing-bedGuestForm'>
-                <BedGuestForm />
-            </Route>
-            <Route exact path='/createListing-amenitiForm'>
-              <AmenitiForm />
-            </Route>
-            <Route exact path='/createListing-categoryForm'>
-              <CategoryForm />
-            </Route>
-            <Route exact path='/createListing/images'>
-              <ImageForm />
-            </Route>
-            <Route exact path='/createListing/titleForm'>
-              <TitleForm />
-            </Route>
-            <Route exact path='/createListing/descriptionForm'>
-              <DescriptionForm />
-            </Route>
-            <Route exact path='/createListing/listingPriceForm'>
-              <ListingPriceForm />
-            </Route>
-          </ListingProvider>
         </Switch>
       )}
     </>

@@ -3,24 +3,26 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('ListingPrices', {
       id: {
+        type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
       },
       listingId: {
         allowNull: false,
         type: Sequelize.INTEGER,
-        references: { model: 'Listings' }
+        references: { model: 'Listings' },
+        onDelete: 'CASCADE'
       },
       userId: {
         allowNull: false,
         type: Sequelize.INTEGER,
-        references: { model: 'Users' }
+        references: { model: 'Users' },
+        onDelete: "CASCADE"
       },
       pricePerDay: {
+        type: Sequelize.DECIMAL,
         allowNull: false,
-        type: Sequelize.DECIMAL
       },
       startDate: {
         allowNull: false,
@@ -32,11 +34,13 @@ module.exports = {
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     });
   },

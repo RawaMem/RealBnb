@@ -1,3 +1,53 @@
-.profile-dropdown {
-  position: absolute;
+.nav-container {
+  height: var(--navbar-height);
+  width: var(--navbar-width);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
+}
+
+.nav-inner-container {
+  height: var(--inner-navbar-height);
+  width: var(--inner-navbar-width);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#logo-text {
+  color: var(--logo-color);
+  text-decoration: none;
+  font-size: var(--logo-font-size);
+  font-weight: var(--logo-font-weight);
+}
+
+.right-section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: var(--navbar-right-section-width);
+  justify-content: space-between;
+}
+
+#become-host-link-id {
+  text-decoration: none;
+  color: var(--become-host-btn-color);
+  font-size: var(--become-host-btn-text-size);
+  font-weight: 500;
+}
+
+.become-host-btn-container {
+  height: 40px;
+  width: 60%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--profile-dropdown-borderRadius);
+}
+
+.become-host-btn-container:hover {
+  background-color: var(--become-host-btn-hover-color);
 }

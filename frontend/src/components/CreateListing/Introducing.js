@@ -1,24 +1,15 @@
 import { NavLink } from 'react-router-dom';
-import './createListing.css';
+import { VideoPlayer } from '../../ui/VideoPlayer';
+// import './createListing.css';
 
 
 export default function Introducing() {
+    const videoSrc = "https://a0.muscache.com/v/8b/04/8b0456c7-13f8-54bc-889a-7cf549f144a3/8b0456c713f854bc889a7cf549f144a3_4000k_1.mp4";
+
     return (
         <div className='form-container'>
             <section className='video-section-container'>
-                <video 
-                    autoPlay 
-                    controls
-                    muted 
-                    preload='auto' 
-                    controlsList="play nodownload noplaybackrate"
-                    disablePictureInPicture
-                    playsInline
-                    crossOrigin="anonymous"
-                    style = {{ width:'100%', height: 'auto'}}
-                >
-                    <source src="https://a0.muscache.com/v/8b/04/8b0456c7-13f8-54bc-889a-7cf549f144a3/8b0456c713f854bc889a7cf549f144a3_4000k_1.mp4" type="video/mp4" />
-                </video>
+                <VideoPlayer src={videoSrc} />
             </section>
             <section className='title-form-container'>
                 <div className="title-content-introduction">

@@ -1,11 +1,8 @@
 import { useState, useEffect } from "react";
 import './createListing.css';
-import { useListing } from "../../context/ListingContext";
 
-export default function ImageDropDown({ handleDeleteImage, url, setShowEditModal, setEditedPhotoUrl }) {
+export default function ImageDropDown({ handleDeleteImage, url, setShowEditModal, setEditedPhotoUrl, previewImageUrl, setPreviewImageUrl }) {
     const [showMenu, setShowMenu] = useState(false);
-    const {previewImageUrl, setPreviewImageUrl} = useListing();
-
 
     const openMenu = () => {
         if (showMenu) return;

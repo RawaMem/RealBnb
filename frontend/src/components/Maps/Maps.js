@@ -1,5 +1,4 @@
 import React from 'react';
-import { useEffect, useState } from 'react';
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 
 // const containerStyleExample = {

@@ -1,10 +1,9 @@
 import { useState } from "react";
+import { handleInitialSelect } from "./AmentitiCard";
 
 export default function CategoryCard({categoryName}) {
-    const selectedCategory = localStorage.getItem('categoryArr').split(',');
-    const initialSelect = selectedCategory.filter(item => item.toLowerCase() === categoryName.toLowerCase());
 
-    const [selected, setSelected] = useState(initialSelect.length > 0);
+    const [selected, setSelected] = useState(handleInitialSelect('categoryArr', categoryName));
 
     const selectedStyle = {
         width:'132px',

@@ -1,19 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useListing } from "../../context/ListingContext";
 import './createListing.css';
 import CategoryCard from "./CategoryCard";
-
+import { resetAmenity } from "./AmenitiForm";
 
 export default function CategoryForm() {
-    const {categoryArr, setCategoryArr} = useListing();
-
-    useEffect(() => {
-        const categoriesStr = localStorage.getItem('categoryArr');
-        const category = categoriesStr.split(',');
-        const categoryFromLocalStorage = category.filter(item => item.length)
-        setCategoryArr([...categoryFromLocalStorage]);
-    },[])
+    const [categoryArr, setCategoryArr] = useState(resetAmenity('categoryArr'));
 
     useEffect(() => {
         localStorage.setItem('categoryArr', categoryArr)
@@ -28,7 +20,7 @@ export default function CategoryForm() {
             });
         } else {
             return setCategoryArr(prevArr => [...prevArr, category])
-        }
+        };
     };
 
 
@@ -105,7 +97,7 @@ export default function CategoryForm() {
                         <Link 
                             className={categoryArr.length ? "edit-photo-modal-save-button" : "edit-photo-modal-save-button-disabled"}
                             style={{textDecoration:'none'}}
-                            to="/createListing/images"
+                            to="/createListing/titleForm"
                         >
                             <div>Next</div>
                         </Link>

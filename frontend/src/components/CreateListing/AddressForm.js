@@ -1,55 +1,51 @@
 import './createListing.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { getToken, getKey } from '../../store/maps';
-import Maps from '../Maps/Maps';
-import { useListing } from '../../context/ListingContext';
+import { getToken } from '../../store/maps';
+import { MapBox } from '../Maps/Mapbox';
 
 
 export default function AddressForm() {
-    const { address, setAddress, inputVal, setInputVal, city, setCity, state, setState, zipCode, setZipCode,setLongitude, setLatitude, latitude, longitude } = useListing();
+    const dispatch = useDispatch();
+    const [address, setAddress] = useState('');
+    const [inputVal, setInputVal] = useState(localStorage.getItem('addressInputVal') || '');
+    const [city, setCity] = useState(localStorage.getItem('city') || '');
+    const [state, setState] = useState(localStorage.getItem('state') || '');
+    const [zipCode, setZipCode] = useState(localStorage.getItem('zipCode') || null);
+    const [longitude, setLongitude] = useState(localStorage.getItem('lng') || 10);
+    const [latitude, setLatitude] = useState(localStorage.getItem('lat') || 10);
+    const optinalAddress = useRef(null);
+    const [suggestions, setSuggestions] = useState([]);
 
     const token = useSelector((state) => state.maps?.token);
-    const apiKey = useSelector((state) => state.maps?.key);
-
-    const dispatch = useDispatch();
-    const [optionalAdd, setOptionalAdd] = useState('');
-    const [suggestions, setSuggestions] = useState([]);
-    const [coordinates, setCoordinates] = useState('');
-    const [initialAutoFill, setInitialAutoFill] = useState(false);
 
     useEffect(() => {
-        setInputVal(localStorage.getItem('addressInputVal').length ? localStorage.getItem('addressInputVal') : '');
-        setCity(localStorage.getItem('city').length ? localStorage.getItem('city') : '');
-        setState(localStorage.getItem('state'));
-        setZipCode(localStorage.getItem('zipCode'));
-        const lng = localStorage.getItem('lng');
-        const lat = localStorage.getItem('lat');
-        setCoordinates([+lng, +lat])
-        setInitialAutoFill(true);
+        if(!token) dispatch(getToken());
+    }, [dispatch]);
 
-        return () => setInitialAutoFill(false);
-    },[])
+    function handleClickingNext() {
 
-    useEffect(() => {
+        if (optinalAddress.current.value) {
+            setAddress(optinalAddress.current.value + address)
+            localStorage.setItem('address', address);
+            localStorage.setItem('optinalAddress', optinalAddress.current.value);
+        } else {
+            localStorage.setItem('optinalAddress', '');
+        }; 
+
         localStorage.setItem('addressInputVal', inputVal);
         localStorage.setItem('city', city);
         localStorage.setItem('state', state);
         localStorage.setItem('zipCode', zipCode);
         localStorage.setItem('lat', latitude);
         localStorage.setItem('lng', longitude)
-    },[address,city, state, zipCode, latitude, longitude])
-    
-    useEffect(() => {
-        if(!token) dispatch(getToken());
-        if(!apiKey) dispatch(getKey());
-    }, [dispatch, token, apiKey]);
-    
+    };
+
     const containerStyle = {
-        width: '300px',
-        height: '300px',
-      };
+        width: '90%',
+        height: '95%',
+    };
 
     const handleChange = async (event) => {
 
@@ -59,36 +55,13 @@ export default function AddressForm() {
     
             const response = await fetch(endpoint);
             const results = await response.json();
-            setSuggestions(results?.features);
+            setSuggestions(results.features);
         } catch(e) {
             console.log('Error fetching data', e);
         }  
     };
-
-    let lng;
-    let lat;
-    if(coordinates.length) {
-        [lng, lat] = coordinates;
-        setLatitude(lat);
-        setLongitude(lng);
-    };
-
-
-    if(!inputVal) {
-        setCity('');
-        setState('');
-        setZipCode('');
-    };
     
-    // handleAddOptionalAddress needs editing
-    const handleAddOptionalAddress = async (event) => {
-        await setOptionalAdd(e => setOptionalAdd(event.target?.value))
-        if(optionalAdd) {
-            setAddress(address+' '+optionalAdd)
-        };
-    };
-
-    if(!token || !apiKey || !initialAutoFill ) return null;
+    if(!token) return null;
 
     return (
         <div className="form-container">
@@ -101,40 +74,42 @@ export default function AddressForm() {
                     <div className='grid-right-inner-page'>
                         <form>
                             <h3>Confirm your address</h3>
-                            <div className='grid-right-container-input'>
+                            <div className='grid-right-container-input' id="address-input">
                                 <input 
                                 placeholder='Street'
                                 type='search' 
                                 value={inputVal} 
                                 onChange={handleChange} 
                                 />
-                                {suggestions?.length > 0 && 
-                                    suggestions.map((suggestion, idx) => (
-                                        <div 
-                                            key={idx} 
-                                            onClick={() => {
-                                                setCoordinates(suggestion.geometry.coordinates);
-                                                setAddress(suggestion.place_name)
-                                                setSuggestions([])
-                                                setInputVal(suggestion.place_name)
-                                                setZipCode(suggestion.context[1].text)
-                                                setCity(suggestion.context[2].text)
-                                                setState(suggestion.context[4].text)
-                                            }} 
-                                            style={{cursor:'pointer'}}
-                                        > 
-                                            {suggestion.place_name}
-                                        </div>                
-                                    )
-                                    )    
-                                }
-                                </div>
+                                    {suggestions?.length > 0 && 
+                                        (<div className='address-suggestion-container'>
+                                            {suggestions.map(suggestion => (
+                                                <div 
+                                                    key={suggestion.place_name} 
+                                                    onClick={() => {
+                                                        setLatitude(suggestion.geometry.coordinates[1])
+                                                        setLongitude(suggestion.geometry.coordinates[0])
+                                                        setAddress(suggestion.place_name)
+                                                        setSuggestions([])
+                                                        setInputVal(suggestion.place_name)
+                                                        setZipCode(suggestion.context[1].text)
+                                                        setCity(suggestion.context[2].text)
+                                                        setState(suggestion.context[4].text)
+                                                    }} 
+                                                    style={{cursor:'pointer'}}
+                                                > 
+                                                    {suggestion.place_name}
+                                                </div>                
+                                            ))}   
+                                        </div>)
+                                    }
+                            </div>
                             <div className='grid-right-container-input'>
                                 <input 
                                     type="text" 
                                     placeholder='Apt, suite, etc. (Optional)' 
-                                    defaultValue=''
-                                    onBlur={handleAddOptionalAddress}
+                                    defaultValue={localStorage.getItem('optinalAddress') || ''}
+                                    ref={optinalAddress}
                                 />
                             </div>
                             <div className='grid-right-container-input'>
@@ -161,7 +136,7 @@ export default function AddressForm() {
                             </div>
                         </form>
                         <div>
-                            <Maps coordinates={coordinates} containerStyle={containerStyle} apiKey={apiKey} />    
+                            <MapBox style={containerStyle} latitude={latitude} longitude={longitude} />
                         </div> 
                     </div>
                 </div>
@@ -169,11 +144,12 @@ export default function AddressForm() {
                     <div className="button-container-div">
                         <NavLink
                             style={{color:'rgb(34,34,34)', fontWeight:'600', fontSize:'18px'}}
-                            to='/createListing'
+                            to='/createListing/introduction'
+                            onClick={handleClickingNext}
                             >
                                 Back
                         </NavLink>
-                        {address && city && state && zipCode ? (
+                        {inputVal && city && state && zipCode ? (
                             <div className='addressform-nextpage-button-wrapper'>
                                 <NavLink
                                 style={{ 
@@ -181,6 +157,7 @@ export default function AddressForm() {
                                     color: 'white',
                                     cursor:'pointer'
                                 }}
+                                onClick={handleClickingNext}
                                 to='/createListing-bedGuestForm'
                                 >
                                     Next

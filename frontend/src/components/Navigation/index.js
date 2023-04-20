@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
 import LoginForm from '../LoginFormModal';
 import SignupForm from '../SignupFormPage';
@@ -12,6 +12,7 @@ import { useCategory } from '../../context/CategoryContext';
 function Navigation({ isLoaded }){
 
   const dispatch = useDispatch();
+  const sessionUser = useSelector(state => state.session.user)
   const [showLogInModal, setShowLogInModal] = useState(false);
   const [showSignUpModal, setShowSignUpModal] = useState(false);
 
@@ -91,23 +92,23 @@ function Navigation({ isLoaded }){
 
         <div className='right-section'>
           <div className='become-host-btn-container'>
-            <NavLink id="become-host-link-id" to='/createListing/introduction'>Become a Host</NavLink>
+            {sessionUser && <NavLink id="become-host-link-id" to='/createListing/introduction'>Become a Host</NavLink>}
           </div>
           <div>
             {isLoaded && sessionLinks}
           </div>
         </div>
 
-        {showLogInModal && (
-        <Modal onClose={() => setShowLogInModal(false)}>
-          <LoginForm setShowLogInModal={setShowLogInModal} />
-        </Modal>
-        )}
-        {showSignUpModal && (
-        <Modal onClose={() => setShowSignUpModal(false)}>
-          <SignupForm setShowSignUpModal={setShowSignUpModal} />
-        </Modal>
-        )}
+          {showLogInModal && (
+          <Modal onClose={() => setShowLogInModal(false)}>
+            <LoginForm setShowLogInModal={setShowLogInModal} />
+          </Modal>
+          )}
+          {showSignUpModal && (
+          <Modal onClose={() => setShowSignUpModal(false)}>
+            <SignupForm setShowSignUpModal={setShowSignUpModal} />
+          </Modal>
+          )}
 
       </div>
     </div>

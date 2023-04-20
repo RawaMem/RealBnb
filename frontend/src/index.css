@@ -19,5 +19,8 @@
     --become-host-btn-color: rgb(34,34,34);
     --become-host-btn-text-size: 14px;
     --become-host-btn-hover-color: rgb(247,247,247);
+
+    --profileDropDownContainer-right-distance: 0.5em;
+    --profileDropDownContainer-border-radius: 13px;
 }
 

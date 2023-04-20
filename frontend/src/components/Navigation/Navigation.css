@@ -51,3 +51,30 @@
 .become-host-btn-container:hover {
   background-color: var(--become-host-btn-hover-color);
 }
+
+.profileDropDownBtn {
+  position: relative;
+}
+
+.profileDropDown-container {
+  position: absolute;
+  right: var(--profileDropDownContainer-right-distance);
+  background-color: white;
+  border-radius: var(--profileDropDownContainer-border-radius);
+  box-shadow: var(--profile-dropdown-box-shadow);
+  width: 180px;
+}
+
+.profile-dropdown-ul {
+  list-style: none;
+}
+
+.profile-dropdown li {
+  cursor: pointer;
+  height: 35px;
+}
+
+.profile-dropdown li:hover {
+  background-color: var(--become-host-btn-hover-color);
+}
+

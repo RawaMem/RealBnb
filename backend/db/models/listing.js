@@ -21,8 +21,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         len: {
-          args: [1, 500],
-          msg: "Description must be between 1 and 500 characters"
+          args: [1, 1000],
+          msg: "Description must be between 1 and 1000 characters"
         }
       },
     },

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink,Link } from "react-router-dom"
 import {useDropzone} from 'react-dropzone';
 import './createListing.css';
@@ -9,7 +9,7 @@ import ConfirmForm from "./ConfirmForm";
 
 export default function ImageForm() {
 
-    const [previewImageUrl, setPreviewImageUrl] = useState('')
+    const [previewImageUrl, setPreviewImageUrl] = useState(null)
     const [imgUrl, setImgUrl] = useState(''); 
     const [multiImages, setMultiImages] = useState([]);
 
@@ -22,6 +22,9 @@ export default function ImageForm() {
     const [showConformationForm, setShowConformationForm] = useState(false);
     const [editedPhotoUrl, setEditedPhotoUrl] = useState('');
     const [imageDescription, setImageDescription] = useState({});
+    // const [errors, setErrors] = useState([]);
+    const [errors, setErrors] = useState({});
+    const [hasSubmitted, setHasSubmitted] = useState(false);
 
     
     const handleDeleteImage = url => {
@@ -182,6 +185,31 @@ export default function ImageForm() {
         );
     };
 
+    function handleClickHostBtn() {
+        const imageFormError = {};
+
+        if(!previewImageUrl) imageFormError['previewImage']="Please select a preview image";
+
+        if(multiImages.length < 5) imageFormError['imageQyt']="Please add at least 5 images for your property";
+
+        if(Object.values(imageFormError).length) {
+            setErrors(imageFormError);
+            setHasSubmitted(true)
+            return;
+        } else {
+            setShowConformationForm(true);
+        };
+    };
+
+    useEffect(() => {
+        if (hasSubmitted) {
+            const newErrors = { ...errors };
+            if (previewImageUrl) delete newErrors['previewImage'];
+            if (multiImages.length >= 5) delete newErrors['imageQyt'];
+            setErrors(newErrors);
+        };
+    }, [previewImageUrl, multiImages, hasSubmitted]);
+
     return (
         <>
             <div className="form-container">
@@ -242,6 +270,9 @@ export default function ImageForm() {
                                     <span className="upload-button">Upload</span>
                                 </div>
                             </div>
+                            {Object.values(errors).length > 0 && (Object.values(errors).map(e => (
+                                <div key={e}>{e}</div>
+                            )))}
                         </div>
                         {pictureZone()}
                         {showConformationForm && showConformationModal()}
@@ -257,7 +288,7 @@ export default function ImageForm() {
                             <div>
                                 <div
                                     className={imgUrl.length ? "edit-photo-modal-save-button" : "edit-photo-modal-save-button-disabled"}
-                                    onClick={() => setShowConformationForm(true)}
+                                    onClick={handleClickHostBtn}
                                     >
                                         <div>Host</div>
                                         

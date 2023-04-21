@@ -1,11 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import { Link } from "react-router-dom";
-import 'react-dates/initialize';
-import { DateRangePicker } from 'react-dates';
-import 'react-dates/lib/css/_datepicker.css';
-import './react_dates_overrides.css';
-import moment from 'moment';
 import './createListing.css';
+// import 'react-dates/initialize';
+// import { DateRangePicker } from 'react-dates';
+// import 'react-dates/lib/css/_datepicker.css';
+// import './react_dates_overrides.css';
+// import moment from 'moment';
+
+import DatePicker from "../../ui/DatePicker";
+import { datePickerReducer } from "../../ui/DatePicker";
+
+import './createListing.css';
+
 
 export default function ListingPriceForm() {
 
@@ -17,21 +23,27 @@ export default function ListingPriceForm() {
 
     const getInitalDate = (localStorageKey) => {
         const dateStr = localStorage.getItem(localStorageKey);
-        if(dateStr) return moment.utc(dateStr);
+        if(dateStr) return new Date(dateStr);
         else return null;
     };
 
+    const initialState = {
+        startDate: getInitalDate('startingDate'),
+        endDate: getInitalDate("endingDate"),
+        focusedInput: null
+    };
+
+    const [state, dispatch] = useReducer(datePickerReducer, initialState);
+    console.log("startDate------", state.startDate)
+    console.log("endDate--------", state.endDate)
     const [serviceFee, setServiceFee] = useState(getInitalPrice("service fee", 1));
     const [cleaningFee, setCleaningFee] = useState(getInitalPrice("cleanning fee", 1));
 
     const [error, setError] = useState({});
-    const [startingDate, setStartingDate] = useState(getInitalDate('startingDate'));
-    const [endingDate, setEndingDate] = useState(getInitalDate("endingDate"));;
-
     const [focusedInput, setFocusedInput] = useState(null);
     const [listingPrice, setListingPrice] = useState(getInitalPrice("listing price", 10));
-    const [startDateError, setStartDateError] = useState(false);
-    const [endDateError, setEndDateError] = useState(false);
+    // const [startDateError, setStartDateError] = useState(false);
+    // const [endDateError, setEndDateError] = useState(false);
     
     const handlePageChange = () => {
         function convertDateObjToStr(date) {
@@ -40,8 +52,8 @@ export default function ListingPriceForm() {
         localStorage.setItem("listing price", listingPrice);
         localStorage.setItem("service fee", serviceFee);
         localStorage.setItem("cleanning fee", cleaningFee);
-        localStorage.setItem("startingDate", convertDateObjToStr(startingDate));
-        localStorage.setItem("endingDate", convertDateObjToStr(endingDate));
+        localStorage.setItem("startingDate", convertDateObjToStr(state.startDate));
+        localStorage.setItem("endingDate", convertDateObjToStr(state.endDate));
     };
 
     useEffect(() => {
@@ -51,13 +63,13 @@ export default function ListingPriceForm() {
         if(serviceFee < 1) errorMsg['serviceFee'] = "Service fee must be greater than $1";
         if(cleaningFee < 1) errorMsg['cleaningFee'] = "Cleaning fee must be greater than $1";
         setError(errorMsg)
-        if(!startingDate) setStartDateError(true)
-        else setStartDateError(false)
+        // if(!startingDate) setStartDateError(true)
+        // else setStartDateError(false)
         
-        if(!endingDate) setEndDateError(true)
-        else setEndDateError(false)
+        // if(!endingDate) setEndDateError(true)
+        // else setEndDateError(false)
 
-    },[listingPrice, serviceFee, cleaningFee, startingDate, endingDate])
+    },[listingPrice, serviceFee, cleaningFee])
 
     function increment(setter, num1, num2) {
         return setter(prev => {
@@ -126,19 +138,7 @@ export default function ListingPriceForm() {
                             <div className="price-section">  
                                 <div className="price-form-calendar">
                                     <p style={{color: 'rgb(113,113,113)'}}>Please select a date range for your property, your property will be listed at the current set price during this time frame </p>
-                                    <DateRangePicker 
-                                        startDate={startingDate}
-                                        startDateId="your_unique_start_date_id"
-                                        endDate={endingDate}
-                                        endDateId="your_unique_start_date_id"
-                                        onDatesChange={({ startDate, endDate }) => {
-                                            setStartingDate(startDate);
-                                            setEndingDate(endDate)
-                                        }} 
-                                        focusedInput={focusedInput}
-                                        onFocusChange={focusedInput => setFocusedInput(focusedInput)}
-                                        // withPortal 
-                                    />
+                                    <DatePicker state={state} dispatch={dispatch} />
                                 </div>
                             </div>
                         </div>
@@ -209,7 +209,7 @@ export default function ListingPriceForm() {
                             onClick={handlePageChange}
                         >Back</Link>
                         <Link 
-                            className={(Object.values(error).length || startDateError || endDateError) ? "edit-photo-modal-save-button-disabled" :"edit-photo-modal-save-button"}
+                            // className={(Object.values(error).length || startDateError || endDateError) ? "edit-photo-modal-save-button-disabled" :"edit-photo-modal-save-button"}
                             style={{textDecoration:'none'}}
                             to="/createListing/images"
                             onClick={handlePageChange}

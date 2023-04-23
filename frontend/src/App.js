@@ -19,6 +19,8 @@ import DescriptionForm from './components/CreateListing/DescriptionForm';
 import ListingPriceForm from './components/CreateListing/ListingPriceForm';
 import CategoryForm from './components/CreateListing/CategoryForm';
 import CreateNewList from './components/CreateListing';
+import UserProfile from './components/UserProfile';
+
 //websocket setup
 import { io } from 'socket.io-client'
 import Socket from './components/Socket';
@@ -151,6 +153,9 @@ function App() {
           </Route>
           <Route exact path='/listings/:listingId'>
             <SingleListingPage />
+          </Route>
+          <Route exact path='/user-profile'>
+            <UserProfile />
           </Route>
           <Route exact path='/testing'>
             <TestCompontent />

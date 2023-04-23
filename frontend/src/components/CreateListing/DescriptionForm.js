@@ -35,12 +35,12 @@ export default function DescriptionForm() {
                     <div className="title-content-div">
                         <h5 style={{fontSize:'22px'}}>Create your description</h5>
                         <textarea 
-                            maxLength="500"
+                            maxLength="1000"
                             value={description}
                             onChange={e => setDescription(e.target.value)}
                             required
                         />
-                        <div style={{color:'rgb(118,118,118)', fontWeight:'600'}}>{descriptionLength}/500</div>
+                        <div style={{color:'rgb(118,118,118)', fontWeight:'600'}}>{descriptionLength}/1000</div>
                     </div>
                 </div>
                 <div className="button-container">

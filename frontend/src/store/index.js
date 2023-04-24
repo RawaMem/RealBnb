@@ -4,13 +4,17 @@ import session from './session';
 import listings from './listings';
 import mapsReducer from './maps';
 import reviews from './reviews';
+import dmThreads from './directMessageThreads';
+import directMessages from './directMessages';
 import bookings from './bookings';
 
 const rootReducer = combineReducers({
   session,
   listings,
   reviews,
-  maps: mapsReducer
+  maps: mapsReducer,
+  dmThreads,
+  directMessages
 });
 
 let enhancer;

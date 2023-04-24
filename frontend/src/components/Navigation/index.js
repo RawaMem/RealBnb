@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
 import LoginForm from '../LoginFormModal';
@@ -24,7 +24,7 @@ function Navigation({ isLoaded }){
   const {setSorted} = useCategory();
 
   let sessionLinks = (
-    <ProfileButton 
+    <ProfileButton
       isLoaded={isLoaded}
       setShowLogInModal={setShowLogInModal}
       setShowSignUpModal={setShowSignUpModal}
@@ -91,6 +91,10 @@ function Navigation({ isLoaded }){
         </div>
 
         <div className='right-section'>
+          {sessionUser && <Link to='/messages'>
+            <div className="navbar-messages">Messages</div>
+          </Link>}
+
           <div className='become-host-btn-container'>
             {sessionUser && <NavLink id="become-host-link-id" to='/createListing/introduction'>Become a Host</NavLink>}
           </div>

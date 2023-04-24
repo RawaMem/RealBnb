@@ -18,12 +18,17 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: { model: 'Users' }
       },
+      receiverId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: { model: 'Users' }
+      },
       directMessageThreadId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: { model: 'DirectMessageThreads' }
       },
-      notified: {
+      read: {
         allowNull: false,
         type: Sequelize.BOOLEAN,
         defaultValue: false

@@ -1,15 +1,16 @@
 #!/usr/bin/env node
-const { port } = require('../config');
+const { port, environment } = require('../config');
 const app = require('../app');
 const db = require('../db/models');
 
 //websocket
 const { createServer } = require('http');
 const { Server } = require('socket.io');
+const { createDirectMessage, editDirectMessage, deleteDirectMessage, editOnlineStatusToFalse, editOnlineStatusToTrue, editDirectMessageToRead } = require('../routes/sockets');
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: environment == 'development' ? 'http://localhost:3000' : 'https://realbnb.onrender.com/',
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"]
   }
 });
@@ -22,7 +23,43 @@ io.on("connection", socket => {
 
   socket.on('message', async (data) => {
     io.emit('testing', data);
+
   })
+
+  socket.on('sendMessage', async (message) => {
+    console.log('BIN/WWW SEND MESSAGE SOCKT RUNNING, HERE IS MESSAGE', message)
+    const createdMessage = await createDirectMessage(message)
+    console.log('BIN/WWW SEND MESSAGE SOCKT RUNNING, THIS IS CREATED MESSAGE', createdMessage)
+    io.emit('messageReceived', createdMessage)
+  })
+
+  socket.on('editMessage', async(message) =>{
+    const edittedMessage = await editDirectMessage(message)
+    io.emit('messageEditted', edittedMessage)
+  })
+
+  socket.on('deleteMessage', async(messageId) =>{
+    const deleteResult = await deleteDirectMessage(messageId)
+    io.emit('messageDeleted', messageId)
+  })
+
+  socket.on('messageRead', async(messageId) =>{
+    const readMessage = await editDirectMessageToRead(messageId)
+    io.emit('messageRead', readMessage)
+  })
+
+  socket.on('userOnline', async (userId) =>{
+    const user = await editOnlineStatusToTrue(userId)
+    io.emit('userStatusOnline', user)
+  })
+
+  socket.on('userOffline', async (userId) =>{
+    const user = await editOnlineStatusToFalse(userId)
+    io.emit('userStatusOffline', user)
+  })
+
+
+
 })
 //end websocket code
 

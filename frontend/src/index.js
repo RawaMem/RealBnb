@@ -12,6 +12,7 @@ import configureStore from './store';
 import { restoreCSRF, csrfFetch } from "./store/csrf";
 import * as sessionActions from './store/session';
 import CategoryProvider from './context/CategoryContext';
+import ReceiverIdProvider from './context/ReceiverId';
 
 const store = configureStore();
 
@@ -35,14 +36,16 @@ function Root() {
     <ModalProvider>
         <Provider store={store}>
           <CategoryProvider>
-          <BrowserRouter>
-          <Switch>
-            <App />
-          </Switch>
-          </BrowserRouter>
+            <ReceiverIdProvider>
+              <BrowserRouter>
+                <Switch>
+                  <App />
+                </Switch>
+              </BrowserRouter>
+          </ReceiverIdProvider>
         </CategoryProvider>
-        </Provider>
-      </ModalProvider>
+      </Provider>
+    </ModalProvider>
   );
 }
 

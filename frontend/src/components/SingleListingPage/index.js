@@ -32,14 +32,14 @@ export default function SingleListingPage() {
 
     if (!listing.Images) return <div className="loading">Loading...</div>
 
-    
+
     return (
         <>
         <div className="singleListingPageContainer">
         {listing && (
             <div className="listingContent">
                 <div className="singleListingTitleContainer">
-                    <SingleListingTitle listing={listing}/>
+                    <SingleListingTitle listing={listing} currentUser={currentUser}/>
                 </div>
                 <div className="singleListingImageContainer">
                     <SingleListingImages listing={listing}/>

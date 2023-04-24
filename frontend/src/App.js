@@ -24,6 +24,7 @@ import UserProfile from './components/UserProfile';
 //websocket setup
 import { io } from 'socket.io-client'
 import Socket from './components/Socket';
+import Messages from './components/Messages';
 let serverUrl;
 if (process.env.NODE_ENV === 'production') {
   serverUrl = 'https://realbnb-app.herokuapp.com'
@@ -156,6 +157,9 @@ function App() {
           </Route>
           <Route exact path='/user-profile'>
             <UserProfile />
+          </Route>
+          <Route exact path='/messages'>
+            <Messages socket={socket}/>
           </Route>
           <Route exact path='/testing'>
             <TestCompontent />

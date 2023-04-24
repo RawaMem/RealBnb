@@ -1,7 +1,7 @@
 import React, { useReducer } from "react";
 import { DateRangeInput } from "@datepicker-react/styled";
 import { ThemeProvider } from "styled-components";
-  
+
 export function datePickerReducer(state, action) {
     switch (action.type) {
         case "focusChange":

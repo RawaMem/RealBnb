@@ -43,6 +43,7 @@ module.exports = (sequelize, DataTypes) => {
     host: DataTypes.BOOLEAN,
     superHost: DataTypes.BOOLEAN,
     identityVerified: DataTypes.BOOLEAN,
+    online: DataTypes.BOOLEAN,
     aboutMe: DataTypes.STRING,
     duringStay: DataTypes.STRING,
     email: {
@@ -78,10 +79,10 @@ module.exports = (sequelize, DataTypes) => {
   });
   User.associate = function(models) {
     // associations can be defined here
-    User.hasMany(models.Listing, { 
+    User.hasMany(models.Listing, {
       foreignKey: 'ownerId',
       onDelete: 'CASCADE',
-      hooks: true       
+      hooks: true
     });
     User.hasMany(models.Review, { foreignKey: 'authorId' });
     User.hasMany(models.Image, { foreignKey: 'userId' });
@@ -95,7 +96,7 @@ module.exports = (sequelize, DataTypes) => {
     User.hasMany(models.ListingBrowseHistory, { foreignKey: 'userId' });
     User.hasMany(models.ListingPrice, { foreignKey: 'userId',
     onDelete: 'CASCADE',
-    hooks: true 
+    hooks: true
     });
     User.hasMany(models.WishList, { foreignKey: 'userId' });
 

@@ -21,6 +21,7 @@ import CategoryForm from './components/CreateListing/CategoryForm';
 import CreateNewList from './components/CreateListing';
 import UserProfile from './components/UserProfile';
 
+
 //websocket setup
 import { io } from 'socket.io-client'
 import Socket from './components/Socket';
@@ -125,6 +126,9 @@ function App() {
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <Switch>
+          <Route exact path="/">
+            <Listings />
+          </Route>
           <Route exact path='/createListing/introduction'>
               <Introducing />
           </Route>
@@ -155,18 +159,18 @@ function App() {
           <Route exact path='/listings/:listingId'>
             <SingleListingPage />
           </Route>
+
           <Route exact path='/user-profile'>
             <UserProfile />
           </Route>
+
           <Route exact path='/messages'>
             <Messages socket={socket}/>
           </Route>
           <Route exact path='/testing'>
             <TestCompontent />
           </Route>
-          <Route exact path="/">
-            <Listings />
-          </Route>
+
           <Route exact path='/sockets'>
             <Socket socket={socket} />
           </Route>

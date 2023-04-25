@@ -361,8 +361,27 @@ router.get('/:listingId(\\d+)', asyncHandler(async (req, res) => {
   res.json(singleListing);
 }));
 
-router.post('/testing', singleMulterUpload('image'), asyncHandler(async (req, res) => {
-  const url = await singlePublicFileUpload(req.file);
+//get all listings of the logged in user
+router.get('/user', requireAuth, asyncHandler(async(req, res) => {
+  const {user} = req;
+
+  const allUserListings = await Listing.findAll({
+    where: {
+      ownerId: user.id
+    },
+    include: [
+      {
+        model: ListingPrice,
+        attributes:["pricePerDay", "startDate", "endDate"]
+      }
+    ],
+    order: [ [ListingPrice, "startDate"] ]
+  });
+
+  if(allUserListings) res.json({userListings:allUserListings})
+  else {
+    res.json({message: "You don't have any listings."})
+  }
 }));
 
 module.exports = router;

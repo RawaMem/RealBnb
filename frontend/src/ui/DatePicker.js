@@ -57,6 +57,7 @@ function DatePicker({ state, dispatch}) {
           endDate={state.endDate} // Date or null
           focusedInput={state.focusedInput} // START_DATE, END_DATE or null
           style={{border: "none !important"}}
+          minBookingDays={"2"}
         />
       </ThemeProvider>
     );

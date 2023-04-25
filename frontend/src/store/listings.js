@@ -6,6 +6,13 @@ const GET_SINGLE_LISTING = "listings/GET_SINGLE_LISTING";
 const LISTING_SEARCH_RESULTS = "listings/LISTING_SEARCH_RESULTS";
 const CLEAR_LISTING_STATE = "listings/CLEAR_LISTING_STATE";
 const STORE_LISTING_IMAGES_FILES="listings/STORE_LISTING_IMAGES_FILES";
+const GET_USER_LISTINGS = "listings/GET_USER_LISTINGS";
+
+
+export const getUserListingsAction = listings => ({
+    type: GET_USER_LISTINGS,
+    listings
+});
 
 export const getListingImagesAction = multiImagesFilesArr => {
     console.log('from action', multiImagesFilesArr)
@@ -39,6 +46,15 @@ export const getListingsThunk = () => async dispatch => {
         dispatch(getListingsAction(listings));
         return listings;
     }
+};
+
+export const getUserListingsThunk = () => async dispatch => {
+    const response = await csrfFetch('/api/listings/user');
+
+    if(response.ok) {
+        const userListings = await response.json();
+        dispatch(getUserListingsAction(userListings.userListings));
+    };
 };
 
 
@@ -81,8 +97,6 @@ export const getSingleListingThunk = (listingId) => async dispatch => {
 export const createNewListingThunk = (newListing, amenityAndCategory, newListingImages) => async dispatch => {
     const [multiImages, imageDescription] = newListingImages;
     const {newListingObj,  listingPricing} = newListing;
-    console.log('receiving newListingObj', newListingObj)
-    console.log('receiving newlistingpricing', listingPricing)
     const formData = new FormData();
 
     for(const info in newListingObj) {
@@ -153,6 +167,10 @@ export default function listings(state = initialState, action) {
             newState = {allListings:{}, singleListing: {}};
             action.listings.forEach(listing => newState.allListings[listing.id] = listing);
             return newState;
+        case GET_USER_LISTINGS:
+            newState = {allListings:{}, singleListing: {}};
+            action.listings.forEach(listing => newState.allListings[listing.id] = listing);
+            return newState
         case CLEAR_LISTING_STATE:
             return {allListings:{}, singleListing: {}}
         default:

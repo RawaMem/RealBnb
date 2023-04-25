@@ -1,0 +1,98 @@
+.userListingPage-main-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+.welcome-container {
+    height: 5%;
+    margin: 2%;
+}
+
+.toggle-tab-container-outer {
+    height: 5%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-bottom: .5px solid rgb(224,224,224);
+    padding: 2%;
+}
+
+.toggle-tab-container-inner {
+    display: flex;
+    flex-direction: row;
+    width: 30%;
+    /* border: 1px solid orange; */
+    justify-content: space-between;
+
+}
+
+.toggle-tab-container-inner div {
+    font-size: 1.3em;
+    color: rgb(102,102,102);
+    cursor: pointer;
+}
+
+.toggle-tab-container-inner div:hover {
+    color: var(--logo-color);
+}
+
+.content-page-container {
+    height: 90%;
+}
+
+.user-listing-display-container {
+    height: 100%;
+}
+
+
+.userListingCard-container {
+    height: 200px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    border-bottom: .5px solid rgb(224,224,224);
+    
+}
+
+.userListingCard-container:hover {
+    background-color: var( --become-host-btn-hover-color);
+}
+
+.userListingCard-clickable-container {
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    height: 100%;
+}
+.userListingCard-info-container {
+    width: 60%;
+    margin-left: 2%;
+}
+
+.userListingCard-image-container {
+    height: 200px;
+    width: 250px;
+}
+
+.userListingCard-image {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+}
+
+#edit-delete-btn-container {
+    width: 4%;
+    /* border: 2px solid orange; */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#edit-delete-btn-container:hover {
+    cursor: pointer;
+}
+

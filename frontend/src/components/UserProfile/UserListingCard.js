@@ -1,8 +1,13 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { Modal } from "../../context/Modal";
+import ConfirmDeleteListingForm from "./ConfirmDeleteListingForm";
 
 function UserListingCard({listing}) {
-    // find current price within the date range
-    //console.log(new Date(startDate).getTime() > new Date().getTime());
+
+    const [showConfirmDeleteForm, setShowConfirmDeleteForm] = useState(false);
+
+    // find current price within the date range.
     const listingPriceArr = listing.ListingPrices;
     const curPrice = listingPriceArr.find(price => {
         const now = new Date().getTime();
@@ -21,9 +26,19 @@ function UserListingCard({listing}) {
         const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 
         return formattedDate;
-    }
+    };
 
-    console.log('current price', curPrice)
+    function showConfirmDeleteModal() {
+        return (
+            <Modal onClick={() => setShowConfirmDeleteForm(false)}>
+                <ConfirmDeleteListingForm
+                    setShowConfirmDeleteForm={setShowConfirmDeleteForm}
+                    previewImageUrl={listing.previewImageUrl}
+                    listingId={listing.id}
+                />
+            </Modal>
+        );
+    };
 
     return (
             <div className="userListingCard-container">
@@ -42,10 +57,13 @@ function UserListingCard({listing}) {
 
                 <div id="edit-delete-btn-container">
                     <div>Edit</div>
-                    <div><span className="material-symbols-outlined">
+                    <div onClick={() => setShowConfirmDeleteForm(true) }><span className="material-symbols-outlined">
                         delete
                     </span></div>
                 </div>
+
+                {showConfirmDeleteForm && showConfirmDeleteModal()}
+
             </div>
     );
 };

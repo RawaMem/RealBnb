@@ -22,5 +22,24 @@
 
     --profileDropDownContainer-right-distance: 0.5em;
     --profileDropDownContainer-border-radius: 13px;
+
+    --confirmation-modal-height: 70vh;
+    --confirmation-modal-width: 90vh;
+    --confirmation-modal-background-color: white;
+    --confirmation-modal-border-radius: 5%;
+    --confirmation-modal-top-container-width: 100%;
+    --confirmation-modal-top-container-height: 80%;
+    --confirmation-modal-preview-image-container-width: 50%;
+    --confirmation-modal-preview-image-container-height: 100%%;
+    --confirmation-modal-preview-image-container-background-color: rgb(247,247,247);
+    --confirmation-modal-preview-image-width: 85%;
+    --confirmation-modal-preview-image-height: 80%;
+    --confirmation-modal-preview-image-border-radius: 3%;
+    --confirmation-modal-contents-container-width: 50%;
+    --confirmation-modal-contents-container-height: 100%;
+    --confirmation-modal-contents-container-padding: 5%;
+    --confirmation-modal-bottom-container-width: 100%;
+    --confirmation-modal-bottom-container-height: 20%;
+
 }
 

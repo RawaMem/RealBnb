@@ -71,6 +71,7 @@
 .userListingCard-info-container {
     width: 60%;
     margin-left: 2%;
+    color: black;
 }
 
 .userListingCard-image-container {
@@ -95,4 +96,68 @@
 #edit-delete-btn-container:hover {
     cursor: pointer;
 }
+
+.confirmDeleteListingForm-container {
+    display: flex;
+    height: var(--confirmation-modal-height);
+    width: var(--confirmation-modal-width);
+    background-color: var(--confirmation-modal-background-color);
+    flex-direction: column;
+    border-radius: var(--confirmation-modal-border-radius);
+}
+
+.confirmDeleteListingForm-top {
+    display: flex;
+    flex-direction: row;
+    width: var(--confirmation-modal-top-container-width);
+    height: var(--confirmation-modal-top-container-height);
+}
+
+.confirmDeleteListingForm-image-container {
+    width: var(--confirmation-modal-preview-image-container-width);
+    height: var(--confirmation-modal-preview-image-container-height);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: var(--confirmation-modal-border-radius);
+    background-color: var( --confirmation-modal-preview-image-container-background-color);
+}
+
+.confirmDeleteListingForm-preview-image {
+    width: var(--confirmation-modal-preview-image-width);
+    height: var(--confirmation-modal-preview-image-height);
+    border-radius: var(--confirmation-modal-preview-image-border-radius);
+}
+
+.confirmDeleteListingForm-contents-container {
+    width: var(--confirmation-modal-contents-container-width);
+    height: var(--confirmation-modal-contents-container-height);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--confirmation-modal-contents-container-padding);
+}
+
+.confirmDeleteListingForm-contents-container div {
+    font-size: 1.4em;
+}
+
+.confirmDeleteListingForm-bottom-container {
+    width: var(--confirmation-modal-bottom-container-width);
+    height: var(--confirmation-modal-bottom-container-height);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.confirmDeleteListingForm-bottom-inner-container {
+    width: 70%;
+    height: 85%;
+    /* border: 1px solid black; */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
 

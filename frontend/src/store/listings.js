@@ -7,7 +7,12 @@ const LISTING_SEARCH_RESULTS = "listings/LISTING_SEARCH_RESULTS";
 const CLEAR_LISTING_STATE = "listings/CLEAR_LISTING_STATE";
 const STORE_LISTING_IMAGES_FILES="listings/STORE_LISTING_IMAGES_FILES";
 const GET_USER_LISTINGS = "listings/GET_USER_LISTINGS";
+const DELETE_USER_LISTING = "listings/DELETE_USER_LISTING";
 
+export const deleteUserListingAction = listingId => ({
+    type: DELETE_USER_LISTING,
+    listingId
+});
 
 export const getUserListingsAction = listings => ({
     type: GET_USER_LISTINGS,
@@ -55,6 +60,16 @@ export const getUserListingsThunk = () => async dispatch => {
         const userListings = await response.json();
         dispatch(getUserListingsAction(userListings.userListings));
     };
+};
+
+export const deleteUserListingThunk = listingId => async dispatch => {
+    const response = await csrfFetch(`/api/listings/${listingId}/delete`, {
+        method: "DELETE",
+    });
+
+    if(response.ok) dispatch(deleteUserListingAction(listingId));
+
+    return response;
 };
 
 
@@ -171,12 +186,16 @@ export default function listings(state = initialState, action) {
             newState = {allListings:{}, singleListing: {}};
             action.listings.forEach(listing => newState.allListings[listing.id] = listing);
             return newState
+        case DELETE_USER_LISTING:
+            newState={allListings: {...state.allListings}, singleListing: {}};
+            delete newState.allListings[action.listingId];
+            return newState;
         case CLEAR_LISTING_STATE:
             return {allListings:{}, singleListing: {}}
         default:
             return state;
-    }
-}
+    };
+};
 
 
         //keep for now, once we know we dont need this then we can delete

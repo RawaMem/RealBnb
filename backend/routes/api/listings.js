@@ -384,4 +384,30 @@ router.get('/user', requireAuth, asyncHandler(async(req, res) => {
   }
 }));
 
+//delete a listing by its id
+router.delete('/:listingId/delete', requireAuth, asyncHandler(async(req, res) => {
+  const listingId = req.params.listingId;
+
+  const user = req.user;
+
+  const findListing = await Listing.findByPk(listingId);
+
+  if(!findListing) return res.json({
+    "message": `Event with ID ${listingId} couldn't be found`,
+    "statusCode": 404
+  });
+
+  if(findListing.ownerId !== user.id) return res.json({
+    "message": "Only the host have access to delete the current listing",
+    "statusCode": 404
+  });
+
+  let deletedListing = await findListing.destroy();
+
+  if(deletedListing) res.json({
+    "message": "Successfully deleted",
+    "statusCode": 200
+  });    
+}));
+
 module.exports = router;

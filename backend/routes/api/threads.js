@@ -43,7 +43,7 @@ router.get('/:threadId', restoreUser, asyncHandler(async (req, res) => {
     const threads = await DirectMessageThread.findByPk(threadId, {
         include: DirectMessage
     } )
-    console.log('this is threads, looking for messages', threads)
+    // console.log('this is threads, looking for messages', threads)
 
     return res.json(threads.DirectMessages)
 }))

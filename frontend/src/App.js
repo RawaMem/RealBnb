@@ -25,9 +25,10 @@ import UserProfile from './components/UserProfile';
 import { io } from 'socket.io-client'
 import Socket from './components/Socket';
 import Messages from './components/Messages';
+import MessageWrapper from './components/Messages/MessageWrapper';
 let serverUrl;
 if (process.env.NODE_ENV === 'production') {
-  serverUrl = 'https://realbnb-app.herokuapp.com'
+  serverUrl = 'https://realbnb.onrender.com/'
 } else {
   serverUrl = 'http://localhost:5000'
 }
@@ -159,7 +160,7 @@ function App() {
             <UserProfile />
           </Route>
           <Route exact path='/messages'>
-            <Messages socket={socket}/>
+            <MessageWrapper socket={socket}/>
           </Route>
           <Route exact path='/testing'>
             <TestCompontent />

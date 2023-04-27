@@ -21,7 +21,7 @@ const { Listing,
 
 const router = express.Router();
 
-//get all threads related to user
+//get all threads and messages related to user
 router.get('/', restoreUser, asyncHandler(async (req, res) => {
 
     const userId = req.user.id

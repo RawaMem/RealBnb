@@ -8,17 +8,21 @@ import {
 } from "../../store/directMessages";
 import { useReceiverId } from "../../context/ReceiverId";
 import { getDMThreadsThunk } from "../../store/directMessageThreads";
+import { useParams } from "react-router-dom";
 
-export default function Messages({ socket, threadId, setThreadId, messageThreadsArr, messageThreadsObj }) {
+export default function Messages({ socket, messageThreadsArr, messageThreadsObj }) {
     const dispatch = useDispatch();
+    // const {threadId} = useParams()
 
-    const { receiverId, setReceiverId } = useReceiverId();
+    const { threadIdFromListing } = useReceiverId();
     // console.log('this is the current receiverID', receiverId)
 
     const socketRef = useRef(socket)
     const [content, setContent] = useState("");
-    // const [threadId, setThreadId] = useState(0)
+    const [threadId, setThreadId] = useState(0)
+    const [firstRender, setFirstRender] = useState(true)
     const [messageIdToEdit, setMessageIdToEdit] = useState(0)
+    const [receiverId, setReceiverId] = useState(0)
 
     // const messageThreadsObj = useSelector((state) => state.dmThreads);
     const directMessagesObj = useSelector((state) => state.directMessages);
@@ -32,23 +36,23 @@ export default function Messages({ socket, threadId, setThreadId, messageThreads
 
     //consider moving joining threads and rooms in a context component so then its not related to threads
     //if not works take out rooms and do it with userIds potentially
-    useEffect(() => {
-        console.log('this is socketRef.current in useEffect OF JOINING ROOMS', socketRef.current)
-        messageThreadsArr.forEach((thread) => {
-            const threadAndUser = {threadId: thread.id, userId: sessionUser.id}
-            console.log('this is join room map, thsi is threadAndUser', threadAndUser)
-            socketRef.current.emit('joinThreadRoom', threadAndUser)
-            console.log('after socket join emit in useEffect')
-        })
+    // useEffect(() => {
+    //     console.log('this is socketRef.current in useEffect OF JOINING ROOMS', socketRef.current)
+    //     messageThreadsArr.forEach((thread) => {
+    //         const threadAndUser = {threadId: thread.id, userId: sessionUser.id}
+    //         console.log('this is join room map, thsi is threadAndUser', threadAndUser)
+    //         socketRef.current.emit('joinThreadRoom', threadAndUser)
+    //         console.log('after socket join emit in useEffect')
+    //     })
 
-        return () => {
-            messageThreadsArr.forEach((thread) => {
-            const threadAndUser = {threadId: thread.id, userId: sessionUser.id}
-                socketRef.current.emit('leaveThreadRoom', threadAndUser)
-            })
-        }
+    //     return () => {
+    //         messageThreadsArr.forEach((thread) => {
+    //         const threadAndUser = {threadId: thread.id, userId: sessionUser.id}
+    //             socketRef.current.emit('leaveThreadRoom', threadAndUser)
+    //         })
+    //     }
 
-    },[socketRef.current, messageThreadsArr])
+    // },[socketRef.current, messageThreadsArr])
 
 
     useEffect(() => {
@@ -127,7 +131,8 @@ export default function Messages({ socket, threadId, setThreadId, messageThreads
     const handleSelectThread = (e) => {
         e.preventDefault()
         console.log('here is the thread info in select thread, ', e.target.dataset.threadid)
-        if (threadId !== 0) {
+        setFirstRender(false)
+        if (threadId === e.target.dataset.threadid) {
             setThreadId(0)
         } else {
             setThreadId(e.target.dataset.threadid)
@@ -168,23 +173,44 @@ export default function Messages({ socket, threadId, setThreadId, messageThreads
             <div className="direct-message-container">
             <div className="test">this is message container</div>
                 {console.log('this is threadId in JSX', threadId)}
-            {threadId !== 0 && directMessagesArr.map((message) => (
-                <div key={`messagediv-${message.id}`}>
-                <div key={`messageid-${message.id}`} className="direct-message">{message.content}</div>
-                {sessionUser.id === message.senderId &&
-                <button
-                data-messageid={message.id}
-                onClick={(e) => handleEditMessage(message, e)}
-                className="dm-edit-button"
-                key={`editbutton-${message.id}`}>edit</button>}
-                {sessionUser.id === message.senderId &&
-                <button
-                data-messageid={message.id}
-                onClick={handleDeleteMessage}
-                className="dm-delete-button"
-                key={`deletebtn-${message.id}`}>delete</button>}
-                </div>
-            ))}
+            {
+                firstRender && threadIdFromListing !== 0 ?
+                    threadId !== 0 && directMessagesArr.map((message) => (
+                        <div key={`messagediv-${message.id}`}>
+                        <div key={`messageid-${message.id}`} className="direct-message">{message.content}</div>
+                        {sessionUser.id === message.senderId &&
+                        <button
+                        data-messageid={message.id}
+                        onClick={(e) => handleEditMessage(message, e)}
+                        className="dm-edit-button"
+                        key={`editbutton-${message.id}`}>edit</button>}
+                        {sessionUser.id === message.senderId &&
+                        <button
+                        data-messageid={message.id}
+                        onClick={handleDeleteMessage}
+                        className="dm-delete-button"
+                        key={`deletebtn-${message.id}`}>delete</button>}
+                        </div>
+                    )) :
+                        threadId !== 0 && directMessagesArr.map((message) => (
+                        <div key={`messagediv-${message.id}`}>
+                        <div key={`messageid-${message.id}`} className="direct-message">{message.content}</div>
+                        {sessionUser.id === message.senderId &&
+                        <button
+                        data-messageid={message.id}
+                        onClick={(e) => handleEditMessage(message, e)}
+                        className="dm-edit-button"
+                        key={`editbutton-${message.id}`}>edit</button>}
+                        {sessionUser.id === message.senderId &&
+                        <button
+                        data-messageid={message.id}
+                        onClick={handleDeleteMessage}
+                        className="dm-delete-button"
+                        key={`deletebtn-${message.id}`}>delete</button>}
+                        </div>
+                    ))
+
+            }
             </div>
 
             <div className="create-message-form-container">

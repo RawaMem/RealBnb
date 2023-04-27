@@ -1,4 +1,5 @@
 import { csrfFetch } from "./csrf";
+import { GET_DMS } from "./directMessageThreads";
 
 const GET_DIRECT_MESSAGES = 'dms/GET'
 const CREATE_DIRECT_MESSAGES = 'dms/CREATE'
@@ -24,6 +25,16 @@ export const deleteDirectMessageAction = (messageId) => ({
     type: DELETE_DIRECT_MESSAGES,
     messageId
 })
+
+export const getAllMessagesThunk = (threadId) => async (dispatch) => {
+    const res = await csrfFetch(`/api/directMessageThreads/current`)
+
+    if (res.ok) {
+        const messages = await res.json()
+        dispatch(getDirectMessageAction(messages))
+        return messages
+    }
+}
 
 export const getDirectMessageThunk = (threadId) => async (dispatch) => {
     const res = await csrfFetch(`/api/directMessageThreads/${threadId}`)
@@ -62,6 +73,13 @@ export default function directMessages (state = initialState, action) {
             newState = {...state}
             delete newState[action.messageId]
             return newState
+
+            case GET_DMS:
+                newState = {}
+                action.threads.forEach((thead) => {
+                    newState[action.thread.id] = thread.DirectMessages
+                })
+
 
         default:
             return newState

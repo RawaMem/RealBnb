@@ -159,7 +159,7 @@ function App() {
           <Route exact path='/user-profile'>
             <UserProfile />
           </Route>
-          <Route exact path='/messages'>
+          <Route exact path='/messages/'>
             <MessageWrapper socket={socket}/>
           </Route>
           <Route exact path='/testing'>

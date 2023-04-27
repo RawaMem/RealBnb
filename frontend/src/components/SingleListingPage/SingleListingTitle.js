@@ -1,15 +1,19 @@
 import { useHistory } from "react-router-dom";
 import { useReceiverId } from "../../context/ReceiverId";
+import { useDispatch } from "react-redux";
+import { createDMThreadsThunk } from "../../store/directMessageThreads";
 
-export default function SingleListingTitle({ listing, currentUser }) {
+export default function SingleListingTitle({ listing, currentUser, dispatch }) {
 
-  const {receiverId, setReceiverId} = useReceiverId();
+  const {setThreadIdFromListing} = useReceiverId();
   const history = useHistory()
 
-  const handleSendMessage = (e) => {
+  const handleSendMessage = async (e) => {
     e.preventDefault();
-    setReceiverId(listing.ownerId)
-    history.push('/messages')
+    const thread = await dispatch(createDMThreadsThunk({hostId: listing.ownerId, guestId: currentUser.id}))
+    // console.log('this is created thread in listing page@@@@@@@', thread)
+    setThreadIdFromListing(thread.id)
+    history.push(`/messages`)
 
   };
 

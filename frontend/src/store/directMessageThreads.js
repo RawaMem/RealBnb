@@ -18,19 +18,19 @@ const deleteDMThreadsAction = (threadId) => ({
     threadId
 })
 
-export const getDMs = threads => ({
+export const getDMsAction = threads => ({
     type: GET_DMS,
     threads
 })
 
 
-
+//this is getting all threads and messages, puts them in their respective slice of state
 export const getDMThreadsThunk = () => async (dispatch) => {
     const response = await csrfFetch('/api/directMessageThreads')
 
     if (response.ok) {
         const directMessageThreads = await response.json()
-        dispatch(getDMs(directMessageThreads))
+        dispatch(getDMsAction(directMessageThreads))
         dispatch(getDMThreadsAction(directMessageThreads))
     }
 }
@@ -69,9 +69,11 @@ export default function dmThreads(state = initialState, action) {
     let newState
     switch (action.type) {
         case GET_DM_THREADS:
+            //dont need messages so we delete them here
             newState = {}
             action.dmThreads.forEach(thread => {
                 newState[thread.id] = thread
+                delete newState[thread.id].DirectMessages
 
             })
             return newState

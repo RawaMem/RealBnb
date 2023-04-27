@@ -2,28 +2,22 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Messages from ".";
 import { getDMThreadsThunk } from "../../store/directMessageThreads";
+import { Redirect } from "react-router-dom";
 
 
 
 export default function MessageWrapper({socket}) {
     console.log('RERENDER WRAPPER=========')
     const dispatch = useDispatch();
-    // const [threadId, setThreadId] = useState(0)
-
 
     const messageThreadsObj = useSelector((state) => state.dmThreads);
     const sessionUser = useSelector((state) => state.session.user);
 
-
     const messageThreadsArr = Object.values(messageThreadsObj);
-    console.log('messageThreadsArr==========', messageThreadsArr)
+    // console.log('messageThreadsArr==========', messageThreadsArr)
 
     useEffect(() => {
         dispatch(getDMThreadsThunk())
-
-        // return () => {
-        // setThreadId(0);
-        // };
     }, [dispatch])
 
     useEffect(() => {
@@ -41,9 +35,7 @@ export default function MessageWrapper({socket}) {
                 socket.emit('leaveThreadRoom', threadAndUser)
             })
         }
-
     },[socket, messageThreadsArr])
-
 
 
     return (
@@ -52,3 +44,9 @@ export default function MessageWrapper({socket}) {
         </>
     )
 }
+
+// const [threadId, setThreadId] = useState(0)
+    // if (!sessionUser) return (<Redirect to='/'/>)
+    // return () => {
+        // setThreadId(0);
+        // };

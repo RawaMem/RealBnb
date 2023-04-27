@@ -7,101 +7,70 @@ import {
   getDirectMessageThunk,
 } from "../../store/directMessages";
 import { useReceiverId } from "../../context/ReceiverId";
-import { getDMThreadsThunk } from "../../store/directMessageThreads";
-import { useParams } from "react-router-dom";
+
 
 export default function Messages({ socket, messageThreadsArr, messageThreadsObj }) {
     const dispatch = useDispatch();
-    // const {threadId} = useParams()
 
     const { threadIdFromListing } = useReceiverId();
-    // console.log('this is the current receiverID', receiverId)
 
-    const socketRef = useRef(socket)
     const [content, setContent] = useState("");
     const [threadId, setThreadId] = useState(0)
     const [firstRender, setFirstRender] = useState(true)
     const [messageIdToEdit, setMessageIdToEdit] = useState(0)
     const [receiverId, setReceiverId] = useState(0)
 
-    // const messageThreadsObj = useSelector((state) => state.dmThreads);
-    const directMessagesObj = useSelector((state) => state.directMessages);
+    const directMessagesObj = useSelector((state) => state.directMessages[threadId]);
     const sessionUser = useSelector((state) => state.session.user);
 
-    //   console.log('this is directMessagesObj ', directMessagesObj)
-    //   console.log('this is messageThreadsObj ', messageThreadsObj)
-
-    // const messageThreadsArr = Object.values(messageThreadsObj);
     const directMessagesArr = Object.values(directMessagesObj);
 
-    //consider moving joining threads and rooms in a context component so then its not related to threads
-    //if not works take out rooms and do it with userIds potentially
-    // useEffect(() => {
-    //     console.log('this is socketRef.current in useEffect OF JOINING ROOMS', socketRef.current)
-    //     messageThreadsArr.forEach((thread) => {
-    //         const threadAndUser = {threadId: thread.id, userId: sessionUser.id}
-    //         console.log('this is join room map, thsi is threadAndUser', threadAndUser)
-    //         socketRef.current.emit('joinThreadRoom', threadAndUser)
-    //         console.log('after socket join emit in useEffect')
-    //     })
-
-    //     return () => {
-    //         messageThreadsArr.forEach((thread) => {
-    //         const threadAndUser = {threadId: thread.id, userId: sessionUser.id}
-    //             socketRef.current.emit('leaveThreadRoom', threadAndUser)
-    //         })
-    //     }
-
-    // },[socketRef.current, messageThreadsArr])
-
-
     useEffect(() => {
-        console.log("this is socketRef.current in useEffect ", socketRef.current);
+        console.log("this is socket in useEffect ", socket);
 
-        const messageReceivedHandler = (message) => {
-          console.log("message recieved socketRef.current in use effect running before dispatch, this is message", message);
-          dispatch(createDirectMessageAction(message));
+        const messageReceivedSocketHandler = (message) => {
+            console.log("message recieved socket in use effect running before dispatch, this is message", message);
+            dispatch(createDirectMessageAction(message));
         };
 
-        const messageEdittedHandler = (message) => {
-          dispatch(editDirectMessageAction(message));
+        const messageEdittedSocketHandler = (message) => {
+            dispatch(editDirectMessageAction(message));
         };
 
-        const messageDeletedHandler = (messageId) => {
-          console.log("delete received, this is messageId", messageId);
-          dispatch(deleteDirectMessageAction(messageId));
+        const messageDeletedSocketHandler = (messageId) => {
+            console.log("delete received, this is messageId", messageId);
+            dispatch(deleteDirectMessageAction(messageId));
         };
 
-        socketRef.current.on("messageReceived", messageReceivedHandler);
-        socketRef.current.on("messageEditted", messageEdittedHandler);
-        socketRef.current.on("messageDeleted", messageDeletedHandler);
+        socket.on("messageReceived", messageReceivedSocketHandler);
+        socket.on("messageEditted", messageEdittedSocketHandler);
+        socket.on("messageDeleted", messageDeletedSocketHandler);
 
         return () => {
             console.log('SOCKET OFF RUNNING IN USE EFFECT RETURN')
-          socketRef.current.off("messageReceived", messageReceivedHandler);
-          socketRef.current.off("messageEditted", messageEdittedHandler);
-          socketRef.current.off("messageDeleted", messageDeletedHandler);
+            socket.off("messageReceived", messageReceivedSocketHandler);
+            socket.off("messageEditted", messageEdittedSocketHandler);
+            socket.off("messageDeleted", messageDeletedSocketHandler);
         };
-      }, [dispatch, socketRef.current]);
+      }, [dispatch, socket]);
 
 
-    useEffect(() => {
-        console.log("useEffect running, here is threadId", threadId);
 
-        if (threadId !== 0) {
-          console.log("if threadID not 0 running", threadId);
-          dispatch(getDirectMessageThunk(threadId));
-        }
-      }, [dispatch, threadId]);
+    const handleSelectThread = (e) => {
+    e.preventDefault()
+    // console.log('here is the thread info in select thread, ', e.target.dataset.threadid)
+    setFirstRender(false)
+    if (threadId === e.target.dataset.threadid) {
+        setThreadId(0)
+    } else {
+        setThreadId(e.target.dataset.threadid)
+    }
+    setReceiverId(messageThreadsObj[e.target.dataset.threadid].hostId === sessionUser.id ?
+                    messageThreadsObj[e.target.dataset.threadid].guestId :
+                    messageThreadsObj[e.target.dataset.threadid].hostId
+                    )
+    }
 
-
-    // useEffect(() => {
-    //     dispatch(getDMThreadsThunk())
-
-    //     return () => {
-    //     setThreadId(0);
-    //     };
-    // }, [dispatch])
 
     const handleCreateMessage = (e) => {
         e.preventDefault();
@@ -118,42 +87,27 @@ export default function Messages({ socket, messageThreadsArr, messageThreadsObj 
         if (messageIdToEdit !== 0) {
             newMessage.id = messageIdToEdit
             console.log('messageToEdit !== 0 running, this is messageIdToEdit ', messageIdToEdit, 'this is newmessage ', newMessage)
-            socketRef.current.emit('editMessage', newMessage)
+            socket.emit('editMessage', newMessage)
         } else {
             console.log('this is newMessage in handle create message', newMessage)
-            socketRef.current.emit("sendMessage", newMessage);
-            console.log('after socketRef.current.emit')
+            socket.emit("sendMessage", newMessage);
+            console.log('after socket.emit')
         }
         setMessageIdToEdit(0)
         setContent("");
     };
 
-    const handleSelectThread = (e) => {
-        e.preventDefault()
-        console.log('here is the thread info in select thread, ', e.target.dataset.threadid)
-        setFirstRender(false)
-        if (threadId === e.target.dataset.threadid) {
-            setThreadId(0)
-        } else {
-            setThreadId(e.target.dataset.threadid)
-        }
-        setReceiverId(messageThreadsObj[e.target.dataset.threadid].hostId === sessionUser.id ?
-                        messageThreadsObj[e.target.dataset.threadid].guestId :
-                        messageThreadsObj[e.target.dataset.threadid].hostId
-                        )
-    }
 
     const handleDeleteMessage = (e) => {
         console.log('handle delete clicked, this is messageId ', e.target.dataset.messageid, threadId)
-        // e.preventDefault()
-        socketRef.current.emit('deleteMessage', {messageId: e.target.dataset.messageid, threadId})
+        socket.emit('deleteMessage', {messageId: e.target.dataset.messageid, threadId})
     }
 
     const handleEditMessage = (message, e) => {
         setMessageIdToEdit(e.target.dataset.messageid)
         setContent(message.content)
     }
-    console.log('this is socketRef.current in before return ', socketRef.current)
+    console.log('this is socket in before return ', socket)
 
     return (
         <>
@@ -231,3 +185,55 @@ export default function Messages({ socket, messageThreadsArr, messageThreadsObj 
         </>
     );
 }
+
+
+// import { getDMThreadsThunk } from "../../store/directMessageThreads";
+// import { useParams } from "react-router-dom";
+// const {threadId} = useParams()
+    // console.log('this is the current receiverID', receiverId)
+    // const socketRef = useRef(socket)
+    // const messageThreadsObj = useSelector((state) => state.dmThreads);
+    //   console.log('this is directMessagesObj ', directMessagesObj)
+    //   console.log('this is messageThreadsObj ', messageThreadsObj)
+
+    // const messageThreadsArr = Object.values(messageThreadsObj);
+
+    //consider moving joining threads and rooms in a context component so then its not related to threads
+    //if not works take out rooms and do it with userIds potentially
+    // useEffect(() => {
+    //     console.log('this is socket in useEffect OF JOINING ROOMS', socket)
+    //     messageThreadsArr.forEach((thread) => {
+    //         const threadAndUser = {threadId: thread.id, userId: sessionUser.id}
+    //         console.log('this is join room map, thsi is threadAndUser', threadAndUser)
+    //         socket.emit('joinThreadRoom', threadAndUser)
+    //         console.log('after socket join emit in useEffect')
+    //     })
+
+    //     return () => {
+    //         messageThreadsArr.forEach((thread) => {
+    //         const threadAndUser = {threadId: thread.id, userId: sessionUser.id}
+    //             socket.emit('leaveThreadRoom', threadAndUser)
+    //         })
+    //     }
+
+    // },[socket, messageThreadsArr])
+
+    // useEffect(() => {
+    //     console.log("useEffect running, here is threadId", threadId);
+
+    //     if (threadId !== 0) {
+    //       console.log("if threadID not 0 running", threadId);
+    //       dispatch(getDirectMessageThunk(threadId));
+    //     }
+    //   }, [dispatch, threadId]);
+
+
+    // useEffect(() => {
+    //     dispatch(getDMThreadsThunk())
+
+    //     return () => {
+    //     setThreadId(0);
+    //     };
+    // }, [dispatch])
+
+    // e.preventDefault()

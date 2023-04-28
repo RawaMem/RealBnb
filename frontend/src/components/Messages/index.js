@@ -28,9 +28,10 @@ export default function Messages({ socket, messageThreadsArr, messageThreadsObj 
     useEffect(() => {
         console.log("this is socket in useEffect ", socket);
 
-        const messageReceivedSocketHandler = (message) => {
+        const messageReceivedSocketHandler = async (message, resCB) => {
             console.log("message recieved socket in use effect running before dispatch, this is message", message);
-            dispatch(createDirectMessageAction(message));
+            resCB("messageReceived res CallBack")
+            await dispatch(createDirectMessageAction(message));
         };
 
         const messageEdittedSocketHandler = (message) => {
@@ -74,7 +75,7 @@ export default function Messages({ socket, messageThreadsArr, messageThreadsObj 
 
     const handleCreateMessage = (e) => {
         e.preventDefault();
-        console.log('handle create message running')
+        // console.log('handle create message running')
 
         const newMessage = {
         content,
@@ -86,12 +87,12 @@ export default function Messages({ socket, messageThreadsArr, messageThreadsObj 
 
         if (messageIdToEdit !== 0) {
             newMessage.id = messageIdToEdit
-            console.log('messageToEdit !== 0 running, this is messageIdToEdit ', messageIdToEdit, 'this is newmessage ', newMessage)
+            // console.log('messageToEdit !== 0 running, this is messageIdToEdit ', messageIdToEdit, 'this is newmessage ', newMessage)
             socket.emit('editMessage', newMessage)
         } else {
-            console.log('this is newMessage in handle create message', newMessage)
+            // console.log('this is newMessage in handle create message', newMessage)
             socket.emit("sendMessage", newMessage);
-            console.log('after socket.emit')
+            // console.log('after socket.emit')
         }
         setMessageIdToEdit(0)
         setContent("");
@@ -99,7 +100,7 @@ export default function Messages({ socket, messageThreadsArr, messageThreadsObj 
 
 
     const handleDeleteMessage = (e) => {
-        console.log('handle delete clicked, this is messageId ', e.target.dataset.messageid, threadId)
+        // console.log('handle delete clicked, this is messageId ', e.target.dataset.messageid, threadId)
         socket.emit('deleteMessage', {messageId: e.target.dataset.messageid, threadId})
     }
 
@@ -107,7 +108,7 @@ export default function Messages({ socket, messageThreadsArr, messageThreadsObj 
         setMessageIdToEdit(e.target.dataset.messageid)
         setContent(message.content)
     }
-    console.log('this is socket in before return ', socket)
+    // console.log('this is socket in before return ', socket)
 
     return (
         <>

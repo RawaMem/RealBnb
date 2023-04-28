@@ -26,9 +26,11 @@ io.on("connection", socket => {
 
   // })
 
+  //!! TODO fires 3x on room join
   socket.on('joinThreadRoom', async (threadAndUser) => {
     const {threadId, userId} = threadAndUser
     console.log('socket.on join thread room, threadId and userId', threadId, userId)
+    console.log("types for threadId and userId:: ", typeof threadId, typeof userId)
     socket.join(threadId)
     console.log('AFTER THE SOCKET JOIN------')
   })
@@ -43,11 +45,17 @@ io.on("connection", socket => {
   socket.on('sendMessage', async (message) => {
     console.log('BIN/WWW SEND MESSAGE SOCKT RUNNING, HERE IS MESSAGE', message)
     const createdMessage = await createDirectMessage(message)
-    console.log('BIN/WWW SEND MESSAGE SOCKT RUNNING, THIS IS CREATED MESSAGE', createdMessage)
-    console.log('THIS IS IO, ', io)
-    console.log('THIS IS IO.to, ', io.to)
-    console.log('THIS IS IO.to, ', io.to(message.directMessageThreadId))
-    io.to(message.directMessageThreadId).emit('messageReceived', createdMessage)
+    // console.log('BIN/WWW SEND MESSAGE SOCKT RUNNING, THIS IS CREATED MESSAGE', createdMessage)
+    // console.log('THIS IS IO, ', io)
+    // console.log('THIS IS IO.to, ', io.to)
+    // console.log('THIS IS IO.to, ', io.to(message.directMessageThreadId))
+    // console.log('actual message to to: message.directMessageThreadId:: ', message.directMessageThreadId)
+    //console.log('message.directMessageThreadId === threadId :: ', message.directMessageThreadId === meassag)
+    // console.log('message ::::: ', message)
+    console.log("\ntypeof message.directMessageThreadId:: ", typeof message.directMessageThreadId)
+    io.to(Number(message.directMessageThreadId)).emit('messageReceived', createdMessage, (res) => {
+        console.log("\n<< response FOLLOWING EMIT >> \n", res, "\n")
+    })
     console.log('AFTER IO TO EMIT---------------------------')
   })
 

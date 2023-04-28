@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { nanoid } from 'nanoid';
 import Messages from ".";
 import { getDMThreadsThunk } from "../../store/directMessageThreads";
 import { Redirect } from "react-router-dom";
@@ -31,7 +32,7 @@ export default function MessageWrapper({socket}) {
 
         return () => {
             messageThreadsArr.forEach((thread) => {
-            const threadAndUser = {threadId: thread.id, userId: sessionUser.id}
+            const threadAndUser = {threadId: `room-thread-pk-${thread.id}`, userId: sessionUser.id}
                 socket.emit('leaveThreadRoom', threadAndUser)
             })
         }

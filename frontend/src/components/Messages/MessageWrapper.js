@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { nanoid } from 'nanoid';
 import Messages from ".";
 import { getDMThreadsThunk } from "../../store/directMessageThreads";
 import { Redirect } from "react-router-dom";

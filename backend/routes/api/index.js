@@ -8,6 +8,7 @@ const asyncHandler = require('express-async-handler');
 const { Booking } = require('../../db/models')
 const reviewsRouter = require('./reviews')
 const threadsRouter = require('./threads')
+const wishListRouter = require("./wishlist");
 
 // // GET /api/set-token-cookie
 // const asyncHandler = require('express-async-handler');
@@ -60,6 +61,8 @@ router.use('/maps',mapsRouter);
 router.use('/reviews',reviewsRouter);
 
 router.use('/directMessageThreads', threadsRouter)
+
+router.use("/wishlists", wishListRouter);
 
 router.get('/maps-key', (req, res) => {
   const apiKey = process.env.GOOGLE_MAPS_API_KEY;

@@ -10,8 +10,6 @@ const { Op } = require('sequelize');
 const {
   singleMulterUpload,
   singlePublicFileUpload,
-  multipleMulterUpload,
-  multiplePublicFileUpload,
 } = require('../../awsS3');
 const { Listing,
   ListingPrice,
@@ -359,6 +357,49 @@ router.get('/:listingId(\\d+)', asyncHandler(async (req, res) => {
     ]
   })
   res.json(singleListing);
+}));
+
+//get listing by its id for edit form
+router.get("/:listingId/editForm", requireAuth, asyncHandler(async(req, res) => {
+  const listingId = req.params.listingId;
+
+  const listingInfo = await Listing.findByPk(listingId, {
+    include: [
+      {
+        model: Image,
+        attributes: ["url"]
+      },
+      {
+        model: ListingPrice,
+        attributes: ["pricePerDay", "startDate", "endDate"]
+      },
+      {
+        model: Category,
+        attributes: ["name"]
+      }, 
+      {
+        model: Amenity,
+        attributes: ["name"]
+      }
+    ]
+  });
+
+  if(!listingInfo) {
+    res.status(404);
+        res.json({
+            message: `"List with id of ${listingId} couldn't be found"`
+        });
+  };
+
+  const cleanUpListingInfo = listingInfo.toJSON();
+  const categoryArr = cleanUpListingInfo.Categories;
+  const newCategoryArr = categoryArr.map(category => category.name);
+  cleanUpListingInfo.Categories = newCategoryArr;
+  const amenitiesArr = cleanUpListingInfo.Amenities;
+  const newAmenityArr = amenitiesArr.map(amenity => amenity.name);
+  cleanUpListingInfo.Amenities = newAmenityArr;
+
+  res.json(cleanUpListingInfo)
 }));
 
 //get all listings of the logged in user

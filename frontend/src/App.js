@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
+import { StyledEngineProvider } from '@mui/material/styles';
 import * as sessionActions from './store/session';
 import Navigation from './components/Navigation';
 import SingleListingPage from './components/SingleListingPage';
@@ -20,6 +21,7 @@ import ListingPriceForm from './components/CreateListing/ListingPriceForm';
 import CategoryForm from './components/CreateListing/CategoryForm';
 import CreateNewList from './components/CreateListing';
 import UserProfile from './components/UserProfile';
+import EditListingForm from './components/EditListing';
 
 
 //websocket setup
@@ -159,10 +161,15 @@ function App() {
           <Route exact path='/listings/:listingId'>
             <SingleListingPage />
           </Route>
-
           <Route exact path='/user-profile'>
             <UserProfile />
           </Route>
+
+          <StyledEngineProvider injectFirst>
+            <Route exact path='/edit-listing/:listingId'>
+              <EditListingForm />
+            </Route>
+          </StyledEngineProvider>
 
           <Route exact path='/messages'>
             <Messages socket={socket}/>

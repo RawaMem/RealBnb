@@ -56,7 +56,7 @@ function UserListingCard({listing}) {
                 </Link>
 
                 <div id="edit-delete-btn-container">
-                    <div>Edit</div>
+                    <Link to={`/edit-listing/${listing.id}`} >Edit</Link >
                     <div onClick={() => setShowConfirmDeleteForm(true) }><span className="material-symbols-outlined">
                         delete
                     </span></div>

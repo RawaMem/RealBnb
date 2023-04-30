@@ -1,6 +1,8 @@
 const express = require("express");
 const { check, validationResult } = require("express-validator");
 const { validateGuests } = require("../../utils/validations/WishList/validateGuests");
+const { isValidDate } = require("../../utils/validations/WishList/isValidDate");
+
 const { handleValidationErrors } = require("../../utils/validation");
 
 const asyncHandler = require("express-async-handler");
@@ -19,29 +21,32 @@ const validateWishList = [
 		.withMessage("Name cannot be empty.")
 		.bail()
 		.isLength({ min: 1, max: 50 }),
-	check("checkIn").optional().isDate().withMessage("Check in date must be a valid date."),
-	check("checkOut").optional().isDate().withMessage("Check out date must be a valid date."),
 	check("checkIn")
 		.optional()
 		.custom((value) => {
-			const today = new Date();
-			if (value && new Date(value) > today) {
-				return true;
+			if (!isValidDate(value)) {
+				throw new Error("Check in date must be a valid date.");
 			}
-
-			return false;
-		})
-		.withMessage("Check in date must be a valid date and occur after the current date."),
-	check("checkOut")
-		.optional()
-		.custom((value, { req }) => {
-			if (value && req.body.checkIn && new Date(req.body.checkIn) > new Date(value)) {
-				return false;
+			const today = new Date();
+			today.setHours(0, 0, 0, 0);
+			if (new Date(value) < today) {
+				throw new Error("Check in date must occur after the current date.");
 			}
 
 			return true;
-		})
-		.withMessage("Check out date must be a valid date and occur after the check in date."),
+		}),
+	check("checkOut")
+		.optional()
+		.custom((value, { req }) => {
+			if (!isValidDate(value)) {
+				throw new Error("Check out date must be a valid date.");
+			}
+			if (value && req.body.checkIn && new Date(req.body.checkIn) > new Date(value)) {
+				throw new Error("Check out date must occur after the check in date.");
+			}
+
+			return true;
+		}),
 	check("adultGuests")
 		.optional()
 		.isNumeric()

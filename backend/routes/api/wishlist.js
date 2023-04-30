@@ -49,90 +49,62 @@ const validateWishList = [
 		}),
 	check("adultGuests")
 		.optional()
-		.isNumeric()
-		.withMessage("The number of adult guests must be a number.")
-		.toInt()
-		.custom((value) => {
-			if (value < 1 || value > 16) {
-				throw new Error("The number of adult guests must be between 1 and 16.");
-			}
-
-			return true;
-		})
-		.bail(),
-	check("adultGuests")
-		.optional()
-		.isNumeric()
-		.toInt()
-		.withMessage("The number of adult guests must be a number.")
 		.custom((value, { req }) => {
-			const errors = validateGuests(
-				value,
-				req.body.childGuests,
-				req.body.infantGuests,
-				req.body.petGuests
-			);
+			if (isNaN(value)) {
+				throw new Error("The number of adults must be a number.");
+			}
+			if (value < 1 || value > 16) {
+				throw new Error("The number of adults must be between 1 and 16.");
+			}
+			const errors = validateGuests(parseInt(value, 10), parseInt(req.body.childGuests, 10));
+
 			if (Object.keys(errors).length > 0) {
 				throw new Error(errors["adultGuests"]);
 			}
 
 			return true;
-		})
-		.bail(),
+		}),
 	check("childGuests")
 		.optional()
-		.isNumeric()
-		.toInt()
-		.custom((value) => {
-			if (value < 0 || value > 15) {
-				return false;
-			}
-
-			return true;
-		})
-		.withMessage("The number of children must be between 0 and 15"),
-	check("childGuests")
-		.optional()
-		.isNumeric()
-		.toInt()
 		.custom((value, { req }) => {
-			const errors = validateGuests(
-				req.body.adultGuests,
-				value,
-				req.body.infantGuests,
-				req.body.petGuests
-			);
+			const errors = validateGuests(parseInt(req.body.adultGuests, 10), parseInt(value, 10));
+			if (isNaN(value)) {
+				throw new Error("The number of children must be a number.");
+			}
+			if (value < 0 || value > 15) {
+				throw new Error("The number of children must be between 0 and 15");
+			}
 			if (Object.keys(errors).length > 0) {
 				throw new Error(errors["childGuests"]);
 			}
 
 			return true;
-		})
-		.bail(),
+		}),
 	check("infantGuests")
 		.optional()
-		.isNumeric()
-		.toInt()
 		.custom((value) => {
+			if (isNaN(value)) {
+				throw new Error("The number of infants must be a number.");
+			}
 			if (value < 0 || value > 5) {
-				return false;
+				throw new Error("The number of infants must be between 0 and 5.");
 			}
 
 			return true;
-		})
-		.withMessage("The number of infants must be between 0 and 5."),
+		}),
 	check("petGuests")
 		.optional()
-		.isNumeric()
-		.toInt()
 		.custom((value) => {
+			if (isNaN(value)) {
+				throw new Error("The number of pets must be a number.");
+			}
 			if (value < 0 || value > 5) {
-				return false;
+				throw new Error("The number of pets must be between 0 and 5.");
 			}
 
 			return true;
-		})
-		.withMessage("The number of pets must be between 0 and 5"),
+		}),
+	handleValidationErrors,
 ];
 
 const validateWishListListing = [
@@ -174,13 +146,6 @@ router.get(
 router.post(
 	"/",
 	validateWishList,
-	(req, res, next) => {
-		const errors = validationResult(req);
-		if (!errors.isEmpty()) {
-			return res.status(400).json({ errors: errors.array() });
-		}
-		next();
-	},
 	asyncHandler(async (req, res, next) => {
 		try {
 			const wishList = await WishList.create(req.body);

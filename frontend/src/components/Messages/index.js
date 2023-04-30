@@ -10,6 +10,8 @@ import { useReceiverId } from "../../context/ReceiverId";
 
 
 export default function Messages({ socket, messageThreadsArr, messageThreadsObj }) {
+    //!! we don't want other thread data visible to this comp
+    //!! SRP and SOLIDify
     const dispatch = useDispatch();
 
     const { threadIdFromListing } = useReceiverId();
@@ -26,12 +28,10 @@ export default function Messages({ socket, messageThreadsArr, messageThreadsObj 
     const directMessagesArr = Object.values(directMessagesObj);
 
     useEffect(() => {
-        console.log("this is socket in useEffect ", socket);
+        // console.log("this is socket in useEffect ", socket);
 
-        const messageReceivedSocketHandler = async (message, resCB) => {
-            console.log("message recieved socket in use effect running before dispatch, this is message", message);
-            resCB("messageReceived res CallBack")
-            await dispatch(createDirectMessageAction(message));
+        const messageReceivedSocketHandler = (message) => {
+            dispatch(createDirectMessageAction(message));
         };
 
         const messageEdittedSocketHandler = (message) => {
@@ -39,7 +39,7 @@ export default function Messages({ socket, messageThreadsArr, messageThreadsObj 
         };
 
         const messageDeletedSocketHandler = (messageId) => {
-            console.log("delete received, this is messageId", messageId);
+            // console.log("delete received, this is messageId", messageId);
             dispatch(deleteDirectMessageAction(messageId));
         };
 
@@ -48,7 +48,7 @@ export default function Messages({ socket, messageThreadsArr, messageThreadsObj 
         socket.on("messageDeleted", messageDeletedSocketHandler);
 
         return () => {
-            console.log('SOCKET OFF RUNNING IN USE EFFECT RETURN')
+            // console.log('SOCKET OFF RUNNING IN USE EFFECT RETURN')
             socket.off("messageReceived", messageReceivedSocketHandler);
             socket.off("messageEditted", messageEdittedSocketHandler);
             socket.off("messageDeleted", messageDeletedSocketHandler);
@@ -58,8 +58,9 @@ export default function Messages({ socket, messageThreadsArr, messageThreadsObj 
 
 
     const handleSelectThread = (e) => {
+        console.log()
     e.preventDefault()
-    // console.log('here is the thread info in select thread, ', e.target.dataset.threadid)
+    // // console.log('here is the thread info in select thread, ', e.target.dataset.threadid)
     setFirstRender(false)
     if (threadId === e.target.dataset.threadid) {
         setThreadId(0)
@@ -75,7 +76,7 @@ export default function Messages({ socket, messageThreadsArr, messageThreadsObj 
 
     const handleCreateMessage = (e) => {
         e.preventDefault();
-        // console.log('handle create message running')
+        // // console.log('handle create message running')
 
         const newMessage = {
         content,
@@ -83,16 +84,17 @@ export default function Messages({ socket, messageThreadsArr, messageThreadsObj 
         receiverId,
         read: false,
         directMessageThreadId: threadId,
+        socketRoom: messageThreadsObj[threadId].socketRoom
         };
 
         if (messageIdToEdit !== 0) {
             newMessage.id = messageIdToEdit
-            // console.log('messageToEdit !== 0 running, this is messageIdToEdit ', messageIdToEdit, 'this is newmessage ', newMessage)
+            // // console.log('messageToEdit !== 0 running, this is messageIdToEdit ', messageIdToEdit, 'this is newmessage ', newMessage)
             socket.emit('editMessage', newMessage)
         } else {
-            // console.log('this is newMessage in handle create message', newMessage)
+            // // console.log('this is newMessage in handle create message', newMessage)
             socket.emit("sendMessage", newMessage);
-            // console.log('after socket.emit')
+            // // console.log('after socket.emit')
         }
         setMessageIdToEdit(0)
         setContent("");
@@ -100,7 +102,7 @@ export default function Messages({ socket, messageThreadsArr, messageThreadsObj 
 
 
     const handleDeleteMessage = (e) => {
-        // console.log('handle delete clicked, this is messageId ', e.target.dataset.messageid, threadId)
+        // // console.log('handle delete clicked, this is messageId ', e.target.dataset.messageid, threadId)
         socket.emit('deleteMessage', {messageId: e.target.dataset.messageid, threadId})
     }
 
@@ -108,10 +110,10 @@ export default function Messages({ socket, messageThreadsArr, messageThreadsObj 
         setMessageIdToEdit(e.target.dataset.messageid)
         setContent(message.content)
     }
-    // console.log('this is socket in before return ', socket)
+    // // console.log('this is socket in before return ', socket)
 
     return (
-        <>
+        <div>
         <div className="messages-page-container">
             <div className="message-thread-container">
             <div className="test">this is thread container</div>
@@ -121,13 +123,14 @@ export default function Messages({ socket, messageThreadsArr, messageThreadsObj 
                 data-threadid={thread.id}
                 onClick={handleSelectThread}
                 key={`threadid-${thread.id}`}
+                // !! todo: might want user info eager loaded from db
+                // !! for nice thread ux
                 >{thread.id}</div>
             ))}
             </div>
 
             <div className="direct-message-container">
             <div className="test">this is message container</div>
-                {console.log('this is threadId in JSX', threadId)}
             {
                 firstRender && threadIdFromListing !== 0 ?
                     threadId !== 0 && directMessagesArr.map((message) => (
@@ -183,7 +186,7 @@ export default function Messages({ socket, messageThreadsArr, messageThreadsObj 
             </form>
             </div>
         </div>
-        </>
+        </div>
     );
 }
 
@@ -191,23 +194,23 @@ export default function Messages({ socket, messageThreadsArr, messageThreadsObj 
 // import { getDMThreadsThunk } from "../../store/directMessageThreads";
 // import { useParams } from "react-router-dom";
 // const {threadId} = useParams()
-    // console.log('this is the current receiverID', receiverId)
+    // // console.log('this is the current receiverID', receiverId)
     // const socketRef = useRef(socket)
     // const messageThreadsObj = useSelector((state) => state.dmThreads);
-    //   console.log('this is directMessagesObj ', directMessagesObj)
-    //   console.log('this is messageThreadsObj ', messageThreadsObj)
+    //   // console.log('this is directMessagesObj ', directMessagesObj)
+    //   // console.log('this is messageThreadsObj ', messageThreadsObj)
 
     // const messageThreadsArr = Object.values(messageThreadsObj);
 
     //consider moving joining threads and rooms in a context component so then its not related to threads
     //if not works take out rooms and do it with userIds potentially
     // useEffect(() => {
-    //     console.log('this is socket in useEffect OF JOINING ROOMS', socket)
+    //     // console.log('this is socket in useEffect OF JOINING ROOMS', socket)
     //     messageThreadsArr.forEach((thread) => {
     //         const threadAndUser = {threadId: thread.id, userId: sessionUser.id}
-    //         console.log('this is join room map, thsi is threadAndUser', threadAndUser)
+    //         // console.log('this is join room map, thsi is threadAndUser', threadAndUser)
     //         socket.emit('joinThreadRoom', threadAndUser)
-    //         console.log('after socket join emit in useEffect')
+    //         // console.log('after socket join emit in useEffect')
     //     })
 
     //     return () => {
@@ -220,10 +223,10 @@ export default function Messages({ socket, messageThreadsArr, messageThreadsObj 
     // },[socket, messageThreadsArr])
 
     // useEffect(() => {
-    //     console.log("useEffect running, here is threadId", threadId);
+    //     // console.log("useEffect running, here is threadId", threadId);
 
     //     if (threadId !== 0) {
-    //       console.log("if threadID not 0 running", threadId);
+    //       // console.log("if threadID not 0 running", threadId);
     //       dispatch(getDirectMessageThunk(threadId));
     //     }
     //   }, [dispatch, threadId]);

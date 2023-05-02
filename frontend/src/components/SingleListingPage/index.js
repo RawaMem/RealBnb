@@ -39,7 +39,7 @@ export default function SingleListingPage() {
         {listing && (
             <div className="listingContent">
                 <div className="singleListingTitleContainer">
-                    <SingleListingTitle listing={listing} currentUser={currentUser}/>
+                    <SingleListingTitle listing={listing} currentUser={currentUser} dispatch={dispatch}/>
                 </div>
                 <div className="singleListingImageContainer">
                     <SingleListingImages listing={listing}/>

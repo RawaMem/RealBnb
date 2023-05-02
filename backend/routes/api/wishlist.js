@@ -25,7 +25,7 @@ function getWishListValidation(isPutRequest) {
 			.isLength({ min: 1, max: 50 }),
 		check("checkIn")
 			.optional()
-			.custom((value) => {
+			.custom(async (value, { req }) => {
 				if (!isValidDate(value)) {
 					throw new Error("Check in date must be a valid date.");
 				}
@@ -34,14 +34,35 @@ function getWishListValidation(isPutRequest) {
 				if (new Date(value) < today) {
 					throw new Error("Check in date must occur after the current date.");
 				}
+				if (req.method === "PUT") {
+					const wishlistId = parseInt(req.params.wishlistId, 10);
+					const foundWishList = await WishList.findOne({ where: { id: wishlistId } });
+					const existingCheckOutDate = foundWishList.checkOut;
+					console.log("=====================[", {
+						value,
+						existingCheckOutDate,
+						info: existingCheckOutDate > new Date(value),
+					});
+					if (value && existingCheckOutDate && !(existingCheckOutDate > new Date(value))) {
+						throw new Error("Check out date must occur after the check in date.");
+					}
+				}
 
 				return true;
 			}),
 		check("checkOut")
 			.optional()
-			.custom((value, { req }) => {
+			.custom(async (value, { req }) => {
 				if (!isValidDate(value)) {
 					throw new Error("Check out date must be a valid date.");
+				}
+				if (req.method === "PUT") {
+					const wishlistId = parseInt(req.params.wishlistId, 10);
+					const foundWishList = await WishList.findOne({ where: { id: wishlistId } });
+					const existingCheckInDate = foundWishList.checkIn;
+					if (value && existingCheckInDate && existingCheckInDate > new Date(value)) {
+						throw new Error("Check out date must occur after the check in date.");
+					}
 				}
 				if (value && req.body.checkIn && new Date(req.body.checkIn) > new Date(value)) {
 					throw new Error("Check out date must occur after the check in date.");
@@ -51,37 +72,64 @@ function getWishListValidation(isPutRequest) {
 			}),
 		check("adultGuests")
 			.optional()
-			.custom((value, { req }) => {
+			.custom(async (value, { req }) => {
 				if (isNaN(value)) {
 					throw new Error("The number of adults must be a number.");
 				}
-				if (value < 1 || value > 16) {
+				const intValue = parseInt(value, 10);
+				if (intValue < 1 || intValue > 16) {
 					throw new Error("The number of adults must be between 1 and 16.");
 				}
-				const errors = validateGuests(parseInt(value, 10), parseInt(req.body.childGuests, 10));
+				if (req.method === "PUT") {
+					const wishlistId = parseInt(req.params.wishlistId, 10);
+					const foundWishList = await WishList.findOne({ where: { id: wishlistId } });
+					const existingChildGuests = parseInt(foundWishList.childGuests, 10);
+					const errors = validateGuests(intValue, existingChildGuests);
 
-				if (Object.keys(errors).length > 0) {
-					throw new Error(errors["adultGuests"]);
+					if (Object.keys(errors).length > 0) {
+						throw new Error(errors["adultGuests"]);
+					}
+				} else {
+					const errors = validateGuests(intValue, parseInt(req.body.childGuests, 10));
+
+					if (Object.keys(errors).length > 0) {
+						throw new Error(errors["adultGuests"]);
+					}
 				}
 
 				return true;
-			}),
+			})
+			.toInt(),
 		check("childGuests")
 			.optional()
-			.custom((value, { req }) => {
-				const errors = validateGuests(parseInt(req.body.adultGuests, 10), parseInt(value, 10));
+			.custom(async (value, { req }) => {
 				if (isNaN(value)) {
 					throw new Error("The number of children must be a number.");
 				}
-				if (value < 0 || value > 15) {
-					throw new Error("The number of children must be between 0 and 15");
+				const intValue = parseInt(value, 10);
+				if (intValue < 1 || intValue > 16) {
+					throw new Error("The number of children must be between 0 and 15.");
 				}
-				if (Object.keys(errors).length > 0) {
-					throw new Error(errors["childGuests"]);
+				if (req.method === "PUT") {
+					const wishlistId = parseInt(req.params.wishlistId, 10);
+					const foundWishList = await WishList.findOne({ where: { id: wishlistId } });
+					const existingAdultGuests = parseInt(foundWishList.adultGuests, 10);
+					const errors = validateGuests(existingAdultGuests, intValue);
+
+					if (Object.keys(errors).length > 0) {
+						throw new Error(errors["adultGuests"]);
+					}
+				} else {
+					const errors = validateGuests(parseInt(req.body.adultGuests, 10), intValue);
+
+					if (Object.keys(errors).length > 0) {
+						throw new Error(errors["adultGuests"]);
+					}
 				}
 
 				return true;
-			}),
+			})
+			.toInt(),
 		check("infantGuests")
 			.optional()
 			.custom((value) => {

@@ -1,5 +1,5 @@
 const express = require("express");
-const { check, validationResult } = require("express-validator");
+const { check } = require("express-validator");
 const { validateGuests } = require("../../utils/validations/WishList/validateGuests");
 const { isValidDate } = require("../../utils/validations/WishList/isValidDate");
 
@@ -110,14 +110,22 @@ const validateWishList = [
 const validateWishListListing = [
 	check("wishlistId")
 		.exists({ checkFalsy: true })
-		.withMessage("Wish list id is required and must be a number.")
-		.bail()
-		.isNumeric(),
+		.custom((value) => {
+			if (isNaN(value)) {
+				throw new Error("Wish list id must be a number");
+			}
+
+			return true;
+		}),
 	check("listingId")
 		.exists({ checkFalsy: true })
-		.withMessage("Listing list id is required and must be a number.")
-		.bail()
-		.isNumeric(),
+		.custom((value) => {
+			if (isNaN(value)) {
+				throw new Error("List id must be a number");
+			}
+
+			return true;
+		}),
 	handleValidationErrors,
 ];
 
@@ -157,11 +165,15 @@ router.post(
 );
 
 router.post(
-	"/:id",
+	"/:wishlistId",
 	validateWishListListing,
 	asyncHandler(async (req, res, next) => {
 		try {
-			const wishListListing = await WishListListing.create(req.body);
+			const wishlistId = parseInt(req.params.wishlistId, 10);
+			const wishListListing = await WishListListing.create({
+				wishlistId,
+				...req.body,
+			});
 			res.send(wishListListing);
 		} catch (err) {
 			next(err);

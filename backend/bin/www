@@ -26,13 +26,16 @@ io.on("connection", socket => {
 
   // })
 
+  //!! TODO fires 3x on room join
   socket.on('joinThreadRoom', async (threadAndUser) => {
-    const {threadId, userId} = threadAndUser
-    console.log('socket.on join thread room, threadId and userId', threadId, userId)
-    socket.join(threadId)
+    const {threadId, userId, socketRoom} = threadAndUser
+    console.log('socket.on join thread room, thread info:: ', threadId, userId, socketRoom)
+    console.log("types for threadId and userId:: ", typeof threadId, typeof userId)
+    socket.join(socketRoom)
     console.log('AFTER THE SOCKET JOIN------')
   })
 
+  //!! todo: cruds not using socketRoom
   socket.on('leaveThreadRoom', async (threadAndUser) => {
     const {threadId, userId} = threadAndUser
     console.log('socket.on leave thread room, threadId and userId', threadId, userId)
@@ -43,12 +46,8 @@ io.on("connection", socket => {
   socket.on('sendMessage', async (message) => {
     console.log('BIN/WWW SEND MESSAGE SOCKT RUNNING, HERE IS MESSAGE', message)
     const createdMessage = await createDirectMessage(message)
-    console.log('BIN/WWW SEND MESSAGE SOCKT RUNNING, THIS IS CREATED MESSAGE', createdMessage)
-    console.log('THIS IS IO, ', io)
-    console.log('THIS IS IO.to, ', io.to)
-    console.log('THIS IS IO.to, ', io.to(message.directMessageThreadId))
-    io.to(message.directMessageThreadId).emit('messageReceived', createdMessage)
-    console.log('AFTER IO TO EMIT---------------------------')
+    // console.log('BIN/WWW SEND MESSAGE SOCKT RUNNING, THIS IS CREATED MESSAGE', createdMessage)
+    io.to(message.socketRoom).emit('messageReceived', createdMessage)
   })
 
   socket.on('editMessage', async(message) =>{

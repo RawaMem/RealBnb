@@ -7,7 +7,6 @@ import { Redirect } from "react-router-dom";
 
 
 export default function MessageWrapper({socket}) {
-    console.log('RERENDER WRAPPER=========')
     const dispatch = useDispatch();
 
     const messageThreadsObj = useSelector((state) => state.dmThreads);
@@ -23,15 +22,13 @@ export default function MessageWrapper({socket}) {
     useEffect(() => {
         console.log('this is socket in useEffect OF JOINING ROOMS', socket)
         messageThreadsArr.forEach((thread) => {
-            const threadAndUser = {threadId: thread.id, userId: sessionUser.id}
-            console.log('this is join room map, thsi is threadAndUser', threadAndUser)
+            const threadAndUser = {threadId: thread.id, userId: sessionUser.id, socketRoom: thread.socketRoom}
             socket.emit('joinThreadRoom', threadAndUser)
-            console.log('after socket join emit in useEffect')
         })
 
         return () => {
             messageThreadsArr.forEach((thread) => {
-            const threadAndUser = {threadId: thread.id, userId: sessionUser.id}
+            const threadAndUser = {threadId: thread.id, userId: sessionUser.id, socketRoom: thread.socketRoom}
                 socket.emit('leaveThreadRoom', threadAndUser)
             })
         }
@@ -39,9 +36,9 @@ export default function MessageWrapper({socket}) {
 
 
     return (
-        <>
+        <div>
             <Messages socket={socket} messageThreadsObj={messageThreadsObj} messageThreadsArr={messageThreadsArr}/>
-        </>
+        </div>
     )
 }
 

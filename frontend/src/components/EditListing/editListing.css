@@ -55,3 +55,60 @@
     margin-left: 3px;
 }
 
+.edit-image-main-container {
+    height: 450px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.edit-image-inner-container {
+    height: 100%;
+    width: 75%;
+    border: .5px solid lightgray;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.edit-image-2nd-inner-container {
+    height: 90%;
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.edit-image-card-container
+{
+    height: 210px;
+    width: 230px;
+}
+
+.edited-image {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.edit-image-add-icon-container {
+    border: .5px solid lightgray;
+    height: 210px;
+    width: 230px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#material-symbols-outlined {
+    color: var(--profile-dropdown-icon-color);
+    font-size: xx-large;
+}
+

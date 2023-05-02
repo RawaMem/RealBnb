@@ -6,6 +6,8 @@ import { getToken } from '../../store/maps';
 import InputField from "../../ui/TextField";
 import { getListingInfoForEditThunk } from "../../store/listings";
 import EditAmenity from "./EditAmenity";
+import EditCategory from "./EditCategory";
+import AddDeleteImages from "./AddDeleteImage";
 import "./editListing.css";
 
 
@@ -26,6 +28,8 @@ function EditListingForm() {
     const [longitude, setLongitude] = useState();
     const [latitude, setLatitude] = useState();
     const [amenityArr, setAmenityArr] = useState([]);
+    const [categoryArr, setCategoryArr] = useState([]);
+    const [imageArr, setImageArr] = useState([]);
 
     useEffect(() => {     
       dispatch(getListingInfoForEditThunk(listingId))
@@ -41,6 +45,8 @@ function EditListingForm() {
         setMaxGuests(listingData.maxGuests)
         setDescription(listingData.description)
         setAmenityArr(listingData.Amenities)
+        setCategoryArr(listingData.Categories)
+        setImageArr(listingData.Images)
       })
     },[]);
 
@@ -86,6 +92,14 @@ function EditListingForm() {
             <div className="amenities-container">
               <EditAmenity amenityArr={amenityArr} setAmenityArr={setAmenityArr} />
             </div>
+
+            <div>
+              <EditCategory categoryArr={categoryArr} setCategoryArr={setCategoryArr} />
+            </div>
+          </div>
+
+          <div className="edit-image-main-container">
+            <AddDeleteImages imageArr={imageArr} setImageArr={setImageArr} />
           </div>
         </div>
     )

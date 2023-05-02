@@ -1,160 +1,92 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import Box from '@mui/material/Box';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepButton from '@mui/material/StepButton';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { getToken } from '../../store/maps';
+import InputField from "../../ui/TextField";
 import { getListingInfoForEditThunk } from "../../store/listings";
-import StepOne from "./StepOne";
+import EditAmenity from "./EditAmenity";
 import "./editListing.css";
 
-const theme = createTheme({
-    palette: {
-      primary: {
-        main: "#ff4569",
-      },
-      secondary: {
-        main: "#e91e63",
-      },
-    },
-});
-
-const steps = ["step one", "step two", "step three"]
 
 function EditListingForm() {
     const {listingId} = useParams();
     const dispatch = useDispatch();
-    const [listingData, setListingData] = useState({});
 
-    const [activeStep, setActiveStep] = useState(0);
-    const [completed, setCompleted] = useState({});
-
-    console.log('listingData', listingData)
-    const totalSteps = () => {
-        return steps.length;
-      };
-    
-    const completedSteps = () => {
-    return Object.keys(completed).length;
-    };
-
-    const isLastStep = () => {
-    return activeStep === totalSteps() - 1;
-    };
-
-    const allStepsCompleted = () => {
-    return completedSteps() === totalSteps();
-    };
-
-    const handleNext = () => {
-        const newActiveStep =
-          isLastStep() && !allStepsCompleted()
-            ? // It's the last step, but not all steps have been completed,
-              // find the first step that has been completed
-              steps.findIndex((step, i) => !(i in completed))
-            : activeStep + 1;
-        setActiveStep(newActiveStep);
-    };
-    
-    const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    };
-
-    const handleStep = (step) => () => {
-    setActiveStep(step);
-    };
-
-    const handleComplete = () => {
-    const newCompleted = completed;
-    newCompleted[activeStep] = true;
-    setCompleted(newCompleted);
-    handleNext();
-    };
-
-    const handleReset = () => {
-    setActiveStep(0);
-    setCompleted({});
-    };
+    const [name, setName] = useState("")
+    const [address, setAddress] = useState("");
+    const [city, setCity] = useState("");
+    const [state, setState] = useState("");
+    const [zipCode, setZipCode] = useState()
+    const [bedroom, setBedroom] = useState();
+    const [beds, setBeds] = useState();
+    const [baths, setBaths] = useState();
+    const [maxGuests, setMaxGuests] = useState();
+    const [description, setDescription] = useState();
+    const [longitude, setLongitude] = useState();
+    const [latitude, setLatitude] = useState();
+    const [amenityArr, setAmenityArr] = useState([]);
 
     useEffect(() => {     
       dispatch(getListingInfoForEditThunk(listingId))
-      .then(data => setListingData(data))
+      .then(listingData => {
+        setName(listingData.name)
+        setAddress(listingData.address)
+        setCity(listingData.city)
+        setState(listingData.state)
+        setZipCode(listingData.zipCode)
+        setBedroom(listingData.bedrooms)
+        setBeds(listingData.beds)
+        setBaths(listingData.baths)
+        setMaxGuests(listingData.maxGuests)
+        setDescription(listingData.description)
+        setAmenityArr(listingData.Amenities)
+      })
     },[]);
 
-    if(!listingData.id) return null;
+    // const token = useSelector((state) => state.maps.token);
+
+    // useEffect(() => {
+    //     if(!token) dispatch(getToken());
+    // }, [dispatch]);
+
+    // if(!listingData.id) return null;
 
     return (
         <div className="editlistingform-container">
-            <Box sx={{ width: '90%'}}>
 
-              <Stepper nonLinear activeStep={activeStep}>
-                {steps.map((label, index) => (
-                  <Step key={label} completed={completed[index]}>
-                    <ThemeProvider theme={theme}>
-                      <StepButton onClick={handleStep(index)}>
-                        {label}
-                      </StepButton>
-                    </ThemeProvider>
-                  </Step>
-                ))}
-              </Stepper>
+          <div className="editListingForm-inner-container">
 
-              <div >
-                {allStepsCompleted() ? (
-                  <React.Fragment>
-                    <Typography sx={{ mt: 2, mb: 1 }}>
-                      All steps completed - you&apos;re finished
-                    </Typography>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                      <Box sx={{ flex: '1 1 auto' }} />
-                      <Button onClick={handleReset}>Reset</Button>
-                    </Box>
-                  </React.Fragment>
-                ) : (
-                  <div>
-                    {activeStep === 0 && 
-                      <Typography>
-                        <StepOne listingData={listingData} />
-                      </Typography>}
-                    {activeStep === 1 && 
-                      <Typography>
-                        <h1>This is where page 2 component goes</h1>
-                      </Typography>}
-                    <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                      <Button
-                        color="inherit"
-                        disabled={activeStep === 0}
-                        onClick={handleBack}
-                        sx={{ mr: 1 }}
-                      >
-                        Back
-                      </Button>
-                      <Box sx={{ flex: '1 1 auto' }} />
-                      <Button onClick={handleNext} sx={{ mr: 1 }}>
-                        Next
-                      </Button>
-                      {activeStep !== steps.length &&
-                        (completed[activeStep] ? (
-                          <Typography variant="caption" sx={{ display: 'inline-block' }}>
-                            Step {activeStep + 1} already completed
-                          </Typography>
-                        ) : (
-                          <Button onClick={handleComplete}>
-                            {completedSteps() === totalSteps() - 1
-                              ? 'Finish'
-                              : 'Complete Step'}
-                          </Button>
-                        ))}
-                    </Box>
-                  </div>
-                )}
-              </div>
-            </Box>
+            <div className="address-section-container">
+                <InputField size={ { m: 2, width: '35ch' }} setter={setName} val={name} label={"Name"} id={"standard-basic"}  multiline={false} variant={"standard"} />      
+
+                <InputField size={ { m: 2, width: '35ch' }} setter={setAddress} val={address} label={"Address"} id={"standard-basic"}  multiline={false} variant={"standard"} />      
+
+                <InputField size={ { m: 2, width: '35ch' }} setter={setCity} val={city} label={"City"} id={"standard-basic"}  multiline={false} variant={"standard"} />  
+
+                <InputField size={ { m: 2, width: '35ch' }} setter={setState} val={state} label={"State"} id={"standard-basic"}  multiline={false} variant={"standard"} />   
+
+                <InputField size={ { m: 2, width: '35ch' }} setter={setZipCode} val={zipCode} label={"Zip Code"} id={"standard-basic"}  multiline={false} variant={"standard"} />     
+            </div>   
+
+            <div className="listing-basic-info-container">
+                <InputField size={ { m: 2, width: '10ch' }} setter={setBedroom} val={bedroom} label={"Bedrooms"} type={"number"} id={"filled-number"}  multiline={false} variant={"standard"} />  
+
+                <InputField size={ { m: 2, width: '10ch' }} setter={setBeds} val={beds} label={"Beds"} type={"number"} id={"filled-number"}  multiline={false} variant={"standard"} />  
+
+                <InputField size={ { m: 2, width: '10ch' }} setter={setBaths} val={baths} label={"Bathrooms"} type={"number"} id={"filled-number"}  multiline={false} variant={"standard"} />  
+
+                <InputField size={ { m: 2, width: '10ch' }} setter={setMaxGuests} val={maxGuests} label={"Max Guests"} type={"number"} id={"filled-number"}  multiline={false} variant={"standard"} />  
+            </div>
+
+            <div className="title-content-div">
+                <InputField size={ { m: 2, width: '65ch' }} setter={setDescription} val={description} label={"Description"} id={"outlined-multiline-static"}  multiline={true} rows={10} />
+            </div>
+
+            <div className="amenities-container">
+              <EditAmenity amenityArr={amenityArr} setAmenityArr={setAmenityArr} />
+            </div>
+          </div>
         </div>
     )
 };

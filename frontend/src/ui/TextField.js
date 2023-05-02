@@ -2,7 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
-function InputField({size, setter, type, val}) {
+function InputField({size, setter, val, label, type, id, multiline, rows, variant}) {
     return (
         <Box
             component="form"
@@ -13,11 +13,17 @@ function InputField({size, setter, type, val}) {
             autoComplete="off"
             >        
             <TextField 
-                id="standard-basic" 
-                label="Address" 
-                variant="standard" 
+                id={id}
+                label={label}
+                variant={variant}
+                multiline={multiline}
                 value={val}
+                type={type}
+                rows={rows}
                 onChange={e => setter(e.target.value)}
+                InputLabelProps={{
+                    shrink: true,
+                  }}
             />
         </Box>
 

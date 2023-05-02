@@ -2,7 +2,56 @@
     height: 85%;
     width: 100%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
+}
+
+.editListingForm-inner-container {
+    width: 70%;
+    height: 100%;
+}
+
+.address-section-container {
+    display: flex;
+    /* border: 1px solid black; */
+    flex-direction: row;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.listing-basic-info-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.edit-amenity-form-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.edit-amenity-section {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.edit-amenity-selection {
+    display: flex;
+    flex-direction: row;
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 2px;
+    margin: .5%;
+    background-color: rgb(203,201,200);
+    cursor: pointer;
+}
+
+.operator-icon {
+    font-weight: 600;
+    margin-left: 3px;
 }
 

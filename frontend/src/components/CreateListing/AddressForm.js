@@ -18,7 +18,7 @@ export default function AddressForm() {
     const optinalAddress = useRef(null);
     const [suggestions, setSuggestions] = useState([]);
 
-    const token = useSelector((state) => state.maps?.token);
+    const token = useSelector((state) => state.maps.token);
 
     useEffect(() => {
         if(!token) dispatch(getToken());

@@ -207,7 +207,7 @@ export default function listings(state = initialState, action) {
             return newState;
         case GET_LISTING_INFO_FOR_EDIT:
             newState = {allListings:{}, singleListing: {}};
-            newState.allListings = action.listing;
+            newState.singleListing = action.listing;
             return newState;
         case CLEAR_LISTING_STATE:
             return {allListings:{}, singleListing: {}}

@@ -38,11 +38,6 @@ function getWishListValidation(isPutRequest) {
 					const wishlistId = parseInt(req.params.wishlistId, 10);
 					const foundWishList = await WishList.findOne({ where: { id: wishlistId } });
 					const existingCheckOutDate = foundWishList.checkOut;
-					console.log("=====================[", {
-						value,
-						existingCheckOutDate,
-						info: existingCheckOutDate > new Date(value),
-					});
 					if (value && existingCheckOutDate && !(existingCheckOutDate > new Date(value))) {
 						throw new Error("Check out date must occur after the check in date.");
 					}
@@ -55,6 +50,11 @@ function getWishListValidation(isPutRequest) {
 			.custom(async (value, { req }) => {
 				if (!isValidDate(value)) {
 					throw new Error("Check out date must be a valid date.");
+				}
+				const today = new Date();
+				today.setHours(0, 0, 0, 0);
+				if (new Date(value) < today) {
+					throw new Error("Check out date must occur after the current date.");
 				}
 				if (req.method === "PUT") {
 					const wishlistId = parseInt(req.params.wishlistId, 10);
@@ -107,7 +107,7 @@ function getWishListValidation(isPutRequest) {
 					throw new Error("The number of children must be a number.");
 				}
 				const intValue = parseInt(value, 10);
-				if (intValue < 1 || intValue > 16) {
+				if (intValue < 0 || intValue > 15) {
 					throw new Error("The number of children must be between 0 and 15.");
 				}
 				if (req.method === "PUT") {

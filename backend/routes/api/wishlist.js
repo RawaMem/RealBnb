@@ -4,6 +4,7 @@ const { validateGuests } = require("../../utils/validations/WishList/validateGue
 const { isValidDate } = require("../../utils/validations/WishList/isValidDate");
 
 const { handleValidationErrors } = require("../../utils/validation");
+const { requireAuth } = require("../../utils/auth");
 
 const asyncHandler = require("express-async-handler");
 const { WishList, Listing, WishListListing } = require("../../db/models");
@@ -18,11 +19,23 @@ function getWishListValidation(isPutRequest) {
 			.bail()
 			.isNumeric(),
 		check("name")
-			.if((value, { req }) => !isPutRequest || (isPutRequest && value !== undefined))
+			.if((value) => !isPutRequest || (isPutRequest && value !== undefined))
 			.exists({ checkFalsy: true })
 			.withMessage("Name cannot be empty.")
 			.bail()
 			.isLength({ min: 1, max: 50 }),
+		check("wishlistId")
+			.optional()
+			.custom(async (value, { req }) => {
+				if (req.method === "PUT") {
+					const wishlistId = parseInt(value, 10);
+					const foundWishList = await WishList.findOne({ where: { id: wishlistId } });
+
+					if (!foundWishList) {
+						throw new Error("Wish list not found.");
+					}
+				}
+			}),
 		check("checkIn")
 			.optional()
 			.custom(async (value, { req }) => {
@@ -180,10 +193,9 @@ const validateWishListListing = [
 	handleValidationErrors,
 ];
 
-// TODO: Add requireAuth
-
 router.get(
 	"/:userId",
+	requireAuth,
 	asyncHandler(async (req, res, next) => {
 		try {
 			const userId = parseInt(req.params.userId, 10);
@@ -195,6 +207,9 @@ router.get(
 					},
 				],
 			});
+			if (!wishLists.length) {
+				return res.status(404).json({ message: "No wish lists found for this user." });
+			}
 			res.json(wishLists);
 		} catch (err) {
 			next(err);
@@ -204,6 +219,7 @@ router.get(
 
 router.post(
 	"/",
+	requireAuth,
 	getWishListValidation(false),
 	asyncHandler(async (req, res, next) => {
 		try {
@@ -217,6 +233,7 @@ router.post(
 
 router.put(
 	"/:wishlistId",
+	requireAuth,
 	getWishListValidation(true),
 	asyncHandler(async (req, res, next) => {
 		try {
@@ -232,8 +249,30 @@ router.put(
 	})
 );
 
+router.delete(
+	"/:wishlistId",
+	requireAuth,
+	asyncHandler(async (req, res, next) => {
+		try {
+			const wishlistId = parseInt(req.params.wishlistId, 10);
+			const foundWishList = await WishList.findOne({ where: { id: wishlistId } });
+			if (!foundWishList) {
+				return res.status(404).json({ message: "Wish list not found." });
+			}
+			await foundWishList.destroy();
+			res.json({
+				message: "Delete Successful",
+				deleted_id: wishlistId,
+			});
+		} catch (err) {
+			next(err);
+		}
+	})
+);
+
 router.post(
 	"/:wishlistId",
+	requireAuth,
 	validateWishListListing,
 	asyncHandler(async (req, res, next) => {
 		try {

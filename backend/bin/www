@@ -21,41 +21,64 @@ const addString = string => {
 io.on("connection", socket => {
   console.log(`THIS IS THE SOCKET ID IN BIN WWW ${socket.id}`)
 
-  socket.on('message', async (data) => {
-    io.emit('testing', data);
+  // socket.on('message', async (data) => {
+  //   io.emit('testing', data);
 
+  // })
+
+  //!! TODO fires 3x on room join
+  socket.on('joinThreadRoom', async (threadAndUser) => {
+    const {threadId, userId, socketRoom} = threadAndUser
+    console.log('socket.on join thread room, thread info:: ', threadId, userId, socketRoom)
+    console.log("types for threadId and userId:: ", typeof threadId, typeof userId)
+    socket.join(socketRoom)
+    console.log('AFTER THE SOCKET JOIN------')
+  })
+
+  //!! todo: cruds not using socketRoom
+  socket.on('leaveThreadRoom', async (threadAndUser) => {
+    const {threadId, userId} = threadAndUser
+    console.log('socket.on leave thread room, threadId and userId', threadId, userId)
+
+    socket.leave(threadId)
   })
 
   socket.on('sendMessage', async (message) => {
     console.log('BIN/WWW SEND MESSAGE SOCKT RUNNING, HERE IS MESSAGE', message)
     const createdMessage = await createDirectMessage(message)
-    console.log('BIN/WWW SEND MESSAGE SOCKT RUNNING, THIS IS CREATED MESSAGE', createdMessage)
-    io.emit('messageReceived', createdMessage)
+    // console.log('BIN/WWW SEND MESSAGE SOCKT RUNNING, THIS IS CREATED MESSAGE', createdMessage)
+    io.to(message.socketRoom).emit('messageReceived', createdMessage)
   })
 
   socket.on('editMessage', async(message) =>{
     const edittedMessage = await editDirectMessage(message)
-    io.emit('messageEditted', edittedMessage)
+    io.to(message.directMessageThreadId).emit('messageEditted', edittedMessage)
   })
 
-  socket.on('deleteMessage', async(messageId) =>{
+  socket.on('deleteMessage', async(messageIdAndThreadId) =>{
+    const {messageId, threadId} = messageIdAndThreadId
+    console.log('socket.on delete message running, messageId, threadId', messageId, threadId)
     const deleteResult = await deleteDirectMessage(messageId)
-    io.emit('messageDeleted', messageId)
+    console.log('socket.on delete after db query, deleteResult', deleteResult)
+    console.log('Emitting messageDeleted event with threadId:', threadId, 'and messageId:', messageId);
+    io.to(threadId).emit('messageDeleted', messageId)
   })
 
   socket.on('messageRead', async(messageId) =>{
     const readMessage = await editDirectMessageToRead(messageId)
-    io.emit('messageRead', readMessage)
+    io.to(message.directMessageThreadId).emit('messageRead', readMessage)
   })
 
-  socket.on('userOnline', async (userId) =>{
+  socket.on('userOnline', async (userIdandThreadId) =>{
+    const {userId, threadId} = userIdandThreadId
     const user = await editOnlineStatusToTrue(userId)
-    io.emit('userStatusOnline', user)
+    io.to(threadId).emit('userStatusOnline', user)
   })
 
-  socket.on('userOffline', async (userId) =>{
+  socket.on('userOffline', async (userIdandThreadId) =>{
+    const {userId, threadId} = userIdandThreadId
     const user = await editOnlineStatusToFalse(userId)
-    io.emit('userStatusOffline', user)
+    socket.to(threadId).emit('userStatusOffline', user)
   })
 
 

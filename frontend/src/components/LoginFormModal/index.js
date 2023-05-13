@@ -22,9 +22,21 @@ function LoginForm( {setShowLogInModal} ) {
     );
   };
 
-  const handleDemoUser = (e) => {
+  const handleDemoUser1 = (e) => {
     e.preventDefault();
     return dispatch(sessionActions.login({ credential: 'demo@user.io', password: 'password' }))
+    .then(setShowLogInModal(false))
+    .catch(
+      async (res) => {
+        const data = await res.json();
+        if (data && data.errors) setErrors(data.errors);
+      }
+    )
+  }
+
+  const handleDemoUser2 = (e) => {
+    e.preventDefault();
+    return dispatch(sessionActions.login({ credential: 'MacBookProEnergy', password: 'password' }))
     .then(setShowLogInModal(false))
     .catch(
       async (res) => {
@@ -65,7 +77,11 @@ function LoginForm( {setShowLogInModal} ) {
       </form>
       <button
         className="demoUserButton"
-        onClick={handleDemoUser}>Demo Log In</button>
+        onClick={handleDemoUser1}>Demo User 1 Log In</button>
+      <button
+        className="demoUserButton"
+        onClick={handleDemoUser2}>Demo User 2 Log In</button>
+
     </>
   );
 }

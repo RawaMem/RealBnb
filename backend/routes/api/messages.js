@@ -21,7 +21,7 @@ const { Listing,
 
 const router = express.Router();
 
-router.get('/:')
+// router.get('/:')
 
 
 

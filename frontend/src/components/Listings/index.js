@@ -3,12 +3,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { csrfFetch } from '../../store/csrf';
 import { getListingsThunk } from '../../store/listings';
+import { getUserWishlistsThunk } from "../../store/wishlists";
 import ListingCard from './ListingCard';
 import { useCategory } from '../../context/CategoryContext';
 
 export default function Listings() {
     const dispatch = useDispatch();
     const listingsObj = useSelector(state => state.listings.allListings);
+    const { error } = useSelector((state) => state.wishlists);
+    const { wishListListing } = useSelector((state) => state.wishlists);
+    const { id } = useSelector((state) => state.session.user);
 
     const {categories, setCategories, sorted, setSorted, selectedCategory, setSelectedCategory} = useCategory();
 
@@ -40,6 +44,10 @@ export default function Listings() {
        .then(data => setCategories(data))
     },[])
 
+    useEffect(() => {
+        dispatch(getUserWishlistsThunk(id));
+    }, [dispatch]);
+
     //display all categories
     function displayCategories() {
         return categories && categories.map(category => (
@@ -56,6 +64,9 @@ export default function Listings() {
     return(
         <>
             <section>
+                {error && (
+                        <p style={{color:"red"}}>{error}</p>
+                    )}
                 <div style={{display:"flex"}}>
                     {displayCategories()}
                 </div>
@@ -65,7 +76,7 @@ export default function Listings() {
                     {listings && listings.map(listing => (
                         <article key = {`listingId-${listing.id}`} style= {{margin:"15px"}} >
                             <NavLink style={{ textDecoration: 'none'}} to={`/listings/${listing.id}`}>
-                                    <ListingCard listing = {listing} />
+                                    <ListingCard listing = {listing} wishListListing={wishListListing} />
                             </NavLink>
                         </article>
                     ))}

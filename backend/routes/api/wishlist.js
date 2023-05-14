@@ -288,4 +288,25 @@ router.post(
 	})
 );
 
+router.delete(
+	"/:wishlistId/:listingId",
+	asyncHandler(async (req, res, next) => {
+		try {
+			const listingId = parseInt(req.params.listingId, 10);
+			const wishlistId = parseInt(req.params.wishlistId, 10);
+			const foundWishList = await WishListListing.findOne({ where: { listingId, wishlistId } });
+			if (!foundWishList) {
+				return res.status(404).json({ message: "Listing not found." });
+			}
+			await foundWishList.destroy();
+			res.json({
+				message: "Delete Successful",
+				deleted_id: foundWishList.id,
+			});
+		} catch (err) {
+			next(err);
+		}
+	})
+);
+
 module.exports = router;

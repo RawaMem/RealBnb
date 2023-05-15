@@ -208,7 +208,7 @@ router.get(
 				],
 			});
 			if (!wishLists.length) {
-				return res.status(404).json({ message: "No wish lists found for this user." });
+				return res.status(404).json({ errors: "No wish lists found for this user." });
 			}
 			res.json(wishLists);
 		} catch (err) {
@@ -257,7 +257,7 @@ router.delete(
 			const wishlistId = parseInt(req.params.wishlistId, 10);
 			const foundWishList = await WishList.findOne({ where: { id: wishlistId } });
 			if (!foundWishList) {
-				return res.status(404).json({ message: "Wish list not found." });
+				return res.status(404).json({ errors: "Wish list not found." });
 			}
 			await foundWishList.destroy();
 			res.json({
@@ -296,7 +296,7 @@ router.delete(
 			const wishlistId = parseInt(req.params.wishlistId, 10);
 			const foundWishList = await WishListListing.findOne({ where: { listingId, wishlistId } });
 			if (!foundWishList) {
-				return res.status(404).json({ message: "Listing not found." });
+				return res.status(404).json({ errors: "Listing not found." });
 			}
 			await foundWishList.destroy();
 			res.json({

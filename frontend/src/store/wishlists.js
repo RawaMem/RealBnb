@@ -3,6 +3,7 @@ import { csrfFetch } from "./csrf";
 const GET_USER_WISHLISTS = "wishlists/GET_USER_WISHLISTS";
 const SET_ERROR = "wishlists/SET_ERROR";
 const CLEAR_WISHLISTS = "wishlists/CLEAR_WISHLISTS";
+const CREATE_WISHLIST = "wishlists/CREATE_WISHLIST";
 
 function getUserWishlists(wishlists) {
     return {
@@ -24,6 +25,13 @@ export function clearWishlists() {
     }
 }
 
+export function createWishlist(wishlist) {
+    return {
+        type: CREATE_WISHLIST,
+        wishlist
+    }
+}
+
 export function getUserWishlistsThunk(userId) {
     return async function(dispatch) {
         try {
@@ -34,7 +42,29 @@ export function getUserWishlistsThunk(userId) {
             }
         } catch (error) {
             const data = await error.json();
-            dispatch(setError(data.message));
+            dispatch(setError(data.errors));
+        }
+    }
+}
+
+export function createWishlistThunk(wishlist) {
+    return async function(dispatch) {
+        try {
+            const response = await csrfFetch("/api/wishlists/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(wishlist)
+            });
+            if (response.ok) {
+                const data = await response.json();
+                dispatch(createWishlist(data));
+                return data;
+            }
+        } catch (error) {
+            const data = await error.json();
+            dispatch(setError(data.errors));
         }
     }
 }
@@ -59,6 +89,10 @@ export default function wishlistsReducer(state = initialState, action) {
             return {...state, error: action.error};
         case CLEAR_WISHLISTS:
             return initialState;
+        case CREATE_WISHLIST:
+            newState = {...state, wishLists: {...state.wishLists}, error: null};
+            newState.wishLists[action.wishlist.id] = action.wishlist
+            return newState;
         default:
             return state;
     }

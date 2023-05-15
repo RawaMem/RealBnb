@@ -2,6 +2,7 @@ import { csrfFetch } from "./csrf";
 
 const GET_USER_WISHLISTS = "wishlists/GET_USER_WISHLISTS";
 const SET_ERROR = "wishlists/SET_ERROR";
+const CLEAR_WISHLISTS = "wishlists/CLEAR_WISHLISTS";
 
 function getUserWishlists(wishlists) {
     return {
@@ -14,6 +15,12 @@ function setError(error) {
     return {
         type: SET_ERROR,
         error
+    }
+}
+
+export function clearWishlists() {
+    return {
+        type: CLEAR_WISHLISTS
     }
 }
 
@@ -50,6 +57,8 @@ export default function wishlistsReducer(state = initialState, action) {
             return newState;
         case SET_ERROR:
             return {...state, error: action.error};
+        case CLEAR_WISHLISTS:
+            return initialState;
         default:
             return state;
     }

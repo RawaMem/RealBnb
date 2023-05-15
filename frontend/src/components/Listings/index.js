@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { csrfFetch } from '../../store/csrf';
 import { getListingsThunk } from '../../store/listings';
-import { getUserWishlistsThunk } from "../../store/wishlists";
+import { getUserWishlistsThunk, clearWishlists } from "../../store/wishlists";
 import ListingCard from './ListingCard';
 import { useCategory } from '../../context/CategoryContext';
 
@@ -12,7 +12,7 @@ export default function Listings() {
     const listingsObj = useSelector(state => state.listings.allListings);
     const { error } = useSelector((state) => state.wishlists);
     const { wishListListing } = useSelector((state) => state.wishlists);
-    const { id } = useSelector((state) => state.session.user);
+    const user = useSelector((state) => state.session.user);
 
     const {categories, setCategories, sorted, setSorted, selectedCategory, setSelectedCategory} = useCategory();
 
@@ -45,8 +45,14 @@ export default function Listings() {
     },[])
 
     useEffect(() => {
-        dispatch(getUserWishlistsThunk(id));
-    }, [dispatch]);
+        if (user) {
+
+            dispatch(getUserWishlistsThunk(user.id));
+        }
+        return () => {
+             dispatch(clearWishlists());
+        }
+    }, [dispatch, user]);
 
     //display all categories
     function displayCategories() {
@@ -64,7 +70,7 @@ export default function Listings() {
     return(
         <>
             <section>
-                {error && (
+                {error && error !== "Unauthorized" && (
                         <p style={{color:"red"}}>{error}</p>
                     )}
                 <div style={{display:"flex"}}>

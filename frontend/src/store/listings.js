@@ -47,7 +47,7 @@ export const getListingSearchResultsThunk = (searchFormValues) => async dispatch
     if (process.env.NODE_ENV === 'production') {
         currentUrl = 'https://realbnb-app.herokuapp.com/api/listings/search'
     } else {
-        currentUrl = 'http://localhost:5000/api/listings/search'
+        currentUrl = 'http://localhost:8000/api/listings/search'
     }
     const urlInstance = new URL(currentUrl)
     for (let key in searchFormValues) {

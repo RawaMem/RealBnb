@@ -49,6 +49,8 @@ function ProfileButton({ isLoaded, setShowLogInModal, setShowSignUpModal}) {
           <li>{user.username}</li>
           <li>{user.email}</li>
           <NavLink to="/user-profile">manage listings</NavLink>
+          <br />
+          <NavLink to="/wishlists">Wishlists</NavLink>
           <li onClick={logout}>Log Out</li>
         </ul>
       </div>

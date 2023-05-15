@@ -290,6 +290,7 @@ router.post(
 
 router.delete(
 	"/:wishlistId/:listingId",
+	requireAuth,
 	asyncHandler(async (req, res, next) => {
 		try {
 			const listingId = parseInt(req.params.listingId, 10);

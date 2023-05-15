@@ -71,8 +71,8 @@ export default function Listings() {
         <>
             <section>
                 {error && error !== "Unauthorized" && (
-                        <p style={{color:"red"}}>{error}</p>
-                    )}
+                    <p style={{color:"red"}}>{error}</p>
+                )}
                 <div style={{display:"flex"}}>
                     {displayCategories()}
                 </div>

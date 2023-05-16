@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserWishlistsThunk, clearWishlists } from "../../store/wishlists";
 import { getSingleListingThunk } from "../../store/listings";
 import { WishListCard } from "./WishListCard";
+import "./WishList.css";
 
 function WishList() {
   const dispatch = useDispatch();
@@ -45,9 +46,9 @@ function WishList() {
         <p style={{ color: "red" }}>{error}</p>
       )}
       {listOfWishlists.length && listings && (
-        <div>
+        <div className="wishlist-container">
           {listOfWishlists.map((wishlist, idx) => (
-            <div className="wishlist-container" key={`${wishlist.id}`}>
+            <div className="wishlist-item" key={`${wishlist.id}`}>
               <WishListCard
                 wishlist={wishlist}
                 singleListing={listings[idx]}

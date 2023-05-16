@@ -1,0 +1,9 @@
+.wishlist-container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    padding: 10px;
+}
+
+.wishlist-item {
+
+}

@@ -216,35 +216,3 @@ export default function listings(state = initialState, action) {
     };
 };
 
-
-        //keep for now, once we know we dont need this then we can delete
-        //this was in case get single listing but refactored it to be cleaner
-        // newState.currentListing.Reviews = [...action.listing.Reviews]
-        // const normalizedReviews = {}
-        // if (action.listing.Reviews) {
-        //     action.listing.Reviews.forEach(review => {
-        //     normalizedReviews[review.id] = review
-        //     })
-        // }
-        // newState.currentListing.Reviews = normalizedReviews
-
-        // case CREATE_REVIEW:
-        //     newState = {...state}
-        //     newState.currentListing = {...state.currentListing}
-        //     if (state.currentListing.Reviews) {
-        //         newState.currentListing.Reviews = {...state.currentListing.Reviews}
-        //     }
-        //     newState.currentListing.Reviews[action.review.id] = action.review
-        //     return newState
-        // case EDIT_REVIEW:
-        //     newState = {...state}
-        //     newState.currentListing = {...state.currentListing}
-        //     newState.currentListing.Reviews = {...state.currentListing.Reviews}
-        //     newState.currentListing.Reviews[action.review.id] = action.review
-        //     return newState
-        // case DELETE_REVIEW:
-        //     newState = {...state}
-        //     newState.currentListing = {...state.currentListing}
-        //     newState.currentListing.Reviews = {...state.currentListing.Reviews}
-        //     delete newState.currentListing.Reviews[action.review.id]
-        //     return newState

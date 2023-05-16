@@ -21,8 +21,34 @@ const { Listing,
 
 const router = express.Router();
 
-
+//get all threads and messages related to user
 router.get('/', restoreUser, asyncHandler(async (req, res) => {
+
+    const userId = req.user.id
+    const threads = await DirectMessageThread.findAll({
+        where: {
+            [Op.or]: [
+                {hostId: userId},
+                {guestId: userId}
+            ]
+        },
+        include: DirectMessage
+    })
+
+    return res.json(threads)
+}))
+
+
+
+router.post('/', restoreUser, asyncHandler(async (req, res) => {
+
+    const newThread = await DirectMessageThread.create(req.body)
+
+    return res.json(newThread)
+}))
+
+
+router.delete('/:threadId', restoreUser, asyncHandler(async (req, res) => {
 
     const userId = req.user.id
     const threads = await DirectMessageThread.findAll({
@@ -43,7 +69,7 @@ router.get('/:threadId', restoreUser, asyncHandler(async (req, res) => {
     const threads = await DirectMessageThread.findByPk(threadId, {
         include: DirectMessage
     } )
-    console.log('this is threads, looking for messages', threads)
+    // console.log('this is threads, looking for messages', threads)
 
     return res.json(threads.DirectMessages)
 }))

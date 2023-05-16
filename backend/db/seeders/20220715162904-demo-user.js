@@ -60,7 +60,7 @@ module.exports = {
         online: false,
         aboutMe: 'My wide screen monitor allows me to open 10 windows at the same time so I never miss any messages.',
         duringStay: 'I will make sure that I am monitoring you on my widescreen monitor at all times.',
-        hashedPassword: bcrypt.hashSync(faker.internet.password()),
+        hashedPassword: bcrypt.hashSync('password'),
         createdAt: new Date(),
         updatedAt: new Date()
       },

@@ -1,6 +1,9 @@
+const url = require("url");
+const path = require("path");
+const dotenv = require("dotenv");
 const AWS = require("aws-sdk");
 // name of your bucket here
-const NAME_OF_BUCKET = "realbnb";
+const NAME_OF_BUCKET = process.env.NAME_OF_BUCKET;
 
 const multer = require("multer");
 
@@ -30,6 +33,25 @@ const singlePublicFileUpload = async (file) => {
   // save the name of the file in your bucket as the key in your database to retrieve for later
   //You will be saving this url link that S3 generates for us to your database which can be extracted from result.Location
   return result.Location;
+};
+
+const singlePublicFileDelete = async (file) => {
+	const params = {
+		Bucket: NAME_OF_BUCKET,
+		Key: file,
+	};
+	try {
+		await s3.deleteObject(params).promise();
+	} catch (error) {
+		console.error(JSON.stringify(error));
+	}
+};
+
+const extractKeyFromUrl = (fileUrl) => {
+	const parsedUrl = url.parse(fileUrl);
+	const key = path.basename(parsedUrl.pathname);
+
+	return key;
 };
 
 const multiplePublicFileUpload = async (files) => {
@@ -101,4 +123,6 @@ module.exports = {
   retrievePrivateFile,
   singleMulterUpload,
   multipleMulterUpload,
+  singlePublicFileDelete,
+  extractKeyFromUrl
 };

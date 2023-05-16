@@ -10,6 +10,8 @@ const { Op } = require('sequelize');
 const {
   singleMulterUpload,
   singlePublicFileUpload,
+  singlePublicFileDelete,
+	extractKeyFromUrl,
 } = require('../../awsS3');
 const { Listing,
   ListingPrice,
@@ -425,8 +427,8 @@ router.get('/user', requireAuth, asyncHandler(async(req, res) => {
   }
 }));
 
-//delete a listing by its id
-router.delete('/:listingId/delete', requireAuth, asyncHandler(async(req, res) => {
+
+router.delete('/:listingId/delete', requireAuth, singleMulterUpload("image"), asyncHandler(async(req, res) => {
   const listingId = req.params.listingId;
 
   const user = req.user;
@@ -443,6 +445,16 @@ router.delete('/:listingId/delete', requireAuth, asyncHandler(async(req, res) =>
     "statusCode": 404
   });
 
+  const listingImageObjs = await findListing.getImages();
+  const listingImageUrls = listingImageObjs.map(imageObj => imageObj.url);
+  for(const url of listingImageUrls) {
+    const isS3Image = url.match(/^https:\/\/realbnb\.s3\.amazonaws\.com\/\d+\.webp$/);
+    if (!!isS3Image) {
+      const keyToDelete = extractKeyFromUrl(url);
+      await singlePublicFileDelete(keyToDelete);
+    };
+  };
+
   let deletedListing = await findListing.destroy();
 
   if(deletedListing) res.json({
@@ -450,5 +462,35 @@ router.delete('/:listingId/delete', requireAuth, asyncHandler(async(req, res) =>
     "statusCode": 200
   });    
 }));
+
+//delete individual spot images from database and aws.
+router.delete("/listingImage/delete/:imageId", requireAuth, singleMulterUpload("image"), asyncHandler(async(req, res) => {
+  const imageId = req.params.imageId;
+
+  const findImage = await Image.findByPk(imageId);
+
+  if(!findImage) return res.json({
+    "message": `Image with ID ${imageId} couldn't be found`,
+    "statusCode": 404
+  });
+
+  const convertFindImage = findImage.toJSON();
+
+//"https://realbnb.s3.amazonaws.com/1683153626348.webp"
+    const imageUrl = convertFindImage.url;
+    const isS3Image = imageUrl.match(/^https:\/\/realbnb\.s3\.amazonaws\.com\/\d+\.webp$/);
+    if (!!isS3Image) {
+      const keyToDelete = extractKeyFromUrl(imageUrl);
+      await singlePublicFileDelete(keyToDelete);
+    };
+
+    const deletedImage = await findImage.destroy();
+
+    if(deletedImage) res.json({
+      "message": "Successfully deleted",
+      "statusCode": 200
+    });  
+}));
+
 
 module.exports = router;

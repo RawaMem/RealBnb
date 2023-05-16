@@ -115,7 +115,7 @@ module.exports = {
     {
         userId: 5,
         listingId: 5,
-        url: 'https://a0.muscache.com/im/pictures/miso/Hosting-20848638/original/eebe6708-4130-448f-91df-3cf8b0a1bcdc.jpegm/0270ce3c438644db876c44265f5d4f4c.jpg',
+        url: 'https://a0.muscache.com/im/pictures/miso/Hosting-20848638/original/eebe6708-4130-448f-91df-3cf8b0a1bcdc.jpeg',
         description: 'The Hotel California is the best',
         createdAt: new Date(),
         updatedAt: new Date()

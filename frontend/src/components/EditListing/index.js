@@ -19,17 +19,23 @@ function EditListingForm() {
     const [address, setAddress] = useState("");
     const [city, setCity] = useState("");
     const [state, setState] = useState("");
-    const [zipCode, setZipCode] = useState()
-    const [bedroom, setBedroom] = useState();
-    const [beds, setBeds] = useState();
-    const [baths, setBaths] = useState();
-    const [maxGuests, setMaxGuests] = useState();
-    const [description, setDescription] = useState();
-    const [longitude, setLongitude] = useState();
-    const [latitude, setLatitude] = useState();
+    const [zipCode, setZipCode] = useState("")
+    const [bedroom, setBedroom] = useState(1);
+    const [beds, setBeds] = useState(1);
+    const [baths, setBaths] = useState(1);
+    const [maxGuests, setMaxGuests] = useState(1);
+    const [description, setDescription] = useState("");
+    const [longitude, setLongitude] = useState(null);
+    const [latitude, setLatitude] = useState(null);
     const [amenityArr, setAmenityArr] = useState([]);
     const [categoryArr, setCategoryArr] = useState([]);
+
     const [imageArr, setImageArr] = useState([]);
+    const [removedImageIds, setRemovedImageIds] = useState([]);
+    const [addedImages, setAddedImages] = useState([]);
+    const [multiImages, setMultiImages] = useState([]);
+
+
 
     useEffect(() => {     
       dispatch(getListingInfoForEditThunk(listingId))
@@ -56,7 +62,6 @@ function EditListingForm() {
     //     if(!token) dispatch(getToken());
     // }, [dispatch]);
 
-    // if(!listingData.id) return null;
 
     return (
         <div className="editlistingform-container">
@@ -99,7 +104,15 @@ function EditListingForm() {
           </div>
 
           <div className="edit-image-main-container">
-            <AddDeleteImages imageArr={imageArr} setImageArr={setImageArr} />
+            <AddDeleteImages 
+            imageArr={imageArr} 
+            setImageArr={setImageArr} 
+            removedImageIds={removedImageIds}
+            setRemovedImageIds={setRemovedImageIds}
+            addedImages={addedImages}
+            setAddedImages={setAddedImages}
+            setMultiImages={setMultiImages}
+            />
           </div>
         </div>
     )

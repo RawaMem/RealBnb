@@ -367,11 +367,11 @@ router.get("/:listingId/editForm", requireAuth, asyncHandler(async(req, res) => 
     include: [
       {
         model: Image,
-        attributes: ["url"]
+        attributes: ["url","id"]
       },
       {
         model: ListingPrice,
-        attributes: ["pricePerDay", "startDate", "endDate"]
+        attributes: ["pricePerDay", "startDate", "endDate", "id"]
       },
       {
         model: Category,

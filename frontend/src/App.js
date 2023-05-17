@@ -21,6 +21,7 @@ import CategoryForm from './components/CreateListing/CategoryForm';
 import CreateNewList from './components/CreateListing';
 import UserProfile from './components/UserProfile';
 import WishList from './components/WishLists';
+import { WishListListing } from './components/WishLists';
 
 //websocket setup
 import { io } from 'socket.io-client'
@@ -168,6 +169,9 @@ function App() {
           </Route>
           <Route exact path='/wishlists'>
             <WishList />
+          </Route>
+          <Route exact path='/wishlists/:wishlistId'>
+            <WishListListing />
           </Route>
           <Route exact path="/">
             <Listings />

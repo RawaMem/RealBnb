@@ -32,7 +32,6 @@ function WishList() {
           // TODO: Handle situation where there are NO Listings and .find returns undefined.
           return dispatch(getSingleListingThunk(listingId));
         });
-
         const data = await Promise.all(promises);
         setListings(data);
       }

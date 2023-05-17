@@ -1,8 +1,13 @@
 import { useState } from 'react';
 import {useDropzone} from 'react-dropzone';
+import ConfirmAndNextBtn from '../../ui/Buttons/ConfirmAndNext';
+import ClearBackgroundBtn from '../../ui/Buttons/ClearBackground';
 import "./editListing.css";
 
-function AddMoreImagesForm({setAddedImages,addedImages,setShowAddImageModal, imgUrl, setImgUrl}) {
+function AddMoreImagesForm({setAddedImages,addedImages,setShowAddImageModal, imgUrl, setImgUrl, setImageArr}) {
+
+
+    const [dropZone, setDropZone] = useState(false);
     
     const {
         getRootProps,
@@ -15,17 +20,14 @@ function AddMoreImagesForm({setAddedImages,addedImages,setShowAddImageModal, img
             const droppedFiles = acceptedFiles.map(file => Object.assign(file, {
               preview: URL.createObjectURL(file)
             }));
-            // setDroppedFiles([...droppedFiles]);
-
-            // multiImages is used to update s3 bucket, the images updated has to be File type.         
+        
             setAddedImages(prev => [...prev, ...droppedFiles]);
             // droppedFiles is an array of objects of File data type, the blob type url of each image url is stored in the preview key of each object.
             const droppedFileUrl = droppedFiles.map(file => file.preview);
 
-            // console.log("droppedFiles", droppedFiles)
             setImgUrl(prev => [...prev, ...droppedFileUrl]);
             
-            // setDragZone(false);
+            setDropZone(false);
         },
     });
 
@@ -45,7 +47,6 @@ function AddMoreImagesForm({setAddedImages,addedImages,setShowAddImageModal, img
         });
         };
     };
-    console.log("addedImages", addedImages)
 
 
     const buttonEvent = () => {
@@ -66,6 +67,17 @@ function AddMoreImagesForm({setAddedImages,addedImages,setShowAddImageModal, img
         });
     };
 
+    const handleSave = () => {
+        setImageArr(prev => {
+            const newImageArr = [...prev];
+            const addUrlKey = [];
+            imgUrl.forEach(url => addUrlKey.push({url, id:0}));
+            return [...newImageArr, ...addUrlKey];
+        });
+
+        setImgUrl([]);
+    };
+
 
     return(
         <div className="edit-listing-add-images-container">
@@ -83,12 +95,30 @@ function AddMoreImagesForm({setAddedImages,addedImages,setShowAddImageModal, img
 
             <div 
                 className="edit-listing-drag-drop-zone-container"
-            >
+                onDragEnter={e => {
+                    setDropZone(true)
+                    e.stopPropagation()
+                    e.preventDefault()
+                }}
+            >   
+            {dropZone && ( <div 
+                id="edit-listing-image-drop-zone"
+                {...getRootProps({ className: 'dropzone' })} 
+                onDragOver={e => {
+                    e.stopPropagation()
+                    e.preventDefault()
+                }}
+                onDragLeave={e => {
+                    e.stopPropagation()
+                    e.preventDefault()
+                    setDropZone(false);
+                }}
+                >Drop Files Here</div> ) }
+
                 <div 
                 className="edit-listing-drag-drop-zone"
                 >                     
                      <div className='edit-listing-drop-zone'
-                    {...getRootProps()} 
                     >   
                         {imgUrl.map((url, idx) => (
                             <div key={url+idx} className="edit-image-card-container">
@@ -106,7 +136,13 @@ function AddMoreImagesForm({setAddedImages,addedImages,setShowAddImageModal, img
             </div>
 
             <div className="edit-listing-button-container">
-                <div onClick={() => setShowAddImageModal(false)}>Cancel</div>
+                <div className='edit-listing-button-inner-container'>
+                    <ClearBackgroundBtn btnText={"Cancel"} onClick={() => setShowAddImageModal(false)} />
+                    <ConfirmAndNextBtn textColor={"white"} btnText={"Confirm"} disabled={false} onClick={() => {
+                        handleSave();
+                        setShowAddImageModal(false);
+                    }} />
+                </div>
             </div>
 
         </div>

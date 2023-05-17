@@ -29,7 +29,6 @@ const router = express.Router();
 
 // get all listings
 //when wishlist is implemented, include wishlist so that we know which hearts are filled in
-
 router.get('/', asyncHandler(async (req, res) => {
   const listings = await Listing.findAll({
     include: [
@@ -187,6 +186,9 @@ router.post(
       res.json({'newImage': newImage })
     }
   }));
+
+  //edit a listing by its id
+
 
 
 //search listings on home  page
@@ -377,11 +379,11 @@ router.get("/:listingId/editForm", requireAuth, asyncHandler(async(req, res) => 
       },
       {
         model: Category,
-        attributes: ["name"]
+        attributes: ["name","id"]
       }, 
       {
         model: Amenity,
-        attributes: ["name"]
+        attributes: ["name","id"]
       }
     ]
   });
@@ -395,10 +397,16 @@ router.get("/:listingId/editForm", requireAuth, asyncHandler(async(req, res) => 
 
   const cleanUpListingInfo = listingInfo.toJSON();
   const categoryArr = cleanUpListingInfo.Categories;
-  const newCategoryArr = categoryArr.map(category => category.name);
+  const newCategoryArr = [];
+  categoryArr.forEach(categoryObj => {
+    newCategoryArr.push({name: categoryObj.name, id: categoryObj.id})
+  });
   cleanUpListingInfo.Categories = newCategoryArr;
   const amenitiesArr = cleanUpListingInfo.Amenities;
-  const newAmenityArr = amenitiesArr.map(amenity => amenity.name);
+  const newAmenityArr = [];
+  amenitiesArr.forEach(amenityObj => {
+    newAmenityArr.push({name: amenityObj.name, id: amenityObj.id});
+  });
   cleanUpListingInfo.Amenities = newAmenityArr;
 
   res.json(cleanUpListingInfo)

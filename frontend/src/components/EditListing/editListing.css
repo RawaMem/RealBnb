@@ -160,6 +160,21 @@
 
 .edit-listing-button-container {
     height: 10%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.edit-listing-button-inner-container {
+    height: 100%;
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
 }
 
 .edit-listing-drag-drop-zone {
@@ -184,10 +199,18 @@
     column-gap: 10px;   
 }
 
-/* .edit-listing-img {
-    height: 220px;
-    width: 230px;
-    border-radius: 5px;
-} */
+#edit-listing-image-drop-zone {
+    position: absolute;
+    top: 10%;
+    height: 80%;
+    width: 80%;
+    border: 1px dashed grey;
+    background-color: rgb(247,247,247);
+    border-radius: 15px;
+    text-align: center;
+    font-size: 35px;
+    font: grey;
+    z-index: 1
+}
 
 

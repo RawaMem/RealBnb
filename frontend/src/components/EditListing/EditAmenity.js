@@ -2,11 +2,11 @@ import { useState } from "react";
 import {icons} from "../../ui/icons";
 import "./editListing.css";
 
-function EditAmenity( {amenityArr, setAmenityArr}) {
+function EditAmenity( {amenityArr, setAmenityArr, setAddedAmenities, addedAmenities, setRemovedAmenityId}) {
     const amenities = Object.keys(icons);
 
     const unSelectedAmenities = () => {
-        const convertToLower = amenityArr.map(a => a.toLowerCase());
+        const convertToLower = amenityArr.map(amenityObj => amenityObj.name.toLowerCase());
         return amenities.filter(a => !convertToLower.includes(a));
     };
 
@@ -18,11 +18,21 @@ function EditAmenity( {amenityArr, setAmenityArr}) {
             newAmenityArr.splice(amenityIdx, 1);
             return newAmenityArr;
         });
+
         setUnselected(prev => {
             const newUnselectedArr = [...prev];
-            newUnselectedArr.push(amenity);
+            newUnselectedArr.push(amenity.name);
             return newUnselectedArr;
         });
+
+        if (amenity.id) setRemovedAmenityId(prev => [...prev, amenity.id]);
+
+        if(addedAmenities.includes(amenity.name)) setAddedAmenities(prev => {
+            const newRef = [...prev];
+            const idx = newRef.indexOf(amenity.name);
+            newRef.splice(idx, 1);
+            return newRef;
+        });        
     };
 
     const addAmenity = (amenityIdx, amenity) => {
@@ -34,9 +44,11 @@ function EditAmenity( {amenityArr, setAmenityArr}) {
 
         setAmenityArr(prev => {
             const newAmenityArr = [...prev];
-            newAmenityArr.push(amenity);
+            newAmenityArr.push({name: amenity});
             return newAmenityArr;
-        })
+        });
+
+        setAddedAmenities(prev => [...prev, amenity]);
     };
 
 
@@ -46,8 +58,10 @@ function EditAmenity( {amenityArr, setAmenityArr}) {
 
             <div className="edit-amenity-section">
                 {amenityArr.map((amenity, idx) => (
-                    <div className="edit-amenity-selection" key={amenity} onClick={() => removeAmenity(idx, amenity)} >
-                        <div>{amenity.toLowerCase()}</div>
+                    <div className="edit-amenity-selection" key={amenity+idx} 
+                    onClick={() => removeAmenity(idx, amenity)} 
+                    >
+                        <div>{amenity.name.toLowerCase()}</div>
                         <div className="operator-icon">-</div>
                     </div>
                 ))}
@@ -56,7 +70,9 @@ function EditAmenity( {amenityArr, setAmenityArr}) {
             <h5>Add more aminities to your listing</h5>
             <div className="edit-amenity-section">
                 {unSelected.map((amenity, idx) => (
-                    <div className="edit-amenity-selection" key={amenity} onClick={() => addAmenity(idx, amenity)} >
+                    <div className="edit-amenity-selection" key={amenity+idx} 
+                    onClick={() => addAmenity(idx, amenity)} 
+                    >
                         <div>{amenity.toLowerCase()}</div>
                         <div className="operator-icon">+</div>
                     </div>

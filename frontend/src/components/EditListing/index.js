@@ -28,13 +28,18 @@ function EditListingForm() {
     const [longitude, setLongitude] = useState(null);
     const [latitude, setLatitude] = useState(null);
     const [amenityArr, setAmenityArr] = useState([]);
+    const [addedAmenities, setAddedAmenities] = useState([]);
+    const [removedAmenityId, setRemovedAmenityId] = useState([]);
+
     const [categoryArr, setCategoryArr] = useState([]);
+    const [addedCategories, setAddedCategories] = useState([]);
+    const [removedCategoryId, setRemovedCategoryId] = useState([]);
 
     const [imageArr, setImageArr] = useState([]);
     const [removedImageIds, setRemovedImageIds] = useState([]);
     const [addedImages, setAddedImages] = useState([]);
+    const [previewImageUrl, setPreviewImageUrl] = useState("");
     const [multiImages, setMultiImages] = useState([]);
-
 
 
     useEffect(() => {     
@@ -53,6 +58,7 @@ function EditListingForm() {
         setAmenityArr(listingData.Amenities)
         setCategoryArr(listingData.Categories)
         setImageArr(listingData.Images)
+        setPreviewImageUrl(listingData.previewImageUrl)
       })
     },[]);
 
@@ -95,11 +101,23 @@ function EditListingForm() {
             </div>
 
             <div className="amenities-container">
-              <EditAmenity amenityArr={amenityArr} setAmenityArr={setAmenityArr} />
+              <EditAmenity 
+              amenityArr={amenityArr} 
+              setAmenityArr={setAmenityArr} 
+              setAddedAmenities={setAddedAmenities}
+              setRemovedAmenityId={setRemovedAmenityId}
+              addedAmenities={addedAmenities}
+              />
             </div>
 
             <div>
-              <EditCategory categoryArr={categoryArr} setCategoryArr={setCategoryArr} />
+              <EditCategory 
+              categoryArr={categoryArr} 
+              setCategoryArr={setCategoryArr} 
+              addedCategories={addedCategories}
+              setAddedCategories={setAddedCategories}
+              setRemovedCategoryId={setRemovedCategoryId}
+              />
             </div>
           </div>
 
@@ -112,6 +130,8 @@ function EditListingForm() {
             addedImages={addedImages}
             setAddedImages={setAddedImages}
             setMultiImages={setMultiImages}
+            previewImageUrl={previewImageUrl}
+            setPreviewImageUrl={setPreviewImageUrl}
             />
           </div>
         </div>

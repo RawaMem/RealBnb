@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
+import { StyledEngineProvider } from '@mui/material/styles';
 import * as sessionActions from './store/session';
 import Navigation from './components/Navigation';
 import SingleListingPage from './components/SingleListingPage';
@@ -22,6 +23,8 @@ import CreateNewList from './components/CreateListing';
 import UserProfile from './components/UserProfile';
 import WishList from './components/WishLists';
 import { WishListListing } from './components/WishLists';
+import EditListingForm from './components/EditListing';
+
 
 //websocket setup
 import { io } from 'socket.io-client'
@@ -128,6 +131,9 @@ function App() {
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <Switch>
+          <Route exact path="/">
+            <Listings />
+          </Route>
           <Route exact path='/createListing/introduction'>
               <Introducing />
           </Route>
@@ -161,6 +167,13 @@ function App() {
           <Route exact path='/user-profile'>
             <UserProfile />
           </Route>
+
+          <StyledEngineProvider injectFirst>
+            <Route exact path='/edit-listing/:listingId'>
+              <EditListingForm />
+            </Route>
+          </StyledEngineProvider>
+
           <Route exact path='/messages/'>
             <MessageWrapper socket={socket}/>
           </Route>
@@ -176,6 +189,7 @@ function App() {
           <Route exact path="/">
             <Listings />
           </Route>
+
           <Route exact path='/sockets'>
             <Socket socket={socket} />
           </Route>

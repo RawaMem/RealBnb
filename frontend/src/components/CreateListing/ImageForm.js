@@ -79,7 +79,7 @@ export default function ImageForm() {
 
             // droppedFiles is an array of objects of File data type, the blob type url of each image url is stored in the preview key of each object.
             const droppedFileUrl = droppedFiles.map(file => file.preview);
-            setImgUrl([...imgUrl, ...droppedFileUrl]);
+            setImgUrl(prev => [...prev, ...droppedFileUrl]);
             setDragZone(false);
         },
     });
@@ -93,10 +93,10 @@ export default function ImageForm() {
             fr.readAsDataURL(e.target?.files[0]);
             fr.addEventListener('load', () => {
                 const url = fr.result;              
-                setImgUrl([...imgUrl, url])  
+                setImgUrl(prev => [...prev, url])  
                 // File object returned from input event target doesn't have a url, set the newly generated image url to the File object, so all File object stored in multiImages state have a key of preview and value of image url, this image url is used to reorder the files stored in multiImages state after user reordered images.
                 inputFile.preview = url;
-                setMultiImages([...multiImages, inputFile]);
+                setMultiImages(prev => [...prev, inputFile]);
             });
         };
     };

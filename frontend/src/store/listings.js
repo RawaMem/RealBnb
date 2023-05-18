@@ -6,6 +6,24 @@ const GET_SINGLE_LISTING = "listings/GET_SINGLE_LISTING";
 const LISTING_SEARCH_RESULTS = "listings/LISTING_SEARCH_RESULTS";
 const CLEAR_LISTING_STATE = "listings/CLEAR_LISTING_STATE";
 const STORE_LISTING_IMAGES_FILES="listings/STORE_LISTING_IMAGES_FILES";
+const GET_USER_LISTINGS = "listings/GET_USER_LISTINGS";
+const DELETE_USER_LISTING = "listings/DELETE_USER_LISTING";
+const GET_LISTING_INFO_FOR_EDIT = "listings/GET_LISTING_INFO_FOR_EDIT";
+
+export const getListingInfoForEditAction = listing => ({
+    type: GET_LISTING_INFO_FOR_EDIT,
+    listing
+});
+
+export const deleteUserListingAction = listingId => ({
+    type: DELETE_USER_LISTING,
+    listingId
+});
+
+export const getUserListingsAction = listings => ({
+    type: GET_USER_LISTINGS,
+    listings
+});
 
 export const getListingImagesAction = multiImagesFilesArr => {
     console.log('from action', multiImagesFilesArr)
@@ -32,6 +50,15 @@ export const clearListingStateAction = () => ({
     type: CLEAR_LISTING_STATE
 });
 
+export const getListingInfoForEditThunk = (listingId) => async dispatch => {
+    const response = await csrfFetch(`/api/listings/${listingId}/editForm`);
+    if(response.ok) {
+        const listing = await response.json();
+        dispatch(getListingInfoForEditAction(listing));
+        return listing;
+    };
+};
+
 export const getListingsThunk = () => async dispatch => {
     const response = await csrfFetch('/api/listings');
     if (response.ok) {
@@ -39,6 +66,25 @@ export const getListingsThunk = () => async dispatch => {
         dispatch(getListingsAction(listings));
         return listings;
     }
+};
+
+export const getUserListingsThunk = () => async dispatch => {
+    const response = await csrfFetch('/api/listings/user');
+
+    if(response.ok) {
+        const userListings = await response.json();
+        dispatch(getUserListingsAction(userListings.userListings));
+    };
+};
+
+export const deleteUserListingThunk = listingId => async dispatch => {
+    const response = await csrfFetch(`/api/listings/${listingId}/delete`, {
+        method: "DELETE",
+    });
+
+    if(response.ok) dispatch(deleteUserListingAction(listingId));
+
+    return response;
 };
 
 
@@ -81,8 +127,6 @@ export const getSingleListingThunk = (listingId) => async dispatch => {
 export const createNewListingThunk = (newListing, amenityAndCategory, newListingImages) => async dispatch => {
     const [multiImages, imageDescription] = newListingImages;
     const {newListingObj,  listingPricing} = newListing;
-    console.log('receiving newListingObj', newListingObj)
-    console.log('receiving newlistingpricing', listingPricing)
     const formData = new FormData();
 
     for(const info in newListingObj) {
@@ -153,10 +197,22 @@ export default function listings(state = initialState, action) {
             newState = {allListings:{}, singleListing: {}};
             action.listings.forEach(listing => newState.allListings[listing.id] = listing);
             return newState;
+        case GET_USER_LISTINGS:
+            newState = {allListings:{}, singleListing: {}};
+            action.listings.forEach(listing => newState.allListings[listing.id] = listing);
+            return newState
+        case DELETE_USER_LISTING:
+            newState={allListings: {...state.allListings}, singleListing: {}};
+            delete newState.allListings[action.listingId];
+            return newState;
+        case GET_LISTING_INFO_FOR_EDIT:
+            newState = {allListings:{}, singleListing: {}};
+            newState.singleListing = action.listing;
+            return newState;
         case CLEAR_LISTING_STATE:
             return {allListings:{}, singleListing: {}}
         default:
             return state;
-    }
-}
+    };
+};
 

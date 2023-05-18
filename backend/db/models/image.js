@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: false
     }, 
+    preview: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false
+    },
     description: {
       type: DataTypes.STRING,
       allowNull: true

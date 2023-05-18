@@ -781,43 +781,43 @@ span.disabled {
 
 #confirmation-form-container {
     display: flex;
-    height: 70vh;
-    width: 90vh;
-    background-color: white;
+    height: var(--confirmation-modal-height);
+    width: var(--confirmation-modal-width);
+    background-color: var(--confirmation-modal-background-color);
     flex-direction: column;
-    border-radius: 5%;
+    border-radius: var(--confirmation-modal-border-radius);
 }
 
 .confirmation-form-top {
     display: flex;
     flex-direction: row;
-    width: 100%;
-    height: 80%;
+    width: var(--confirmation-modal-top-container-width);
+    height: var(--confirmation-modal-top-container-height);
 }
 
 .confirmation-form-preview-image-container {
-    width: 50%;
-    height: 100%;
+    width: var(--confirmation-modal-preview-image-container-width);
+    height: var(--confirmation-modal-preview-image-container-height);
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 5%;
-    background-color: rgb(247,247,247);
+    border-radius: var(--confirmation-modal-border-radius);
+    background-color: var( --confirmation-modal-preview-image-container-background-color);
 }
 
 .confirmation-form-preview-image {
-    width: 85%;
-    height: 80%;
-    border-radius: 3%;
+    width: var(--confirmation-modal-preview-image-width);
+    height: var(--confirmation-modal-preview-image-height);
+    border-radius: var(--confirmation-modal-preview-image-border-radius);
 }
 
 .confirmation-form-contents-container {
-    width: 50%;
-    height: 100%;
+    width: var(--confirmation-modal-contents-container-width);
+    height: var(--confirmation-modal-contents-container-height);
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 5%;
+    padding: var(--confirmation-modal-contents-container-padding);
 }
 
 .confirmation-form-contents-container div {
@@ -825,8 +825,8 @@ span.disabled {
 }
 
 .confirmation-form-bottom {
-    width: 100%;
-    height: 20%;
+    width: var(--confirmation-modal-bottom-container-width);
+    height: var(--confirmation-modal-bottom-container-height);
     display: flex;
     justify-content: center;
     align-items: center;

@@ -18,7 +18,6 @@ module.exports = {
    return queryInterface.bulkInsert(options, [
     {
       ownerId: '1',
-      previewImageUrl: 'https://media-cdn.tripadvisor.com/media/photo-s/1c/7d/2c/b5/hotel-california.jpg',
       name: 'Hotel California',
       description: 'Welcome to the Hotel California, such a lovely place, such a lovely face, plenty of room at the Hotel California, any time of year, you can find it here.',
       serviceFee: 24.99,
@@ -38,7 +37,6 @@ module.exports = {
    },
     {
       ownerId: '2',
-      previewImageUrl: 'https://beachviewrealty.com/wp-content/uploads/2022/03/CollectionsRecentlyAdded-min.jpg',
       name: 'Newport Beach House',
       description: 'Welcome to the Hotel California, such a lovely place, such a lovely face, plenty of room at the Hotel California, any time of year, you can find it here.',
       serviceFee: 39.99,
@@ -58,7 +56,6 @@ module.exports = {
    },
     {
       ownerId: '3',
-      previewImageUrl: 'https://i.pinimg.com/originals/1e/d8/81/1ed8818e3618f1cbe1b925a5c9f84431.jpg',
       name: 'Mouse House',
       description: 'Discover magic and fun at the Mouse House!',
       serviceFee: 199.99,
@@ -78,7 +75,6 @@ module.exports = {
    },
     {
       ownerId: '4',
-      previewImageUrl: 'https://media.nbcnewyork.com/2021/04/GettyImages-1310356958.jpg?quality=85&strip=all&resize=1200%2C675',
       name: "Vader's Chill Pad",
       description: 'Sometime you need to just get away from the state of the empire and chill in a building.',
       serviceFee: 49.00,
@@ -98,7 +94,6 @@ module.exports = {
    },
     {
       ownerId: '5',
-      previewImageUrl: 'https://images.seattletimes.com/wp-content/uploads/2020/01/CANYON_INTERIOR.jpg?d=780x533',
       name: "Orca's retreat",
       description: 'The best place to hang out with Orcas!',
       serviceFee: 30,

@@ -1,0 +1,41 @@
+.confirmAndNext-btn {
+    width: 84px;
+    height: 48px;
+    background-color: rgb(34,34,34);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: white;
+}
+
+.confirmAndNext-btn-disabled {
+    width: 84px;
+    height: 48px;
+    background-color: rgb(221,221,221);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: not-allowed;
+}
+
+.confirmAndNext-btn :hover {
+    background-color: #000;
+}
+
+.clearBackground-btn {
+    height: 48px;
+    width: 84px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.clearBackground-btn:hover {
+    background-color: rgb(247,247,247);
+}
+

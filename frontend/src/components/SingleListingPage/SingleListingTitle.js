@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import { createDMThreadsThunk } from "../../store/directMessageThreads";
 
 export default function SingleListingTitle({ listing, currentUser, dispatch }) {
-
   const {setThreadIdFromListing} = useReceiverId();
   const history = useHistory()
 

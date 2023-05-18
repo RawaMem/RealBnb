@@ -43,6 +43,13 @@ router.get('/', asyncHandler(async (req, res) => {
       {
         model: Category,
         attributes: ['name']
+      },
+      {
+        model: Image,
+        where: {
+          preview: true
+        },
+        attributes: ["url"]
       }
     ],
     attributes: {
@@ -56,9 +63,18 @@ router.get('/', asyncHandler(async (req, res) => {
       "Categories.id",
       "Categories->ListingCategory.listingId",
       'Categories->ListingCategory.id',
+      "Images.id"
     ]
   });
-  return res.json(listings);
+
+  const newListing = listings.map(singleListing => {
+    const convertListings = singleListing.toJSON();
+    convertListings.previewImageUrl = convertListings.Images[0].url;
+    delete convertListings["Images"];
+    return convertListings
+  });
+
+  return res.json(newListing);
 }));
 
 
@@ -279,88 +295,168 @@ router.get('/search', asyncHandler(async (req, res) => {
 }))
 
 //get single listing for listing detail page
+// router.get('/:listingId(\\d+)', asyncHandler(async (req, res) => {
+//   const { listingId } = req.params;
+//   const singleListing = await Listing.findByPk(listingId, {
+//     attributes: {
+//       include: [
+//         //attempted to do average aggregate query with sql literal
+//         //   [Sequelize.literal(`(
+//         //     SELECT AVG(starRating)
+//         //     FROM Reviews AS Review
+//         //     WHERE
+//         //         Review.listingId = ${listingId}
+//         // )`),
+//         // 'avgRating'],
+
+
+//         //aggregate function for average not calculating correctly, will calculate on front end instead
+//         // [Sequelize.fn('AVG', Sequelize.col('Reviews.starRating')), 'avgRating'],
+//         // [Sequelize.fn('AVG', Sequelize.col('Reviews.cleanliness')), 'aveCleanliness'],
+//         // [Sequelize.fn('AVG', Sequelize.col('Reviews.communication')), 'aveCommunication'],
+//         // [Sequelize.fn('AVG', Sequelize.col('Reviews.checkIn')), 'aveCheckIn'],
+//         // [Sequelize.fn('AVG', Sequelize.col('Reviews.accuracy')), 'aveAccuracy'],
+//         // [Sequelize.fn('AVG', Sequelize.col('Reviews.location')), 'aveLocation'],
+//         // [Sequelize.fn('AVG', Sequelize.col('Reviews.value')), 'aveValue'],
+//       ]
+//     },
+//     include: [Image,
+//       Category,
+//       ListingPrice,
+//       Amenity,
+//       {
+//         model: Review,
+//         include: {
+//           model: User,
+//           attributes: ['username'],
+//         }
+//       },
+//       Booking,
+//       WishList,
+//       {
+//         model: User,
+//         attributes: {
+//           exclude: ['hashedPassword', 'email', 'createdAt', 'updatedAt'],
+//         },
+//         include: {
+//           model: Listing,
+//           attributes: ['id'],
+//           include: {
+//             model: Review,
+//             attributes: ['id']
+//           }
+//         }
+//       }],
+//     group: [
+//       'Reviews.id',
+//       'Listing.id',
+//       'ListingPrices.id',
+//       'Bookings.id',
+//       'Images.id',
+//       'WishLists.id',
+//       'Categories.id',
+//       'User->Listings->Reviews.id',
+//       'Categories->ListingCategory.id',
+//       'Categories->ListingCategory.categoryId',
+//       'Categories->ListingCategory.listingId',
+//       'Categories->ListingCategory.createdAt',
+//       'Categories->ListingCategory.updatedAt',
+//       'Amenities.id',
+//       'Amenities->ListingAmenity.id',
+//       'Amenities->ListingAmenity.amenityId',
+//       'Amenities->ListingAmenity.listingId',
+//       'Amenities->ListingAmenity.createdAt',
+//       'Amenities->ListingAmenity.updatedAt',
+//       'WishLists->WishListListing.wishlistId',
+//       'WishLists->WishListListing.listingId',
+//       'WishLists->WishListListing.createdAt',
+//       'WishLists->WishListListing.updatedAt',
+//       'User.id',
+//       'User->Listings.id',
+//       'Reviews->User.id'
+//     ]
+//   })
+//   res.json(singleListing);
+// }));
+
+
+
+// get single listing for listing detail page refactor
 router.get('/:listingId(\\d+)', asyncHandler(async (req, res) => {
   const { listingId } = req.params;
   const singleListing = await Listing.findByPk(listingId, {
-    attributes: {
-      include: [
-        //attempted to do average aggregate query with sql literal
-        //   [Sequelize.literal(`(
-        //     SELECT AVG(starRating)
-        //     FROM Reviews AS Review
-        //     WHERE
-        //         Review.listingId = ${listingId}
-        // )`),
-        // 'avgRating'],
-
-
-        //aggregate function for average not calculating correctly, will calculate on front end instead
-        // [Sequelize.fn('AVG', Sequelize.col('Reviews.starRating')), 'avgRating'],
-        // [Sequelize.fn('AVG', Sequelize.col('Reviews.cleanliness')), 'aveCleanliness'],
-        // [Sequelize.fn('AVG', Sequelize.col('Reviews.communication')), 'aveCommunication'],
-        // [Sequelize.fn('AVG', Sequelize.col('Reviews.checkIn')), 'aveCheckIn'],
-        // [Sequelize.fn('AVG', Sequelize.col('Reviews.accuracy')), 'aveAccuracy'],
-        // [Sequelize.fn('AVG', Sequelize.col('Reviews.location')), 'aveLocation'],
-        // [Sequelize.fn('AVG', Sequelize.col('Reviews.value')), 'aveValue'],
-      ]
-    },
-    include: [Image,
-      Category,
-      ListingPrice,
-      Amenity,
+    include:[
+      {
+        model: Image,
+        attributes: ["url", "preview","description"]
+      },
+      {
+        model: Category,
+        attributes: ["name"]
+      },
+      {
+        model: ListingPrice,
+        attributes: ["pricePerDay", "startDate", "endDate"]
+      },
+      {
+        model: Amenity,
+        attributes: ["name"]
+      },
       {
         model: Review,
         include: {
           model: User,
-          attributes: ['username'],
-        }
-      },
-      Booking,
-      WishList,
-      {
-        model: User,
-        attributes: {
-          exclude: ['hashedPassword', 'email', 'createdAt', 'updatedAt'],
+          attributes: ["username"]
         },
-        include: {
-          model: Listing,
-          attributes: ['id'],
-          include: {
-            model: Review,
-            attributes: ['id']
-          }
+        attributes: {
+          exclude: ["authorId", "listingId"]
         }
-      }],
+      },  
+      {
+        model: Booking,
+        attributes: ["startDate", "endDate"]
+      },
+      WishList,
+    ],
+    attributes: {
+      include: [[
+        Sequelize.fn("AVG", Sequelize.col("Reviews.starRating")),'avgRating'
+      ]]
+    },
     group: [
-      'Reviews.id',
-      'Listing.id',
-      'ListingPrices.id',
-      'Bookings.id',
-      'Images.id',
-      'WishLists.id',
-      'Categories.id',
-      'User->Listings->Reviews.id',
-      'Categories->ListingCategory.id',
-      'Categories->ListingCategory.categoryId',
-      'Categories->ListingCategory.listingId',
-      'Categories->ListingCategory.createdAt',
-      'Categories->ListingCategory.updatedAt',
-      'Amenities.id',
-      'Amenities->ListingAmenity.id',
-      'Amenities->ListingAmenity.amenityId',
-      'Amenities->ListingAmenity.listingId',
-      'Amenities->ListingAmenity.createdAt',
-      'Amenities->ListingAmenity.updatedAt',
-      'WishLists->WishListListing.wishlistId',
-      'WishLists->WishListListing.listingId',
-      'WishLists->WishListListing.createdAt',
-      'WishLists->WishListListing.updatedAt',
-      'User.id',
-      'User->Listings.id',
-      'Reviews->User.id'
+      "Listing.id",
+      "Images.id",
+      "Categories.id",
+      "Categories->ListingCategory.id",
+      "ListingPrices.id",
+      "Amenities.id",
+      "Amenities->ListingAmenity.id",
+      "Bookings.id",
+      "Reviews.id",
+      "Reviews->User.id",
+      "WishLists.id",
+      "WishLists->WishListListing.wishlistId",
+      "WishLists->WishListListing.listingId",
+      "WishLists->WishListListing.createdAt",
+      "WishLists->WishListListing.updatedAt"
+
     ]
-  })
-  res.json(singleListing);
+  });
+
+  if(!singleListing) {
+    res.status(404);
+        res.json({
+            message: `"List with id of ${listingId} couldn't be found"`
+        });
+  };
+
+  const convertListing = singleListing.toJSON();
+  const newAmenitiesArr = convertListing["Amenities"].map(amnityObj => amnityObj.name)
+  convertListing["Amenities"] = newAmenitiesArr;
+
+  const newCategoryArr = convertListing["Categories"].map(categoryObj => categoryObj.name);
+  convertListing["Categories"] = newCategoryArr;
+  res.json(convertListing)
 }));
 
 //get listing by its id for edit form

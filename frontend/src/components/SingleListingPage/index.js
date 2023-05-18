@@ -22,7 +22,7 @@ export default function SingleListingPage() {
     const listing = useSelector(state => state.listings.singleListing)
     const reviews = useSelector(state => state.reviews)
 
-
+    console.log("reviews", reviews)
     useEffect(() => {
         dispatch(getSingleListingThunk(listingId))
 
@@ -32,7 +32,7 @@ export default function SingleListingPage() {
 
     if (!listing.Images) return <div className="loading">Loading...</div>
 
-
+    console.log("listing",listing)
     return (
         <>
         <div className="singleListingPageContainer">
@@ -42,7 +42,7 @@ export default function SingleListingPage() {
                     <SingleListingTitle listing={listing} currentUser={currentUser} dispatch={dispatch}/>
                 </div>
                 <div className="singleListingImageContainer">
-                    <SingleListingImages listing={listing}/>
+                    <SingleListingImages listingImages={listing.Images}/>
                 </div>
                 <div className="hostAndSpecsContainer">
                     <HostAndSpecs listing={listing}/>

@@ -29,6 +29,10 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false
       },
+      preview: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false
+      },
       description: {
         type: Sequelize.STRING,
         allowNull: true

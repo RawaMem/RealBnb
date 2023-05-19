@@ -19,10 +19,6 @@ module.exports = {
         references: { model: 'Users' },
         onDelete: "CASCADE"
       },
-      previewImageUrl: {
-        allowNull: false,
-        type: Sequelize.TEXT
-      },
       name: {
         allowNull: false,
         type: Sequelize.STRING(50)

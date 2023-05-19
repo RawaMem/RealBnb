@@ -1,0 +1,216 @@
+.editlistingform-container {
+    height: 85%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.editListingForm-inner-container {
+    width: 70%;
+    height: 100%;
+}
+
+.address-section-container {
+    display: flex;
+    /* border: 1px solid black; */
+    flex-direction: row;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.listing-basic-info-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.edit-amenity-form-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.edit-amenity-section {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.edit-amenity-selection {
+    display: flex;
+    flex-direction: row;
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 2px;
+    margin: .5%;
+    background-color: rgb(203,201,200);
+    cursor: pointer;
+}
+
+.operator-icon {
+    font-weight: 600;
+    margin-left: 3px;
+}
+
+.edit-image-main-container {
+    height: 450px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.edit-image-inner-container {
+    height: 100%;
+    width: 75%;
+    border: .5px solid lightgray;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.edit-image-2nd-inner-container {
+    overflow: auto;
+    height: 90%;
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.edit-image-card-container
+{
+    height: 200px;
+    width: 250px;
+    position: relative;
+}
+
+.edit-image-card-delete{
+    position: absolute;
+    font-size: 30px;
+    color: white;
+    right: 5%;
+    top: 4%;
+    border-radius: 50%;
+    /* border: 1px solid black; */
+    width: 25px;
+    height: 25px;
+    background-color: var(--logo-color);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.edited-image {
+    height: 200px;
+    width: 250px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.edit-image-add-icon-container {
+    border: .5px solid lightgray;
+    height: 200px;
+    width: 250px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#material-symbols-outlined {
+    color: var(--profile-dropdown-icon-color);
+    font-size: xx-large;
+}
+
+.edit-listing-add-images-container {
+    height: 85vh;
+    width: var(--confirmation-modal-width);
+    background-color: var(--confirmation-modal-background-color);
+    border-radius: var(--confirmation-modal-border-radius);
+    display: flex;
+    flex-direction: column;
+}
+
+.edit-listing-add-image-title {
+    height: 10%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.edit-listing-drag-drop-zone-container {
+    height: 80%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.edit-listing-button-container {
+    height: 10%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.edit-listing-button-inner-container {
+    height: 100%;
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.edit-listing-drag-drop-zone {
+    width: 80%;
+    height: 100%;
+    border: .5px solid lightgray;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.edit-listing-drop-zone {
+    height: 90%;
+    width: 90%;
+    overflow: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap; 
+    row-gap: 10px;
+    column-gap: 10px;   
+}
+
+#edit-listing-image-drop-zone {
+    position: absolute;
+    top: 10%;
+    height: 80%;
+    width: 80%;
+    border: 1px dashed grey;
+    background-color: rgb(247,247,247);
+    border-radius: 15px;
+    text-align: center;
+    font-size: 35px;
+    font: grey;
+    z-index: 1
+}
+
+

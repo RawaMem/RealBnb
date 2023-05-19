@@ -34,14 +34,15 @@ export default function ConfirmForm({previewImageUrl, multiImages, setShowConfor
     // for category
     const categoryArr = resetAmenity('categoryArr');
 
-    const previewImageFile = multiImages.find(file => file.preview === previewImageUrl)
-
-    // console.log('previewImageFile', previewImageFile)
+    const ImageArr = [];
+    multiImages.forEach(file => {
+        if(file.preview === previewImageUrl) ImageArr.push({file: file, preview: true})
+        else ImageArr.push({file: file, preview: false})
+    });
 
 
     const handleSubmitCreateForm = async() => {
         const newListingObj = {
-            previewImageFile,
             name,
             description,
             serviceFee,
@@ -58,7 +59,7 @@ export default function ConfirmForm({previewImageUrl, multiImages, setShowConfor
             latitude
         };
 
-        const listingImages = [multiImages, imageDescription];
+        const listingImages = [ImageArr, imageDescription];
 
         const amenities = amenityArr;
 

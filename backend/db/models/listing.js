@@ -5,10 +5,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     }, 
-    previewImageUrl: {
-      type: DataTypes.TEXT,
-      allowNull: false
-    },
     name: {
       type: DataTypes.STRING,
       allowNull:false,

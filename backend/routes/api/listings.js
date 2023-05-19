@@ -10,8 +10,8 @@ const { Op } = require('sequelize');
 const {
   singleMulterUpload,
   singlePublicFileUpload,
-  multipleMulterUpload,
-  multiplePublicFileUpload,
+  singlePublicFileDelete,
+	extractKeyFromUrl,
 } = require('../../awsS3');
 const { Listing,
   ListingPrice,
@@ -29,7 +29,6 @@ const router = express.Router();
 
 // get all listings
 //when wishlist is implemented, include wishlist so that we know which hearts are filled in
-
 router.get('/', asyncHandler(async (req, res) => {
   const listings = await Listing.findAll({
     include: [
@@ -44,6 +43,13 @@ router.get('/', asyncHandler(async (req, res) => {
       {
         model: Category,
         attributes: ['name']
+      },
+      {
+        model: Image,
+        where: {
+          preview: true
+        },
+        attributes: ["url"]
       }
     ],
     attributes: {
@@ -57,16 +63,24 @@ router.get('/', asyncHandler(async (req, res) => {
       "Categories.id",
       "Categories->ListingCategory.listingId",
       'Categories->ListingCategory.id',
+      "Images.id"
     ]
   });
-  return res.json(listings);
+
+  const newListing = listings.map(singleListing => {
+    const convertListings = singleListing.toJSON();
+    convertListings.previewImageUrl = convertListings.Images[0].url;
+    delete convertListings["Images"];
+    return convertListings
+  });
+
+  return res.json(newListing);
 }));
 
 
 //create new listing and listing price.
 router.post(
   '/',
-  singleMulterUpload("previewImageFile"),
   requireAuth,
   asyncHandler(async (req, res) => {
     const {
@@ -115,12 +129,9 @@ router.post(
       latitude
     };
 
-    const previewImageUrl = await singlePublicFileUpload(req.file);
-
     const ownerId = req.user.id;
 
     newListing.ownerId = ownerId;
-    newListing.previewImageUrl = previewImageUrl
     //create new listing to generate id
     const createdListing = await Listing.create(newListing)
 
@@ -173,13 +184,14 @@ router.post(
     asyncHandler(async(req, res) => {
     const userId = req.user.id;
     const listingId = req.params.listingId
-    const {description} = req.body;
+    const {description, preview} = req.body;
     const url = await singlePublicFileUpload(req.file);
 
     const newImage = await Image.create({
       userId,
       listingId,
       url,
+      preview,
       description
     });
 
@@ -187,6 +199,9 @@ router.post(
       res.json({'newImage': newImage })
     }
   }));
+
+  //edit a listing by its id
+
 
 
 //search listings on home  page
@@ -277,92 +292,318 @@ router.get('/search', asyncHandler(async (req, res) => {
 }))
 
 //get single listing for listing detail page
+// router.get('/:listingId(\\d+)', asyncHandler(async (req, res) => {
+//   const { listingId } = req.params;
+//   const singleListing = await Listing.findByPk(listingId, {
+//     attributes: {
+//       include: [
+//         //attempted to do average aggregate query with sql literal
+//         //   [Sequelize.literal(`(
+//         //     SELECT AVG(starRating)
+//         //     FROM Reviews AS Review
+//         //     WHERE
+//         //         Review.listingId = ${listingId}
+//         // )`),
+//         // 'avgRating'],
+
+
+//         //aggregate function for average not calculating correctly, will calculate on front end instead
+//         // [Sequelize.fn('AVG', Sequelize.col('Reviews.starRating')), 'avgRating'],
+//         // [Sequelize.fn('AVG', Sequelize.col('Reviews.cleanliness')), 'aveCleanliness'],
+//         // [Sequelize.fn('AVG', Sequelize.col('Reviews.communication')), 'aveCommunication'],
+//         // [Sequelize.fn('AVG', Sequelize.col('Reviews.checkIn')), 'aveCheckIn'],
+//         // [Sequelize.fn('AVG', Sequelize.col('Reviews.accuracy')), 'aveAccuracy'],
+//         // [Sequelize.fn('AVG', Sequelize.col('Reviews.location')), 'aveLocation'],
+//         // [Sequelize.fn('AVG', Sequelize.col('Reviews.value')), 'aveValue'],
+//       ]
+//     },
+//     include: [Image,
+//       Category,
+//       ListingPrice,
+//       Amenity,
+//       {
+//         model: Review,
+//         include: {
+//           model: User,
+//           attributes: ['username'],
+//         }
+//       },
+//       Booking,
+//       WishList,
+//       {
+//         model: User,
+//         attributes: {
+//           exclude: ['hashedPassword', 'email', 'createdAt', 'updatedAt'],
+//         },
+//         include: {
+//           model: Listing,
+//           attributes: ['id'],
+//           include: {
+//             model: Review,
+//             attributes: ['id']
+//           }
+//         }
+//       }],
+//     group: [
+//       'Reviews.id',
+//       'Listing.id',
+//       'ListingPrices.id',
+//       'Bookings.id',
+//       'Images.id',
+//       'WishLists.id',
+//       'Categories.id',
+//       'User->Listings->Reviews.id',
+//       'Categories->ListingCategory.id',
+//       'Categories->ListingCategory.categoryId',
+//       'Categories->ListingCategory.listingId',
+//       'Categories->ListingCategory.createdAt',
+//       'Categories->ListingCategory.updatedAt',
+//       'Amenities.id',
+//       'Amenities->ListingAmenity.id',
+//       'Amenities->ListingAmenity.amenityId',
+//       'Amenities->ListingAmenity.listingId',
+//       'Amenities->ListingAmenity.createdAt',
+//       'Amenities->ListingAmenity.updatedAt',
+//       'WishLists->WishListListing.wishlistId',
+//       'WishLists->WishListListing.listingId',
+//       'WishLists->WishListListing.createdAt',
+//       'WishLists->WishListListing.updatedAt',
+//       'User.id',
+//       'User->Listings.id',
+//       'Reviews->User.id'
+//     ]
+//   })
+//   res.json(singleListing);
+// }));
+
+
+
+// get single listing for listing detail page refactor
 router.get('/:listingId(\\d+)', asyncHandler(async (req, res) => {
   const { listingId } = req.params;
   const singleListing = await Listing.findByPk(listingId, {
-    attributes: {
-      include: [
-        //attempted to do average aggregate query with sql literal
-        //   [Sequelize.literal(`(
-        //     SELECT AVG(starRating)
-        //     FROM Reviews AS Review
-        //     WHERE
-        //         Review.listingId = ${listingId}
-        // )`),
-        // 'avgRating'],
-
-
-        //aggregate function for average not calculating correctly, will calculate on front end instead
-        // [Sequelize.fn('AVG', Sequelize.col('Reviews.starRating')), 'avgRating'],
-        // [Sequelize.fn('AVG', Sequelize.col('Reviews.cleanliness')), 'aveCleanliness'],
-        // [Sequelize.fn('AVG', Sequelize.col('Reviews.communication')), 'aveCommunication'],
-        // [Sequelize.fn('AVG', Sequelize.col('Reviews.checkIn')), 'aveCheckIn'],
-        // [Sequelize.fn('AVG', Sequelize.col('Reviews.accuracy')), 'aveAccuracy'],
-        // [Sequelize.fn('AVG', Sequelize.col('Reviews.location')), 'aveLocation'],
-        // [Sequelize.fn('AVG', Sequelize.col('Reviews.value')), 'aveValue'],
-      ]
-    },
-    include: [Image,
-      Category,
-      ListingPrice,
-      Amenity,
+    include:[
+      {
+        model: Image,
+        attributes: ["url", "preview","description"]
+      },
+      {
+        model: Category,
+        attributes: ["name"]
+      },
+      {
+        model: ListingPrice,
+        attributes: ["pricePerDay", "startDate", "endDate"]
+      },
+      {
+        model: Amenity,
+        attributes: ["name"]
+      },
       {
         model: Review,
         include: {
           model: User,
-          attributes: ['username'],
-        }
-      },
-      Booking,
-      WishList,
-      {
-        model: User,
-        attributes: {
-          exclude: ['hashedPassword', 'email', 'createdAt', 'updatedAt'],
+          attributes: ["username"]
         },
-        include: {
-          model: Listing,
-          attributes: ['id'],
-          include: {
-            model: Review,
-            attributes: ['id']
-          }
+        attributes: {
+          exclude: ["authorId", "listingId"]
         }
-      }],
+      },  
+      {
+        model: Booking,
+        attributes: ["startDate", "endDate"]
+      },
+      WishList,
+    ],
+    attributes: {
+      include: [[
+        Sequelize.fn("AVG", Sequelize.col("Reviews.starRating")),'avgRating'
+      ]]
+    },
     group: [
-      'Reviews.id',
-      'Listing.id',
-      'ListingPrices.id',
-      'Bookings.id',
-      'Images.id',
-      'WishLists.id',
-      'Categories.id',
-      'User->Listings->Reviews.id',
-      'Categories->ListingCategory.id',
-      'Categories->ListingCategory.categoryId',
-      'Categories->ListingCategory.listingId',
-      'Categories->ListingCategory.createdAt',
-      'Categories->ListingCategory.updatedAt',
-      'Amenities.id',
-      'Amenities->ListingAmenity.id',
-      'Amenities->ListingAmenity.amenityId',
-      'Amenities->ListingAmenity.listingId',
-      'Amenities->ListingAmenity.createdAt',
-      'Amenities->ListingAmenity.updatedAt',
-      'WishLists->WishListListing.wishlistId',
-      'WishLists->WishListListing.listingId',
-      'WishLists->WishListListing.createdAt',
-      'WishLists->WishListListing.updatedAt',
-      'User.id',
-      'User->Listings.id',
-      'Reviews->User.id'
+      "Listing.id",
+      "Images.id",
+      "Categories.id",
+      "Categories->ListingCategory.id",
+      "ListingPrices.id",
+      "Amenities.id",
+      "Amenities->ListingAmenity.id",
+      "Bookings.id",
+      "Reviews.id",
+      "Reviews->User.id",
+      "WishLists.id",
+      "WishLists->WishListListing.wishlistId",
+      "WishLists->WishListListing.listingId",
+      "WishLists->WishListListing.createdAt",
+      "WishLists->WishListListing.updatedAt"
+
     ]
-  })
-  res.json(singleListing);
+  });
+
+  if(!singleListing) {
+    res.status(404);
+        res.json({
+            message: `"List with id of ${listingId} couldn't be found"`
+        });
+  };
+
+  const convertListing = singleListing.toJSON();
+  const newAmenitiesArr = convertListing["Amenities"].map(amnityObj => amnityObj.name)
+  convertListing["Amenities"] = newAmenitiesArr;
+
+  const newCategoryArr = convertListing["Categories"].map(categoryObj => categoryObj.name);
+  convertListing["Categories"] = newCategoryArr;
+  res.json(convertListing)
 }));
 
-router.post('/testing', singleMulterUpload('image'), asyncHandler(async (req, res) => {
-  const url = await singlePublicFileUpload(req.file);
+//get listing by its id for edit form
+router.get("/:listingId/editForm", requireAuth, asyncHandler(async(req, res) => {
+  const listingId = req.params.listingId;
+
+  const listingInfo = await Listing.findByPk(listingId, {
+    include: [
+      {
+        model: Image,
+        attributes: ["url","id","preview"]
+      },
+      {
+        model: ListingPrice,
+        attributes: ["pricePerDay", "startDate", "endDate", "id"]
+      },
+      {
+        model: Category,
+        attributes: ["name","id"]
+      }, 
+      {
+        model: Amenity,
+        attributes: ["name","id"]
+      }
+    ]
+  });
+
+
+  if(!listingInfo) {
+    res.status(404);
+        res.json({
+            message: `"List with id of ${listingId} couldn't be found"`
+        });
+  };
+
+  const cleanUpListingInfo = listingInfo.toJSON();
+  const categoryArr = cleanUpListingInfo.Categories;
+  const newCategoryArr = [];
+  categoryArr.forEach(categoryObj => {
+    newCategoryArr.push({name: categoryObj.name, id: categoryObj.id})
+  });
+  cleanUpListingInfo.Categories = newCategoryArr;
+  const amenitiesArr = cleanUpListingInfo.Amenities;
+  const newAmenityArr = [];
+  amenitiesArr.forEach(amenityObj => {
+    newAmenityArr.push({name: amenityObj.name, id: amenityObj.id});
+  });
+  cleanUpListingInfo.Amenities = newAmenityArr;
+
+  const previewImageUrl = cleanUpListingInfo["Images"].find(img => !!img.preview);
+  cleanUpListingInfo.previewImageUrl = previewImageUrl.url;
+
+  res.json(cleanUpListingInfo);
 }));
+
+//get all listings of the logged in user
+router.get('/user', requireAuth, asyncHandler(async(req, res) => {
+  const {user} = req;
+
+  const allUserListings = await Listing.findAll({
+    where: {
+      ownerId: user.id
+    },
+    include: [
+      {
+        model: ListingPrice,
+        attributes:["pricePerDay", "startDate", "endDate"]
+      },
+      {
+        model: Image,        
+        where: {
+          preview: true
+        },
+        attributes: ["url"]
+        
+      }
+    ],
+    order: [ [ListingPrice, "startDate"] ]
+  });
+
+  if(allUserListings) res.json({userListings:allUserListings})
+  else {
+    res.json({message: "You don't have any listings."})
+  }
+}));
+
+
+router.delete('/:listingId/delete', requireAuth, singleMulterUpload("image"), asyncHandler(async(req, res) => {
+  const listingId = req.params.listingId;
+
+  const user = req.user;
+
+  const findListing = await Listing.findByPk(listingId);
+
+  if(!findListing) return res.json({
+    "message": `Event with ID ${listingId} couldn't be found`,
+    "statusCode": 404
+  });
+
+  if(findListing.ownerId !== user.id) return res.json({
+    "message": "Only the host have access to delete the current listing",
+    "statusCode": 404
+  });
+
+  const listingImageObjs = await findListing.getImages();
+  const listingImageUrls = listingImageObjs.map(imageObj => imageObj.url);
+  for(const url of listingImageUrls) {
+    const isS3Image = url.match(/^https:\/\/realbnb\.s3\.amazonaws\.com\/\d+\.webp$/);
+    if (!!isS3Image) {
+      const keyToDelete = extractKeyFromUrl(url);
+      await singlePublicFileDelete(keyToDelete);
+    };
+  };
+
+  let deletedListing = await findListing.destroy();
+
+  if(deletedListing) res.json({
+    "message": "Successfully deleted",
+    "statusCode": 200
+  });    
+}));
+
+//delete individual spot images from database and aws.
+router.delete("/listingImage/delete/:imageId", requireAuth, singleMulterUpload("image"), asyncHandler(async(req, res) => {
+  const imageId = req.params.imageId;
+
+  const findImage = await Image.findByPk(imageId);
+
+  if(!findImage) return res.json({
+    "message": `Image with ID ${imageId} couldn't be found`,
+    "statusCode": 404
+  });
+
+  const convertFindImage = findImage.toJSON();
+
+//"https://realbnb.s3.amazonaws.com/1683153626348.webp"
+    const imageUrl = convertFindImage.url;
+    const isS3Image = imageUrl.match(/^https:\/\/realbnb\.s3\.amazonaws\.com\/\d+\.webp$/);
+    if (!!isS3Image) {
+      const keyToDelete = extractKeyFromUrl(imageUrl);
+      await singlePublicFileDelete(keyToDelete);
+    };
+
+    const deletedImage = await findImage.destroy();
+
+    if(deletedImage) res.json({
+      "message": "Successfully deleted",
+      "statusCode": 200
+    });  
+}));
+
 
 module.exports = router;

@@ -2,20 +2,31 @@
 
 
 
-export default function SingleListingImages({listing}) {
+export default function SingleListingImages({listingImages}) {
+    console.log("listing SingleListingImages", listingImages)
+    let previewImage;
+    let nonPreviewImages = []
 
+    listingImages.forEach(imageObj => {
+        if (imageObj.preview) previewImage = imageObj;
+        else nonPreviewImages.push(imageObj);
+    });
+
+    const rightImages = nonPreviewImages.slice(0, 4);
+    
     return (
         <div className="singleListingImagesContent">
             <div className="leftPreviewImage">
-                <img src={listing.previewImageUrl} alt="" />
+                <img src={previewImage.url} alt="preview image" style={{width:"400px", height: "310px"}}/>
             </div>
-            {!!listing.Images.length && (<div className="rightImages">
-                <img src={listing.Images[0].url} alt="" />
-                <img src={listing.Images[1].url} alt="" />
-                <img src={listing.Images[2].url} alt="" />
-                <img src={listing.Images[3].url} alt="" />
-                <img src={listing.Images[4].url} alt="" />
-            </div>)}
+            <div>
+                {!!rightImages.length && rightImages.map((imageObj, idx) => (
+                    <div className="rightImages" key={imageObj.url + idx}>
+                        <img src={imageObj.url} style={{width:"400px", height: "310px"}} />
+                    </div>
+                )) 
+                }
+            </div>
 
         </div>
     )

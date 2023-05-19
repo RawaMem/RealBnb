@@ -26,6 +26,8 @@ export default function ImageForm() {
     const [errors, setErrors] = useState({});
     const [hasSubmitted, setHasSubmitted] = useState(false);
 
+    console.log("previewImageUrl", previewImageUrl)
+    console.log("multiImages", multiImages)
     
     const handleDeleteImage = url => {
 

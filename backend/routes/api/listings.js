@@ -81,7 +81,6 @@ router.get('/', asyncHandler(async (req, res) => {
 //create new listing and listing price.
 router.post(
   '/',
-  singleMulterUpload("previewImageFile"),
   requireAuth,
   asyncHandler(async (req, res) => {
     const {
@@ -130,12 +129,9 @@ router.post(
       latitude
     };
 
-    const previewImageUrl = await singlePublicFileUpload(req.file);
-
     const ownerId = req.user.id;
 
     newListing.ownerId = ownerId;
-    newListing.previewImageUrl = previewImageUrl
     //create new listing to generate id
     const createdListing = await Listing.create(newListing)
 
@@ -188,13 +184,14 @@ router.post(
     asyncHandler(async(req, res) => {
     const userId = req.user.id;
     const listingId = req.params.listingId
-    const {description} = req.body;
+    const {description, preview} = req.body;
     const url = await singlePublicFileUpload(req.file);
 
     const newImage = await Image.create({
       userId,
       listingId,
       url,
+      preview,
       description
     });
 

@@ -125,37 +125,37 @@ export const getSingleListingThunk = (listingId) => async dispatch => {
 };
 
 export const createNewListingThunk = (newListing, amenityAndCategory, newListingImages) => async dispatch => {
-    const [multiImages, imageDescription] = newListingImages;
+    const [ImageArr, imageDescription] = newListingImages;
     const {newListingObj,  listingPricing} = newListing;
-    const formData = new FormData();
+    // const formData = new FormData();
 
-    for(const info in newListingObj) {
-        formData.append(info, newListingObj[info]);
-    };
+    // for(const info in newListingObj) {
+    //     formData.append(info, newListingObj[info]);
+    // };
 
-    for(const priceInfo in listingPricing) {
-        formData.append(priceInfo, listingPricing[priceInfo]);
-    };
+    // for(const priceInfo in listingPricing) {
+    //     formData.append(priceInfo, listingPricing[priceInfo]);
+    // };
 
     const newListingResponse = await csrfFetch("/api/listings", {
         method: 'POST',
-        headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        body: formData,
+        body: JSON.stringify({...newListingObj, ...listingPricing}),
     });
 
     if(newListingResponse.ok) {
         const newList = await newListingResponse.json();
         const requests = [];
 
-        for(let imageFile of multiImages) {
+        for(let imageFile of ImageArr) {
             const formData = new FormData();
-            if(imageFile.preview in imageDescription) {
+            const {file, preview} = imageFile;
+            if(file.preview in imageDescription) {
                 formData.append('description', imageDescription[imageFile.preview]);
             };
 
-            formData.append('image', imageFile);
+            formData.append('image', file);
+            formData.append("preview", preview);
+            
             requests.push(csrfFetch(`/api/listings/${newList.id}/images`, {
                 method: 'POST',
                 headers: {
@@ -166,7 +166,7 @@ export const createNewListingThunk = (newListing, amenityAndCategory, newListing
         };
 
         try {
-            const response = await Promise.all(requests);
+            await Promise.all(requests);
         } catch(error) {
             console.log('Error in Promise.all():', error)
             return

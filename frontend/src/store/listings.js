@@ -127,15 +127,6 @@ export const getSingleListingThunk = (listingId) => async dispatch => {
 export const createNewListingThunk = (newListing, amenityAndCategory, newListingImages) => async dispatch => {
     const [ImageArr, imageDescription] = newListingImages;
     const {newListingObj,  listingPricing} = newListing;
-    // const formData = new FormData();
-
-    // for(const info in newListingObj) {
-    //     formData.append(info, newListingObj[info]);
-    // };
-
-    // for(const priceInfo in listingPricing) {
-    //     formData.append(priceInfo, listingPricing[priceInfo]);
-    // };
 
     const newListingResponse = await csrfFetch("/api/listings", {
         method: 'POST',

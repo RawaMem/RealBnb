@@ -23,6 +23,8 @@ export default function AddDeleteImages({imageArr, setImageArr, removedImageIds,
             const newAddedImages = newRef.filter(file => file.preview !== imageUrl);
             return newAddedImages;
         });
+
+        if(imageUrl === previewImageUrl) setPreviewImageUrl(null);
     };
 
     const showAddMoreImageModal = () => {
@@ -46,10 +48,6 @@ export default function AddDeleteImages({imageArr, setImageArr, removedImageIds,
             <div className="edit-image-2nd-inner-container">   
                 {imageArr.map((img, idx) => (
                     <div key={img+idx} className="edit-image-card-container">     
-                        {/* <div 
-                        className="edit-image-card-delete"
-                        onClick={() => handleRemovingImages(idx, img.id, img.url)}
-                        >-</div>  */}
                         <ManageImage 
                         previewImageUrl={previewImageUrl}
                         setPreviewImageUrl={setPreviewImageUrl}
@@ -57,7 +55,7 @@ export default function AddDeleteImages({imageArr, setImageArr, removedImageIds,
                         imageIdx={idx}
                         handleRemovingImages={handleRemovingImages}
                         /> 
-                        {/* {previewImageUrl === img.url && <div className="cover-photo-logo">Cover Photo</div>}      */}
+                        {previewImageUrl === img.url && <div className="cover-photo-logo">Cover Photo</div>}     
                         <img src={img.url} className="edited-image" />               
                     </div>
                 ))}

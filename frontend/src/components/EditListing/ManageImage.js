@@ -21,13 +21,13 @@ function ManageImage({previewImageUrl, setPreviewImageUrl, image, handleRemoving
         return () => document.removeEventListener("click", closeMenu);
       }, [showMenu]);
 
-    //   function handlePreviewImage () {
-    //     previewImageUrl !== imageUrl ? setPreviewImageUrl(imageUrl) : setPreviewImageUrl('')
-    //   };
+      function handlePreviewImage () {
+        previewImageUrl !== image.url ? setPreviewImageUrl(image.url) : setPreviewImageUrl(null)
+      };
 
       const dropDown = (
         <div className="image-drop-down">
-          {/* <div onClick={handlePreviewImage}>{previewImageUrl === imageUrl ? 'Remove Cover Photo' : 'Make cover photo' }</div> */}
+          <div onClick={handlePreviewImage}>{previewImageUrl ===  image.url ? 'Remove Cover Photo' : 'Make cover photo' }</div>
           <div onClick={() => handleRemovingImages(imageIdx, image.id, image.url)}>Delete</div>
         </div>  
       );

@@ -464,7 +464,7 @@ router.get("/:listingId/editForm", requireAuth, asyncHandler(async(req, res) => 
     include: [
       {
         model: Image,
-        attributes: ["url","id"]
+        attributes: ["url","id","preview"]
       },
       {
         model: ListingPrice,
@@ -480,6 +480,7 @@ router.get("/:listingId/editForm", requireAuth, asyncHandler(async(req, res) => 
       }
     ]
   });
+
 
   if(!listingInfo) {
     res.status(404);
@@ -502,7 +503,10 @@ router.get("/:listingId/editForm", requireAuth, asyncHandler(async(req, res) => 
   });
   cleanUpListingInfo.Amenities = newAmenityArr;
 
-  res.json(cleanUpListingInfo)
+  const previewImageUrl = cleanUpListingInfo["Images"].find(img => !!img.preview);
+  cleanUpListingInfo.previewImageUrl = previewImageUrl.url;
+
+  res.json(cleanUpListingInfo);
 }));
 
 //get all listings of the logged in user
@@ -517,6 +521,14 @@ router.get('/user', requireAuth, asyncHandler(async(req, res) => {
       {
         model: ListingPrice,
         attributes:["pricePerDay", "startDate", "endDate"]
+      },
+      {
+        model: Image,        
+        where: {
+          preview: true
+        },
+        attributes: ["url"]
+        
       }
     ],
     order: [ [ListingPrice, "startDate"] ]

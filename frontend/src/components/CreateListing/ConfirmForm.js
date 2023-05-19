@@ -34,15 +34,11 @@ export default function ConfirmForm({previewImageUrl, multiImages, setShowConfor
     // for category
     const categoryArr = resetAmenity('categoryArr');
 
-    // const previewImageFile = multiImages.find(file => file.preview === previewImageUrl)
-
     const ImageArr = [];
     multiImages.forEach(file => {
         if(file.preview === previewImageUrl) ImageArr.push({file: file, preview: true})
         else ImageArr.push({file: file, preview: false})
     });
-
-    console.log('ImageArr', ImageArr)
 
 
     const handleSubmitCreateForm = async() => {

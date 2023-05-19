@@ -138,7 +138,8 @@ function AddMoreImagesForm({setAddedImages,addedImages,setShowAddImageModal, img
             <div className="edit-listing-button-container">
                 <div className='edit-listing-button-inner-container'>
                     <ClearBackgroundBtn btnText={"Cancel"} onClick={() => setShowAddImageModal(false)} />
-                    <ConfirmAndNextBtn textColor={"white"} btnText={"Confirm"} disabled={false} onClick={() => {
+                    <ConfirmAndNextBtn textColor={"white"} btnText={"Confirm"} disabled={false} onClick={(e) => {
+                        e.stopPropagation();
                         handleSave();
                         setShowAddImageModal(false);
                     }} />

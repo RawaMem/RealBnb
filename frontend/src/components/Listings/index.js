@@ -83,8 +83,8 @@ export default function Listings() {
                 <div style={{display:"flex", flexWrap: "wrap"}}>
                     {listings && listings.map(listing => (
                         <article key = {`listingId-${listing.id}`} style= {{margin:"15px"}} >
-                            <span onClick={() => setShowCreateWishListModal(true)} className="material-symbols-outlined" style={listing.id in wishListListing ? {fontVariationSettings: "'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48", color: "red"} : {color:"gray"}}>favorite</span>
-                {showCreateWishListModal && <CreateWishListModal setShowCreateWishListModal={setShowCreateWishListModal} />}
+                            <span onClick={() => setShowCreateWishListModal(listing.id)} className="material-symbols-outlined" style={listing.id in wishListListing ? {fontVariationSettings: "'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48", color: "red"} : {color:"gray"}}>favorite</span>
+                {showCreateWishListModal === listing.id && <CreateWishListModal setShowCreateWishListModal={setShowCreateWishListModal} />}
                             <NavLink style={{ textDecoration: 'none'}} to={`/listings/${listing.id}`}>
                                     <ListingCard listing = {listing} />
                             </NavLink>

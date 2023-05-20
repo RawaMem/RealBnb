@@ -33,7 +33,9 @@ export function createWishlist(wishlist) {
 }
 
 export function getUserWishlistsThunk(userId) {
-    return async function(dispatch) {
+    return async function(dispatch, getState) {
+        const { wishLists } = getState().wishlists;
+        if(wishLists && Object.keys(wishLists).length > 0) return;
         try {
             const response = await csrfFetch(`/api/wishlists/${userId}`);
             if (response.ok) {

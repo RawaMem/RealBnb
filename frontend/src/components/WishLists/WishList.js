@@ -17,9 +17,9 @@ function WishList() {
     if (user) {
       dispatch(getUserWishlistsThunk(user.id));
     }
-    return () => {
-      dispatch(clearWishlists());
-    };
+    // return () => {
+    //   dispatch(clearWishlists());
+    // };
   }, [dispatch, user]);
 
   const listOfWishlists = Object.values(wishLists);

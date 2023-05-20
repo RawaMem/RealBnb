@@ -32,6 +32,7 @@ export function WishListListing() {
     <div>
       {filteredLists.map((listing) => (
         <NavLink
+          key={listing.id}
           style={{ textDecoration: "none" }}
           to={`/listings/${listing.id}`}
         >

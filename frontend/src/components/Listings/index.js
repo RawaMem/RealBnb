@@ -6,8 +6,10 @@ import { getListingsThunk } from '../../store/listings';
 import { getUserWishlistsThunk, clearWishlists } from "../../store/wishlists";
 import ListingCard from './ListingCard';
 import { useCategory } from '../../context/CategoryContext';
+import { CreateWishListModal } from '../WishLists/CreateWishListModal';
 
 export default function Listings() {
+    const [showCreateWishListModal, setShowCreateWishListModal] = useState(false);
     const dispatch = useDispatch();
     const listingsObj = useSelector(state => state.listings.allListings);
     const { error } = useSelector((state) => state.wishlists);
@@ -81,8 +83,10 @@ export default function Listings() {
                 <div style={{display:"flex", flexWrap: "wrap"}}>
                     {listings && listings.map(listing => (
                         <article key = {`listingId-${listing.id}`} style= {{margin:"15px"}} >
+                            <span onClick={() => setShowCreateWishListModal(true)} className="material-symbols-outlined" style={listing.id in wishListListing ? {fontVariationSettings: "'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48", color: "red"} : {color:"gray"}}>favorite</span>
+                {showCreateWishListModal && <CreateWishListModal setShowCreateWishListModal={setShowCreateWishListModal} />}
                             <NavLink style={{ textDecoration: 'none'}} to={`/listings/${listing.id}`}>
-                                    <ListingCard listing = {listing} wishListListing={wishListListing} />
+                                    <ListingCard listing = {listing} />
                             </NavLink>
                         </article>
                     ))}

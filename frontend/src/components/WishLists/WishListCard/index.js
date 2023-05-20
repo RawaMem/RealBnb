@@ -7,8 +7,8 @@ export function WishListCard({ wishlist, listingId, singleListing }) {
     <NavLink to={`/wishlists/${wishlist.id}`}>
       <div className="wishListCard-item">
         <div className="wishListCard-container">
-          {singleListing?.Images?.slice(2).map((image, idx) => (
-            <div key={image.id} className={`wishListCard-item-${idx}`}>
+          {singleListing?.Images?.slice(0, 3).map((image, idx) => (
+            <div key={idx} className={`wishListCard-item-${idx}`}>
               <img
                 className="wishListCardImg"
                 src={image.url}

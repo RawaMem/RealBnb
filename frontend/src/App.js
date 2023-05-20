@@ -131,6 +131,12 @@ function App() {
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <Switch>
+          <Route exact path='/wishlists'>
+            <WishList />
+          </Route>
+          <Route exact path='/wishlists/:wishlistId'>
+            <WishListListing />
+          </Route>
           <Route exact path="/">
             <Listings />
           </Route>
@@ -180,16 +186,9 @@ function App() {
           <Route exact path='/testing'>
             <TestCompontent />
           </Route>
-          <Route exact path='/wishlists'>
-            <WishList />
-          </Route>
-          <Route exact path='/wishlists/:wishlistId'>
-            <WishListListing />
-          </Route>
           <Route exact path="/">
             <Listings />
           </Route>
-
           <Route exact path='/sockets'>
             <Socket socket={socket} />
           </Route>

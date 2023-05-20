@@ -1,4 +1,4 @@
-export default function ListingCard({listing, wishListListing}) {
+export default function ListingCard({listing}) {
 
     const avaDate = () => {
         const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -44,7 +44,6 @@ export default function ListingCard({listing, wishListListing}) {
     return (
         <>            
                 <div key={listing.id}>
-                    <span className="material-symbols-outlined" style={listing.id in wishListListing ? {fontVariationSettings: "'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48", color: "red"} : {color:"gray"}}>favorite</span>
                     <img alt="listing" width="340" height="350" src={listing.previewImageUrl} loading="lazy" style={{ borderRadius: "15px"}} />
                     <div style={{ display:"flex", justifyContent:"space-between", marginTop:"10px" }}>
                         <div>

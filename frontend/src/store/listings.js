@@ -190,7 +190,7 @@ export default function listings(state = initialState, action) {
             action.listings.forEach(listing => newState.allListings[listing.id] = listing);
             return newState;
         case GET_SINGLE_LISTING:
-            newState = {allListings:{}, singleListing: {}}
+            newState = {allListings:{...state.allListings}, singleListing: {}}
             newState.singleListing = action.listing
             return newState;
         case LISTING_SEARCH_RESULTS:

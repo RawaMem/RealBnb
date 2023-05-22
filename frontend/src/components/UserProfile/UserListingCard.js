@@ -4,7 +4,7 @@ import { Modal } from "../../context/Modal";
 import ConfirmDeleteListingForm from "./ConfirmDeleteListingForm";
 
 function UserListingCard({listing}) {
-
+    console.log("listinglisting", listing)
     const [showConfirmDeleteForm, setShowConfirmDeleteForm] = useState(false);
 
     // find current price within the date range.
@@ -16,7 +16,6 @@ function UserListingCard({listing}) {
         return start <= now <= end
     });
 
-    const previewImageUrl = listing["Images"][0].url
     
     function convertDate(date) {
         const dateObj = new Date(date);
@@ -35,12 +34,15 @@ function UserListingCard({listing}) {
             <Modal onClick={() => setShowConfirmDeleteForm(false)}>
                 <ConfirmDeleteListingForm
                     setShowConfirmDeleteForm={setShowConfirmDeleteForm}
-                    previewImageUrl={listing.previewImageUrl}
+                    previewImageUrl={listing.Images[0].url}
                     listingId={listing.id}
                 />
             </Modal>
         );
     };
+
+    if(!listing["Images"]) return null;
+    const previewImageUrl = listing["Images"][0].url
 
     return (
             <div className="userListingCard-container">

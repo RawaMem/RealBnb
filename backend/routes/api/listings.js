@@ -147,61 +147,120 @@ router.post(
   }));
 
   // create new listing amenities and categories
-  router.post(
-    '/:listingId/amenity-category',
-    requireAuth,
-    asyncHandler(async(req, res) => {
-      const listingId = req.params.listingId;
-      console.log('in the amenity route', req.body)
-      const {amenities, categories} = req.body;
+router.post(
+  '/:listingId/amenity-category',
+  requireAuth,
+  asyncHandler(async(req, res) => {
+    const listingId = req.params.listingId;
 
-      const findNewListing = await Listing.findByPk(listingId);
+    const {amenities, categories} = req.body;
 
-      if(findNewListing) {
-        for(let amenity of amenities) {
-          const newAmenity = await Amenity.create({
-            name:amenity
-          });
-          await newAmenity.addListing(findNewListing);
-        };
+    const findNewListing = await Listing.findByPk(listingId);
 
-        for(let category of categories) {
-          const newCategory = await Category.create({
-            name: category
-          })
-          await findNewListing.addCategories(newCategory);
-        };
+    if(findNewListing) {
+      for(let amenity of amenities) {
+        const newAmenity = await Amenity.create({
+          name:amenity
+        });
+        await newAmenity.addListing(findNewListing);
       };
-      res.json(findNewListing)
-    })
-  );
+
+      for(let category of categories) {
+        const newCategory = await Category.create({
+          name: category
+        })
+        await findNewListing.addCategories(newCategory);
+      };
+    };
+    res.json(findNewListing)
+  })
+);
+
+// delete amenities by id
+router.delete('/:amenityId/delete', requireAuth, asyncHandler(async(req, res) => {
+  const amenityId = req.params.amenityId;
+  const findAmenity = await Amenity.findByPk(amenityId);
+
+  if(!findAmenity) res.status(404).json({
+    message: `amenity with id of ${amenityId} not found`
+  });
+
+  const deletedAmenity = await findAmenity.destroy();
+  if(deletedAmenity) res.json({
+    "message": "Successfully deleted",
+    "statusCode": 200
+  });
+}));
+
+//delete category by id
+router.delete('/:categoryId/delete', requireAuth, asyncHandler(async(req, res) => {
+  const categoryId = req.params.categoryId;
+  const findCategory = await Amenity.findByPk(categoryId);
+
+  if(!findCategory) res.status(404).json({
+    message: `category with id of ${categoryId} not found`
+  });
+
+  const deletedCategory = await findCategory.destroy();
+  if(deletedCategory) res.json({
+    "message": "Successfully deleted",
+    "statusCode": 200
+  });
+}));
 
   // creating listing images
-  router.post(
-    '/:listingId/images',
-    singleMulterUpload('image'),
-    requireAuth,
-    asyncHandler(async(req, res) => {
-    const userId = req.user.id;
-    const listingId = req.params.listingId
-    const {description, preview} = req.body;
-    const url = await singlePublicFileUpload(req.file);
+router.post(
+  '/:listingId/images',
+  singleMulterUpload('image'),
+  requireAuth,
+  asyncHandler(async(req, res) => {
+  const userId = req.user.id;
+  const listingId = req.params.listingId
+  const {description, preview} = req.body;
+  const url = await singlePublicFileUpload(req.file);
 
-    const newImage = await Image.create({
-      userId,
-      listingId,
-      url,
-      preview,
-      description
-    });
+  const newImage = await Image.create({
+    userId,
+    listingId,
+    url,
+    preview,
+    description
+  });
 
-    if(newImage) {
-      res.json({'newImage': newImage })
-    }
-  }));
+  if(newImage) {
+    res.json({'newImage': newImage })
+  }
+}));
+
+//edit listing image preview status by imageId
+router.patch("/edit/:imageId", requireAuth, asyncHandler(async(req, res) => {
+  const imageId = req.params.imageId;
+  const {preview} = req.body;
+
+  const findImage = await Image.findByPk(imageId);
+  if (!findImage) res.status(404).json({
+    message: `Image with id of ${imageId} couldn't be found`
+  });
+
+  const editedImage = await findImage.update(req.body);
+  if(editedImage) res.status(200).json(editedImage);
+}));
 
   //edit a listing by its id
+router.patch("/:listingId/edit", requireAuth, asyncHandler(async(req, res) => {
+  const listingId = req.params.listingId;
+  const findListing = await Listing.findByPk(listingId);
 
+  if(!findListing) {
+    res.status(404);
+        res.json({
+            message: `"List with id of ${listingId} couldn't be found"`
+        });
+  };
+
+  const updatedListing = await findListing.update(req.body);
+  if(updatedListing) res.status(200).json(updatedListing);
+}));
 
 
 //search listings on home  page
@@ -385,7 +444,7 @@ router.get('/:listingId(\\d+)', asyncHandler(async (req, res) => {
     include:[
       {
         model: Image,
-        attributes: ["url", "preview","description"]
+        attributes: ["url", "preview","description", "id"]
       },
       {
         model: Category,

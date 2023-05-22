@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "./editListing.css";
 
-function ManageImage({previewImageUrl, setPreviewImageUrl, image, handleRemovingImages,imageIdx}) {
+function ManageImage({previewImageUrl, setPreviewImageUrl, image, handleRemovingImages,imageIdx, setAddedImages}) {
     const [showMenu, setShowMenu] = useState(false);
 
     const openMenu = () => {

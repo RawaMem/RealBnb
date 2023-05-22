@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 
 import { getToken } from '../../store/maps';
 import InputField from "../../ui/TextField";
-import { getListingInfoForEditThunk } from "../../store/listings";
+import { createCategoriesAmenitiesThunk, createListingImagesThunk, deleteListingImageByIdThunk, editListImagePreviewStatusThunk, editListingThunk, getListingInfoForEditThunk, removeCategoryAmenityThunk } from "../../store/listings";
 import EditAmenity from "./EditAmenity";
 import EditCategory from "./EditCategory";
 import AddDeleteImages from "./AddDeleteImage";
@@ -12,10 +12,10 @@ import ClearBackgroundBtn from "../../ui/Buttons/ClearBackground";
 import ConfirmAndNextBtn from "../../ui/Buttons/ConfirmAndNext";
 import "./editListing.css";
 
-
 function EditListingForm() {
   const {listingId} = useParams();
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const [name, setName] = useState("")
   const [address, setAddress] = useState("");
@@ -85,9 +85,32 @@ function EditListingForm() {
   useEffect(() => {
     if(errors['previewImage']) alert(errors['previewImage']);
     if(errors['imageQyt']) alert(errors['imageQyt']);
-  },[errors])
+  },[errors]);
 
-  function handleSubmit() {
+  useEffect(() => {
+    if(token) {
+      const editedAddress = `${address} ${city} ${state}`;
+      const endpoint = `http://api.mapbox.com/geocoding/v5/mapbox.places/${editedAddress}.json?access_token=${token}&autocomplete=true`;
+  
+      try {
+        fetch(endpoint)
+        .then(res => res.json())
+        .then(data => {
+          // console.log("data", data)
+          const addressObj = data.features[0];
+          if(addressObj) {
+            const cor = addressObj.center;
+            setLatitude(cor[1]);
+            setLongitude(cor[0]);
+          }
+        })
+      } catch(e) {
+        console.log('Error fetching data', e);
+      };
+    };
+  },[address, city, state, token])
+
+  async function handleSubmit() {
     const imageFormError = {};
 
     if(!previewImageUrl) imageFormError['previewImage']="Please click the drop down and select a preview image for your listing";
@@ -100,21 +123,60 @@ function EditListingForm() {
       setHasSubmitted(true);
       return;
     };
-    const editedAddress = `${address} ${city} ${state}`;
-    const endpoint = `http://api.mapbox.com/geocoding/v5/mapbox.places/${editedAddress}.json?access_token=${token}&autocomplete=true`;
 
-    try {
-      fetch(endpoint)
-      .then(res => res.json())
-      .then(data => {
-        const addressObj = data.features[0];
-        const cor = addressObj.center;
-        setLatitude(cor[1]);
-        setLongitude(cor[0]);
-      })
-    } catch(e) {
-      console.log('Error fetching data', e);
+    const editedList = {
+      name,
+      address,
+      city,
+      state,
+      zipCode,
+      bedroom,
+      beds,
+      baths,
+      maxGuests,
+      description,
+      longitude,
+      latitude
+    };
+
+    const amenityAndCategory = {
+      amenities: addedAmenities,
+      categories: addedCategories
+    };
+
+    const addedImageArr = [addedImages, {}];
+
+    // find out if preview image is changed, if it is, change the preview of the new preview image to truth.
+    // the preview image could have been stored in two places, one of the old images that was stored in S3, or one of the new images added.
+    for(const imgObj of imageArr) {
+      if(imgObj.preview) {
+        if(imgObj.url !== previewImageUrl) dispatch(editListImagePreviewStatusThunk(imgObj.id, false))
+      } else {
+        if(imgObj.url === previewImageUrl && imgObj.id && !imgObj.preview) dispatch(editListImagePreviewStatusThunk(imgObj.id, true));
+        else if(imgObj.url === previewImageUrl && !imgObj.id) {
+          // then it's stored in the newly added image array
+          setAddedImages(prev => {
+            const newAddedImages = prev.map(imgObj => {
+              if(imgObj.file.preview === previewImageUrl) {
+                imgObj.preview = true
+              };
+            });
+            return newAddedImages
+          });
+        };
+      }      
     }
+
+    const newEditedListing = await dispatch(editListingThunk(editedList, listingId))
+
+    if(newEditedListing) {
+      if(removedCategoryId.length || removedAmenityId) {
+        dispatch(removeCategoryAmenityThunk(removedCategoryId, removedAmenityId))
+      };
+      if(removedImageIds.length) dispatch(deleteListingImageByIdThunk(removedImageIds)).dispatch(createCategoriesAmenitiesThunk(amenityAndCategory, listingId));
+      if(addedImageArr.length) await dispatch(createListingImagesThunk(listingId, addedImageArr))
+      history.push(`/listings/${listingId}`);
+    };
   };
 
   if(!token) return null;

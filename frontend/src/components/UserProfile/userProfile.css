@@ -1,3 +1,8 @@
+.editlistingform-container {
+    overflow: auto;
+}
+
+
 .userListingPage-main-container {
     display: flex;
     flex-direction: column;

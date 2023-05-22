@@ -9,6 +9,8 @@ const STORE_LISTING_IMAGES_FILES="listings/STORE_LISTING_IMAGES_FILES";
 const GET_USER_LISTINGS = "listings/GET_USER_LISTINGS";
 const DELETE_USER_LISTING = "listings/DELETE_USER_LISTING";
 const GET_LISTING_INFO_FOR_EDIT = "listings/GET_LISTING_INFO_FOR_EDIT";
+const EDIT_LISTING = "listing/EDIT_LISTING";
+const REMOVE_CATEGORY_AMENITY = "listing/REMOVE_CATEGORY_AMENITY";
 
 export const getListingInfoForEditAction = listing => ({
     type: GET_LISTING_INFO_FOR_EDIT,
@@ -26,7 +28,7 @@ export const getUserListingsAction = listings => ({
 });
 
 export const getListingImagesAction = multiImagesFilesArr => {
-    console.log('from action', multiImagesFilesArr)
+
     return {type: STORE_LISTING_IMAGES_FILES,
             multiImagesFilesArr}
 };
@@ -49,6 +51,55 @@ const listingSearchResultsAction = (listings) => ({
 export const clearListingStateAction = () => ({
     type: CLEAR_LISTING_STATE
 });
+
+
+export const editListingThunk = (editedContent, listingId) => async dispatch =>{
+    const response = await csrfFetch(`/api/listings/${listingId}/edit`, {
+        method: "PATCH",
+        body: JSON.stringify(editedContent)
+    });
+
+    if(response.ok) {
+        const newEditedListing = await response.json();
+        return newEditedListing;
+    };
+};
+
+export const removeCategoryAmenityThunk = (removedCategoryId, removedAmenityId) => async dispatch => {
+    try {
+        await Promise.all(removedCategoryId.map(categoryId => (
+            csrfFetch(`/api/listings/${categoryId}/delete`, {
+                method: "DELETE"
+            })
+        )))
+    } catch (error) {
+        console.log('Error happend while remove a category:', error)
+        return error
+    }
+
+    try {
+        await Promise.all(removedAmenityId.map(amenityId => (
+            csrfFetch(`/api/listings/${amenityId}/delete`, {
+                method: "DELETE"
+            })
+        )));
+    } catch (error) {
+        console.log('Error happend while remove a amenity:', error);
+        return error;
+    }
+};
+
+export const deleteListingImageByIdThunk = (removedImageIds) => async dispatch => {
+    try {
+        await Promise.all(removedImageIds.map(imageId => (
+            csrfFetch(`/api/listings/listingImage/delete/${imageId}`, {
+                method: "DELETE"
+            })
+        )));
+    } catch(error) {
+        return error
+    };
+};
 
 export const getListingInfoForEditThunk = (listingId) => async dispatch => {
     const response = await csrfFetch(`/api/listings/${listingId}/editForm`);
@@ -99,7 +150,7 @@ export const getListingSearchResultsThunk = (searchFormValues) => async dispatch
     for (let key in searchFormValues) {
         urlInstance.searchParams.append(key, searchFormValues[key])
     }
-    console.log('THIS IS TEH SEACH URL', urlInstance)
+
     const response = await csrfFetch(urlInstance);
     if (response.ok) {
         const listings = await response.json();
@@ -124,8 +175,54 @@ export const getSingleListingThunk = (listingId) => async dispatch => {
     }
 };
 
-export const createNewListingThunk = (newListing, amenityAndCategory, newListingImages) => async dispatch => {
+export const editListImagePreviewStatusThunk = (imageId, preview) => async dispatch => {
+
+    const response = await csrfFetch(`/api/listings/edit/${imageId}`, {
+        method: "PATCH",
+        body: JSON.stringify({preview: preview})        
+    });
+}
+
+export const createListingImagesThunk = (listingId, newListingImages) => async dispatch => {
+    const requests = [];
     const [ImageArr, imageDescription] = newListingImages;
+
+    for(let imageFile of ImageArr) {
+        const formData = new FormData();
+        const {file, preview} = imageFile;
+        if(file.preview in imageDescription) {
+            formData.append('description', imageDescription[imageFile.preview]);
+        };
+
+        formData.append('image', file);
+        formData.append("preview", preview);
+        
+        requests.push(csrfFetch(`/api/listings/${listingId}/images`, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "multipart/form-data",
+              },
+              body: formData,
+        }));
+    };
+
+    try {
+        await Promise.all(requests);
+        return listingId;
+    } catch(error) {
+        console.log('Error when creating liting images:', error)
+        return
+    };
+};
+
+export const createCategoriesAmenitiesThunk = (amenityAndCategory, listingId) => async dispatch => {
+    await csrfFetch(`/api/listings/${listingId}/amenity-category`, {
+        method: 'POST',
+        body: JSON.stringify(amenityAndCategory)
+    }).catch(e => console.error(e))
+};
+
+export const createNewListingThunk = (newListing, amenityAndCategory, newListingImages) => async dispatch => {
     const {newListingObj,  listingPricing} = newListing;
 
     const newListingResponse = await csrfFetch("/api/listings", {
@@ -134,41 +231,13 @@ export const createNewListingThunk = (newListing, amenityAndCategory, newListing
     });
 
     if(newListingResponse.ok) {
+
         const newList = await newListingResponse.json();
-        const requests = [];
 
-        for(let imageFile of ImageArr) {
-            const formData = new FormData();
-            const {file, preview} = imageFile;
-            if(file.preview in imageDescription) {
-                formData.append('description', imageDescription[imageFile.preview]);
-            };
+        await dispatch(createCategoriesAmenitiesThunk(amenityAndCategory, newList.id));
+        const imageRes = await dispatch(createListingImagesThunk(newList.id, newListingImages))
 
-            formData.append('image', file);
-            formData.append("preview", preview);
-            
-            requests.push(csrfFetch(`/api/listings/${newList.id}/images`, {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                  },
-                  body: formData,
-            }));
-        };
-
-        try {
-            await Promise.all(requests);
-        } catch(error) {
-            console.log('Error in Promise.all():', error)
-            return
-        }
-
-        const listingRes = await csrfFetch(`/api/listings/${newList.id}/amenity-category`, {
-            method: 'POST',
-            body: JSON.stringify(amenityAndCategory)
-        }).catch(e => console.error(e))
-
-        if(listingRes) return listingRes
+        if(imageRes) return newList;       
     };
 };
 

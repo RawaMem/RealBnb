@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import { wishlistDateFormatter } from "../../../utils/WishList/wishlistDateFormatter";
 
 import "./WishListCard.css";
-export function WishListCard({ wishlist, listingId, singleListing }) {
+export function WishListCard({ wishlist, singleListing }) {
   return (
     <NavLink to={`/wishlists/${wishlist.id}`}>
       <div className="wishListCard-item">

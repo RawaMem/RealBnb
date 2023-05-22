@@ -1,25 +1,22 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserWishlistsThunk, clearWishlists } from "../../store/wishlists";
+import { getUserWishlistsThunk } from "../../store/wishlists";
 import { getSingleListingThunk } from "../../store/listings";
 import { WishListCard } from "./WishListCard";
-import "./WishList.css";
+// import "./WishList.css";
 
-function WishList() {
+function WishList({wishListStyle}) {
   const dispatch = useDispatch();
   const [listings, setListings] = useState([]);
   const { error } = useSelector((state) => state.wishlists);
   const { wishLists } = useSelector((state) => state.wishlists);
   const { wishListListing } = useSelector((state) => state.wishlists);
   const user = useSelector((state) => state.session.user);
-
+ 
   useEffect(() => {
     if (user) {
       dispatch(getUserWishlistsThunk(user.id));
     }
-    // return () => {
-    //   dispatch(clearWishlists());
-    // };
   }, [dispatch, user]);
 
   const listOfWishlists = Object.values(wishLists);
@@ -45,18 +42,12 @@ function WishList() {
         <p style={{ color: "red" }}>{error}</p>
       )}
       {listOfWishlists.length && listings && (
-        <div className="wishlist-container">
+        <div style={wishListStyle}>
           {listOfWishlists.map((wishlist, idx) => (
             <div className="wishlist-item" key={`${wishlist.id}`}>
               <WishListCard
                 wishlist={wishlist}
                 singleListing={listings[idx]}
-                listingId={
-                  Object.values(wishListListing).find(
-                    (listing) =>
-                      wishlist.id === listing.WishListListing.wishlistId
-                  ).WishListListing.listingId
-                }
               />
             </div>
           ))}

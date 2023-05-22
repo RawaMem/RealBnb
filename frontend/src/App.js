@@ -132,7 +132,7 @@ function App() {
       {isLoaded && (
         <Switch>
           <Route exact path='/wishlists'>
-            <WishList />
+            <WishList wishListStyle={{display: "grid", gridTemplateColumns: "auto auto auto", padding: "10px"}} />
           </Route>
           <Route exact path='/wishlists/:wishlistId'>
             <WishListListing />

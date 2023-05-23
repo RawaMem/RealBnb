@@ -25,6 +25,7 @@ function WishList({wishListStyle}) {
     if (user) {
       async function fetchListingDetails() {
         const promises = listOfWishlists.map((wishlist) => {
+          if (!wishlist.Listings.length) return;
           const listingId = wishlist.Listings.find((listing) => listing).id;
           // TODO: Handle situation where there are NO Listings and .find returns undefined.
           return dispatch(getSingleListingThunk(listingId));

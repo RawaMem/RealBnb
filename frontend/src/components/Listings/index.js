@@ -89,7 +89,7 @@ export default function Listings() {
                                 setShowCreateWishListModal(listing.id);
                                 setModalOpen("CreateWishListModal");
                             } } className="material-symbols-outlined" style={listing.id in wishListListing ? {fontVariationSettings: "'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48", color: "red"} : {color:"gray"}}>favorite</span>
-                {showCreateWishListModal === listing.id && modalOpen === "CreateWishListModal" && <CreateWishListParentComponent setModalOpen={setModalOpen} modalOpen="CreateWishListModal" user={user}/> }
+                {showCreateWishListModal === listing.id && modalOpen === "CreateWishListModal" && <CreateWishListParentComponent setModalOpen={setModalOpen} modalOpen="CreateWishListModal" user={user} listingId={showCreateWishListModal} /> }
                             <NavLink style={{ textDecoration: 'none'}} to={`/listings/${listing.id}`}>
                                     <ListingCard listing = {listing} />
                             </NavLink>

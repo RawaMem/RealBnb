@@ -49,7 +49,7 @@ export function getUserWishlistsThunk(userId) {
     }
 }
 
-export function createWishlistThunk(wishlist) {
+export function createWishlistThunk(wishlist, listingId) {
     return async function(dispatch) {
         try {
             const response = await csrfFetch("/api/wishlists/", {
@@ -61,6 +61,16 @@ export function createWishlistThunk(wishlist) {
             });
             if (response.ok) {
                 const data = await response.json();
+                data.Listings = [];
+                const newResponse = await csrfFetch(`/api/wishlists/${data.id}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({listingId})
+                });
+                const newData = await newResponse.json();
+                console.log("$%c this is the new Data", "color:yellow;", newData);
                 dispatch(createWishlist(data));
                 return data;
             }

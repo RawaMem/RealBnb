@@ -2,7 +2,7 @@ import { useState } from "react";
 import { CreateNewWishList } from "../CreateNewWishList";
 import { CreateWishListModal } from "../CreateWishListModal";
 
-export function CreateWishListParentComponent({ user }) {
+export function CreateWishListParentComponent({ user, setModalOpen, listingId }) {
   const [wishListModalOpen, setWishListModalOpen] = useState(true);
   const [newWishListOpen, setNewWishListOpen] = useState(false);
 
@@ -13,8 +13,8 @@ export function CreateWishListParentComponent({ user }) {
 
   return (
     <>
-      {wishListModalOpen && <CreateWishListModal openCreateNewWishList={openCreateNewWishList} />}
-      {newWishListOpen && <CreateNewWishList setOpenWishList={setNewWishListOpen} user={user} />}
+      {wishListModalOpen && <CreateWishListModal openCreateNewWishList={openCreateNewWishList} setWishListModalOpen={setWishListModalOpen} setModalOpen={setModalOpen} />}
+      {newWishListOpen && <CreateNewWishList setOpenWishList={setNewWishListOpen} user={user} setModalOpen={setModalOpen} listingId={listingId} />}
     </>
   );
 }

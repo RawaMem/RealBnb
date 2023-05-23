@@ -7,7 +7,7 @@ const { handleValidationErrors } = require("../../utils/validation");
 const { requireAuth } = require("../../utils/auth");
 
 const asyncHandler = require("express-async-handler");
-const { WishList, Listing, WishListListing } = require("../../db/models");
+const { WishList, Listing, WishListListing, Image } = require("../../db/models");
 
 const router = express.Router();
 
@@ -281,7 +281,10 @@ router.post(
 				wishlistId,
 				...req.body,
 			});
-			res.send(wishListListing);
+			// const foundListing = await Listing.findOne({
+			// 	where: { id: req.body.listingId },
+			// });
+			res.send({ wishListListing });
 		} catch (err) {
 			next(err);
 		}

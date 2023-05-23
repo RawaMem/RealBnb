@@ -3,9 +3,11 @@ import { wishlistDateFormatter } from "../../../utils/WishList/wishlistDateForma
 
 import "./WishListCard.css";
 export function WishListCard({ wishlist, singleListing }) {
+
   return (
     <NavLink to={`/wishlists/${wishlist.id}`}>
       <div className="wishListCard-item">
+
         <div className="wishListCard-container">
           {singleListing?.Images?.slice(0, 3).map((image, idx) => (
             <div key={idx} className={`wishListCard-item-${idx}`}>

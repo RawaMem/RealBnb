@@ -4,6 +4,7 @@ const GET_USER_WISHLISTS = "wishlists/GET_USER_WISHLISTS";
 const SET_ERROR = "wishlists/SET_ERROR";
 const CLEAR_WISHLISTS = "wishlists/CLEAR_WISHLISTS";
 const CREATE_WISHLIST = "wishlists/CREATE_WISHLIST";
+const DELETE_WISHLIST = "wishlists/DELETE_WISHLIST";
 
 function getUserWishlists(wishlists) {
     return {
@@ -31,6 +32,14 @@ export function createWishlist(wishlist) {
         wishlist
     }
 }
+
+export function deleteWishlist(wishlistId) {
+    return {
+        type: DELETE_WISHLIST,
+        wishlistId
+    }
+}
+
 
 export function getUserWishlistsThunk(userId) {
     return async function(dispatch, getState) {
@@ -70,9 +79,25 @@ export function createWishlistThunk(wishlist, listingId) {
                     body: JSON.stringify({listingId})
                 });
                 const newData = await newResponse.json();
-                console.log("$%c this is the new Data", "color:yellow;", newData);
+                data.Listings.push({id: listingId});
                 dispatch(createWishlist(data));
                 return data;
+            }
+        } catch (error) {
+            const data = await error.json();
+            dispatch(setError(data.errors));
+        }
+    }
+}
+
+export function deleteWishlistThunk(wishlistId) {
+    return async function(dispatch) {
+        try {
+            const response = await csrfFetch(`/api/wishlists/${wishlistId}`, {
+                method: "DELETE"
+            });
+            if (response.ok) {
+                dispatch(deleteWishlist(wishlistId));
             }
         } catch (error) {
             const data = await error.json();
@@ -104,6 +129,10 @@ export default function wishlistsReducer(state = initialState, action) {
         case CREATE_WISHLIST:
             newState = {...state, wishLists: {...state.wishLists}, error: null};
             newState.wishLists[action.wishlist.id] = action.wishlist
+            return newState;
+        case DELETE_WISHLIST:
+            newState = {...state, wishLists: {...state.wishLists}, error: null};
+            delete newState.wishLists[action.wishlistId];
             return newState;
         default:
             return state;

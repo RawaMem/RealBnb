@@ -23,7 +23,8 @@ const { Listing,
   Booking,
   WishList,
   Amenity,
-  User } = require('../../db/models');
+  User, 
+  sequelize} = require('../../db/models');
 
 const router = express.Router();
 
@@ -462,7 +463,7 @@ router.get('/:listingId(\\d+)', asyncHandler(async (req, res) => {
         model: Review,
         include: {
           model: User,
-          attributes: ["username"]
+          attributes: ["username", "id"]
         },
         attributes: {
           exclude: ["authorId", "listingId"]
@@ -474,29 +475,33 @@ router.get('/:listingId(\\d+)', asyncHandler(async (req, res) => {
       },
       WishList,
     ],
-    attributes: {
-      include: [[
-        Sequelize.fn("AVG", Sequelize.col("Reviews.starRating")),'avgRating'
-      ]]
-    },
-    group: [
-      "Listing.id",
-      "Images.id",
-      "Categories.id",
-      "Categories->ListingCategory.id",
-      "ListingPrices.id",
-      "Amenities.id",
-      "Amenities->ListingAmenity.id",
-      "Bookings.id",
-      "Reviews.id",
-      "Reviews->User.id",
-      "WishLists.id",
-      "WishLists->WishListListing.wishlistId",
-      "WishLists->WishListListing.listingId",
-      "WishLists->WishListListing.createdAt",
-      "WishLists->WishListListing.updatedAt"
+    // attributes: [
+    //     [
+    //     Sequelize.fn("AVG", Sequelize.col("Reviews.starRating")),'avgRating'
+    //     ],
+    //     [
+    //       Sequelize.fn("COUNT", Sequelize.col("Reviews.id")), "numOfReviews"
+    //     ]
+    // ]
+    // ,
+    // group: [
+    //   "Listing.id",
+    //   "Images.id",
+    //   "Categories.id",
+    //   "Categories->ListingCategory.id",
+    //   "ListingPrices.id",
+    //   "Amenities.id",
+    //   "Amenities->ListingAmenity.id",
+    //   "Bookings.id",
+    //   "Reviews.id",
+    //   "Reviews->User.id",
+    //   "WishLists.id",
+    //   "WishLists->WishListListing.wishlistId",
+    //   "WishLists->WishListListing.listingId",
+    //   "WishLists->WishListListing.createdAt",
+    //   "WishLists->WishListListing.updatedAt"
 
-    ]
+    // ]
   });
 
   if(!singleListing) {
@@ -512,6 +517,13 @@ router.get('/:listingId(\\d+)', asyncHandler(async (req, res) => {
 
   const newCategoryArr = convertListing["Categories"].map(categoryObj => categoryObj.name);
   convertListing["Categories"] = newCategoryArr;
+
+  const totalReviews = await singleListing.countReviews();
+  convertListing["totalNumOfReviews"] = totalReviews;
+
+  const totalRating = await Review.sum("starRating", {where: {listingId}});
+  convertListing["avgRating"] = (totalRating / totalReviews).toFixed(2);
+
   res.json(convertListing)
 }));
 

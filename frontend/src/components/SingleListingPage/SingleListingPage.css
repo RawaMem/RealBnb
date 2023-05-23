@@ -1,7 +1,294 @@
-.booking-container {
+/* .booking-container {
     border: solid 3px red;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+} */
+
+.singleListingPageContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 85vh;
+    width: 100%;
 }
+
+.listingContent {
+    width: 95%;
+    height: 95%;
+    display: flex;
+    flex-direction: column;
+}
+
+.singleListingTitleContainer {
+    height: 15%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.singleListingTitleContent {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.singleListing-lowerTitle-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.singleListing-lowerTitle-left-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.singleListing-lowerTitle-left-container div {
+    margin-right: 10px;
+}
+
+.upperTitle h1 {
+    font-size: 26px;
+    color: #222222;
+}
+
+.reviewStar-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.singleListing-lowerTitle-right-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.wishListHeart-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.wishListHeart {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.wishListSaveText {
+    margin-left: 5px;
+}
+
+.single-listing-send-message-btn-container {
+    width: 140px;
+    height: 35px;
+    background-color: rgb(34,34,34);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: white;
+    margin-left:8%
+}
+
+.singleListingImageContainer {
+    width: 100%;
+    height: 75%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.singleListingImagesContent {
+    width: 99%;
+    height: 90%;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.leftPreviewImage {
+    height: 100%;
+    width: 49%;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+.leftPreviewImage img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+}
+
+.singleListingrightImageContainer {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.singleListingrightImages {
+    width: 50%;
+    height: 50%;
+}
+
+.singleListingrightImages img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+#right-upper-coner-images {
+    border-top-right-radius: 15px;
+}
+
+#right-bottom-coner-images {
+    border-bottom-right-radius: 15px;
+}
+
+.singleListingAmenity-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.amenity-list-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.single-amenity-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    width: 150px;
+    border: .5px solid gray;
+    margin-right: 1%;
+    margin-bottom: 1%;
+    border-radius: 15px;
+    background-color: rgb(247,247,247);
+}
+
+#singleListing-amenity-name {
+    margin-left: 5px;
+}
+
+.aveRatingAndNumReviews {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 2%;
+}
+
+#singleListingReview-font {
+    font-size: 22px;
+    font-weight: 500;
+    margin-right: 5px;
+}
+
+.custom-progress-bar {
+    height: 5px;
+    width: 150px;
+}
+
+.custom-progress-bar .progress-bar {
+    background-color: black;
+}
+
+.singleListing-aveRatingBars-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.singleListing-leftRatings-container {
+    width: 49%;
+}
+
+.singleListing-rightRatings-container {
+    width: 49%;
+}
+
+.singleListig-avgRatingBars-single {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2%;
+}
+
+.singleListing-progressBar-container {
+    width: 30%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.progress-bar-item {
+    flex: 1
+}
+
+.singleListing-progresBar-font {
+    color: rgb(65,65,65);
+    font-weight: 400;
+    font-size: 17px;
+}
+
+.singleListing-reviewCard-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.singleListing-review-upper-container {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1%;
+}
+
+.singleListing-reviewContent-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 1.5%;
+}
+
+.singleListing-profile-picture {
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+    background-color: rgb(34,34,34);
+    color: white;
+    font-size: 25px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-right: 1%;
+}
+
+.review-created-time {
+    color: rgb(174,174,174)
+}
+
+

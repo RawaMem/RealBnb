@@ -13,7 +13,6 @@ router.post('/', asyncHandler(async (req, res) => {
             attributes: ['username'],
           }]
     })
-    console.log('@@@@@@@@@@@@@@@@@', reviewWithUser.User.username)
     res.json(reviewWithUser)
 }))
 

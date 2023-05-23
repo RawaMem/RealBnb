@@ -1,6 +1,6 @@
 /* TODO Add site wide styles */
 :root {
-    --navbar-height: 15%;
+    --navbar-height: 15vh;
     --navbar-width: 100%;
     --inner-navbar-height: 100%;
     --inner-navbar-width: 95%;

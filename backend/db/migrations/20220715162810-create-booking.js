@@ -31,10 +31,9 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DECIMAL
       },
-      paymentConfirmed: {
+      numOfGuests: {
         allowNull: false,
-        type: Sequelize.BOOLEAN,
-        defaultValue: false
+        type: Sequelize.INTEGER
       },
       startDate: {
         allowNull: false,

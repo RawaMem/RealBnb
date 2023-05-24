@@ -10,7 +10,10 @@ import SingleListingTitle from "./SingleListingTitle";
 import BookingsContainer from "./BookingsContainer";
 import Amenities from "./Amenities";
 import AboutListing from "./AboutListing";
+import Mapbox from "react-map-gl/dist/esm/mapbox/mapbox";
 import './SingleListingPage.css';
+import Booking from "./Booking";
+import { MapBox } from "../Maps/Mapbox";
 
 
 export default function SingleListingPage() {
@@ -30,7 +33,6 @@ export default function SingleListingPage() {
         return () => dispatch(clearListingStateAction())
     }, [dispatch, listingId])
 
-
     if (!listing.Images) return <div className="loading">Loading...</div>
 
     return (
@@ -45,18 +47,24 @@ export default function SingleListingPage() {
                     <SingleListingImages listingImages={listing.Images}/>
                 </div>
                 <div className="hostAndSpecsContainer">
-                    <HostAndSpecs 
-                    listing={listing}
-                    currentUser={currentUser}
-                    />
+                    <div>
+                        <div>
+                            <HostAndSpecs 
+                            listing={listing}
+                            currentUser={currentUser}
+                            />
+                        </div>
+                        <div className="amenitiesListContainer">
+                            <Amenities amenities={listing.Amenities} />
+                        </div>
+                    </div>
+                    <div>
+                        <Booking listing={listing} />   
+                    </div>
                 </div>
                 <hr />
                 <div className="aboutTheListing-container">
                     <AboutListing description={listing.description} />
-                </div>
-                <hr />
-                <div className="amenitiesListContainer">
-                    <Amenities amenities={listing.Amenities} />
                 </div>
                 {/* <div className="createReviewBtnContainer">
                     <ReviewFormModal
@@ -65,6 +73,11 @@ export default function SingleListingPage() {
                     currentUser={currentUser}
                     listingId={listingId}/>
                 </div> */}
+                <hr />
+                <div>
+                    <h3>Where you'll be</h3>
+                    <MapBox style={{width: '100%', height: '550px'}} latitude={listing.latitude} longitude={listing.longitude} />
+                </div>
                 <hr />
                 <div className="reviewContainer">
                     <ReviewsContainer

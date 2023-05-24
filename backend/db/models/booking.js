@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     listingId: DataTypes.INTEGER,
     totalCost: DataTypes.DECIMAL,
     avePricePerDay: DataTypes.DECIMAL,
-    paymentConfirmed: DataTypes.BOOLEAN,
+    numOfGuests: DataTypes.INTEGER,
     startDate: DataTypes.DATE,
     endDate: DataTypes.DATE
   }, {});

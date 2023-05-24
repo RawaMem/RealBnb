@@ -39,7 +39,7 @@ module.exports = {
               listingId,
               userId,
               avePricePerDay,
-              paymentConfirmed: true,
+              numOfGuests: 2,
               createdAt: new Date(),
               updatedAt: new Date(),
             }

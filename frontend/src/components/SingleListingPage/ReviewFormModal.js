@@ -7,7 +7,6 @@ function ReviewFormModal({currentUser, listingId, showCreateReviewModal, setShow
 
     return(
         <>
-            {currentUser && showLeaveReviewButton && <button className="createReview" onClick={() => setShowCreateReviewModal(true)}>Leave a Review</button>}
             {showCreateReviewModal && (
                 <Modal onClose={()=> setShowCreateReviewModal(false)}>
                     <CreateReview

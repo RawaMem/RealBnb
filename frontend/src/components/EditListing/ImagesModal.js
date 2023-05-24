@@ -54,6 +54,7 @@ function AddMoreImagesForm({setAddedImages,addedImages,setShowAddImageModal, img
 
 
     const buttonEvent = () => {
+        console.log("invoked")
         const fileElem = document.getElementById("fileElem");
         fileElem.click();
     };

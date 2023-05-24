@@ -3,7 +3,7 @@
 
 
 export default function SingleListingImages({listingImages}) {
-    console.log("listing SingleListingImages", listingImages)
+
     let previewImage;
     let nonPreviewImages = []
 
@@ -13,21 +13,27 @@ export default function SingleListingImages({listingImages}) {
     });
 
     const rightImages = nonPreviewImages.slice(0, 4);
+
+    const singleListingRightImagesClassName = (idx) => {
+        if(idx === 1 ) return "right-upper-coner-images"
+        if(idx === 3) return "right-bottom-coner-images"
+    };
+
+
     
     return (
         <div className="singleListingImagesContent">
             <div className="leftPreviewImage">
-                <img src={previewImage.url} alt="preview image" style={{width:"400px", height: "310px"}}/>
+                <img src={previewImage.url} alt="preview image" />
             </div>
-            <div>
+            <div className="singleListingrightImageContainer">
                 {!!rightImages.length && rightImages.map((imageObj, idx) => (
-                    <div className="rightImages" key={imageObj.url + idx}>
-                        <img src={imageObj.url} style={{width:"400px", height: "310px"}} />
+                    <div className="singleListingrightImages" key={imageObj.url + idx}>
+                        <img src={imageObj.url} id={singleListingRightImagesClassName(idx)} />
                     </div>
                 )) 
                 }
             </div>
-
         </div>
     )
 }

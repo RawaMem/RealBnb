@@ -4,7 +4,7 @@ import { useParams, useHistory } from "react-router-dom";
 
 import { getToken } from '../../store/maps';
 import InputField from "../../ui/TextField";
-import { createCategoriesAmenitiesThunk, createListingImagesThunk, deleteListingImageByIdThunk, editListImagePreviewStatusThunk, editListingThunk, getListingInfoForEditThunk, removeCategoryAmenityThunk } from "../../store/listings";
+import { clearListingStateAction, createCategoriesAmenitiesThunk, createListingImagesThunk, deleteListingImageByIdThunk, editListImagePreviewStatusThunk, editListingThunk, getListingInfoForEditThunk, removeCategoryAmenityThunk } from "../../store/listings";
 import EditAmenity from "./EditAmenity";
 import EditCategory from "./EditCategory";
 import AddDeleteImages from "./AddDeleteImage";
@@ -50,6 +50,7 @@ function EditListingForm() {
 
   useEffect(() => {
       if(!token) dispatch(getToken());
+      return () => clearListingStateAction();
   }, [dispatch]);
 
   useEffect(() => {     
@@ -130,7 +131,7 @@ function EditListingForm() {
       city,
       state,
       zipCode,
-      bedroom,
+      bedrooms:bedroom,
       beds,
       baths,
       maxGuests,
@@ -174,7 +175,9 @@ function EditListingForm() {
         dispatch(removeCategoryAmenityThunk(removedCategoryId, removedAmenityId))
       };
       if(removedImageIds.length) dispatch(deleteListingImageByIdThunk(removedImageIds)).dispatch(createCategoriesAmenitiesThunk(amenityAndCategory, listingId));
-      if(addedImageArr.length) await dispatch(createListingImagesThunk(listingId, addedImageArr))
+      if(addedImageArr.length) await dispatch(createListingImagesThunk(listingId, addedImageArr));
+
+      await dispatch(clearListingStateAction())
       history.push(`/listings/${listingId}`);
     };
   };

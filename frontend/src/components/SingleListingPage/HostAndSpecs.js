@@ -1,8 +1,8 @@
 
 
 
-export default function HostAndSpecs({listing, currentUser}) {
-    const hostName = currentUser.username
+export default function HostAndSpecs({listing}) {
+    const hostName = listing.hostInfo.username
 
 
     return (

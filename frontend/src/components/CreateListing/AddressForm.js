@@ -12,9 +12,9 @@ export default function AddressForm() {
     const [inputVal, setInputVal] = useState(localStorage.getItem('addressInputVal') || '');
     const [city, setCity] = useState(localStorage.getItem('city') || '');
     const [state, setState] = useState(localStorage.getItem('state') || '');
-    const [zipCode, setZipCode] = useState(localStorage.getItem('zipCode') || null);
-    const [longitude, setLongitude] = useState(localStorage.getItem('lng') || 10);
-    const [latitude, setLatitude] = useState(localStorage.getItem('lat') || 10);
+    const [zipCode, setZipCode] = useState(localStorage.getItem('zipCode') || '');
+    const [longitude, setLongitude] = useState(localStorage.getItem('lng') || 40.7128);
+    const [latitude, setLatitude] = useState(localStorage.getItem('lat') || 74.0060);
     const optinalAddress = useRef(null);
     const [suggestions, setSuggestions] = useState([]);
 

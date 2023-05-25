@@ -475,33 +475,7 @@ router.get('/:listingId(\\d+)', asyncHandler(async (req, res) => {
       },
       WishList,
     ],
-    // attributes: [
-    //     [
-    //     Sequelize.fn("AVG", Sequelize.col("Reviews.starRating")),'avgRating'
-    //     ],
-    //     [
-    //       Sequelize.fn("COUNT", Sequelize.col("Reviews.id")), "numOfReviews"
-    //     ]
-    // ]
-    // ,
-    // group: [
-    //   "Listing.id",
-    //   "Images.id",
-    //   "Categories.id",
-    //   "Categories->ListingCategory.id",
-    //   "ListingPrices.id",
-    //   "Amenities.id",
-    //   "Amenities->ListingAmenity.id",
-    //   "Bookings.id",
-    //   "Reviews.id",
-    //   "Reviews->User.id",
-    //   "WishLists.id",
-    //   "WishLists->WishListListing.wishlistId",
-    //   "WishLists->WishListListing.listingId",
-    //   "WishLists->WishListListing.createdAt",
-    //   "WishLists->WishListListing.updatedAt"
-
-    // ]
+   
   });
 
   if(!singleListing) {
@@ -523,6 +497,15 @@ router.get('/:listingId(\\d+)', asyncHandler(async (req, res) => {
 
   const totalRating = await Review.sum("starRating", {where: {listingId}});
   convertListing["avgRating"] = (totalRating / totalReviews).toFixed(2);
+
+  const owner = await User.findOne({
+    where: {id: singleListing.ownerId},
+    attributes: {
+      exclude: ["id"]
+    }
+  });
+  
+  convertListing["hostInfo"] = owner;
 
   res.json(convertListing)
 }));

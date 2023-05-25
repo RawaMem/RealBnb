@@ -27,7 +27,7 @@ export default function SingleListingPage() {
     const listing = useSelector(state => state.listings.singleListing)
     const reviews = useSelector(state => state.reviews)
 
-    console.log("listing---------", listing)
+
     useEffect(() => {
         dispatch(getSingleListingThunk(listingId))
 

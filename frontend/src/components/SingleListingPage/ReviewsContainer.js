@@ -21,16 +21,15 @@ export default function ReviewsContainer({reviews, currentUser, listingId, listi
         reviewsArr = Object.values(reviews)
         averageScores = reviewScoreCalculator(reviewsArr, currentUser)
     }
+    console.log("listing", listing)
 
-
-    const handleDelete = async (id) => {
-        await dispatch(deleteReviewThunk(id))
+    const handleDelete = (id) => {
+        dispatch(deleteReviewThunk(id))
     }
 
-    const handleEdit = async (review)=>{
+    const handleEdit = (review)=>{
         setReviewToEdit(review)
         setShowCreateReviewModal(true)
-
     }
 
     if (!averageScores) return (
@@ -38,6 +37,18 @@ export default function ReviewsContainer({reviews, currentUser, listingId, listi
             <div className="noReviews">No reviews at this time.</div>
         </>
     )
+
+    const qualifyToLeaveAnReview = () => {
+        // have to log in: currentUser
+        // don't already have an review
+        // not the host of the listingId
+        const alreadyReviewed = () => {
+            const findExitReview = reviewsArr.find(review => review.User.id === currentUser.id);
+             return !!findExitReview;  
+        }; 
+        const listHost = listing.ownerId === currentUser.id
+        return currentUser && !alreadyReviewed() && !listHost;
+    };
 
     return (
         <div className='singleListing-review-container'>
@@ -49,7 +60,10 @@ export default function ReviewsContainer({reviews, currentUser, listingId, listi
                         reviewToEdit={reviewToEdit}
                         currentUser={currentUser}
                         showLeaveReviewButton={averageScores.showLeaveReviewButton}
-                        listingId={listingId}/>
+                        listingId={listingId}
+                        handleDelete={handleDelete}
+                        />
+                        
                     </div>
             }
 
@@ -63,7 +77,7 @@ export default function ReviewsContainer({reviews, currentUser, listingId, listi
                     <div id="singleListingReview-font">&middot;</div>
                     <div id="singleListingReview-font">{listing.totalNumOfReviews} {listing.totalNumOfReviews === 0 ? "Review" : "Reviews"}</div>
                 </div>
-                {currentUser && <div
+                {qualifyToLeaveAnReview() && <div
                     className="single-listing-send-message-btn-container" onClick={() => setShowCreateReviewModal(true)}>Leave a Review</div>
                 }
             </div>

@@ -34,7 +34,7 @@ export default function SingleListingTitle({ listing, currentUser }) {
             {listing.avgRating === "NaN" ? "New" : listing.avgRating }
           </div>
           <div>&middot;</div>
-          <div>{listing.totalNumOfReviews} reviews</div>
+          <div>{listing.totalNumOfReviews} {listing.totalNumOfReviews < 1 ? "review" : "reviews"}</div>
           <div>&middot;</div>
           <div className="reviewAverageScore">{listing.city}, {listing.state}</div>
         </div>

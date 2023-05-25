@@ -29,3 +29,8 @@
     color: var(--profile-dropdown-icon-color);
     fill: var(--profile-dropdown-icon-color);
 }
+
+.starIcons-star-rating-container {
+    display: flex;
+    flex-direction: row;
+}

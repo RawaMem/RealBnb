@@ -353,4 +353,114 @@
     justify-content: space-between;
 }
 
+.review-form-main-container {
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+.review-star-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.review-form-main-container {
+    height: 80vh;
+    width: 60vw;
+}
+
+.review-form-title-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center; 
+}
+
+.review-form-content-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.review-content-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 80%;
+    width: 80%;
+    /* border: 1px solid pink; */
+}
+
+.review-star-section {
+    height: 95%;
+    width: 30%;
+    /* border: 1px solid yellow; */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.review-content-section {
+    /* border: 2px solid orange; */
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.revireForm-contentTextArea-label {
+    height: 90%;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.revireForm-contentTextArea {
+    border-radius: 15px;
+    padding: 5%;
+    height: 90%;
+    width: 90%;
+    font-size: 20px;
+}
+
+.cancel-delete-btn-container {
+    /* border: 2px solid blue; */
+    height: 15%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.cancel-delete-btn-inner-container {
+    width: 80%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.review-form-submit-btn {
+    display: flex;
+    flex-direction: row;
+    width: 90%;
+    justify-content: flex-end;
+}
+
+
+
+
+
+
 

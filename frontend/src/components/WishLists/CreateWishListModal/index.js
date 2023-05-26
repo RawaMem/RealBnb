@@ -19,7 +19,7 @@ export function CreateWishListModal({
             <button onClick={openCreateNewWishList}>Create new wishlist</button>
           </label>
           <div className="modal-header">
-            <WishList wishListStyle={{}} listingId={listingId}/>
+            <WishList wishListStyle={{}} listingId={listingId} setWishListModalOpen={setWishListModalOpen} setModalOpen={setModalOpen}/> 
           </div>
         </div>
       </Modal>

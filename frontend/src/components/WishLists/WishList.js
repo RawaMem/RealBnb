@@ -5,7 +5,7 @@ import { getSingleListingThunk } from "../../store/listings";
 import { WishListCard } from "./WishListCard";
 // import "./WishList.css";
 
-function WishList({wishListStyle, listingId}) {
+function WishList({wishListStyle, listingId, setWishListModalOpen, setModalOpen}) {
   const dispatch = useDispatch();
   const [listings, setListings] = useState([]);
   const { error } = useSelector((state) => state.wishlists);
@@ -50,6 +50,8 @@ function WishList({wishListStyle, listingId}) {
                 wishlist={wishlist}
                 singleListing={listings[idx]}
                 listingId={listingId}
+                setWishListModalOpen={setWishListModalOpen}
+                setModalOpen={setModalOpen}
               />
             </div>
           ))}

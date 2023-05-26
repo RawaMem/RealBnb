@@ -4,7 +4,8 @@ import "./CreateWishListModal.css";
 export function CreateWishListModal({
   openCreateNewWishList,
   setWishListModalOpen,
-  setModalOpen
+  setModalOpen,
+  listingId
 }) {
   return (
     <>
@@ -18,7 +19,7 @@ export function CreateWishListModal({
             <button onClick={openCreateNewWishList}>Create new wishlist</button>
           </label>
           <div className="modal-header">
-            <WishList wishListStyle={{}} />
+            <WishList wishListStyle={{}} listingId={listingId}/>
           </div>
         </div>
       </Modal>

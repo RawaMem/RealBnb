@@ -4,6 +4,7 @@ const GET_USER_WISHLISTS = "wishlists/GET_USER_WISHLISTS";
 const SET_ERROR = "wishlists/SET_ERROR";
 const CLEAR_WISHLISTS = "wishlists/CLEAR_WISHLISTS";
 const CREATE_WISHLIST = "wishlists/CREATE_WISHLIST";
+const CREATE_WISHLIST_LISTING = "wishlists/CREATE_WISHLIST_LISTING";
 const DELETE_WISHLIST = "wishlists/DELETE_WISHLIST";
 
 function getUserWishlists(wishlists) {
@@ -30,6 +31,14 @@ export function createWishlist(wishlist) {
     return {
         type: CREATE_WISHLIST,
         wishlist
+    }
+}
+
+export function createWishlistListing({wishListListing: {wishlistId, listingId}}) {
+    return {
+        type: CREATE_WISHLIST_LISTING,
+        wishlistId,
+        listingId
     }
 }
 
@@ -90,6 +99,28 @@ export function createWishlistThunk(wishlist, listingId) {
     }
 }
 
+export function createWishlistListingThunk(wishlistId, listingId) {
+    return async function(dispatch) {
+        try {
+            const response = await csrfFetch(`/api/wishlists/${wishlistId}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({listingId})
+            });
+            if (response.ok) {
+                const data = await response.json();
+                dispatch(createWishlistListing(data));
+                return data;
+            }
+        } catch (error) {
+            const data = await error.json();
+            dispatch(setError(data.errors));
+        }
+    }
+}
+
 export function deleteWishlistThunk(wishlistId) {
     return async function(dispatch) {
         try {
@@ -129,6 +160,11 @@ export default function wishlistsReducer(state = initialState, action) {
         case CREATE_WISHLIST:
             newState = {...state, wishLists: {...state.wishLists}, error: null};
             newState.wishLists[action.wishlist.id] = action.wishlist
+            return newState;
+        case CREATE_WISHLIST_LISTING:
+            newState = {...state, wishLists: {...state.wishLists}, wishListListing: {...state.wishListListing}, error: null};
+            newState.wishLists[action.wishlistId].Listings.push({id: action.listingId});
+            newState.wishListListing[action.listingId] = {id: action.listingId};
             return newState;
         case DELETE_WISHLIST:
             newState = {...state, wishLists: {...state.wishLists}, error: null};

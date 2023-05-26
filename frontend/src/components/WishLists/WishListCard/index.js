@@ -1,11 +1,19 @@
 import { NavLink } from "react-router-dom";
 import { wishlistDateFormatter } from "../../../utils/WishList/wishlistDateFormatter";
+import { useDispatch } from "react-redux";
 
+import { createWishlistListingThunk } from "../../../store/wishlists";
 import "./WishListCard.css";
-export function WishListCard({ wishlist, singleListing }) {
+export function WishListCard({ wishlist, singleListing, listingId }) {
+  const dispatch = useDispatch();
 
+  async function addListingToExistingWishList() {
+    if (listingId) {
+      await dispatch(createWishlistListingThunk(wishlist.id, listingId));
+    }
+  }
   return (
-    <NavLink to={`/wishlists/${wishlist.id}`}>
+    <NavLink to={`/wishlists/${wishlist.id}`} onClick={addListingToExistingWishList}>
       <div className="wishListCard-item">
 
         <div className="wishListCard-container">

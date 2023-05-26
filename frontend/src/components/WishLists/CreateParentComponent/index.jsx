@@ -13,7 +13,7 @@ export function CreateWishListParentComponent({ user, setModalOpen, listingId })
 
   return (
     <>
-      {wishListModalOpen && <CreateWishListModal openCreateNewWishList={openCreateNewWishList} setWishListModalOpen={setWishListModalOpen} setModalOpen={setModalOpen} />}
+      {wishListModalOpen && <CreateWishListModal openCreateNewWishList={openCreateNewWishList} setWishListModalOpen={setWishListModalOpen} setModalOpen={setModalOpen} listingId={listingId} />}
       {newWishListOpen && <CreateNewWishList setOpenWishList={setNewWishListOpen} user={user} setModalOpen={setModalOpen} listingId={listingId} />}
     </>
   );

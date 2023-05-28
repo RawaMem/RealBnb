@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { csrfFetch } from '../../store/csrf';
 import { getListingsThunk } from '../../store/listings';
-import { getUserWishlistsThunk, clearWishlists } from "../../store/wishlists";
+import { getUserWishlistsThunk, clearWishlists, deleteWishlistListingThunk } from "../../store/wishlists";
 import ListingCard from './ListingCard';
 import { useCategory } from '../../context/CategoryContext';
 import { CreateWishListParentComponent } from '../WishLists/CreateParentComponent';
@@ -85,7 +85,12 @@ export default function Listings() {
                 <div style={{display:"flex", flexWrap: "wrap"}}>
                     {listings && listings.map(listing => (
                         <article key = {`listingId-${listing.id}`} style= {{margin:"15px"}} >
-                            <span onClick={() => {
+                            <span onClick={async () => {
+                                if (listing.id in wishListListing) {
+                                    console.log("%c wishListListing[listing.id]", "color:pink;", wishListListing[listing.id]);
+                                    await dispatch(deleteWishlistListingThunk(wishListListing[listing.id].WishListListing.wishlistId, listing.id));
+                                    return;
+                                }
                                 setShowCreateWishListModal(listing.id);
                                 setModalOpen("CreateWishListModal");
                             } } className="material-symbols-outlined" style={listing.id in wishListListing ? {fontVariationSettings: "'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48", color: "red"} : {color:"gray"}}>favorite</span>

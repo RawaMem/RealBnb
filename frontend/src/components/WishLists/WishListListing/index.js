@@ -5,6 +5,7 @@ import ListingCard from "../../Listings/ListingCard";
 import {
   deleteWishlistThunk,
   getUserWishlistsThunk,
+  updateWishlistThunk,
 } from "../../../store/wishlists";
 import { getListingsThunk } from "../../../store/listings";
 import { Modal } from "../../../context/Modal";
@@ -22,11 +23,11 @@ export function WishListListing() {
   const [showModal, setShowModal] = useState(false);
   const [name, setName] = useState(currentWishList?.name || "");
 
-    useEffect(() => {
+  useEffect(() => {
     if (currentWishList) {
       setName(currentWishList.name);
     }
-    }, [wishLists]);
+  }, [wishLists]);
 
   useEffect(() => {
     dispatch(getUserWishlistsThunk(id));
@@ -35,7 +36,8 @@ export function WishListListing() {
     dispatch(getListingsThunk());
   }, [dispatch, wishlistId]);
   const listingSet = new Set();
-  currentWishList?.Listings.forEach((listing) => listingSet.add(listing.id));
+  console.log("%c what is going on here?", "color: pink", currentWishList);
+  currentWishList?.Listings?.forEach((listing) => listingSet.add(listing.id));
 
   const filteredLists = Object.values(allListings).filter((listing) =>
     listingSet.has(listing.id)
@@ -46,15 +48,46 @@ export function WishListListing() {
     history.push("/wishlists");
   }
 
+  async function updateWishlist() {
+    const updatedWishlist = {
+      ...currentWishList,
+      name,
+      checkIn: new Date(currentWishList.checkIn).toISOString().split("T")[0],
+      checkOut: new Date(currentWishList.checkOut).toISOString().split("T")[0],
+    };
+    await dispatch(updateWishlistThunk(updatedWishlist));
+    setShowModal(false);
+    // history.push(`/wishlists/${wishlistId}`);
+  }
+
   return (
     <div>
-      <button onClick={() => setShowModal(true)}>DELETE</button>
-      {showModal && <Modal onClose={() => setShowModal(false)}>
-        <>
-        <input type="text" onChange={(e) => setName(e.target.value)} value={name}/>
-        <button type="submit" onClick={() => deleteWishlist()}>Delete this wishlist</button>
-        </>
-        </Modal>}
+      <span
+        className="material-symbols-outlined"
+        style={{
+          fontVariationSettings: "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48",
+        }}
+        onClick={() => setShowModal(true)}
+      >
+        more_horiz
+      </span>
+      {showModal && (
+        <Modal onClose={() => setShowModal(false)}>
+          <>
+            <input
+              type="text"
+              onChange={(e) => setName(e.target.value)}
+              value={name}
+            />
+            <button type="submit" onClick={() => updateWishlist()}>
+              Update this wishlist
+            </button>
+            <button type="submit" onClick={() => deleteWishlist()}>
+              Delete this wishlist
+            </button>
+          </>
+        </Modal>
+      )}
       {filteredLists.map((listing) => (
         <NavLink
           key={listing.id}

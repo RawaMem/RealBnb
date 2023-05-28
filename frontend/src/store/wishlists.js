@@ -7,6 +7,7 @@ const CREATE_WISHLIST = "wishlists/CREATE_WISHLIST";
 const CREATE_WISHLIST_LISTING = "wishlists/CREATE_WISHLIST_LISTING";
 const DELETE_WISHLIST = "wishlists/DELETE_WISHLIST";
 const DELETE_WISHLIST_LISTING = "wishlists/DELETE_WISHLIST_LISTING";
+const UPDATE_WISHLIST = "wishlists/UPDATE_WISHLIST";
 
 function getUserWishlists(wishlists) {
   return {
@@ -59,6 +60,13 @@ export function deleteWishlistListing(wishlistId, listingId) {
     type: DELETE_WISHLIST_LISTING,
     wishlistId,
     listingId,
+  };
+}
+
+export function updateWishlist(wishlist) {
+  return {
+    type: UPDATE_WISHLIST,
+    wishlist,
   };
 }
 
@@ -168,6 +176,30 @@ export function deleteWishlistListingThunk(wishlistId, listingId) {
   };
 }
 
+export function updateWishlistThunk(wishlist) {
+  return async function (dispatch, getState) {
+    const { wishLists } = getState().wishlists;
+    try {
+      const response = await csrfFetch(`/api/wishlists/${wishlist.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(wishlist),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        const listings = wishLists[data.id].Listings;
+        data.Listings = listings;
+        dispatch(updateWishlist(data));
+      }
+    } catch (error) {
+      const data = await error.json();
+      dispatch(setError(data.errors));
+    }
+  };
+}
+
 const initialState = { wishLists: {}, wishListListing: {}, error: null };
 export default function wishlistsReducer(state = initialState, action) {
   let newState;
@@ -223,8 +255,14 @@ export default function wishlistsReducer(state = initialState, action) {
       };
       return newState;
     case DELETE_WISHLIST:
-      newState = { ...state, wishLists: { ...state.wishLists }, wishListListing: { ...state.wishListListing }, error: null };
-      const listingsAssociatedToCurrentWishlist = newState.wishLists[action.wishlistId].Listings;
+      newState = {
+        ...state,
+        wishLists: { ...state.wishLists },
+        wishListListing: { ...state.wishListListing },
+        error: null,
+      };
+      const listingsAssociatedToCurrentWishlist =
+        newState.wishLists[action.wishlistId].Listings;
       listingsAssociatedToCurrentWishlist.forEach((listing) => {
         delete newState.wishListListing[listing.id];
       });
@@ -248,6 +286,15 @@ export default function wishlistsReducer(state = initialState, action) {
       ].Listings.filter((listing) => listing.id !== action.listingId);
 
       delete newState.wishListListing[action.listingId];
+      return newState;
+    case UPDATE_WISHLIST:
+      newState = {
+        ...state,
+        wishLists: { ...state.wishLists },
+        wishListListing: { ...state.wishListListing },
+        error: null,
+      };
+      newState.wishLists[action.wishlist.id] = action.wishlist;
       return newState;
     default:
       return state;

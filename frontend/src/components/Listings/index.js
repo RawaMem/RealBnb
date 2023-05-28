@@ -7,10 +7,13 @@ import { getUserWishlistsThunk, clearWishlists, deleteWishlistListingThunk } fro
 import ListingCard from './ListingCard';
 import { useCategory } from '../../context/CategoryContext';
 import { CreateWishListParentComponent } from '../WishLists/CreateParentComponent';
+import LoginForm from '../LoginFormModal';
+import { Modal } from '../../context/Modal';
 
 export default function Listings() {
     const [showCreateWishListModal, setShowCreateWishListModal] = useState(false);
     const [modalOpen, setModalOpen] = useState(null);
+    const [showLogInModal, setShowLogInModal] = useState(false);
 
     const dispatch = useDispatch();
     const listingsObj = useSelector(state => state.listings.allListings);
@@ -92,6 +95,10 @@ export default function Listings() {
                     {listings && listings.map(listing => (
                         <article key = {`listingId-${listing.id}`} style= {{margin:"15px"}} >
                             <span onClick={async () => {
+                                if (!user) {
+                                    setShowLogInModal(listing.id);
+                                    return;
+                                }
                                 if (listing.id in wishListListing) {
                                     console.log("%c wishListListing[listing.id]", "color:pink;", wishListListing[listing.id]);
                                     await dispatch(deleteWishlistListingThunk(wishListListing[listing.id].WishListListing.wishlistId, listing.id));
@@ -101,6 +108,11 @@ export default function Listings() {
                                 setModalOpen("CreateWishListModal");
                             } } className="material-symbols-outlined" style={listing.id in wishListListing ? {fontVariationSettings: "'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48", color: "red"} : {color:"gray"}}>favorite</span>
                 {showCreateWishListModal === listing.id && modalOpen === "CreateWishListModal" && <CreateWishListParentComponent setModalOpen={setModalOpen} modalOpen="CreateWishListModal" user={user} listingId={showCreateWishListModal} /> }
+                {showLogInModal === listing.id  && (
+                    <Modal onClose={() => setShowLogInModal(false)}>
+                        <LoginForm setShowLogInModal={setShowLogInModal} />
+                    </Modal>
+                )}
                             <NavLink style={{ textDecoration: 'none'}} to={`/listings/${listing.id}`}>
                                     <ListingCard listing = {listing} />
                             </NavLink>

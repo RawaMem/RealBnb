@@ -224,6 +224,10 @@ export default function wishlistsReducer(state = initialState, action) {
       return newState;
     case DELETE_WISHLIST:
       newState = { ...state, wishLists: { ...state.wishLists }, wishListListing: { ...state.wishListListing }, error: null };
+      const listingsAssociatedToCurrentWishlist = newState.wishLists[action.wishlistId].Listings;
+      listingsAssociatedToCurrentWishlist.forEach((listing) => {
+        delete newState.wishListListing[listing.id];
+      });
       delete newState.wishLists[action.wishlistId];
       return newState;
     case DELETE_WISHLIST_LISTING:

@@ -53,8 +53,14 @@ export default function Listings() {
 
             dispatch(getUserWishlistsThunk(user.id));
         }
-        return () => {
-             dispatch(clearWishlists());
+        // return () => {
+        //      dispatch(clearWishlists());
+        // }
+    }, [dispatch, user]);
+
+    useEffect(() => {
+        if (!user) {
+            dispatch(clearWishlists());
         }
     }, [dispatch, user]);
 

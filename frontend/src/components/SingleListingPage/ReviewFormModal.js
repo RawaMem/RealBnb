@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Modal } from "../../context/Modal";
 import CreateReview from "./CreateReview";
 
-function ReviewFormModal({currentUser, listingId, showCreateReviewModal, setShowCreateReviewModal, reviewToEdit, showLeaveReviewButton, handleDelete}){
+function ReviewFormModal({currentUser, listingId, showCreateReviewModal, setShowCreateReviewModal, reviewToEdit, showLeaveReviewButton, setReviewToEdit}){
     // const [showCreateReviewModal, setShowCreateReviewModal] = useState(false)
 
     return(
@@ -14,7 +14,7 @@ function ReviewFormModal({currentUser, listingId, showCreateReviewModal, setShow
                     listingId={listingId}
                     reviewToEdit={reviewToEdit}
                     setShowCreateReviewModal={setShowCreateReviewModal}
-                    handleDelete={handleDelete}
+                    setReviewToEdit={setReviewToEdit}
                     />
                 </Modal>
             )}

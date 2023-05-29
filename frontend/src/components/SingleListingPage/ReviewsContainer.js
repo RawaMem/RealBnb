@@ -1,9 +1,5 @@
 import ProgressBar from 'react-bootstrap/ProgressBar';
-
-
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useDispatch } from 'react-redux';
-import { deleteReviewThunk } from '../../store/reviews';
 import { useState } from 'react';
 import { calculateMonthAndYear, reviewScoreCalculator } from '../Utils';
 import ReviewFormModal from './ReviewFormModal';
@@ -13,31 +9,28 @@ export default function ReviewsContainer({reviews, currentUser, listingId, listi
     const [reviewToEdit, setReviewToEdit] = useState({})
     const [showCreateReviewModal, setShowCreateReviewModal] = useState(false)
 
-    const dispatch = useDispatch()
 
     let averageScores
     let reviewsArr
     if(reviews) {
         reviewsArr = Object.values(reviews)
         averageScores = reviewScoreCalculator(reviewsArr, currentUser)
-    }
-    console.log("listing", listing)
+        for(let key in averageScores) {
+             if(typeof averageScores[key] === "number") averageScores[key] = averageScores[key].toFixed(2)
+        };
+    };
 
-    const handleDelete = (id) => {
-        dispatch(deleteReviewThunk(id))
-    }
 
     const handleEdit = (review)=>{
         setReviewToEdit(review)
         setShowCreateReviewModal(true)
-    }
+    };
 
     if (!averageScores) return (
         <>
             <div className="noReviews">No reviews at this time.</div>
         </>
-    )
-
+    );
     const qualifyToLeaveAnReview = () => {
         // have to log in: currentUser
         // don't already have an review
@@ -61,7 +54,7 @@ export default function ReviewsContainer({reviews, currentUser, listingId, listi
                         currentUser={currentUser}
                         showLeaveReviewButton={averageScores.showLeaveReviewButton}
                         listingId={listingId}
-                        handleDelete={handleDelete}
+                        setReviewToEdit={setReviewToEdit}
                         />
                         
                     </div>
@@ -162,7 +155,7 @@ export default function ReviewsContainer({reviews, currentUser, listingId, listi
             
             
 
-            <div className="listingReviews">
+            <div className="single-listing-listingReviews">
                 {reviewsArr.map(review => (
                     <div key={`review-container-id-${review.id}`} className="singleListing-reviewCard-container">
                         <div className='singleListing-review-upper-container'>
@@ -177,27 +170,23 @@ export default function ReviewsContainer({reviews, currentUser, listingId, listi
                         </div>
 
                         <div className="singleListing-reviewContent-container">
-                            <div >{review.content}</div>
-
-                            { currentUser && currentUser.id === review.User.id ?
-                            (<>
-                            {/* <button
-                            onClick={()=>handleDelete(review.id)}
-                            className="deleteReviewBtn">Delete Review</button> */}
-                            <div 
-                            className="single-listing-send-message-btn-container"
-                            onClick={()=>handleEdit(review)}
-                            >Edit Review</div>
-                            </>): null}
+                            <div className='singleListing-review-content'>  {review.content}
+                            </div>
+                            {currentUser && currentUser.id === review.User.id &&
+                            <>
+                            {/* {console.log("===============review", review)} */}
+                                <div 
+                                className="single-listing-send-message-btn-container"
+                                onClick={()=>handleEdit(review)}
+                                >Edit Review
+                                </div>
+                            </>
+                            }
                         </div>
                     </div>
                 ))}
             </div>
 
         </div>
-    )
-
-
-
-
-}
+    );
+};

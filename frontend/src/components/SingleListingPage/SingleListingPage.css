@@ -258,6 +258,7 @@
 .singleListing-reviewCard-container {
     display: flex;
     flex-direction: column;
+    margin-bottom: 2.5%;
 }
 
 .singleListing-review-upper-container {
@@ -270,7 +271,11 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-bottom: 1.5%;
+    width: 100%;
+}
+
+.singleListing-review-content {
+    width: 80%;
 }
 
 .singleListing-profile-picture {
@@ -356,28 +361,23 @@
 .review-form-main-container {
     display: flex;
     flex-direction: column;
-}
-
-
-
-.review-star-section {
-    display: flex;
-    flex-direction: column;
-}
-
-.review-form-main-container {
     height: 80vh;
-    width: 60vw;
+    width: 75vw;
 }
+
+
+
 
 .review-form-title-container {
     display: flex;
     flex-direction: row;
     justify-content: center; 
+    align-items: center;
+    height: 15%;
 }
 
 .review-form-content-container {
-    height: 100%;
+    height: 70%;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -390,25 +390,26 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    height: 80%;
+    height: 95%;
     width: 80%;
-    /* border: 1px solid pink; */
+    /* border: 2px solid blue; */
 }
 
 .review-star-section {
-    height: 95%;
-    width: 30%;
-    /* border: 1px solid yellow; */
+    height: 90%;
+    width: 50%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
+    align-items: center;
+    /* border: 1px solid salmon; */
+
 }
 
 .review-content-section {
-    /* border: 2px solid orange; */
     display: flex;
     flex-direction: column;
-    width: 70%;
+    width: 50%;
     height: 100%;
     align-items: center;
     justify-content: center;
@@ -416,7 +417,6 @@
 
 .revireForm-contentTextArea-label {
     height: 90%;
-    height: 100%;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -427,13 +427,13 @@
 .revireForm-contentTextArea {
     border-radius: 15px;
     padding: 5%;
-    height: 90%;
+    height: 87%;
     width: 90%;
     font-size: 20px;
+    color: rgb(62,62,62);
 }
 
 .cancel-delete-btn-container {
-    /* border: 2px solid blue; */
     height: 15%;
     width: 100%;
     display: flex;
@@ -457,6 +457,40 @@
     width: 90%;
     justify-content: flex-end;
 }
+
+.review-star-section label {
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+.review-each-rating-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 95%;
+}
+
+.review-form-submit-btn-disabled {
+    width: 140px;
+    height: 35px;
+    background-color: var(--disabled-btn-background-color);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: white;
+    margin-left:8%;
+    cursor: not-allowed;
+    border: none;
+}
+
+.single-listing-listingReviews {
+    margin-top: 2%;
+}
+
+
 
 
 

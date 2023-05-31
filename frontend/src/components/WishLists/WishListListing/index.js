@@ -9,6 +9,7 @@ import {
 } from "../../../store/wishlists";
 import { getListingsThunk } from "../../../store/listings";
 import { Modal } from "../../../context/Modal";
+import { Guests } from "../Guests";
 
 export function WishListListing() {
   const { wishlistId } = useParams();
@@ -22,6 +23,7 @@ export function WishListListing() {
   const currentWishList = wishLists[wishlistId];
   const [showModal, setShowModal] = useState(false);
   const [name, setName] = useState(currentWishList?.name || "");
+  const [showGuestModal, setShowGuestModal] = useState(false);
 
   useEffect(() => {
     if (currentWishList) {
@@ -36,7 +38,6 @@ export function WishListListing() {
     dispatch(getListingsThunk());
   }, [dispatch, wishlistId]);
   const listingSet = new Set();
-  console.log("%c what is going on here?", "color: pink", currentWishList);
   currentWishList?.Listings?.forEach((listing) => listingSet.add(listing.id));
 
   const filteredLists = Object.values(allListings).filter((listing) =>
@@ -57,7 +58,6 @@ export function WishListListing() {
     };
     await dispatch(updateWishlistThunk(updatedWishlist));
     setShowModal(false);
-    // history.push(`/wishlists/${wishlistId}`);
   }
 
   return (
@@ -71,6 +71,16 @@ export function WishListListing() {
       >
         more_horiz
       </span>
+      <h1>{currentWishList?.name}</h1>
+      <div className="wishListListing-button-container">
+        <button>Dates</button>
+        <button onClick={() => setShowGuestModal(true)}>Guests</button>
+        {showGuestModal && (
+          <Modal onClose={() => setShowGuestModal(false)}>
+            <Guests currentWishList={currentWishList} setShowGuestModal={setShowGuestModal}/>
+          </Modal>
+        )}
+      </div>
       {showModal && (
         <Modal onClose={() => setShowModal(false)}>
           <>

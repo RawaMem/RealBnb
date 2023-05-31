@@ -192,10 +192,12 @@ export function updateWishlistThunk(wishlist) {
         const listings = wishLists[data.id].Listings;
         data.Listings = listings;
         dispatch(updateWishlist(data));
+        return data;
       }
     } catch (error) {
       const data = await error.json();
       dispatch(setError(data.errors));
+      return data;
     }
   };
 }

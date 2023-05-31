@@ -94,10 +94,8 @@ function getWishListValidation(isPutRequest) {
 					throw new Error("The number of adults must be between 1 and 16.");
 				}
 				if (req.method === "PUT") {
-					const wishlistId = parseInt(req.params.wishlistId, 10);
-					const foundWishList = await WishList.findOne({ where: { id: wishlistId } });
-					const existingChildGuests = parseInt(foundWishList.childGuests, 10);
-					const errors = validateGuests(intValue, existingChildGuests);
+					const childGuests = parseInt(req.body.childGuests, 10);
+					const errors = validateGuests(intValue, childGuests);
 
 					if (Object.keys(errors).length > 0) {
 						throw new Error(errors["adultGuests"]);
@@ -122,22 +120,6 @@ function getWishListValidation(isPutRequest) {
 				const intValue = parseInt(value, 10);
 				if (intValue < 0 || intValue > 15) {
 					throw new Error("The number of children must be between 0 and 15.");
-				}
-				if (req.method === "PUT") {
-					const wishlistId = parseInt(req.params.wishlistId, 10);
-					const foundWishList = await WishList.findOne({ where: { id: wishlistId } });
-					const existingAdultGuests = parseInt(foundWishList.adultGuests, 10);
-					const errors = validateGuests(existingAdultGuests, intValue);
-
-					if (Object.keys(errors).length > 0) {
-						throw new Error(errors["adultGuests"]);
-					}
-				} else {
-					const errors = validateGuests(parseInt(req.body.adultGuests, 10), intValue);
-
-					if (Object.keys(errors).length > 0) {
-						throw new Error(errors["adultGuests"]);
-					}
 				}
 
 				return true;

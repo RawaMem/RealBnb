@@ -21,8 +21,7 @@ import ListingPriceForm from './components/CreateListing/ListingPriceForm';
 import CategoryForm from './components/CreateListing/CategoryForm';
 import CreateNewList from './components/CreateListing';
 import UserProfile from './components/UserProfile';
-import WishList from './components/WishLists';
-import { WishListListing } from './components/WishLists';
+import WishList, { WishListListing } from './components/WishLists';
 import EditListingForm from './components/EditListing';
 
 

@@ -17,16 +17,16 @@ export const icons = {
     'smoke alarm':<span className="material-symbols-outlined">detector_smoke</span>,
     'first aid kit':<span className="material-symbols-outlined">medical_services</span>,
     'fire extinguisher':<span className="material-symbols-outlined">fire_extinguisher</span>,
-    'self check-in':<span class="material-symbols-rounded">
+    'self check-in':<span className="material-symbols-rounded">
     check_in_out
     </span>,
-    'pets allowed': <span class="material-symbols-rounded">
+    'pets allowed': <span className="material-symbols-rounded">
     pets
     </span>,
-    'elevator': <span class="material-symbols-rounded">
+    'elevator': <span className="material-symbols-rounded">
     elevator
     </span>,
-    'streaming services':<span class="material-symbols-rounded">
+    'streaming services':<span className="material-symbols-rounded">
     smart_display
     </span>
 

@@ -1,7 +1,7 @@
 import { icons } from "../../ui/icons";
 
 function Amenities( {amenities}) {
-    console.log("amenities------", amenities)
+
     return (
         <div className="singleListingAmenity-container">
             <h3 style={{marginBottom:"2%"}}>What this place offers</h3>

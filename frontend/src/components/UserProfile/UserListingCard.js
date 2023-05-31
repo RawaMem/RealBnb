@@ -4,7 +4,7 @@ import { Modal } from "../../context/Modal";
 import ConfirmDeleteListingForm from "./ConfirmDeleteListingForm";
 
 function UserListingCard({listing}) {
-    console.log("listinglisting", listing)
+
     const [showConfirmDeleteForm, setShowConfirmDeleteForm] = useState(false);
 
     // find current price within the date range.

@@ -22,7 +22,6 @@ export const reviewScoreCalculator = (reviewArr, currentUser) => {
         totalLocation += +review.location
         totalValue += +review.value
         if (currentUser && review.authorId === currentUser.id) showLeaveReviewButton = false
-        // console.log('in for each totalRating', review.starRating)
     })
     return {
         aveRating : totalRating/+reviewArr.length,

@@ -25,9 +25,9 @@ export default function SingleListingPage() {
 
     const currentUser = useSelector(state => state.session.user)
     const listing = useSelector(state => state.listings.singleListing)
-    const reviews = useSelector(state => state.reviews)
+    const reviews = useSelector(state => state.reviews.listingReviews)
 
-    console.log("listing---------", listing)
+
     useEffect(() => {
         dispatch(getSingleListingThunk(listingId))
 
@@ -66,13 +66,6 @@ export default function SingleListingPage() {
                 <div className="aboutTheListing-container">
                     <AboutListing description={listing.description} />
                 </div>
-                {/* <div className="createReviewBtnContainer">
-                    <ReviewFormModal
-                    showCreateReviewModal={showCreateReviewModal}
-                    setShowCreateReviewModal={setShowCreateReviewModal}
-                    currentUser={currentUser}
-                    listingId={listingId}/>
-                </div> */}
                 <hr />
                 <div>
                     <h3>Where you'll be</h3>
@@ -81,8 +74,6 @@ export default function SingleListingPage() {
                 <hr />
                 <div className="reviewContainer">
                     <ReviewsContainer
-                    // showCreateReviewModal={showCreateReviewModal}
-                    // setShowCreateReviewModal={setShowCreateReviewModal}
                     listingId={listingId}
                     reviews={reviews}
                     currentUser={currentUser}

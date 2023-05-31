@@ -30,7 +30,6 @@
     display: flex;
     flex-direction: row;
     width: 30%;
-    /* border: 1px solid orange; */
     justify-content: space-between;
 
 }
@@ -49,7 +48,8 @@
     height: 90%;
 }
 
-.user-listing-display-container {
+.user-listing-display-container,
+.user-reviews-display-container {
     height: 100%;
 }
 
@@ -59,9 +59,11 @@
     width: 100%;
     display: flex;
     flex-direction: row;
-    border-bottom: .5px solid rgb(224,224,224);
-    
+    border-bottom: .5px solid rgb(224,224,224);    
+    transition: background-color 0.3s ease-in-out;
 }
+
+
 
 .userListingCard-container:hover {
     background-color: var( --become-host-btn-hover-color);
@@ -158,11 +160,100 @@
 .confirmDeleteListingForm-bottom-inner-container {
     width: 70%;
     height: 85%;
-    /* border: 1px solid black; */
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
 }
+
+.user-reviews-display-container {
+    height: 100%;
+    width: 100%;
+}
+
+.userReviewsCard-container {
+    height: 200px;
+    width: 100%;
+    border-bottom: .5px solid rgb(224,224,224);    
+}
+
+.user-reviews-display-inner-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.user-reviews-display-inner-container:hover {
+    background-color: var( --become-host-btn-hover-color);
+}
+
+.user-review-clickable-section {
+    display: flex;
+    flex-direction: row;
+    width: 75%;
+}
+.user-review-image {
+    height: 200px;
+    width: 250px;
+    object-fit: cover;
+}
+
+.user-review-info-container {
+    margin-left: 2%;
+    color: black;
+    width: 85%;
+}
+
+.user-review-listing-name {
+    display: flex;
+    flex-direction: row;
+}
+
+.user-review-card-rating-container {
+    display: flex;
+    flex-direction: row;
+    margin-left: 1%;
+    color: rgb(65,65,65);
+    font-size: 15px;
+    padding-top: 2px;
+}
+
+.user-review-content-container {
+    color: rgb(65,65,65);
+    width: 85%;
+    height: auto;
+    margin-top:1%;
+
+}
+
+.user-review-edit-btn-container {
+    width: 25%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.user-review-edit-pen-container {
+    /* border: .5px solid black; */
+    width: 45px;
+    height: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: rgb(247,247,247);
+    margin-top: 5px;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.user-review-edit-pen-container:hover {
+    box-shadow: 0px 0px 10px 2px rgba(128,128,128,0.5);
+}
+
+
 
 

@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useReducer } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, NavLink, useHistory } from "react-router-dom";
+import DatePicker, { datePickerReducer } from "../../../ui/DatePicker";
 import ListingCard from "../../Listings/ListingCard";
 import {
   deleteWishlistThunk,
@@ -10,6 +11,7 @@ import {
 import { getListingsThunk } from "../../../store/listings";
 import { Modal } from "../../../context/Modal";
 import { Guests } from "../Guests";
+import { wishlistDateFormatter } from "../../../utils/WishList/wishlistDateFormatter";
 
 export function WishListListing() {
   const { wishlistId } = useParams();
@@ -24,6 +26,19 @@ export function WishListListing() {
   const [showModal, setShowModal] = useState(false);
   const [name, setName] = useState(currentWishList?.name || "");
   const [showGuestModal, setShowGuestModal] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
+
+  const initialState = {
+    startDate: currentWishList?.checkIn
+      ? new Date(currentWishList.checkIn)
+      : new Date(),
+    endDate: currentWishList?.checkOut
+      ? new Date(currentWishList.checkOut)
+      : null,
+    focusedInput: null,
+  };
+
+  const [state, dispatchCalendar] = useReducer(datePickerReducer, initialState);
 
   useEffect(() => {
     if (currentWishList) {
@@ -34,9 +49,24 @@ export function WishListListing() {
   useEffect(() => {
     dispatch(getUserWishlistsThunk(id));
   }, [dispatch, id, wishlistId]);
+
   useEffect(() => {
     dispatch(getListingsThunk());
   }, [dispatch, wishlistId]);
+
+  useEffect(() => {
+  if (currentWishList?.checkIn && currentWishList?.checkOut) {
+    dispatchCalendar({
+      type: 'dateChange',
+      payload: {
+        startDate: new Date(currentWishList.checkIn),
+        endDate: new Date(currentWishList.checkOut),
+        focusedInput: null,
+      },
+    });
+  }
+}, [currentWishList]);
+
   const listingSet = new Set();
   currentWishList?.Listings?.forEach((listing) => listingSet.add(listing.id));
 
@@ -74,6 +104,15 @@ export function WishListListing() {
     setShowModal(false);
   }
 
+  async function updateWishlistDates({ startDate, endDate }) {
+    const updatedWishlist = {
+      ...currentWishList,
+      checkIn: new Date(startDate).toISOString().split("T")[0],
+      checkOut: new Date(endDate).toISOString().split("T")[0],
+    };
+    await dispatch(updateWishlistThunk(updatedWishlist));
+  }
+
   return (
     <div>
       <span
@@ -87,7 +126,19 @@ export function WishListListing() {
       </span>
       <h1>{currentWishList?.name}</h1>
       <div className="wishListListing-button-container">
-        <button>Dates</button>
+        <button onClick={() => setShowCalendar(true)}>
+          {state.startDate && state.endDate
+            ? wishlistDateFormatter(state.startDate, state.endDate)
+            : "Date"}
+        </button>
+        {showCalendar && (
+          <DatePicker
+            state={state}
+            dispatch={dispatchCalendar}
+            setShowCalendar={setShowCalendar}
+            updateWishlistDates={updateWishlistDates}
+          />
+        )}
         <button onClick={() => setShowGuestModal(true)}>Guests</button>
         {showGuestModal && (
           <Modal onClose={() => setShowGuestModal(false)}>
@@ -125,21 +176,27 @@ export function WishListListing() {
         </NavLink>
       ))}
 
-        {arrayOfListingsThatExceedMaxGuests.length > 0 && (
-          <div>
-            <h3>None of these homes fit your trip</h3>
-            <p>If you’re flexible, try adjusting your wishlist filters to find other options.</p>
-            {arrayOfListingsThatExceedMaxGuests.map((listing) => (
-              <NavLink
-                key={listing.id}
-                style={{ textDecoration: "none" }}
-                to={`/listings/${listing.id}`}
-              >
-                <ListingCard listing={listing} wishListListing={wishListListing} />
-              </NavLink>
-            ))}
-          </div>
-        )}
+      {arrayOfListingsThatExceedMaxGuests.length > 0 && (
+        <div>
+          <h3>None of these homes fit your trip</h3>
+          <p>
+            If you’re flexible, try adjusting your wishlist filters to find
+            other options.
+          </p>
+          {arrayOfListingsThatExceedMaxGuests.map((listing) => (
+            <NavLink
+              key={listing.id}
+              style={{ textDecoration: "none" }}
+              to={`/listings/${listing.id}`}
+            >
+              <ListingCard
+                listing={listing}
+                wishListListing={wishListListing}
+              />
+            </NavLink>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -48,10 +48,10 @@ function getWishListValidation(isPutRequest) {
 					throw new Error("Check in date must occur after the current date.");
 				}
 				if (req.method === "PUT") {
-					const wishlistId = parseInt(req.params.wishlistId, 10);
-					const foundWishList = await WishList.findOne({ where: { id: wishlistId } });
-					const existingCheckOutDate = foundWishList.checkOut;
-					if (value && existingCheckOutDate && !(existingCheckOutDate > new Date(value))) {
+					// const wishlistId = parseInt(req.params.wishlistId, 10);
+					// const foundWishList = await WishList.findOne({ where: { id: wishlistId } });
+					const existingCheckOutDate = req.body.checkOut;
+					if (value && existingCheckOutDate && existingCheckOutDate < new Date(value)) {
 						throw new Error("Check out date must occur after the check in date.");
 					}
 				}
@@ -70,9 +70,9 @@ function getWishListValidation(isPutRequest) {
 					throw new Error("Check out date must occur after the current date.");
 				}
 				if (req.method === "PUT") {
-					const wishlistId = parseInt(req.params.wishlistId, 10);
-					const foundWishList = await WishList.findOne({ where: { id: wishlistId } });
-					const existingCheckInDate = foundWishList.checkIn;
+					// const wishlistId = parseInt(req.params.wishlistId, 10);
+					// const foundWishList = await WishList.findOne({ where: { id: wishlistId } });
+					const existingCheckInDate = req.body.checkIn;
 					if (value && existingCheckInDate && existingCheckInDate > new Date(value)) {
 						throw new Error("Check out date must occur after the check in date.");
 					}

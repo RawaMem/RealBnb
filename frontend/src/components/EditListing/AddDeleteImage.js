@@ -4,7 +4,7 @@ import ManageImage from "./ManageImage";
 import AddMoreImagesForm from "./ImagesModal";
 
 export default function AddDeleteImages({imageArr, setImageArr, removedImageIds, setRemovedImageIds, addedImages, setAddedImages, setMultiImages, previewImageUrl, setPreviewImageUrl}) {
-    console.log("imageArr", imageArr)
+    
     const [showAddImageModal, setShowAddImageModal] = useState(false);
 
     const [imgUrl, setImgUrl] = useState([]);

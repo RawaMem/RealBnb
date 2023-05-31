@@ -9,7 +9,7 @@ import { getSingleListingThunk } from "../../store/listings";
 
 
 function CreateReview({setShowCreateReviewModal, currentUser, listingId, reviewToEdit, setReviewToEdit }) {
-    console.log("reviewToEdit", reviewToEdit) 
+    // console.log("setReviewToEdit", setReviewToEdit)
     const dispatch = useDispatch()
     const [content, setContent] = useState(reviewToEdit.content ? reviewToEdit.content : '')
     const [starRating, setStarRating] = useState(reviewToEdit.starRating ? reviewToEdit.starRating : 0)
@@ -29,6 +29,7 @@ function CreateReview({setShowCreateReviewModal, currentUser, listingId, reviewT
         .then(() => setReviewToEdit({}))
         .then(() => setShowCreateReviewModal(false))
     }
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         const review = {
@@ -46,9 +47,6 @@ function CreateReview({setShowCreateReviewModal, currentUser, listingId, reviewT
 
         if (reviewToEdit.id) {
             review.id = reviewToEdit.id
-        };
-
-        if (reviewToEdit.id) {
             console.log("dispatching edit review", review)
             dispatch(editReviewThunk(review))
             .then(() => dispatch(getSingleListingThunk(listingId)))
@@ -137,9 +135,11 @@ function CreateReview({setShowCreateReviewModal, currentUser, listingId, reviewT
                             ></textarea>
                         </label>
                         <div className="review-form-submit-btn">
-                            <button className= {!handleSubmitBtnDisable() ? "single-listing-send-message-btn-container" : "review-form-submit-btn-disabled"}
-                            disabled={handleSubmitBtnDisable()}>
-                                {reviewToEdit.listingId ? 'Edit review' : 'Submit Review'}
+                            <button 
+                            className= {!handleSubmitBtnDisable() ? "single-listing-send-message-btn-container" : "review-form-submit-btn-disabled"}
+                            disabled={handleSubmitBtnDisable()}
+                            >
+                                {reviewToEdit.id ? 'Edit review' : 'Submit Review'}
                             </button>
                         </div>
                     </div>

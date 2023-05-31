@@ -2,10 +2,11 @@ import { useSelector } from "react-redux";
 import * as React from 'react';
 import { useState } from "react";
 import UserListings from "./UserListings";
+import ManageUserReviews from "./ManageUserReviews";
 
 function UserProfile() {
     const user = useSelector(state => state.session.user);
-    const [showComponent, setShowComponent] = useState("View all your listings");
+    const [showComponent, setShowComponent] = useState("View your listings");
 
     return (
         <div className="userListingPage-main-container">
@@ -15,14 +16,14 @@ function UserProfile() {
 
             <div className="toggle-tab-container-outer">
                 <div className="toggle-tab-container-inner">
-                    <div onClick={() => setShowComponent("View all your listings")}>View all your listings</div>
-                    <div onClick={() => setShowComponent("NEW TAB TO BE USED")}>New tab to be used</div>
+                    <div onClick={() => setShowComponent("View your listings")}>View your listings</div>
+                    <div onClick={() => setShowComponent("Manage your reviews")}>Manage your reviews </div>
                 </div>
             </div>
 
             <div className="content-page-container">
-                {showComponent==="View all your listings" &&  <UserListings />}
-                {showComponent==="NEW TAB TO BE USED" && <div>To be developed</div>}
+                {showComponent==="View your listings" &&  <UserListings />}
+                {showComponent==="Manage your reviews" && <ManageUserReviews />}
             </div>
         </div>
     );

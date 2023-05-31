@@ -20,8 +20,9 @@ export default function ReviewsContainer({reviews, currentUser, listingId, listi
         };
     };
 
-
+    
     const handleEdit = (review)=>{
+        console.log("review", review)
         setReviewToEdit(review)
         setShowCreateReviewModal(true)
     };
@@ -55,8 +56,7 @@ export default function ReviewsContainer({reviews, currentUser, listingId, listi
                         showLeaveReviewButton={averageScores.showLeaveReviewButton}
                         listingId={listingId}
                         setReviewToEdit={setReviewToEdit}
-                        />
-                        
+                        />                        
                     </div>
             }
 
@@ -68,7 +68,7 @@ export default function ReviewsContainer({reviews, currentUser, listingId, listi
                     </span>
                     <div id="singleListingReview-font">{listing.avgRating !== "NaN" ? listing.avgRating : "New"}</div>
                     <div id="singleListingReview-font">&middot;</div>
-                    <div id="singleListingReview-font">{listing.totalNumOfReviews} {listing.totalNumOfReviews === 1 ? "Review" : "Reviews"}</div>
+                    <div id="singleListingReview-font">{listing.totalNumOfReviews} {listing.totalNumOfReviews <= 1 ? "Review" : "Reviews"}</div>
                 </div>
                 {qualifyToLeaveAnReview() && <div
                     className="single-listing-send-message-btn-container" onClick={() => setShowCreateReviewModal(true)}>Leave a Review</div>
@@ -174,7 +174,6 @@ export default function ReviewsContainer({reviews, currentUser, listingId, listi
                             </div>
                             {currentUser && currentUser.id === review.User.id &&
                             <>
-                            {/* {console.log("===============review", review)} */}
                                 <div 
                                 className="single-listing-send-message-btn-container"
                                 onClick={()=>handleEdit(review)}

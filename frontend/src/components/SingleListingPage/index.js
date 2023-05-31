@@ -25,7 +25,7 @@ export default function SingleListingPage() {
 
     const currentUser = useSelector(state => state.session.user)
     const listing = useSelector(state => state.listings.singleListing)
-    const reviews = useSelector(state => state.reviews)
+    const reviews = useSelector(state => state.reviews.listingReviews)
 
 
     useEffect(() => {

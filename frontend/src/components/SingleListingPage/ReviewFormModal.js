@@ -4,7 +4,7 @@ import CreateReview from "./CreateReview";
 
 function ReviewFormModal({currentUser, listingId, showCreateReviewModal, setShowCreateReviewModal, reviewToEdit, showLeaveReviewButton, setReviewToEdit}){
     // const [showCreateReviewModal, setShowCreateReviewModal] = useState(false)
-
+    console.log("showCreateReviewModal from ReviewFormModal", showCreateReviewModal)
     return(
         <>
             {showCreateReviewModal && (

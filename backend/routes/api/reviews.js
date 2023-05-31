@@ -61,14 +61,32 @@ router.post('/', asyncHandler(async (req, res) => {
 router.put('/:reviewId', asyncHandler(async(req, res)=> {
     const {reviewId} = req.params
     const reviewToEdit = await Review.findByPk(reviewId)
+
     await reviewToEdit.update(req.body)
+
     const reviewWithUserData = await Review.findByPk(reviewToEdit.id, {
         include: [{
             model: User,
-            attributes: ['username'],
+            attributes: ['username', 'id'],
           }]
     })
-    res.json(reviewWithUserData)
+
+    const reviewListing = await Listing.findByPk(reviewToEdit.listingId, {
+        include: {
+            model: Image,
+            where: {
+                preview: true
+            },
+            attributes: ["url"]
+        },
+        attributes: ['name']
+    });
+
+    const reviewWithUserDataJson = reviewWithUserData.toJSON();
+
+    reviewWithUserDataJson.listingName = reviewListing.name;
+    reviewWithUserDataJson.listingImageUrl = reviewListing["Images"][0].url
+    res.json(reviewWithUserDataJson)
 }))
 
 router.delete('/:reviewId', asyncHandler(async(req, res)=>{

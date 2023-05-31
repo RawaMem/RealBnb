@@ -44,6 +44,20 @@ export function WishListListing() {
     listingSet.has(listing.id)
   );
 
+  const arrayOfListingsThatExceedMaxGuests = filteredLists.filter((listing) => {
+    return (
+      listing.maxGuests <
+      currentWishList?.adultGuests + currentWishList?.childGuests
+    );
+  });
+
+  const arrayOfValidListings = filteredLists.filter((listing) => {
+    return (
+      listing.maxGuests >=
+      currentWishList?.adultGuests + currentWishList?.childGuests
+    );
+  });
+
   async function deleteWishlist() {
     await dispatch(deleteWishlistThunk(wishlistId));
     history.push("/wishlists");
@@ -77,7 +91,10 @@ export function WishListListing() {
         <button onClick={() => setShowGuestModal(true)}>Guests</button>
         {showGuestModal && (
           <Modal onClose={() => setShowGuestModal(false)}>
-            <Guests currentWishList={currentWishList} setShowGuestModal={setShowGuestModal}/>
+            <Guests
+              currentWishList={currentWishList}
+              setShowGuestModal={setShowGuestModal}
+            />
           </Modal>
         )}
       </div>
@@ -98,7 +115,7 @@ export function WishListListing() {
           </>
         </Modal>
       )}
-      {filteredLists.map((listing) => (
+      {arrayOfValidListings.map((listing) => (
         <NavLink
           key={listing.id}
           style={{ textDecoration: "none" }}
@@ -107,6 +124,22 @@ export function WishListListing() {
           <ListingCard listing={listing} wishListListing={wishListListing} />
         </NavLink>
       ))}
+
+        {arrayOfListingsThatExceedMaxGuests.length > 0 && (
+          <div>
+            <h3>None of these homes fit your trip</h3>
+            <p>If you’re flexible, try adjusting your wishlist filters to find other options.</p>
+            {arrayOfListingsThatExceedMaxGuests.map((listing) => (
+              <NavLink
+                key={listing.id}
+                style={{ textDecoration: "none" }}
+                to={`/listings/${listing.id}`}
+              >
+                <ListingCard listing={listing} wishListListing={wishListListing} />
+              </NavLink>
+            ))}
+          </div>
+        )}
     </div>
   );
 }

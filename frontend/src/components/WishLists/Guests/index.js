@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import "./Guests.css";
-import { updateWishlistThunk } from "../../../store/wishlists";
+import { updateWishlistThunk, clearError } from "../../../store/wishlists";
 
 export function Guests({ currentWishList, setShowGuestModal }) {
   const dispatch = useDispatch();  
@@ -10,6 +10,10 @@ export function Guests({ currentWishList, setShowGuestModal }) {
   const [infants, setInfants] = useState(currentWishList.infantGuests);
   const [pets, setPets] = useState(currentWishList.petGuests);
   const [validation, setValidation] = useState(null);
+
+  useEffect(() => {
+    return () => dispatch(clearError());
+  }, [dispatch]);
 
   function clearState() {
     setAdults(1);

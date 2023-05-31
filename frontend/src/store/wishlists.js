@@ -3,6 +3,7 @@ import { csrfFetch } from "./csrf";
 const GET_USER_WISHLISTS = "wishlists/GET_USER_WISHLISTS";
 const SET_ERROR = "wishlists/SET_ERROR";
 const CLEAR_WISHLISTS = "wishlists/CLEAR_WISHLISTS";
+const CLEAR_ERROR = "wishlists/CLEAR_ERROR";
 const CREATE_WISHLIST = "wishlists/CREATE_WISHLIST";
 const CREATE_WISHLIST_LISTING = "wishlists/CREATE_WISHLIST_LISTING";
 const DELETE_WISHLIST = "wishlists/DELETE_WISHLIST";
@@ -20,6 +21,12 @@ function setError(error) {
   return {
     type: SET_ERROR,
     error,
+  };
+}
+
+export function clearError() {
+  return {
+    type: CLEAR_ERROR,
   };
 }
 
@@ -220,6 +227,8 @@ export default function wishlistsReducer(state = initialState, action) {
       return newState;
     case SET_ERROR:
       return { ...state, error: action.error };
+    case CLEAR_ERROR:
+      return { ...state, error: null };
     case CLEAR_WISHLISTS:
       return initialState;
     case CREATE_WISHLIST:

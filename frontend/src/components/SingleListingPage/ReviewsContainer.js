@@ -68,7 +68,7 @@ export default function ReviewsContainer({reviews, currentUser, listingId, listi
                     </span>
                     <div id="singleListingReview-font">{listing.avgRating !== "NaN" ? listing.avgRating : "New"}</div>
                     <div id="singleListingReview-font">&middot;</div>
-                    <div id="singleListingReview-font">{listing.totalNumOfReviews} {listing.totalNumOfReviews === 0 ? "Review" : "Reviews"}</div>
+                    <div id="singleListingReview-font">{listing.totalNumOfReviews} {listing.totalNumOfReviews === 1 ? "Review" : "Reviews"}</div>
                 </div>
                 {qualifyToLeaveAnReview() && <div
                     className="single-listing-send-message-btn-container" onClick={() => setShowCreateReviewModal(true)}>Leave a Review</div>

@@ -18,9 +18,6 @@ function ReviewFormModal({currentUser, listingId, showCreateReviewModal, setShow
                     />
                 </Modal>
             )}
-
-
-
         </>
     )
 

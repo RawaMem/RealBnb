@@ -31,17 +31,17 @@ router.get('/userReviews', requireAuth, asyncHandler(async(req, res) => {
     });
 
     const userReviewData = [];
-    userReviews.forEach(data => {
-        const jsonData = data.toJSON();
-        const listingName = jsonData["Listing"].name;
-        const listingImageUrl = jsonData["Listing"].Images[0].url;
-        jsonData.listingName = listingName;
-        jsonData.listingImageUrl = listingImageUrl;
-        delete jsonData["Listing"];
-        userReviewData.push(jsonData);
-    });
-
-
+    if(userReviews.length) {
+        userReviews.forEach(data => {
+            const jsonData = data.toJSON();
+            const listingName = jsonData["Listing"].name;
+            const listingImageUrl = jsonData["Listing"].Images[0].url;
+            jsonData.listingName = listingName;
+            jsonData.listingImageUrl = listingImageUrl;
+            delete jsonData["Listing"];
+            userReviewData.push(jsonData);
+        });
+    };
 
     res.json(userReviewData);
 }));

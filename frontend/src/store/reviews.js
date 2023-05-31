@@ -1,9 +1,10 @@
 import { csrfFetch } from "./csrf";
 
-const GET_REVIEWS_FOR_SINGLE_LISTING = 'reviews/GET_REVIEWS_FOR_SINGLE_LISTING'
-const CREATE_REVIEW = 'reviews/CREATE_REVIEW'
-const EDIT_REVIEW = 'reviews/EDIT_REVIEW'
-const DELETE_REVIEW = 'reviews/DELETE_REVIEW'
+const GET_REVIEWS_FOR_SINGLE_LISTING = 'reviews/GET_REVIEWS_FOR_SINGLE_LISTING';
+const CREATE_REVIEW = 'reviews/CREATE_REVIEW';
+const EDIT_REVIEW = 'reviews/EDIT_REVIEW';
+const DELETE_REVIEW = 'reviews/DELETE_REVIEW';
+const GET_USER_REVIEWS = 'reviews/GET_USER_REVIEWS';
 
 
 export const getReviewsForSingleListingAction = (reviewsArr) =>({
@@ -25,6 +26,11 @@ const deleteReviewAction = (id) => ({
     type: DELETE_REVIEW,
     id
 })
+
+const getUserReviewsAction = (reviews) => ({
+    type: GET_USER_REVIEWS,
+    reviews
+});
 
 export const createReviewThunk = (review) => async dispatch => {
     const response = await csrfFetch('/api/reviews', {
@@ -61,8 +67,17 @@ export const deleteReviewThunk = (id) => async dispatch => {
     }
 }
 
+export const getUserReviewsThunk = () => async dispatch => {
+    const response = await csrfFetch("/api/reviews/userReviews");
 
-const initialState = null
+    if(response.ok) {
+        const reviewData = await response.json();
+        dispatch(getUserReviewsAction(reviewData));
+    };
+};
+
+
+const initialState = {}
 export default function reviews(state = initialState, action) {
     let newState
     switch(action.type) {
@@ -86,7 +101,10 @@ export default function reviews(state = initialState, action) {
             newState = {...state}
             delete newState[action.id]
             return newState
-
+        case GET_USER_REVIEWS:
+            newState = {};
+            action.reviews.forEach(review => newState[review.id] = review);
+            return newState;
         default:
             return state
     }

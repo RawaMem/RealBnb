@@ -97,7 +97,6 @@ function EditListingForm() {
         fetch(endpoint)
         .then(res => res.json())
         .then(data => {
-          // console.log("data", data)
           const addressObj = data.features[0];
           if(addressObj) {
             const cor = addressObj.center;

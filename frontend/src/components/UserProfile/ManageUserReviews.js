@@ -8,7 +8,6 @@ import UserReviewCard from "./UserReviewCard";
 export default function ManageUserReviews() {
     const dispatch = useDispatch();
     const userReviewsState = useSelector(state => state.reviews.userReviews);
-    console.log("userReviewsState", userReviewsState)
     const userReviewsArr = Object.values(userReviewsState);
 
     useEffect(() => {
@@ -17,13 +16,13 @@ export default function ManageUserReviews() {
 
     return (
         <div className="user-reviews-display-container">
-            {userReviewsArr.map(review => (
+            {userReviewsArr.length ? userReviewsArr.map(review => (
           
                 <div key={review.id} className="userReviewsCard-container">
                     <UserReviewCard review={review} />
                 </div>
                
-            ))}
+            )) : <h5>You don't have any review yet</h5>}
         </div>
     );
 };

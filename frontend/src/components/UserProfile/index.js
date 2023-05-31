@@ -6,7 +6,7 @@ import ManageUserReviews from "./ManageUserReviews";
 
 function UserProfile() {
     const user = useSelector(state => state.session.user);
-    const [showComponent, setShowComponent] = useState("View your listings");
+    const [showComponent, setShowComponent] = useState(localStorage.getItem("user profile current page") || "View your listings");
 
     return (
         <div className="userListingPage-main-container">
@@ -16,8 +16,21 @@ function UserProfile() {
 
             <div className="toggle-tab-container-outer">
                 <div className="toggle-tab-container-inner">
-                    <div onClick={() => setShowComponent("View your listings")}>View your listings</div>
-                    <div onClick={() => setShowComponent("Manage your reviews")}>Manage your reviews </div>
+                    <div 
+                        onClick={() => {
+                            localStorage.setItem("user profile current page", "View your listings")
+                            setShowComponent("View your listings")
+                            }}
+                    >
+                        View your listings
+                    </div>
+                    <div 
+                    onClick={() => {
+                        localStorage.setItem("user profile current page", "Manage your reviews")
+                        setShowComponent("Manage your reviews")
+                    }}
+                    
+                    >Manage your reviews </div>
                 </div>
             </div>
 

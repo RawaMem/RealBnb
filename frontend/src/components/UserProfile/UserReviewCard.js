@@ -14,8 +14,6 @@ export default function UserReviewCard({review}) {
         setShowEditReviewModal(true)
     };
 
-    console.log("showEditReviewModal from UserReviewCard", showEditReviewModal)
-    
     return (
         <div className="user-reviews-display-inner-container" >
              <Link 
@@ -62,7 +60,7 @@ export default function UserReviewCard({review}) {
                     className="user-review-edit-pen-container"
                     onClick={() => handleEdit(review)}
                 >
-                    <span className="material-symbols-outlined">
+                    <span className="material-symbols-outlined" style={{color:"rgb(102,102,102)"}}>
                         edit
                     </span>
                 </div>

@@ -73,7 +73,6 @@ export const removeCategoryAmenityThunk = (removedCategoryId, removedAmenityId) 
             })
         )))
     } catch (error) {
-        console.log('Error happend while remove a category:', error)
         return error
     }
 
@@ -84,7 +83,6 @@ export const removeCategoryAmenityThunk = (removedCategoryId, removedAmenityId) 
             })
         )));
     } catch (error) {
-        console.log('Error happend while remove a amenity:', error);
         return error;
     }
 };
@@ -210,7 +208,6 @@ export const createListingImagesThunk = (listingId, newListingImages) => async d
         await Promise.all(requests);
         return listingId;
     } catch(error) {
-        console.log('Error when creating liting images:', error)
         return
     };
 };

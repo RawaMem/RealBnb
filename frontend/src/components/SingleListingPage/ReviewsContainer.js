@@ -22,7 +22,6 @@ export default function ReviewsContainer({reviews, currentUser, listingId, listi
 
     
     const handleEdit = (review)=>{
-        console.log("review", review)
         setReviewToEdit(review)
         setShowCreateReviewModal(true)
     };

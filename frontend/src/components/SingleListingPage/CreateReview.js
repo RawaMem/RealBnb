@@ -9,7 +9,7 @@ import { getSingleListingThunk } from "../../store/listings";
 
 
 function CreateReview({setShowCreateReviewModal, currentUser, listingId, reviewToEdit, setReviewToEdit }) {
-    // console.log("setReviewToEdit", setReviewToEdit)
+
     const dispatch = useDispatch()
     const [content, setContent] = useState(reviewToEdit.content ? reviewToEdit.content : '')
     const [starRating, setStarRating] = useState(reviewToEdit.starRating ? reviewToEdit.starRating : 0)
@@ -47,11 +47,9 @@ function CreateReview({setShowCreateReviewModal, currentUser, listingId, reviewT
 
         if (reviewToEdit.id) {
             review.id = reviewToEdit.id
-            console.log("dispatching edit review", review)
             dispatch(editReviewThunk(review))
             .then(() => dispatch(getSingleListingThunk(listingId)))
         } else {
-            console.log("dispatching create review", reviewToEdit)
             dispatch(createReviewThunk(review))
             .then(() => dispatch(getSingleListingThunk(listingId)))
         }

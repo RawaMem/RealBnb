@@ -11,7 +11,6 @@ export default function SingleListingTitle({ listing, currentUser }) {
   const handleSendMessage = async (e) => {
     e.preventDefault();
     const thread = await dispatch(createDMThreadsThunk({hostId: listing.ownerId, guestId: currentUser.id}))
-    // console.log('this is created thread in listing page@@@@@@@', thread)
     setThreadIdFromListing(thread.id)
     history.push(`/messages`)
 

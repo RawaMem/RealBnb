@@ -5,7 +5,6 @@ import ClearBackgroundBtn from '../../ui/Buttons/ClearBackground';
 import "./editListing.css";
 
 function AddMoreImagesForm({setAddedImages,addedImages,setShowAddImageModal, imgUrl, setImgUrl, setImageArr}) {
-    console.log("addedImages", addedImages)
 
     const [dropZone, setDropZone] = useState(false);
     
@@ -54,7 +53,6 @@ function AddMoreImagesForm({setAddedImages,addedImages,setShowAddImageModal, img
 
 
     const buttonEvent = () => {
-        console.log("invoked")
         const fileElem = document.getElementById("fileElem");
         fileElem.click();
     };

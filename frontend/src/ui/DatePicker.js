@@ -56,7 +56,6 @@ function DatePicker({ state, dispatch, setShowCalendar, updateWishlistDates }) {
           onDatesChange={(data) => {
             dispatch({ type: "dateChange", payload: data });
             if (data.endDate && setShowCalendar && updateWishlistDates) {
-              console.log("%c I am here", "color:green;");
               setShowCalendar(false);
               updateWishlistDates(data);
             }

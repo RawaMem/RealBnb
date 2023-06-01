@@ -128,7 +128,7 @@ export function WishListListing() {
       <div className="wishListListing-button-container">
         <button onClick={() => setShowCalendar(true)}>
           {state.startDate && state.endDate
-            ? wishlistDateFormatter(state.startDate, state.endDate)
+            ? wishlistDateFormatter(state.startDate - 1, state.endDate - 1)
             : "Date"}
         </button>
         {showCalendar && (

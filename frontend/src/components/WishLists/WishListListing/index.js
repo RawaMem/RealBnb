@@ -14,6 +14,7 @@ import { Guests } from "../Guests";
 import {
   wishlistDateFormatter,
   toISODateString,
+  determineNumberOfGuests,
 } from "../../../utils/WishList";
 
 export function WishListListing() {
@@ -25,6 +26,7 @@ export function WishListListing() {
   );
   const { id } = useSelector((state) => state.session.user);
   const { allListings } = useSelector((state) => state.listings);
+  const { error } = useSelector((state) => state.wishlists);
   const currentWishList = wishLists[wishlistId];
   const [showModal, setShowModal] = useState(false);
   const [name, setName] = useState(currentWishList?.name || "");
@@ -165,9 +167,10 @@ export function WishListListing() {
         more_horiz
       </span>
       <h1>{currentWishList?.name}</h1>
+      <p className="errors">{error}</p>
       <div className="wishListListing-button-container">
         <button onClick={() => setShowCalendar(true)}>
-          {state.startDate && state.endDate
+          {currentWishList 
             ? wishlistDateFormatter(
                 currentWishList.checkIn,
                 currentWishList.checkOut
@@ -182,7 +185,9 @@ export function WishListListing() {
             updateWishlistDates={updateWishlistDates}
           />
         )}
-        <button onClick={() => setShowGuestModal(true)}>Guests</button>
+        <button onClick={() => setShowGuestModal(true)}>{
+          currentWishList ? determineNumberOfGuests(currentWishList.adultGuests, currentWishList.childGuests, currentWishList.petGuests) : "Guests"
+        }</button>
         {showGuestModal && (
           <Modal onClose={() => setShowGuestModal(false)}>
             <Guests

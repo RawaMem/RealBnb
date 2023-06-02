@@ -12,6 +12,15 @@ import { getListingsThunk } from "../../../store/listings";
 import { Modal } from "../../../context/Modal";
 import { Guests } from "../Guests";
 import {
+  useListingPrices,
+  useFilteredLists,
+  useListingSet,
+  useExceedMaxGuestListings,
+  useValidListings,
+  useListingArray,
+  useValidListingPrices,
+} from "../../../hooks/WishList/WishListListing";
+import {
   wishlistDateFormatter,
   toISODateString,
   determineNumberOfGuests,
@@ -76,59 +85,25 @@ export function WishListListing() {
     }
   }, [currentWishList]);
 
-  const listingSet = new Set();
-  const listingPricesHashMap = {};
-  const listingPricesSet = new Set();
-  currentWishList?.Listings?.forEach((listing) => listingSet.add(listing.id));
-  currentWishList?.Listings?.forEach((listing) => {
-    listingSet.add(listing.id);
-  });
-
-  // const filteredLists = Object.values(allListings).filter((listing) =>
-  //   listingSet.has(listing.id)
-  // );
-  const filteredLists = Object.values(allListings).filter((listing) =>
-    listingSet.has(listing.id)
+  // Hooks
+  const listingSet = useListingSet(currentWishList?.Listings);
+  const listingPricesHashMap = useListingPrices(allListings, listingSet);
+  const listingArray = useListingArray(listingPricesHashMap);
+  const validListingPrices = useValidListingPrices(
+    listingArray,
+    currentWishList
   );
-
-  const listingsWithListingPrices = Object.values(allListings).filter(
-    (listing) => listingSet.has(listing.id)
+  const filteredLists = useFilteredLists(allListings, listingSet);
+  const validListings = useValidListings(
+    filteredLists,
+    currentWishList,
+    validListingPrices
   );
-
-  listingsWithListingPrices.forEach((listing) => {
-    listingPricesHashMap[listing.id] = listing.ListingPrices;
-  });
-
-  const listingArray = Object.entries(listingPricesHashMap).flatMap(
-    ([listingId, listings]) =>
-      listings.map((listing) => ({ ...listing, listingId }))
+  const exceedMaxGuestListings = useExceedMaxGuestListings(
+    filteredLists,
+    currentWishList,
+    validListingPrices
   );
-
-  listingArray.forEach((listing) => {
-    if (
-      new Date(listing.startDate) <= new Date(currentWishList.checkIn) &&
-      new Date(listing.endDate) >= new Date(currentWishList.checkOut)
-    ) {
-      listingPricesSet.add(Number(listing.listingId));
-    }
-  });
-  // listingPricesSet
-
-  const arrayOfListingsThatExceedMaxGuests = filteredLists.filter((listing) => {
-    return (
-      listing.maxGuests <
-        currentWishList?.adultGuests + currentWishList?.childGuests ||
-      !listingPricesSet.has(listing.id)
-    );
-  });
-
-  const arrayOfValidListings = filteredLists.filter((listing) => {
-    return (
-      listing.maxGuests >=
-        currentWishList?.adultGuests + currentWishList?.childGuests &&
-      listingPricesSet.has(listing.id)
-    );
-  });
 
   async function deleteWishlist() {
     await dispatch(deleteWishlistThunk(wishlistId));
@@ -226,7 +201,7 @@ export function WishListListing() {
           </>
         </Modal>
       )}
-      {arrayOfValidListings.map((listing) => (
+      {validListings.map((listing) => (
         <NavLink
           key={listing.id}
           style={{ textDecoration: "none" }}
@@ -236,14 +211,14 @@ export function WishListListing() {
         </NavLink>
       ))}
 
-      {arrayOfListingsThatExceedMaxGuests.length > 0 && (
+      {exceedMaxGuestListings.length > 0 && (
         <div>
           <h3>None of these homes fit your trip</h3>
           <p>
             If you’re flexible, try adjusting your wishlist filters to find
             other options.
           </p>
-          {arrayOfListingsThatExceedMaxGuests.map((listing) => (
+          {exceedMaxGuestListings.map((listing) => (
             <NavLink
               key={listing.id}
               style={{ textDecoration: "none" }}

@@ -7,6 +7,7 @@ import reviews from './reviews';
 import dmThreads from './directMessageThreads';
 import directMessages from './directMessages';
 import bookings from './bookings';
+import wishlistsReducer from "./wishlists.js";
 
 const rootReducer = combineReducers({
   session,
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
   reviews,
   maps: mapsReducer,
   dmThreads,
-  directMessages
+  directMessages,
+  wishlists: wishlistsReducer,
 });
 
 let enhancer;

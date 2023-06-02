@@ -1,0 +1,28 @@
+/* https: //www.w3schools.com/css/tryit.asp?filename=trycss_grid_layout_named */
+.wishListCard-item-0 {
+  grid-area: main;
+}
+
+.wishListCard-item-1 {
+  grid-area: second;
+}
+
+.wishListCard-item-2 {
+  grid-area: third;
+}
+
+.wishListCard-container {
+  display: grid;
+  grid-template-areas:
+    "main main main second second"
+    "main main main second second"
+    "main main main third third";
+  /* grid-template-rows: 1fr 1fr 1fr; */
+  width: 325px;
+}
+
+.wishListCardImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

@@ -11,11 +11,11 @@ import App from './App';
 import configureStore from './store';
 import { restoreCSRF, csrfFetch } from "./store/csrf";
 import * as sessionActions from './store/session';
+import * as wishlistActions from './store/wishlists';
 import CategoryProvider from './context/CategoryContext';
 import ReceiverIdProvider from './context/ReceiverId';
 
 const store = configureStore();
-
 
 if (process.env.NODE_ENV !== "production") {
   restoreCSRF();
@@ -23,6 +23,7 @@ if (process.env.NODE_ENV !== "production") {
   window.csrfFetch = csrfFetch;
   window.store = store;
   window.sessionActions = sessionActions;
+  window.wishlistActions = wishlistActions;
 }
 
 // const Carrot = () => (

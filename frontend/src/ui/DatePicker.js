@@ -1,19 +1,27 @@
 import React, { useReducer } from "react";
 import { DateRangeInput } from "@datepicker-react/styled";
 import { ThemeProvider } from "styled-components";
-
+//https://github.com/t0gre/react-datepicker/tree/master
 export function datePickerReducer(state, action) {
     switch (action.type) {
         case "focusChange":
         return { ...state, focusedInput: action.payload };
         case "dateChange":
+          // const { startDate, endDate } = action.payload;
+          // let focusedInput = state.focusedInput;
+          // if (startDate !== null && (endDate === null || +startDate === +endDate)) {
+          //     focusedInput = 'endDate';
+          // }
+          // return { ...state, startDate: startDate, endDate: endDate, focusedInput: focusedInput };
+          // console.log("%c this is the payload", "color: orange", action.payload);
         return action.payload;
+        // return { ...state, ...action.payload };
         default:
         throw new Error();
     };
 };
 
-function DatePicker({ state, dispatch}) {
+function DatePicker({ state, dispatch, setShowCalendar, updateWishlistDates }) {
 
     return (
       <ThemeProvider
@@ -47,8 +55,14 @@ function DatePicker({ state, dispatch}) {
       }}
       >
         <DateRangeInput
-          onDatesChange={(data) =>
-            dispatch({ type: "dateChange", payload: data })
+          onDatesChange={(data) => {
+            dispatch({ type: "dateChange", payload: data });
+            console.log("%c what is going on here", "color: orange", data);
+            if (data.endDate && setShowCalendar && updateWishlistDates) {
+              setShowCalendar(false);
+              updateWishlistDates(data);
+            }
+          }
           }
           onFocusChange={(focusedInput) =>
             dispatch({ type: "focusChange", payload: focusedInput })

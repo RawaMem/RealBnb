@@ -23,11 +23,11 @@ module.exports = {
         type: Sequelize.STRING
       },
       checkIn: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE
       },
       checkOut: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE
       },
       adultGuests: {

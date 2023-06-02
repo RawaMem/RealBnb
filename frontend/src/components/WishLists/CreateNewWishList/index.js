@@ -10,8 +10,6 @@ export function CreateNewWishList({ setOpenWishList, user, setModalOpen, listing
     const newWishListObj = {
       name,
       userId: user.id,
-      checkIn: new Date("2026-05-28").toISOString().split("T")[0],
-      checkOut: new Date("2026-06-28").toISOString().split("T")[0],
       adultGuests: 1,
       childGuests: 0,
       infantGuests: 0,

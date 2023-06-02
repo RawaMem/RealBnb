@@ -139,8 +139,12 @@ export function WishListListing() {
     const updatedWishlist = {
       ...currentWishList,
       name,
-      checkIn: new Date(currentWishList.checkIn).toISOString().split("T")[0],
-      checkOut: new Date(currentWishList.checkOut).toISOString().split("T")[0],
+      checkIn: currentWishList.checkIn
+        ? new Date(currentWishList.checkIn).toISOString().split("T")[0]
+        : currentWishList.checkIn,
+      checkOut: currentWishList.checkOut
+        ? new Date(currentWishList.checkOut).toISOString().split("T")[0]
+        : currentWishList.checkOut,
     };
     await dispatch(updateWishlistThunk(updatedWishlist));
     setShowModal(false);
@@ -169,8 +173,10 @@ export function WishListListing() {
       <h1>{currentWishList?.name}</h1>
       <p className="errors">{error}</p>
       <div className="wishListListing-button-container">
-        <button onClick={() => setShowCalendar(true)}>
-          {currentWishList 
+        <button onClick={() => setShowCalendar((prev) => !prev)}>
+          {currentWishList &&
+          currentWishList.checkIn &&
+          currentWishList.checkOut
             ? wishlistDateFormatter(
                 currentWishList.checkIn,
                 currentWishList.checkOut
@@ -185,9 +191,15 @@ export function WishListListing() {
             updateWishlistDates={updateWishlistDates}
           />
         )}
-        <button onClick={() => setShowGuestModal(true)}>{
-          currentWishList ? determineNumberOfGuests(currentWishList.adultGuests, currentWishList.childGuests, currentWishList.petGuests) : "Guests"
-        }</button>
+        <button onClick={() => setShowGuestModal(true)}>
+          {currentWishList
+            ? determineNumberOfGuests(
+                currentWishList.adultGuests,
+                currentWishList.childGuests,
+                currentWishList.petGuests
+              )
+            : "Guests"}
+        </button>
         {showGuestModal && (
           <Modal onClose={() => setShowGuestModal(false)}>
             <Guests

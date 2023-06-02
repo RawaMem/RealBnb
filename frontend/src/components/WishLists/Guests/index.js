@@ -4,7 +4,7 @@ import "./Guests.css";
 import { updateWishlistThunk, clearError } from "../../../store/wishlists";
 
 export function Guests({ currentWishList, setShowGuestModal }) {
-  const dispatch = useDispatch();  
+  const dispatch = useDispatch();
   const [adults, setAdults] = useState(currentWishList.adultGuests);
   const [children, setChildren] = useState(currentWishList.childGuests);
   const [infants, setInfants] = useState(currentWishList.infantGuests);
@@ -30,22 +30,25 @@ export function Guests({ currentWishList, setShowGuestModal }) {
       petGuests: Number(pets),
     };
     const updatedWishlist = {
-        ...currentWishList,
-        ...guests,
-        checkIn: new Date(currentWishList.checkIn).toISOString().split("T")[0],
-        checkOut: new Date(currentWishList.checkOut).toISOString().split("T")[0],
+      ...currentWishList,
+      ...guests,
+      checkIn: currentWishList.checkIn
+        ? new Date(currentWishList.checkIn).toISOString().split("T")[0]
+        : currentWishList.checkIn,
+      checkOut: currentWishList.checkOut
+        ? new Date(currentWishList.checkOut).toISOString().split("T")[0]
+        : currentWishList.checkOut,
     };
     const data = await dispatch(updateWishlistThunk(updatedWishlist));
     if (data.errors) {
-        setValidation(data.errors);
-    }
-    else {
-        setShowGuestModal(false);
+      setValidation(data.errors);
+    } else {
+      setShowGuestModal(false);
     }
   }
   return (
     <div className="guests-parent-container">
-        {validation && <p className="errors">{validation}</p>}
+      {validation && <p className="errors">{validation}</p>}
       <div className="guests-container">
         <div>
           <label>Adults</label>

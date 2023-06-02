@@ -6,7 +6,6 @@ import "./editListing.css";
 
 function AddMoreImagesForm({setAddedImages,addedImages,setShowAddImageModal, imgUrl, setImgUrl, setImageArr}) {
 
-
     const [dropZone, setDropZone] = useState(false);
     
     const {
@@ -21,7 +20,11 @@ function AddMoreImagesForm({setAddedImages,addedImages,setShowAddImageModal, img
               preview: URL.createObjectURL(file)
             }));
         
-            setAddedImages(prev => [...prev, ...droppedFiles]);
+            setAddedImages(prev => {
+                const newRef = [...prev];
+                droppedFiles.forEach(file => newRef.push({file, preview: false }));
+                return newRef;
+            });
             // droppedFiles is an array of objects of File data type, the blob type url of each image url is stored in the preview key of each object.
             const droppedFileUrl = droppedFiles.map(file => file.preview);
 
@@ -43,7 +46,7 @@ function AddMoreImagesForm({setAddedImages,addedImages,setShowAddImageModal, img
             const url = fr.result;              
             setImgUrl(prev => [...prev, url])  
             inputFile.preview = url;
-            setAddedImages(prev => [...prev, inputFile]);
+            setAddedImages(prev => [...prev, {file:inputFile, preview: false}]);
         });
         };
     };
@@ -62,7 +65,7 @@ function AddMoreImagesForm({setAddedImages,addedImages,setShowAddImageModal, img
         });
 
         setAddedImages(prev => {
-            const newAddedImageArr = prev.filter(file => file.preview !== url);
+            const newAddedImageArr = prev.filter(fileObj => fileObj.file.preview !== url);
             return newAddedImageArr;
         });
     };
@@ -138,7 +141,8 @@ function AddMoreImagesForm({setAddedImages,addedImages,setShowAddImageModal, img
             <div className="edit-listing-button-container">
                 <div className='edit-listing-button-inner-container'>
                     <ClearBackgroundBtn btnText={"Cancel"} onClick={() => setShowAddImageModal(false)} />
-                    <ConfirmAndNextBtn textColor={"white"} btnText={"Confirm"} disabled={false} onClick={() => {
+                    <ConfirmAndNextBtn textColor={"white"} btnText={"Confirm"} disabled={false} onClick={(e) => {
+                        e.stopPropagation();
                         handleSave();
                         setShowAddImageModal(false);
                     }} />

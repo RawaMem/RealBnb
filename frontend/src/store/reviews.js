@@ -1,13 +1,15 @@
 import { csrfFetch } from "./csrf";
+import { getSingleListingThunk } from "./listings";
 
-const GET_REVIEWS_FOR_SINGLE_LISTING = 'reviews/GET_REVIEWS_FOR_SINGLE_LISTING'
-const CREATE_REVIEW = 'reviews/CREATE_REVIEW'
-const EDIT_REVIEW = 'reviews/EDIT_REVIEW'
-const DELETE_REVIEW = 'reviews/DELETE_REVIEW'
+const GET_SINGLE_LISTING_REVIEWS = 'reviews/GET_SINGLE_LISTING_REVIEWS';
+const CREATE_REVIEW = 'reviews/CREATE_REVIEW';
+const EDIT_REVIEW = 'reviews/EDIT_REVIEW';
+const DELETE_REVIEW = 'reviews/DELETE_REVIEW';
+const GET_USER_REVIEWS = 'reviews/GET_USER_REVIEWS';
 
 
 export const getReviewsForSingleListingAction = (reviewsArr) =>({
-    type: GET_REVIEWS_FOR_SINGLE_LISTING,
+    type: GET_SINGLE_LISTING_REVIEWS,
     reviewsArr
 })
 
@@ -25,6 +27,11 @@ const deleteReviewAction = (id) => ({
     type: DELETE_REVIEW,
     id
 })
+
+const getUserReviews = reviews => ({
+    type: GET_USER_REVIEWS,
+    reviews
+});
 
 export const createReviewThunk = (review) => async dispatch => {
     const response = await csrfFetch('/api/reviews', {
@@ -44,7 +51,6 @@ export const editReviewThunk = (review) => async dispatch => {
     })
     if (response.ok) {
         const newReview = await response.json()
-        console.log('this is the response review in the thunk:',newReview)
         dispatch(editReviewAction(newReview))
     }
 }
@@ -61,32 +67,48 @@ export const deleteReviewThunk = (id) => async dispatch => {
     }
 }
 
+export const getUserReviewsThunk = () => async dispatch => {
+    const response = await csrfFetch("/api/reviews/userReviews");
 
-const initialState = null
+    if(response.ok) {
+        const reviewData = await response.json();
+        dispatch(getUserReviews(reviewData));
+    };
+};
+
+
+const initialState = {listingReviews: {}, userReviews: {}};
+
 export default function reviews(state = initialState, action) {
     let newState
     switch(action.type) {
-        case GET_REVIEWS_FOR_SINGLE_LISTING:
-            newState = {}
+        case GET_SINGLE_LISTING_REVIEWS:
+            newState = {...state, listingReviews:{}}
             action.reviewsArr.forEach(review =>{
-                newState[review.id] = review
+                newState.listingReviews[review.id] = review
             })
             return newState
+        case GET_USER_REVIEWS:
+            newState = {...state, userReviews: {}};
+            action.reviews.forEach(review => {
+                newState.userReviews[review.id] = review
+            });
+            return newState;
         case CREATE_REVIEW:
-            newState = {...state}
-            newState[action.review.id] = action.review
+            newState = {...state, listingReviews:{...state.listingReviews}};
+            newState.listingReviews[action.review.id] = action.review
             return newState
-
         case EDIT_REVIEW:
-            newState = {...state}
-            newState[action.review.id] = action.review
+            newState = {listingReviews: {...state.listingReviews}, userReviews: {...state.userReviews}};
+            newState.listingReviews[action.review.id] = action.review;
+            newState.userReviews[action.review.id] = action.review;
             return newState
-
         case DELETE_REVIEW:
-            newState = {...state}
-            delete newState[action.id]
-            return newState
+            newState = {listingReviews: {...state.listingReviews}, userReviews: {...state.userReviews}};
 
+            delete newState.listingReviews[action.id]
+            delete newState.userReviews[action.id]
+            return newState
         default:
             return state
     }

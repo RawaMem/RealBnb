@@ -39,3 +39,15 @@
     background-color: rgb(247,247,247);
 }
 
+.pink-purple-btn-container {
+    background: linear-gradient(to right, rgb(230, 30, 77) 0%, rgb(227, 28, 95) 50%, rgb(215, 4, 102) 100%) !important;
+    border-radius: 10px;
+    display: flex;
+    justify-content: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    
+}
+

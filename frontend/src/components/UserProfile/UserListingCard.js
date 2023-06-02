@@ -15,6 +15,7 @@ function UserListingCard({listing}) {
         const end = new Date(price.endDate).getTime();
         return start <= now <= end
     });
+
     
     function convertDate(date) {
         const dateObj = new Date(date);
@@ -33,18 +34,21 @@ function UserListingCard({listing}) {
             <Modal onClick={() => setShowConfirmDeleteForm(false)}>
                 <ConfirmDeleteListingForm
                     setShowConfirmDeleteForm={setShowConfirmDeleteForm}
-                    previewImageUrl={listing.previewImageUrl}
+                    previewImageUrl={listing.Images[0].url}
                     listingId={listing.id}
                 />
             </Modal>
         );
     };
 
+    if(!listing["Images"]) return null;
+    const previewImageUrl = listing["Images"][0].url
+
     return (
             <div className="userListingCard-container">
                 <Link to={`/listings/${listing.id}`} style={{textDecoration: "none"}} className="userListingCard-clickable-container">
                     <div className="userListingCard-image-container">
-                        <img src={listing.previewImageUrl} alt={listing.name} className="userListingCard-image" />
+                        <img src={previewImageUrl} alt={listing.name} className="userListingCard-image" />
                     </div>
 
                     <div className="userListingCard-info-container">

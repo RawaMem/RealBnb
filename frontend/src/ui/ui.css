@@ -29,3 +29,24 @@
     color: var(--profile-dropdown-icon-color);
     fill: var(--profile-dropdown-icon-color);
 }
+
+.starIcons-star-rating-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.starIcons-star-rating-container .filled {
+    color: var(--logo-color)
+}
+
+#star_icon-review {
+    font-size: 1.5em;
+}
+
+#each-icon-container-review {
+    margin-right: 3.5px
+}
+
+.starIcons-star-rating-container .empty {
+    color: rgb(95,95,95);
+}

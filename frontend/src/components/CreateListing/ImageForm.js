@@ -25,7 +25,6 @@ export default function ImageForm() {
     // const [errors, setErrors] = useState([]);
     const [errors, setErrors] = useState({});
     const [hasSubmitted, setHasSubmitted] = useState(false);
-
     
     const handleDeleteImage = url => {
 

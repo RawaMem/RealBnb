@@ -1,6 +1,6 @@
 /* TODO Add site wide styles */
 :root {
-    --navbar-height: 15%;
+    --navbar-height: 15vh;
     --navbar-width: 100%;
     --inner-navbar-height: 100%;
     --inner-navbar-width: 95%;
@@ -41,6 +41,10 @@
     --confirmation-modal-bottom-container-width: 100%;
     --confirmation-modal-bottom-container-height: 20%;
 
+    --disabled-btn-background-color: rgb(221,221,221);
+}
 
+.mapboxgl-ctrl.mapboxgl-ctrl-attrib {
+    display: none;
 }
 

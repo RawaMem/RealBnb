@@ -34,8 +34,7 @@ export default function ListingPriceForm() {
     };
 
     const [state, dispatch] = useReducer(datePickerReducer, initialState);
-    console.log("startDate------", state.startDate)
-    console.log("endDate--------", state.endDate)
+
     const [serviceFee, setServiceFee] = useState(getInitalPrice("service fee", 1));
     const [cleaningFee, setCleaningFee] = useState(getInitalPrice("cleanning fee", 1));
 

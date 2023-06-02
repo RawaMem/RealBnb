@@ -7,8 +7,8 @@
 export function wishlistDateFormatter(date1, date2) {
   const checkInDate = [];
   const checkOutDate = [];
-  const checkIn = new Date(date1);
-  const checkOut = new Date(date2);
+  const checkIn = new Date(new Date(date1).getTime() + new Date().getTimezoneOffset()*60*1000);
+  const checkOut = new Date(new Date(date2).getTime() + new Date().getTimezoneOffset()*60*1000);
   const checkInMonth = checkIn.toLocaleDateString("en-US", { month: "long" });
   const checkOutMonth = checkOut.toLocaleDateString("en-US", { month: "long" });
   const checkInDay = checkIn.getUTCDate();

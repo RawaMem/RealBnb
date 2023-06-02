@@ -11,7 +11,10 @@ import {
 import { getListingsThunk } from "../../../store/listings";
 import { Modal } from "../../../context/Modal";
 import { Guests } from "../Guests";
-import { wishlistDateFormatter } from "../../../utils/WishList/wishlistDateFormatter";
+import {
+  wishlistDateFormatter,
+  toISODateString,
+} from "../../../utils/WishList";
 
 export function WishListListing() {
   const { wishlistId } = useParams();
@@ -55,36 +58,73 @@ export function WishListListing() {
   }, [dispatch, wishlistId]);
 
   useEffect(() => {
-  if (currentWishList?.checkIn && currentWishList?.checkOut) {
-    dispatchCalendar({
-      type: 'dateChange',
-      payload: {
-        startDate: new Date(currentWishList.checkIn),
-        endDate: new Date(currentWishList.checkOut),
-        focusedInput: null,
-      },
-    });
-  }
-}, [currentWishList]);
+    if (currentWishList?.checkIn && currentWishList?.checkOut) {
+      dispatchCalendar({
+        type: "dateChange",
+        payload: {
+          startDate: new Date(
+            new Date(currentWishList.checkIn).getTime() + 24 * 60 * 60 * 1000
+          ),
+          endDate: new Date(
+            new Date(currentWishList.checkOut).getTime() + 24 * 60 * 60 * 1000
+          ),
+          focusedInput: null,
+        },
+      });
+    }
+  }, [currentWishList]);
 
   const listingSet = new Set();
+  const listingPricesHashMap = {};
+  const listingPricesSet = new Set();
   currentWishList?.Listings?.forEach((listing) => listingSet.add(listing.id));
+  currentWishList?.Listings?.forEach((listing) => {
+    listingSet.add(listing.id);
+  });
 
+  // const filteredLists = Object.values(allListings).filter((listing) =>
+  //   listingSet.has(listing.id)
+  // );
   const filteredLists = Object.values(allListings).filter((listing) =>
     listingSet.has(listing.id)
   );
 
+  const listingsWithListingPrices = Object.values(allListings).filter(
+    (listing) => listingSet.has(listing.id)
+  );
+
+  listingsWithListingPrices.forEach((listing) => {
+    listingPricesHashMap[listing.id] = listing.ListingPrices;
+  });
+
+  const listingArray = Object.entries(listingPricesHashMap).flatMap(
+    ([listingId, listings]) =>
+      listings.map((listing) => ({ ...listing, listingId }))
+  );
+
+  listingArray.forEach((listing) => {
+    if (
+      new Date(listing.startDate) <= new Date(currentWishList.checkIn) &&
+      new Date(listing.endDate) >= new Date(currentWishList.checkOut)
+    ) {
+      listingPricesSet.add(Number(listing.listingId));
+    }
+  });
+  // listingPricesSet
+
   const arrayOfListingsThatExceedMaxGuests = filteredLists.filter((listing) => {
     return (
       listing.maxGuests <
-      currentWishList?.adultGuests + currentWishList?.childGuests
+        currentWishList?.adultGuests + currentWishList?.childGuests ||
+      !listingPricesSet.has(listing.id)
     );
   });
 
   const arrayOfValidListings = filteredLists.filter((listing) => {
     return (
       listing.maxGuests >=
-      currentWishList?.adultGuests + currentWishList?.childGuests
+        currentWishList?.adultGuests + currentWishList?.childGuests &&
+      listingPricesSet.has(listing.id)
     );
   });
 
@@ -107,8 +147,8 @@ export function WishListListing() {
   async function updateWishlistDates({ startDate, endDate }) {
     const updatedWishlist = {
       ...currentWishList,
-      checkIn: new Date(startDate).toISOString().split("T")[0],
-      checkOut: new Date(endDate).toISOString().split("T")[0],
+      checkIn: toISODateString(new Date(startDate)).split("T")[0],
+      checkOut: toISODateString(new Date(endDate)).split("T")[0],
     };
     await dispatch(updateWishlistThunk(updatedWishlist));
   }
@@ -128,7 +168,10 @@ export function WishListListing() {
       <div className="wishListListing-button-container">
         <button onClick={() => setShowCalendar(true)}>
           {state.startDate && state.endDate
-            ? wishlistDateFormatter(state.startDate - 1, state.endDate - 1)
+            ? wishlistDateFormatter(
+                currentWishList.checkIn,
+                currentWishList.checkOut
+              )
             : "Date"}
         </button>
         {showCalendar && (

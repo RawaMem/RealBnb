@@ -30,6 +30,20 @@ export const getToken = () => async (dispatch) => {
     dispatch(loadAccessToken(token.mapboxAccessToken));
 }
 
+export function calculateDistanceBetweenListings(token) {
+    return async function (dispatch) {
+        const res = await csrfFetch('/api/maps/distance', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ token })
+        });
+        const data = await res.json();
+        return data;
+    }
+}
+
 const initialState = { key: null, token: null };
 
 const mapsReducer = (state = initialState, action) => {

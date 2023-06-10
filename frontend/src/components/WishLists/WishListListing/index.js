@@ -20,6 +20,7 @@ import {
   useValidListings,
   useListingArray,
   useValidListingPrices,
+  useValidListingSet
 } from "../../../hooks/WishList/WishListListing";
 import {
   wishlistDateFormatter,
@@ -106,6 +107,7 @@ export function WishListListing() {
     currentWishList,
     validListingPrices
   );
+  const validListingSet = useValidListingSet(validListings);
   const exceedMaxGuestListings = useExceedMaxGuestListings(
     filteredLists,
     currentWishList,
@@ -274,6 +276,7 @@ export function WishListListing() {
           style={containerStyle}
           zoom={zoom}
           coordinates={filteredLists}
+          validListings={validListingSet}
         />
       </div>
     </div>

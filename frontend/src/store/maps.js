@@ -27,7 +27,6 @@ export const getToken = () => async (dispatch) => {
         method: 'POST'
     });
     const token = await res.json();
-    console.log("%c this is the token", "color: pink", token);
     dispatch(loadAccessToken(token.mapboxAccessToken));
 }
 

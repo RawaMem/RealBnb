@@ -4,7 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { getToken } from "../../store/maps";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-export function MapBox({ style, latitude, longitude, zoom, coordinates }) {
+export function MapBox({
+  style,
+  latitude,
+  longitude,
+  zoom,
+  coordinates,
+  validListings,
+}) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.maps?.token);
   const [viewport, setViewport] = useState({ latitude, longitude, zoom: 12 });
@@ -27,16 +34,30 @@ export function MapBox({ style, latitude, longitude, zoom, coordinates }) {
       mapStyle="mapbox://styles/mapbox/streets-v9"
       mapboxAccessToken={MAPBOX_TOKEN}
     >
-      {coordinates ? (
+      {coordinates && validListings ? (
         coordinates.map((item) => (
           <Marker
             longitude={item.longitude}
             latitude={item.latitude}
             color="red"
           >
-            <div style={{ fontSize: "15px", color: "red", fontWeight: "bold" }}>
-              {item.ListingPrices[0].pricePerDay}
-            </div>
+            {validListings.has(item.id) ? (
+              <div
+                style={{ fontSize: "15px", color: "red", fontWeight: "bold" }}
+              >
+                {item.ListingPrices[0].pricePerDay}
+              </div>
+            ) : (
+              <span
+                style={{
+                  fontVariationSettings:
+                    "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48",
+                }}
+                class="material-symbols-outlined"
+              >
+                block
+              </span>
+            )}
           </Marker>
         ))
       ) : (

@@ -3,16 +3,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserWishlistsThunk } from "../../store/wishlists";
 import { getSingleListingThunk } from "../../store/listings";
 import { WishListCard } from "./WishListCard";
-// import "./WishList.css";
 
-function WishList({wishListStyle, listingId, setWishListModalOpen, setModalOpen}) {
+function WishList({
+  wishListStyle,
+  listingId,
+  setWishListModalOpen,
+  setModalOpen,
+}) {
   const dispatch = useDispatch();
   const [listings, setListings] = useState([]);
   const { error } = useSelector((state) => state.wishlists);
   const { wishLists } = useSelector((state) => state.wishlists);
   const { wishListListing } = useSelector((state) => state.wishlists);
   const user = useSelector((state) => state.session.user);
- 
+
   useEffect(() => {
     if (user) {
       dispatch(getUserWishlistsThunk(user.id));
@@ -27,7 +31,6 @@ function WishList({wishListStyle, listingId, setWishListModalOpen, setModalOpen}
         const promises = listOfWishlists.map((wishlist) => {
           if (!wishlist.Listings.length) return;
           const listingId = wishlist.Listings.find((listing) => listing).id;
-          // TODO: Handle situation where there are NO Listings and .find returns undefined.
           return dispatch(getSingleListingThunk(listingId));
         });
         const data = await Promise.all(promises);

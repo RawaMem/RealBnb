@@ -2,6 +2,7 @@ import { useEffect, useState, useReducer } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, NavLink, useHistory } from "react-router-dom";
 import DatePicker, { datePickerReducer } from "../../../ui/DatePicker";
+import { MapBox } from "../../Maps/Mapbox";
 import ListingCard from "../../Listings/ListingCard";
 import {
   deleteWishlistThunk,
@@ -41,6 +42,12 @@ export function WishListListing() {
   const [name, setName] = useState(currentWishList?.name || "");
   const [showGuestModal, setShowGuestModal] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
+  const [zoom, setZoom] = useState(4);
+
+  const containerStyle = {
+    width: "90%",
+    height: "95%",
+  };
 
   const initialState = {
     startDate: currentWishList?.checkIn
@@ -135,7 +142,8 @@ export function WishListListing() {
   }
 
   return (
-    <div>
+    <div style={{display: "flex"}}>
+      <div>
       <span
         className="material-symbols-outlined"
         style={{
@@ -232,6 +240,42 @@ export function WishListListing() {
           ))}
         </div>
       )}
+      </div>
+      <div
+        style={{
+          width: "80%",
+          height: "100vh",
+          display: "flex",
+          flexDirection: "row-reverse",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <button
+            style={{ height: "100px" }}
+            onClick={() => setZoom((prev) => prev + 1)}
+          >
+            +
+          </button>
+          <button
+            style={{ height: "100px" }}
+            onClick={() => setZoom((prev) => prev - 1)}
+          >
+            -
+          </button>
+        </div>
+        <MapBox
+          latitude={35.4117}
+          longitude={-118.2712}
+          style={containerStyle}
+          zoom={zoom}
+          coordinates={filteredLists}
+        />
+      </div>
     </div>
   );
 }

@@ -20,7 +20,7 @@ import {
   useValidListings,
   useListingArray,
   useValidListingPrices,
-  useValidListingSet
+  useValidListingSet,
 } from "../../../hooks/WishList/WishListListing";
 import {
   wishlistDateFormatter,
@@ -44,6 +44,7 @@ export function WishListListing() {
   const [showGuestModal, setShowGuestModal] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const [zoom, setZoom] = useState(4);
+  const [hoveredListing, setHoveredListing] = useState(null);
 
   const containerStyle = {
     width: "90%",
@@ -144,91 +145,78 @@ export function WishListListing() {
   }
 
   return (
-    <div style={{display: "flex"}}>
+    <div style={{ display: "flex" }}>
       <div>
-      <span
-        className="material-symbols-outlined"
-        style={{
-          fontVariationSettings: "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48",
-        }}
-        onClick={() => setShowModal(true)}
-      >
-        more_horiz
-      </span>
-      <h1>{currentWishList?.name}</h1>
-      <p className="errors">{error}</p>
-      <div className="wishListListing-button-container">
-        <button onClick={() => setShowCalendar((prev) => !prev)}>
-          {currentWishList &&
-          currentWishList.checkIn &&
-          currentWishList.checkOut
-            ? wishlistDateFormatter(
-                currentWishList.checkIn,
-                currentWishList.checkOut
-              )
-            : "Date"}
-        </button>
-        {showCalendar && (
-          <DatePicker
-            state={state}
-            dispatch={dispatchCalendar}
-            setShowCalendar={setShowCalendar}
-            updateWishlistDates={updateWishlistDates}
-          />
-        )}
-        <button onClick={() => setShowGuestModal(true)}>
-          {currentWishList
-            ? determineNumberOfGuests(
-                currentWishList.adultGuests,
-                currentWishList.childGuests,
-                currentWishList.petGuests
-              )
-            : "Guests"}
-        </button>
-        {showGuestModal && (
-          <Modal onClose={() => setShowGuestModal(false)}>
-            <Guests
-              currentWishList={currentWishList}
-              setShowGuestModal={setShowGuestModal}
+        <span
+          className="material-symbols-outlined"
+          style={{
+            fontVariationSettings: "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48",
+          }}
+          onClick={() => setShowModal(true)}
+        >
+          more_horiz
+        </span>
+        <h1>{currentWishList?.name}</h1>
+        <p className="errors">{error}</p>
+        <div className="wishListListing-button-container">
+          <button onClick={() => setShowCalendar((prev) => !prev)}>
+            {currentWishList &&
+            currentWishList.checkIn &&
+            currentWishList.checkOut
+              ? wishlistDateFormatter(
+                  currentWishList.checkIn,
+                  currentWishList.checkOut
+                )
+              : "Date"}
+          </button>
+          {showCalendar && (
+            <DatePicker
+              state={state}
+              dispatch={dispatchCalendar}
+              setShowCalendar={setShowCalendar}
+              updateWishlistDates={updateWishlistDates}
             />
+          )}
+          <button onClick={() => setShowGuestModal(true)}>
+            {currentWishList
+              ? determineNumberOfGuests(
+                  currentWishList.adultGuests,
+                  currentWishList.childGuests,
+                  currentWishList.petGuests
+                )
+              : "Guests"}
+          </button>
+          {showGuestModal && (
+            <Modal onClose={() => setShowGuestModal(false)}>
+              <Guests
+                currentWishList={currentWishList}
+                setShowGuestModal={setShowGuestModal}
+              />
+            </Modal>
+          )}
+        </div>
+        {showModal && (
+          <Modal onClose={() => setShowModal(false)}>
+            <>
+              <input
+                type="text"
+                onChange={(e) => setName(e.target.value)}
+                value={name}
+              />
+              <button type="submit" onClick={() => updateWishlist()}>
+                Update this wishlist
+              </button>
+              <button type="submit" onClick={() => deleteWishlist()}>
+                Delete this wishlist
+              </button>
+            </>
           </Modal>
         )}
-      </div>
-      {showModal && (
-        <Modal onClose={() => setShowModal(false)}>
-          <>
-            <input
-              type="text"
-              onChange={(e) => setName(e.target.value)}
-              value={name}
-            />
-            <button type="submit" onClick={() => updateWishlist()}>
-              Update this wishlist
-            </button>
-            <button type="submit" onClick={() => deleteWishlist()}>
-              Delete this wishlist
-            </button>
-          </>
-        </Modal>
-      )}
-      {validListings.map((listing) => (
-        <NavLink
-          key={listing.id}
-          style={{ textDecoration: "none" }}
-          to={`/listings/${listing.id}`}
-        >
-          <ListingCard listing={listing} wishListListing={wishListListing} />
-        </NavLink>
-      ))}
-
-      {exceedMaxGuestListings.length > 0 && (
-        <div>
-          <h3>None of these homes fit your trip</h3>
-          <p>
-            If you’re flexible, try adjusting your wishlist filters to find
-            other options.
-          </p>
-          {exceedMaxGuestListings.map((listing) => (
+        {validListings.map((listing) => (
+          <div
+            onMouseOver={() => setHoveredListing(listing.id)}
+            onMouseLeave={() => setHoveredListing(null)}
+          >
             <NavLink
               key={listing.id}
               style={{ textDecoration: "none" }}
@@ -239,9 +227,35 @@ export function WishListListing() {
                 wishListListing={wishListListing}
               />
             </NavLink>
-          ))}
-        </div>
-      )}
+          </div>
+        ))}
+
+        {exceedMaxGuestListings.length > 0 && (
+          <div>
+            <h3>None of these homes fit your trip</h3>
+            <p>
+              If you’re flexible, try adjusting your wishlist filters to find
+              other options.
+            </p>
+            {exceedMaxGuestListings.map((listing) => (
+              <div
+                onMouseOver={() => setHoveredListing(listing.id)}
+                onMouseLeave={() => setHoveredListing(null)}
+              >
+                <NavLink
+                  key={listing.id}
+                  style={{ textDecoration: "none" }}
+                  to={`/listings/${listing.id}`}
+                >
+                  <ListingCard
+                    listing={listing}
+                    wishListListing={wishListListing}
+                  />
+                </NavLink>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
       <div
         style={{
@@ -277,6 +291,7 @@ export function WishListListing() {
           zoom={zoom}
           coordinates={filteredLists}
           validListings={validListingSet}
+          hoveredListing={hoveredListing}
         />
       </div>
     </div>

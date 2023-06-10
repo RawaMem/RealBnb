@@ -11,6 +11,7 @@ export function MapBox({
   zoom,
   coordinates,
   validListings,
+  hoveredListing,
 }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.maps?.token);
@@ -43,7 +44,13 @@ export function MapBox({
           >
             {validListings.has(item.id) ? (
               <div
-                style={{ fontSize: "15px", color: "red", fontWeight: "bold" }}
+                style={{
+                  fontSize: "15px",
+                  color: "red",
+                  fontWeight: "bold",
+                  backgroundColor:
+                    hoveredListing !== null && hoveredListing === item.id ? "black" : "transparent",
+                }}
               >
                 {item.ListingPrices[0].pricePerDay}
               </div>
@@ -52,6 +59,8 @@ export function MapBox({
                 style={{
                   fontVariationSettings:
                     "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48",
+                  backgroundColor:
+                    hoveredListing !== null && hoveredListing === item.id ? "black" : "transparent",
                 }}
                 class="material-symbols-outlined"
               >

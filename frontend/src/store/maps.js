@@ -14,10 +14,10 @@ const loadAccessToken = (key) => ({
   key,
 });
 
-function calculateDistance(distances) {
+function calculateDistance(durations) {
   return {
     type: CALCULATE_DISTANCE,
-    distances,
+    durations,
   };
 }
 
@@ -39,8 +39,8 @@ export const getToken = () => async (dispatch) => {
 
 export function getDistancesBetweenListings(token, listings, profile) {
   return async function (dispatch, getState) {
-    const { distances } = getState().maps;
-    if (distances && Object.keys(distances).length) return;
+    const { durations } = getState().maps;
+    if (durations && Object.keys(durations).length) return;
     try {
       const formattedCoordinates = listings.map(
         (listing) => `${listing.longitude},${listing.latitude};`
@@ -51,8 +51,8 @@ export function getDistancesBetweenListings(token, listings, profile) {
         stringOfCoordinates.length - 1
       )}&token=${token}`;
       const response = await csrfFetch(`/api/distanceMatrix${query}`);
-      const distances = await response.json();
-      dispatch(calculateDistance(distances.distances));
+      const durations = await response.json();
+      dispatch(calculateDistance(durations.durations));
     } catch (error) {
       const data = await error.json();
       return data;
@@ -60,7 +60,7 @@ export function getDistancesBetweenListings(token, listings, profile) {
   };
 }
 
-const initialState = { key: null, token: null, distances: {} };
+const initialState = { key: null, token: null, durations: {} };
 
 const mapsReducer = (state = initialState, action) => {
   let newState;
@@ -70,13 +70,15 @@ const mapsReducer = (state = initialState, action) => {
     case LOAD_ACCESS_TOKEN:
       return { ...state, token: action.key };
     case CALCULATE_DISTANCE:
-      if (!action.distances) {
+      if (!action.durations || action.durations === undefined) {
         return state;
       }
-      newState = { ...state, distances: {} };
-      action.distances.forEach(
-        (distance) => (newState.distances[distance.location[0]] = distance)
-      );
+
+      newState = { ...state, durations: {} };
+      // As of right now, I can't think of a reason to normalize the duration to get from point A to B.
+      // The distances key won't mean anything in this context. And, given that there could be up to 25 points, the duration might repeat meaning that some items might be replaced.
+      // Durations could be null too meaning that a key could be null.
+      newState.durations = action.durations.flatMap((duration) => duration);
       return newState;
     default:
       return state;

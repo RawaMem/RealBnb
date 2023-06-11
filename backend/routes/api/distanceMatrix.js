@@ -5,8 +5,11 @@ const fetch = (...args) => import("node-fetch").then(({ default: fetch }) => fet
 router.get("/", async (req, res, next) => {
 	try {
 		const { token, coordinates, profile } = req.query;
+		if (!token || !coordinates || !profile) {
+			return res.status(400).json({ message: "Missing required parameters." });
+		}
 		const response = await fetch(
-			`https://api.mapbox.com/directions-matrix/v1/mapbox/${profile}/${coordinates}?approaches=curb;curb&access_token=${token}`,
+			`https://api.mapbox.com/directions-matrix/v1/mapbox/${profile}/${coordinates}?&access_token=${token}`,
 			{
 				headers: {
 					Accept: "application/json",
@@ -14,7 +17,7 @@ router.get("/", async (req, res, next) => {
 			}
 		);
 		const data = await response.json();
-		res.json({ distances: data.destinations });
+		res.json({ durations: data.durations });
 	} catch (err) {
 		next(err);
 	}

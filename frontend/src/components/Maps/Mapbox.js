@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import Map, { Marker } from "react-map-gl";
 import { useDispatch, useSelector } from "react-redux";
-import { getToken, getDistancesBetweenListings } from "../../store/maps";
+import { getToken } from "../../store/maps";
 import { Modal } from "../../context/Modal";
 import "mapbox-gl/dist/mapbox-gl.css";
 import ListingCard from "../Listings/ListingCard";
+import { useCalculateDistanceBetweenListings } from "../../hooks/MapBox";
 
 export function MapBox({
   style,
@@ -18,19 +19,15 @@ export function MapBox({
 }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.maps?.token);
-  const { distances } = useSelector((state) => state.maps);
   const [viewport, setViewport] = useState({ latitude, longitude, zoom: 12 });
   const [showListing, setShowListing] = useState(false);
+  // Made it a custom hook to separate a bit of the logic and so that the map looks more like just a map while the logic happens somewhere else.
+  const durations = useCalculateDistanceBetweenListings(token, filteredLists, "driving");
+
 
   useEffect(() => {
     if (!token) dispatch(getToken());
   }, [dispatch, token]);
-
-  useEffect(() => {
-    if (token) {
-      dispatch(getDistancesBetweenListings(token, filteredLists, "driving"));
-    }
-  }, [filteredLists, token]);
 
   useEffect(() => {
     setViewport({ latitude, longitude, zoom: zoom || 12 });

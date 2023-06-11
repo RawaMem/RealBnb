@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Map, { Marker } from "react-map-gl";
 import { useDispatch, useSelector } from "react-redux";
-import { getToken } from "../../store/maps";
+import { getToken, getDistancesBetweenListings } from "../../store/maps";
 import { Modal } from "../../context/Modal";
 import "mapbox-gl/dist/mapbox-gl.css";
 import ListingCard from "../Listings/ListingCard";
@@ -14,15 +14,23 @@ export function MapBox({
   coordinates,
   validListings,
   hoveredListing,
+  filteredLists,
 }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.maps?.token);
+  const { distances } = useSelector((state) => state.maps);
   const [viewport, setViewport] = useState({ latitude, longitude, zoom: 12 });
   const [showListing, setShowListing] = useState(false);
 
   useEffect(() => {
     if (!token) dispatch(getToken());
   }, [dispatch, token]);
+
+  useEffect(() => {
+    if (token) {
+      dispatch(getDistancesBetweenListings(token, filteredLists, "driving"));
+    }
+  }, [filteredLists, token]);
 
   useEffect(() => {
     setViewport({ latitude, longitude, zoom: zoom || 12 });
@@ -48,6 +56,7 @@ export function MapBox({
             {validListings.has(item.id) ? (
               <div
                 onClick={() => setShowListing(item.id)}
+                key={item.id}
                 style={{
                   fontSize: "15px",
                   color: "red",
@@ -62,6 +71,7 @@ export function MapBox({
               </div>
             ) : (
               <span
+                key={item.id}
                 onClick={() => setShowListing(item.id)}
                 style={{
                   fontVariationSettings:

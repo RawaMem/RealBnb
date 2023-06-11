@@ -6,7 +6,7 @@ router.get("/", async (req, res, next) => {
 	try {
 		const { token, coordinates, profile } = req.query;
 		const response = await fetch(
-			`https://api.mapbox.com/directions-matrix/v1/mapbox/${profile}/${coordinates}?approaches=curb;curb;curb&access_token=${token}`,
+			`https://api.mapbox.com/directions-matrix/v1/mapbox/${profile}/${coordinates}?approaches=curb;curb&access_token=${token}`,
 			{
 				headers: {
 					Accept: "application/json",

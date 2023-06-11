@@ -216,6 +216,7 @@ export function WishListListing() {
           <div
             onMouseOver={() => setHoveredListing(listing.id)}
             onMouseLeave={() => setHoveredListing(null)}
+            key={listing.id}
           >
             <NavLink
               key={listing.id}
@@ -241,6 +242,7 @@ export function WishListListing() {
               <div
                 onMouseOver={() => setHoveredListing(listing.id)}
                 onMouseLeave={() => setHoveredListing(null)}
+                key={listing.id}
               >
                 <NavLink
                   key={listing.id}
@@ -292,6 +294,7 @@ export function WishListListing() {
           coordinates={filteredLists}
           validListings={validListingSet}
           hoveredListing={hoveredListing}
+          filteredLists={filteredLists}
         />
       </div>
     </div>

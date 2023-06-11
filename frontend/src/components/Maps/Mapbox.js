@@ -6,12 +6,13 @@ import { Modal } from "../../context/Modal";
 import "mapbox-gl/dist/mapbox-gl.css";
 import ListingCard from "../Listings/ListingCard";
 import { useCalculateDistanceBetweenListings } from "../../hooks/MapBox";
+import { useDetermineZoom } from "../../hooks/MapBox/Matrix/useDetermineZoom";
 
 export function MapBox({
   style,
   latitude,
   longitude,
-  zoom,
+  // zoom,
   coordinates,
   validListings,
   hoveredListing,
@@ -23,7 +24,7 @@ export function MapBox({
   const [showListing, setShowListing] = useState(false);
   // Made it a custom hook to separate a bit of the logic and so that the map looks more like just a map while the logic happens somewhere else.
   const durations = useCalculateDistanceBetweenListings(token, filteredLists, "driving");
-
+  const zoom = useDetermineZoom(durations);
 
   useEffect(() => {
     if (!token) dispatch(getToken());

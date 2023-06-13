@@ -12,7 +12,7 @@ export function MapBox({
   style,
   latitude,
   longitude,
-  // zoom,
+  zoom,
   coordinates,
   validListings,
   hoveredListing,
@@ -24,7 +24,7 @@ export function MapBox({
   const [showListing, setShowListing] = useState(false);
   // Made it a custom hook to separate a bit of the logic and so that the map looks more like just a map while the logic happens somewhere else.
   const durations = useCalculateDistanceBetweenListings(token, filteredLists, "driving");
-  const zoom = useDetermineZoom(durations);
+  // const zoom = useDetermineZoom(durations);
 
   useEffect(() => {
     if (!token) dispatch(getToken());
@@ -40,9 +40,10 @@ export function MapBox({
   return (
     <Map
       {...viewport}
-      style={style}
-      mapStyle="mapbox://styles/mapbox/streets-v9"
+      // style={style}
+      mapStyle="mapbox://styles/mapbox/streets-v12"
       mapboxAccessToken={MAPBOX_TOKEN}
+      onMove={event => setViewport(event.viewState)}
     >
       {coordinates && validListings ? (
         coordinates.map((item) => (

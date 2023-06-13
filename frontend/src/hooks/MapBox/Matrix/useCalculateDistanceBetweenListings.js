@@ -16,6 +16,7 @@ export function useCalculateDistanceBetweenListings(
 ) {
   const dispatch = useDispatch();
   const { durations } = useSelector((state) => state.maps);
+  if (!filteredLists) return null;
 
   useEffect(() => {
     // Since request is sometimes sending an empty array, we need to make sure that the token and filteredLists are not empty.

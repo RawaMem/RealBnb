@@ -43,7 +43,7 @@ export function WishListListing() {
   const [name, setName] = useState(currentWishList?.name || "");
   const [showGuestModal, setShowGuestModal] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
-  const [zoom, setZoom] = useState(4);
+  const [zoom, setZoom] = useState(9);
   const [hoveredListing, setHoveredListing] = useState(null);
 
   const containerStyle = {

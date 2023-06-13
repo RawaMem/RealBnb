@@ -31,16 +31,12 @@ export default function ReviewsContainer({reviews, currentUser, listingId, listi
             <div className="noReviews">No reviews at this time.</div>
         </>
     );
-    const qualifyToLeaveAnReview = () => {
-        // have to log in: currentUser
-        // don't already have an review
-        // not the host of the listingId
-        const alreadyReviewed = () => {
+    const qualifyToLeaveAnReview = () => {    
+        if(currentUser) {
             const findExitReview = reviewsArr.find(review => review.User.id === currentUser.id);
-             return !!findExitReview;  
-        }; 
-        const listHost = listing.ownerId === currentUser.id
-        return currentUser && !alreadyReviewed() && !listHost;
+            const listHost = listing.ownerId === currentUser.id
+            return !findExitReview && !listHost
+        };
     };
 
     return (
@@ -69,7 +65,7 @@ export default function ReviewsContainer({reviews, currentUser, listingId, listi
                     <div id="singleListingReview-font">&middot;</div>
                     <div id="singleListingReview-font">{listing.totalNumOfReviews} {listing.totalNumOfReviews <= 1 ? "Review" : "Reviews"}</div>
                 </div>
-                {qualifyToLeaveAnReview() && <div
+                {qualifyToLeaveAnReview() && currentUser && <div
                     className="single-listing-send-message-btn-container" onClick={() => setShowCreateReviewModal(true)}>Leave a Review</div>
                 }
             </div>

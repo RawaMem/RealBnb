@@ -1,14 +1,50 @@
 const express = require('express');
 const asyncHandler = require('express-async-handler');
 
-const { Booking, Listing } = require('../../db/models');
+const { Booking, Listing, Image } = require('../../db/models');
+const { requireAuth } = require('../../utils/auth')
 
 const router = express.Router();
 
-// get all bookings
-router.get('/', asyncHandler(async (req, res) => {
-    const bookings = await Booking.findAll();
-    res.json(bookings);
+
+
+// get all user bookings
+router.get('/userBooking', requireAuth, asyncHandler(async (req, res) => {
+    const userId = req.user.id;
+
+    const userBookings = await Booking.findAll({
+        where: {
+            userId
+        },
+        attributes: {
+            exclude: ["userId", "updatedAt"]
+        },
+        include: {
+            model: Listing,
+            include: {
+                model: Image,
+                where: {
+                    preview: true
+                },
+                attributes: ["url"]
+            },
+            attributes: ["name"],
+        }
+    })
+
+    const userBookingData = [];
+
+    userBookings.forEach(data => {
+        const dataJson = data.toJSON();
+        const listingName = dataJson["Listing"].name;
+        const listingImagePreview = dataJson["Listing"]["Images"][0].url;
+        dataJson.listingName = listingName;
+        dataJson.listingImagePreview = listingImagePreview;
+        delete dataJson["Listing"]; 
+        userBookingData.push(dataJson);
+    });
+
+    res.json(userBookingData)
 }));
 
 router.delete('/:bookingId', asyncHandler(async (req, res) => {

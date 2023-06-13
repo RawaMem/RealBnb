@@ -91,7 +91,7 @@ function EditListingForm() {
   useEffect(() => {
     if(token) {
       const editedAddress = `${address} ${city} ${state}`;
-      const endpoint = `http://api.mapbox.com/geocoding/v5/mapbox.places/${editedAddress}.json?access_token=${token}&autocomplete=true`;
+      const endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${editedAddress}.json?access_token=${token}&autocomplete=true`;
   
       try {
         fetch(endpoint)

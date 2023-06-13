@@ -10,10 +10,9 @@ import SingleListingTitle from "./SingleListingTitle";
 import BookingsContainer from "./BookingsContainer";
 import Amenities from "./Amenities";
 import AboutListing from "./AboutListing";
-import Mapbox from "react-map-gl/dist/esm/mapbox/mapbox";
 import './SingleListingPage.css';
 import Booking from "./Booking";
-import { MapBox } from "../Maps/Mapbox";
+import { GeoLocationMap } from "../Maps/GeoLocationMap";
 
 
 export default function SingleListingPage() {
@@ -69,7 +68,7 @@ export default function SingleListingPage() {
                 <hr />
                 <div>
                     <h3>Where you'll be</h3>
-                    <MapBox style={{width: '100%', height: '550px'}} latitude={listing.latitude} longitude={listing.longitude} />
+                    <GeoLocationMap style={{width: '100%', height: '550px'}} latitude={listing.latitude} longitude={listing.longitude} />
                 </div>
                 <hr />
                 <div className="reviewContainer">

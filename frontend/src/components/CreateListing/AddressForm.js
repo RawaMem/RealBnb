@@ -1,9 +1,10 @@
 import './createListing.css';
 import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { csrfFetch } from '../../store/csrf';
 import { NavLink } from 'react-router-dom';
 import { getToken } from '../../store/maps';
-import { MapBox } from '../Maps/Mapbox';
+import { GeoLocationMap } from '../Maps/GeoLocationMap';
 
 
 export default function AddressForm() {
@@ -17,7 +18,6 @@ export default function AddressForm() {
     const [latitude, setLatitude] = useState(localStorage.getItem('lat') || 74.0060);
     const optinalAddress = useRef(null);
     const [suggestions, setSuggestions] = useState([]);
-
     const token = useSelector((state) => state.maps.token);
 
     useEffect(() => {
@@ -51,9 +51,9 @@ export default function AddressForm() {
 
         setInputVal(event.target.value);
         try {
-            const endpoint = `http://api.mapbox.com/geocoding/v5/mapbox.places/${event.target.value}.json?access_token=${token}&autocomplete=true`;
+            const endpoint = `https://api.mapbox.com/geocoding/v5/mapbox.places/${event.target.value}.json?access_token=${token}&autocomplete=true`;
     
-            const response = await fetch(endpoint);
+            const response = await csrfFetch(endpoint);
             const results = await response.json();
             setSuggestions(results.features);
         } catch(e) {
@@ -136,7 +136,7 @@ export default function AddressForm() {
                             </div>
                         </form>
                         <div>
-                            <MapBox style={containerStyle} latitude={latitude} longitude={longitude} />
+                            <GeoLocationMap style={containerStyle} latitude={latitude} longitude={longitude} />
                         </div> 
                     </div>
                 </div>

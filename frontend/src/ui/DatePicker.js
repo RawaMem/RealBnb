@@ -13,6 +13,16 @@ export function datePickerReducer(state, action) {
     };
 };
 
+function isDateBlocked(date) {
+  // the function should return a boolean, if true then date will be blocked
+  // block all the past dates
+  const today = new Date();
+  // the date object include the current time by default, therefore, setting hour, minute, second and millisecond to zero to block the past dates.
+  today.setHours(0, 0, 0, 0);
+  return date < today;
+}
+
+
 function DatePicker({ state, dispatch}) {
 
     return (
@@ -58,6 +68,7 @@ function DatePicker({ state, dispatch}) {
           focusedInput={state.focusedInput} // START_DATE, END_DATE or null
           style={{border: "none !important"}}
           minBookingDays={"2"}
+          isDateBlocked={isDateBlocked}
         />
       </ThemeProvider>
     );

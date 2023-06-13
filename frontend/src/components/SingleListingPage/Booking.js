@@ -22,17 +22,9 @@ function Booking({listing}) {
         endDate: new Date( today.getTime() + (24 * 60 * 60 * 1000)),
         focusedInput: null
     };
-
-    const existingBooking = listing.Bookings;
-    // function blockedDates(date) {
-    //     const today = new Date();
-    //     today.setHours(0, 0, 0, 0);
-
-
-    // };
-
-
+    
     function isDateBlocked(date) {
+        const existingBooking = listing.Bookings;
         // the function should return a boolean, if true then date will be blocked
         // block all the past dates
         function blockPast() {
@@ -64,14 +56,53 @@ function Booking({listing}) {
                 const end = new Date(bookedDate.endDate).toISOString().slice(0,10);
             
                 if(dateString >= start && dateString <= end) return true;
-            }            
+            };           
             return false;        
         };
-        return blockPast() || blockBookedDates();
+
+        
+        function blockClosedDates() {
+            const currentOpenDates = listing.ListingPrices;
+            const validDates = [];
+            currentOpenDates.forEach(openDates => {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const startDate = new Date(openDates.startDate);
+                const endDate = new Date(openDates.endDate);
+        
+                if(startDate <= today && today <= endDate) {
+                    const newOpenDate = {startDate: today.toISOString(), endDate: endDate.toISOString(), pricePerDay: openDates.pricePerDay};
+                    validDates.push(newOpenDate);
+                } else if(today <= startDate) {
+                    validDates.push(openDates)
+                }
+            });
+
+            const dateString = date.toISOString().slice(0,10);
+            let isDateInRange = false;
+
+            for(let openDate of validDates) {
+                const start = new Date(openDate.startDate).toISOString().slice(0, 10);
+                const end = new Date(openDate.endDate).toISOString().slice(0, 10);
+                
+                if(dateString >= start && dateString <= end) {
+                    isDateInRange = true;
+                    break;
+                }
+            };
+
+            return !isDateInRange;
+            
+        };
+
+        return blockPast() || blockBookedDates() || blockClosedDates();
     };
 
-   
 
+
+
+
+   
     const daySize = [25, 26];
 
     const [state, dispatch] = useReducer(datePickerReducer, initialState);

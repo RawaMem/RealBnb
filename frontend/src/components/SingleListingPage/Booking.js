@@ -23,6 +23,57 @@ function Booking({listing}) {
         focusedInput: null
     };
 
+    const existingBooking = listing.Bookings;
+    // function blockedDates(date) {
+    //     const today = new Date();
+    //     today.setHours(0, 0, 0, 0);
+
+
+    // };
+
+
+    function isDateBlocked(date) {
+        // the function should return a boolean, if true then date will be blocked
+        // block all the past dates
+        function blockPast() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            return date < today
+        }
+
+        function blockBookedDates() {
+            const validBooking = [];
+            existingBooking.forEach(booking => {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const startDate = new Date(booking.startDate);
+                const endDate = new Date(booking.endDate);
+            
+                if(startDate <= today && today <= endDate) {
+                    const newDateToBlock = {startDate:today, endDate};
+                    validBooking.push(newDateToBlock)
+                } else if(today <= startDate) {
+                    validBooking.push(booking)
+                };
+            });
+
+            const dateString = date.toISOString().slice(0,10);
+
+            for(let bookedDate of validBooking) {
+                const start = new Date(bookedDate.startDate).toISOString().slice(0,10);
+                const end = new Date(bookedDate.endDate).toISOString().slice(0,10);
+            
+                if(dateString >= start && dateString <= end) return true;
+            }            
+            return false;        
+        };
+        return blockPast() || blockBookedDates();
+    };
+
+   
+
+    const daySize = [25, 26];
+
     const [state, dispatch] = useReducer(datePickerReducer, initialState);
 
     const [numOfGuests, setNumOfGuests] = useState(1)
@@ -47,7 +98,7 @@ function Booking({listing}) {
                 </div>
 
                 <div className="booking-datePicker-container">
-                    <DatePicker state={state} dispatch={dispatch} />
+                    <DatePicker state={state} dispatch={dispatch} isDateBlocked={isDateBlocked} daySize={daySize} />
                     <div className="booking-guest-selectField-container" >
                         <BasicSelect value={numOfGuests} label={"GUESTS"} style={{width: "430px"}} handleChange={handleNumOfGuestChange} maxGuest={listing.maxGuests} />
                     </div>

@@ -1,6 +1,7 @@
 import React, { useReducer } from "react";
 import { DateRangeInput } from "@datepicker-react/styled";
 import { ThemeProvider } from "styled-components";
+import "./ui.css";
 
 export function datePickerReducer(state, action) {
     switch (action.type) {
@@ -13,24 +14,17 @@ export function datePickerReducer(state, action) {
     };
 };
 
-function isDateBlocked(date) {
-  // the function should return a boolean, if true then date will be blocked
-  // block all the past dates
-  const today = new Date();
-  // the date object include the current time by default, therefore, setting hour, minute, second and millisecond to zero to block the past dates.
-  today.setHours(0, 0, 0, 0);
-  return date < today;
-}
 
 
-function DatePicker({ state, dispatch}) {
-
+function DatePicker({ state, dispatch, isDateBlocked, daySize }) {
+// The isDateBlocked is a function that produces a boolean output. If this function returns 'true' for a specific date, that date will be blocked according to the conditions specified within the function.
+// daySize takes in an array of (2) number elements, the number represent the width and height of the calendar dropdown. 
     return (
       <ThemeProvider
       theme={{
         breakpoints: ["40em", "48em", "64em"],
         reactDatepicker: {
-          daySize: [30, 35],
+          daySize: daySize,
           fontFamily: "system-ui, -apple-system",
           colors: {
             accessibility: "pink",
@@ -56,20 +50,22 @@ function DatePicker({ state, dispatch}) {
         }
       }}
       >
-        <DateRangeInput
-          onDatesChange={(data) =>
-            dispatch({ type: "dateChange", payload: data })
-          }
-          onFocusChange={(focusedInput) =>
-            dispatch({ type: "focusChange", payload: focusedInput })
-          }
-          startDate={state.startDate} // Date or null
-          endDate={state.endDate} // Date or null
-          focusedInput={state.focusedInput} // START_DATE, END_DATE or null
-          style={{border: "none !important"}}
-          minBookingDays={"2"}
-          isDateBlocked={isDateBlocked}
-        />
+        <div className="datepicker-wrapper">
+          <DateRangeInput
+            onDatesChange={(data) =>
+              dispatch({ type: "dateChange", payload: data })
+            }
+            onFocusChange={(focusedInput) =>
+              dispatch({ type: "focusChange", payload: focusedInput })
+            }
+            startDate={state.startDate} // Date or null
+            endDate={state.endDate} // Date or null
+            focusedInput={state.focusedInput} // START_DATE, END_DATE or null
+            style={{border: "none !important"}}
+            minBookingDays={"2"}
+            isDateBlocked={isDateBlocked}
+          />
+        </div>
       </ThemeProvider>
     );
 };

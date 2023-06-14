@@ -34,7 +34,7 @@ let serverUrl;
 if (process.env.NODE_ENV === 'production') {
   serverUrl = 'https://realbnb.onrender.com/'
 } else {
-  serverUrl = 'http://localhost:8000'
+  serverUrl = 'http://localhost:5000'
 }
 
 const socket = io(serverUrl, {

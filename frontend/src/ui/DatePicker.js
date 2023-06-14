@@ -58,26 +58,28 @@ function DatePicker({ state, dispatch, isDateBlocked, daySize, setShowCalendar, 
         }
       }}
       >
-        <DateRangeInput
-          onDatesChange={(data) => {
-            dispatch({ type: "dateChange", payload: data });
-            console.log("%c what is going on here", "color: orange", data);
-            if (data.endDate && setShowCalendar && updateWishlistDates) {
-              setShowCalendar(false);
-              updateWishlistDates(data);
+        <div className="datepicker-wrapper">
+          <DateRangeInput
+            onDatesChange={(data) => {
+              dispatch({ type: "dateChange", payload: data });
+              console.log("%c what is going on here", "color: orange", data);
+              if (data.endDate && setShowCalendar && updateWishlistDates) {
+                setShowCalendar(false);
+                updateWishlistDates(data);
+              }
             }
-          }
-          }
-          onFocusChange={(focusedInput) =>
-            dispatch({ type: "focusChange", payload: focusedInput })
-          }
-          startDate={state.startDate} // Date or null
-          endDate={state.endDate} // Date or null
-          focusedInput={state.focusedInput} // START_DATE, END_DATE or null
-          style={{border: "none !important"}}
-          minBookingDays={"2"}
-          isDateBlocked={isDateBlocked}
-        />
+            }
+            onFocusChange={(focusedInput) =>
+              dispatch({ type: "focusChange", payload: focusedInput })
+            }
+            startDate={state.startDate} // Date or null
+            endDate={state.endDate} // Date or null
+            focusedInput={state.focusedInput} // START_DATE, END_DATE or null
+            style={{border: "none !important"}}
+            minBookingDays={"2"}
+            isDateBlocked={isDateBlocked}
+          />
+        </div>
       </ThemeProvider>
     );
 };

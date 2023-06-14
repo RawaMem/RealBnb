@@ -24,7 +24,13 @@ export default function BasicSelect({value, label, style, handleChange, maxGuest
             onChange={handleChange}
           >
             {dropDownVal.map(val => (
-                <MenuItem key={val} value={val}>{val}</MenuItem>
+                <MenuItem 
+                  key={val} 
+                  value={val}
+                  sx={{ position: 'relative', zIndex: '9999' }}
+                >
+                    {val}
+                </MenuItem>
             ))}
           </Select>
         </FormControl>

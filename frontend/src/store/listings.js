@@ -168,6 +168,7 @@ export const getSingleListingThunk = (listingId) => async dispatch => {
             await dispatch(getReviewsForSingleListingAction([...listing.Reviews]))
             delete listing.Reviews
         }
+
         dispatch(getSingleListingAction(listing))
         return listing
     }

@@ -7,7 +7,6 @@ import ReviewFormModal from "./ReviewFormModal";
 import ReviewsContainer from "./ReviewsContainer";
 import SingleListingImages from "./SingleListingImages";
 import SingleListingTitle from "./SingleListingTitle";
-import BookingsContainer from "./BookingsContainer";
 import Amenities from "./Amenities";
 import AboutListing from "./AboutListing";
 import './SingleListingPage.css';
@@ -16,21 +15,17 @@ import { GeoLocationMap } from "../Maps/GeoLocationMap";
 
 
 export default function SingleListingPage() {
-    const { listingId } = useParams()
-    const dispatch = useDispatch()
-
-    // const [showCreateReviewModal, setShowCreateReviewModal] = useState(false)
-
-
-    const currentUser = useSelector(state => state.session.user)
-    const listing = useSelector(state => state.listings.singleListing)
-    const reviews = useSelector(state => state.reviews.listingReviews)
+    const { listingId } = useParams();
+    const dispatch = useDispatch();
+    const currentUser = useSelector(state => state.session.user);
+    const listing = useSelector(state => state.listings.singleListing);
+    const reviews = useSelector(state => state.reviews.listingReviews);
 
 
     useEffect(() => {
-        dispatch(getSingleListingThunk(listingId))
+        dispatch(getSingleListingThunk(listingId));
 
-    }, [dispatch, listingId])
+    }, [dispatch, listingId]);
 
     if (!listing.Images) return <div className="loading">Loading...</div>
 

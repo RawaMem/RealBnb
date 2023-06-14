@@ -1,10 +1,16 @@
 import { useReducer, useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import DatePicker from "../../ui/DatePicker";
 import { datePickerReducer } from "../../ui/DatePicker";
 import BasicSelect from "../../ui/SelectField.js/BasicSelect";
 import PinkPurpleBtn from "../../ui/Buttons/PinkPurpleBtn";
+import { createBookingThunk } from "../../store/bookings";
 
 function Booking({listing}) {
+    const dispatchThunk = useDispatch();
+    const history = useHistory();
+
     let today = new Date();
 
     const initialState = {
@@ -152,6 +158,22 @@ function Booking({listing}) {
 
     const reserveBtnDisabled = !state.startDate && !state.endDate;
 
+    const handleReserve = async() => {
+        const avePricePerDay = (totalPrice / numOfDays).toFixed(2);
+        const newBooking = {
+            listingId: listing.id,
+            totalCost: totalPrice,
+            avePricePerDay: avePricePerDay,
+            numOfGuests,
+            startDate: state.startDate.toISOString(),
+            endDate: state.endDate.toISOString()
+        };
+        console.log("newBooking", newBooking)
+        const newlyCreatedBooking = await dispatchThunk(createBookingThunk(newBooking));
+
+        if(newlyCreatedBooking) history.push("/user-profile");
+    };
+
     if(!curPrice) return null;
 
     return (
@@ -185,6 +207,7 @@ function Booking({listing}) {
                         text={"Reserve"} 
                         style={{width: "430px", height: "50px"}} 
                         disbaled={reserveBtnDisabled}
+                        onClick={handleReserve}
                     />
                     <p style={{marginTop:"5px"}}>You won't be charged yet</p>
                 </div>

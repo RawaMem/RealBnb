@@ -47,7 +47,7 @@ router.get('/userBooking', requireAuth, asyncHandler(async (req, res) => {
     res.json(userBookingData)
 }));
 
-router.delete('/:bookingId', asyncHandler(async (req, res) => {
+router.delete('/:bookingId', requireAuth, asyncHandler(async (req, res) => {
     const bookingToDelete = await Booking.findByPk(req.params.bookingId);
 
     if (!bookingToDelete) {
@@ -61,40 +61,27 @@ router.delete('/:bookingId', asyncHandler(async (req, res) => {
 }));
 
 
-router.post('/', asyncHandler(async (req, res) => {
-    const { userId, totalCost, avePricePerDay, paymentConfirmed, startDate, endDate, listingId } = req.body;
+router.post('/create', requireAuth, asyncHandler(async (req, res) => {
+    const { totalCost, avePricePerDay, startDate, endDate, listingId, numOfGuests } = req.body;
+    
+    const userId = req.user.id;
 
     const listing = await Listing.findByPk(listingId);
+
 
     if (!listing) {
         res.status(404);
         return res.json({ errors: ['No listing found.'] });
     }
 
-    const foundListiings = await Booking.findAll({
-        where: {
-            startDate: {
-                [Op.between]: [new Date(startDate), new Date(endDate)]
-            },
-            endDate: {
-                [Op.between]: [new Date(startDate), new Date(endDate)]
-            }
-        }
-    });
-
-    if (foundListiings.length) {
-        res.status(401);
-        return res.json({ errors: ['These dates are already booked.'] })
-    }
-
     const booking = await Booking.create({
         userId,
+        listingId,
         totalCost,
         avePricePerDay,
-        paymentConfirmed,
+        numOfGuests,
         startDate,
-        endDate,
-        listingId
+        endDate     
     });
 
     return res.json(booking);

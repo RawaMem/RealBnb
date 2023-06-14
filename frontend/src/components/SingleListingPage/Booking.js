@@ -1,11 +1,13 @@
 import { useReducer, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { CardElement, useStripe, useElements} from "@stripe/react-stripe-js"
 import DatePicker from "../../ui/DatePicker";
 import { datePickerReducer } from "../../ui/DatePicker";
 import BasicSelect from "../../ui/SelectField.js/BasicSelect";
 import PinkPurpleBtn from "../../ui/Buttons/PinkPurpleBtn";
 import { createBookingThunk } from "../../store/bookings";
+import { csrfFetch } from "../../store/csrf";
 
 function Booking({listing}) {
     const dispatchThunk = useDispatch();
@@ -168,7 +170,45 @@ function Booking({listing}) {
             startDate: state.startDate.toISOString(),
             endDate: state.endDate.toISOString()
         };
-        console.log("newBooking", newBooking)
+
+        const stripePaymentIntentRes = await fetch("/api/bookings/create-payment-intent", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({totalCost: newBooking.totalCost})
+        });
+
+        const stripeResult = await stripePaymentIntentRes.json();
+
+        if(stripeResult.stripePaymentId) newBooking.stripePaymentIntentId = stripeResult.stripePaymentId;
+
+        if(stripeResult.error) {
+            console.error(stripeResult.error);
+        } else {
+            // confirm payment intent on client side
+            const stripe = useStripe();
+            const elements = useElements();
+            const cardElement = elements.getElement(CardElement);
+
+            const {error, paymentIntent} = await stripe.confirmCardPayment(stripeResult.client_secret, {
+                payment_method: {
+                    card: cardElement,
+                    billing_details: {
+                        name: 'John Doe',
+                    },
+                },
+            });
+
+        if (error) {
+            console.error(error);
+        } else if (paymentIntent.status === 'succeeded') {
+                // Payment was successful, you can now create the booking
+                const newlyCreatedBooking = await dispatchThunk(createBookingThunk(newBooking));
+                if(newlyCreatedBooking) history.push("/user-profile");
+            }
+        }
+
         const newlyCreatedBooking = await dispatchThunk(createBookingThunk(newBooking));
 
         if(newlyCreatedBooking) history.push("/user-profile");

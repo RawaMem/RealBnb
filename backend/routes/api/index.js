@@ -69,6 +69,7 @@ router.use("/wishlists", wishListRouter);
 router.use("/bookings", bookingRouter);
 router.use("/distanceMatrix", distanceMatrix);
 
+
 router.get('/maps-key', (req, res) => {
   const apiKey = process.env.GOOGLE_MAPS_API_KEY;
   // console.log('THIS IS THE GOOGLE KEY', apiKey)

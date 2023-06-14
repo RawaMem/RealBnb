@@ -149,6 +149,9 @@ function Booking({listing}) {
     };
    
     const daySize = [25, 26];
+
+    const reserveBtnDisabled = !state.startDate && !state.endDate;
+
     if(!curPrice) return null;
 
     return (
@@ -178,7 +181,11 @@ function Booking({listing}) {
                 </div>
 
                 <div className="reserve-button-container">
-                    <PinkPurpleBtn text={"Reserve"} style={{width: "430px", height: "50px"}} />
+                    <PinkPurpleBtn 
+                        text={"Reserve"} 
+                        style={{width: "430px", height: "50px"}} 
+                        disbaled={reserveBtnDisabled}
+                    />
                     <p style={{marginTop:"5px"}}>You won't be charged yet</p>
                 </div>
 

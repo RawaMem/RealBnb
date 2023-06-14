@@ -1,9 +1,14 @@
 
-function PinkPurpleBtn({text, style}) {
+function PinkPurpleBtn({text, style, disbaled, onClick}) {
     return (
-        <div className="pink-purple-btn-container" style={style} >
+        <button 
+            className={!disbaled ? "pink-purple-btn-container" : "pink-purple-btn-container-disabled"}
+            style={style} 
+            disabled={disbaled}
+            onClick={onClick}
+        >
             {text}
-        </div>
+        </button>
     );
 };
 

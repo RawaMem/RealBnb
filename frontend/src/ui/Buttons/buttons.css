@@ -48,6 +48,20 @@
     justify-content: center;
     align-items: center;
     color: white;
-    
+    border: none;
+    cursor: pointer;
+}
+
+.pink-purple-btn-container-disabled {
+    border-radius: 10px;
+    display: flex;
+    justify-content: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    cursor: not-allowed;
+    background-color: #CCCCCC;
+    color: #666666; 
 }
 

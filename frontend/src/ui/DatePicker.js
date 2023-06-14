@@ -3,20 +3,28 @@ import { DateRangeInput } from "@datepicker-react/styled";
 import { ThemeProvider } from "styled-components";
 import "./ui.css";
 
+//https://github.com/t0gre/react-datepicker/tree/master
 export function datePickerReducer(state, action) {
     switch (action.type) {
         case "focusChange":
         return { ...state, focusedInput: action.payload };
         case "dateChange":
+          // const { startDate, endDate } = action.payload;
+          // let focusedInput = state.focusedInput;
+          // if (startDate !== null && (endDate === null || +startDate === +endDate)) {
+          //     focusedInput = 'endDate';
+          // }
+          // return { ...state, startDate: startDate, endDate: endDate, focusedInput: focusedInput };
+          // console.log("%c this is the payload", "color: orange", action.payload);
         return action.payload;
+        // return { ...state, ...action.payload };
         default:
         throw new Error();
     };
 };
 
 
-
-function DatePicker({ state, dispatch, isDateBlocked, daySize }) {
+function DatePicker({ state, dispatch, isDateBlocked, daySize, setShowCalendar, updateWishlistDates }) {
 // The isDateBlocked is a function that produces a boolean output. If this function returns 'true' for a specific date, that date will be blocked according to the conditions specified within the function.
 // daySize takes in an array of (2) number elements, the number represent the width and height of the calendar dropdown. 
     return (
@@ -50,22 +58,26 @@ function DatePicker({ state, dispatch, isDateBlocked, daySize }) {
         }
       }}
       >
-        <div className="datepicker-wrapper">
-          <DateRangeInput
-            onDatesChange={(data) =>
-              dispatch({ type: "dateChange", payload: data })
+        <DateRangeInput
+          onDatesChange={(data) => {
+            dispatch({ type: "dateChange", payload: data });
+            console.log("%c what is going on here", "color: orange", data);
+            if (data.endDate && setShowCalendar && updateWishlistDates) {
+              setShowCalendar(false);
+              updateWishlistDates(data);
             }
-            onFocusChange={(focusedInput) =>
-              dispatch({ type: "focusChange", payload: focusedInput })
-            }
-            startDate={state.startDate} // Date or null
-            endDate={state.endDate} // Date or null
-            focusedInput={state.focusedInput} // START_DATE, END_DATE or null
-            style={{border: "none !important"}}
-            minBookingDays={"2"}
-            isDateBlocked={isDateBlocked}
-          />
-        </div>
+          }
+          }
+          onFocusChange={(focusedInput) =>
+            dispatch({ type: "focusChange", payload: focusedInput })
+          }
+          startDate={state.startDate} // Date or null
+          endDate={state.endDate} // Date or null
+          focusedInput={state.focusedInput} // START_DATE, END_DATE or null
+          style={{border: "none !important"}}
+          minBookingDays={"2"}
+          isDateBlocked={isDateBlocked}
+        />
       </ThemeProvider>
     );
 };

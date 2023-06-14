@@ -21,6 +21,7 @@ import ListingPriceForm from './components/CreateListing/ListingPriceForm';
 import CategoryForm from './components/CreateListing/CategoryForm';
 import CreateNewList from './components/CreateListing';
 import UserProfile from './components/UserProfile';
+import WishList, { WishListListing } from './components/WishLists';
 import EditListingForm from './components/EditListing';
 
 
@@ -33,7 +34,7 @@ let serverUrl;
 if (process.env.NODE_ENV === 'production') {
   serverUrl = 'https://realbnb.onrender.com/'
 } else {
-  serverUrl = 'http://localhost:5000'
+  serverUrl = 'http://localhost:8000'
 }
 
 const socket = io(serverUrl, {
@@ -129,6 +130,12 @@ function App() {
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <Switch>
+          <Route exact path='/wishlists'>
+            <WishList wishListStyle={{display: "grid", gridTemplateColumns: "auto auto auto", padding: "10px"}} />
+          </Route>
+          <Route exact path='/wishlists/:wishlistId'>
+            <WishListListing />
+          </Route>
           <Route exact path="/">
             <Listings />
           </Route>
@@ -178,7 +185,9 @@ function App() {
           <Route exact path='/testing'>
             <TestCompontent />
           </Route>
-
+          <Route exact path="/">
+            <Listings />
+          </Route>
           <Route exact path='/sockets'>
             <Socket socket={socket} />
           </Route>

@@ -7,7 +7,7 @@ const { handleValidationErrors } = require("../../utils/validation");
 const { requireAuth } = require("../../utils/auth");
 
 const asyncHandler = require("express-async-handler");
-const { WishList, Listing, WishListListing } = require("../../db/models");
+const { WishList, Listing, WishListListing, Image } = require("../../db/models");
 
 const router = express.Router();
 
@@ -39,6 +39,9 @@ function getWishListValidation(isPutRequest) {
 		check("checkIn")
 			.optional()
 			.custom(async (value, { req }) => {
+				if (!value) {
+					return;
+				}
 				if (!isValidDate(value)) {
 					throw new Error("Check in date must be a valid date.");
 				}
@@ -48,10 +51,8 @@ function getWishListValidation(isPutRequest) {
 					throw new Error("Check in date must occur after the current date.");
 				}
 				if (req.method === "PUT") {
-					const wishlistId = parseInt(req.params.wishlistId, 10);
-					const foundWishList = await WishList.findOne({ where: { id: wishlistId } });
-					const existingCheckOutDate = foundWishList.checkOut;
-					if (value && existingCheckOutDate && !(existingCheckOutDate > new Date(value))) {
+					const existingCheckOutDate = req.body.checkOut;
+					if (value && existingCheckOutDate && existingCheckOutDate < new Date(value)) {
 						throw new Error("Check out date must occur after the check in date.");
 					}
 				}
@@ -61,6 +62,9 @@ function getWishListValidation(isPutRequest) {
 		check("checkOut")
 			.optional()
 			.custom(async (value, { req }) => {
+				if (!value) {
+					return;
+				}
 				if (!isValidDate(value)) {
 					throw new Error("Check out date must be a valid date.");
 				}
@@ -70,9 +74,9 @@ function getWishListValidation(isPutRequest) {
 					throw new Error("Check out date must occur after the current date.");
 				}
 				if (req.method === "PUT") {
-					const wishlistId = parseInt(req.params.wishlistId, 10);
-					const foundWishList = await WishList.findOne({ where: { id: wishlistId } });
-					const existingCheckInDate = foundWishList.checkIn;
+					// const wishlistId = parseInt(req.params.wishlistId, 10);
+					// const foundWishList = await WishList.findOne({ where: { id: wishlistId } });
+					const existingCheckInDate = req.body.checkIn;
 					if (value && existingCheckInDate && existingCheckInDate > new Date(value)) {
 						throw new Error("Check out date must occur after the check in date.");
 					}
@@ -94,10 +98,8 @@ function getWishListValidation(isPutRequest) {
 					throw new Error("The number of adults must be between 1 and 16.");
 				}
 				if (req.method === "PUT") {
-					const wishlistId = parseInt(req.params.wishlistId, 10);
-					const foundWishList = await WishList.findOne({ where: { id: wishlistId } });
-					const existingChildGuests = parseInt(foundWishList.childGuests, 10);
-					const errors = validateGuests(intValue, existingChildGuests);
+					const childGuests = parseInt(req.body.childGuests, 10);
+					const errors = validateGuests(intValue, childGuests);
 
 					if (Object.keys(errors).length > 0) {
 						throw new Error(errors["adultGuests"]);
@@ -122,22 +124,6 @@ function getWishListValidation(isPutRequest) {
 				const intValue = parseInt(value, 10);
 				if (intValue < 0 || intValue > 15) {
 					throw new Error("The number of children must be between 0 and 15.");
-				}
-				if (req.method === "PUT") {
-					const wishlistId = parseInt(req.params.wishlistId, 10);
-					const foundWishList = await WishList.findOne({ where: { id: wishlistId } });
-					const existingAdultGuests = parseInt(foundWishList.adultGuests, 10);
-					const errors = validateGuests(existingAdultGuests, intValue);
-
-					if (Object.keys(errors).length > 0) {
-						throw new Error(errors["adultGuests"]);
-					}
-				} else {
-					const errors = validateGuests(parseInt(req.body.adultGuests, 10), intValue);
-
-					if (Object.keys(errors).length > 0) {
-						throw new Error(errors["adultGuests"]);
-					}
 				}
 
 				return true;
@@ -208,7 +194,7 @@ router.get(
 				],
 			});
 			if (!wishLists.length) {
-				return res.status(404).json({ message: "No wish lists found for this user." });
+				return res.status(404).json({ errors: "No wish lists found for this user." });
 			}
 			res.json(wishLists);
 		} catch (err) {
@@ -257,7 +243,7 @@ router.delete(
 			const wishlistId = parseInt(req.params.wishlistId, 10);
 			const foundWishList = await WishList.findOne({ where: { id: wishlistId } });
 			if (!foundWishList) {
-				return res.status(404).json({ message: "Wish list not found." });
+				return res.status(404).json({ errors: "Wish list not found." });
 			}
 			await foundWishList.destroy();
 			res.json({
@@ -281,7 +267,32 @@ router.post(
 				wishlistId,
 				...req.body,
 			});
-			res.send(wishListListing);
+			// const foundListing = await Listing.findOne({
+			// 	where: { id: req.body.listingId },
+			// });
+			res.send({ wishListListing });
+		} catch (err) {
+			next(err);
+		}
+	})
+);
+
+router.delete(
+	"/:wishlistId/:listingId",
+	requireAuth,
+	asyncHandler(async (req, res, next) => {
+		try {
+			const listingId = parseInt(req.params.listingId, 10);
+			const wishlistId = parseInt(req.params.wishlistId, 10);
+			const foundWishList = await WishListListing.findOne({ where: { listingId, wishlistId } });
+			if (!foundWishList) {
+				return res.status(404).json({ errors: "Listing not found." });
+			}
+			await foundWishList.destroy();
+			res.json({
+				message: "Delete Successful",
+				deleted_id: foundWishList.id,
+			});
 		} catch (err) {
 			next(err);
 		}

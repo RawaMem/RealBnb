@@ -1,5 +1,3 @@
-
-
 export default function ListingCard({listing}) {
 
     const avaDate = () => {
@@ -45,7 +43,7 @@ export default function ListingCard({listing}) {
 
     return (
         <>            
-                <div key={listing.id}>   
+                <div key={listing.id}>
                     <img alt="listing" width="340" height="350" src={listing.previewImageUrl} loading="lazy" style={{ borderRadius: "15px"}} />
                     <div style={{ display:"flex", justifyContent:"space-between", marginTop:"10px" }}>
                         <div>

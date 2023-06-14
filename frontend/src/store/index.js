@@ -6,7 +6,7 @@ import mapsReducer from './maps';
 import reviews from './reviews';
 import dmThreads from './directMessageThreads';
 import directMessages from './directMessages';
-import bookings from './bookings';
+import bookingsReducer from './bookings';
 import wishlistsReducer from "./wishlists.js";
 
 const rootReducer = combineReducers({
@@ -16,6 +16,7 @@ const rootReducer = combineReducers({
   maps: mapsReducer,
   dmThreads,
   directMessages,
+  bookings: bookingsReducer,
   wishlists: wishlistsReducer,
 });
 

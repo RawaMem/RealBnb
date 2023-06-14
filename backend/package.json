@@ -44,7 +44,8 @@
     "pg": "^8.7.3",
     "sequelize": "^6.3.5",
     "sequelize-cli": "^6.2.0",
-    "socket.io": "^4.5.1"
+    "socket.io": "^4.5.1",
+    "stripe": "^12.9.0"
   },
   "devDependencies": {
     "dotenv-cli": "^4.0.0",

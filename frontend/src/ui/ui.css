@@ -50,3 +50,7 @@
 .starIcons-star-rating-container .empty {
     color: rgb(95,95,95);
 }
+
+.datepicker-wrapper {
+    z-index: 1000 !important;
+}

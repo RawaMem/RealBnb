@@ -3,6 +3,7 @@ import * as React from 'react';
 import { useState } from "react";
 import UserListings from "./UserListings";
 import ManageUserReviews from "./ManageUserReviews";
+import ManageUserBookings from "./ManageUserBookings";
 
 function UserProfile() {
     const user = useSelector(state => state.session.user);
@@ -28,15 +29,25 @@ function UserProfile() {
                     onClick={() => {
                         localStorage.setItem("user profile current page", "Manage your reviews")
                         setShowComponent("Manage your reviews")
-                    }}
-                    
-                    >Manage your reviews </div>
+                    }}                    
+                    >
+                        Manage your reviews 
+                    </div>
+                    <div 
+                    onClick={() => {
+                        localStorage.setItem("user profile current page", "Manage your bookings")
+                        setShowComponent("Manage your bookings")
+                    }}                    
+                    >
+                        Your Trips
+                    </div>
                 </div>
             </div>
 
             <div className="content-page-container">
                 {showComponent==="View your listings" &&  <UserListings />}
                 {showComponent==="Manage your reviews" && <ManageUserReviews />}
+                {showComponent==="Manage your bookings" && <ManageUserBookings />}
             </div>
         </div>
     );

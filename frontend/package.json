@@ -10,6 +10,8 @@
     "@googlemaps/react-wrapper": "^1.1.35",
     "@mui/material": "^5.12.2",
     "@react-google-maps/api": "^2.13.1",
+    "@stripe/react-stripe-js": "^2.1.0",
+    "@stripe/stripe-js": "^1.54.0",
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^13.1.5",
@@ -58,5 +60,5 @@
     "prettier": "^2.8.8",
     "redux-logger": "^3.0.6"
   },
-  "proxy": "http://localhost:8000"
+  "proxy": "http://localhost:5000"
 }

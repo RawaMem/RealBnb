@@ -1,12 +1,6 @@
 import { useState, useEffect, useReducer } from "react";
 import { Link } from "react-router-dom";
 import './createListing.css';
-// import 'react-dates/initialize';
-// import { DateRangePicker } from 'react-dates';
-// import 'react-dates/lib/css/_datepicker.css';
-// import './react_dates_overrides.css';
-// import moment from 'moment';
-
 import DatePicker from "../../ui/DatePicker";
 import { datePickerReducer } from "../../ui/DatePicker";
 
@@ -41,8 +35,17 @@ export default function ListingPriceForm() {
     const [error, setError] = useState({});
     const [focusedInput, setFocusedInput] = useState(null);
     const [listingPrice, setListingPrice] = useState(getInitalPrice("listing price", 10));
-    // const [startDateError, setStartDateError] = useState(false);
-    // const [endDateError, setEndDateError] = useState(false);
+
+    function isDateBlocked(date) {
+        // the function should return a boolean, if true then date will be blocked
+        // block all the past dates
+        const today = new Date();
+        // the date object include the current time by default, therefore, setting hour, minute, second and millisecond to zero to block the past dates.
+        today.setHours(0, 0, 0, 0);
+        return date < today;
+    };
+
+    const daySize = [25, 25];
     
     const handlePageChange = () => {
         function convertDateObjToStr(date) {
@@ -62,11 +65,6 @@ export default function ListingPriceForm() {
         if(serviceFee < 1) errorMsg['serviceFee'] = "Service fee must be greater than $1";
         if(cleaningFee < 1) errorMsg['cleaningFee'] = "Cleaning fee must be greater than $1";
         setError(errorMsg)
-        // if(!startingDate) setStartDateError(true)
-        // else setStartDateError(false)
-        
-        // if(!endingDate) setEndDateError(true)
-        // else setEndDateError(false)
 
     },[listingPrice, serviceFee, cleaningFee])
 
@@ -137,7 +135,7 @@ export default function ListingPriceForm() {
                             <div className="price-section">  
                                 <div className="price-form-calendar">
                                     <p style={{color: 'rgb(113,113,113)'}}>Please select a date range for your property, your property will be listed at the current set price during this time frame </p>
-                                    <DatePicker state={state} dispatch={dispatch} />
+                                    <DatePicker state={state} dispatch={dispatch} isDateBlocked={isDateBlocked} daySize={daySize} />
                                 </div>
                             </div>
                         </div>

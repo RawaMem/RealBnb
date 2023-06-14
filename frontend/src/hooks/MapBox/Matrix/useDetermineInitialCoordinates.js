@@ -7,7 +7,6 @@ import { useMemo } from "react";
  * @returns {CoordinatesArray} an array of the average latitude and longitude of the listings associated with the current wishlist. Useful for determining the initial coordinates of the map.
  */
 export function useDetermineInitialCoordinates(filteredLists) {
-    console.log("%c filteredLists", "color:yellow; font-size: 16px;", filteredLists);
     return useMemo(() => {
         let sumOfLatitudes = 0;
         let sumOfLongitudes = 0;

@@ -27,18 +27,32 @@ export function MapBox({
   const durations = 
   useCalculateDistanceBetweenListings(token, filteredLists, "driving");
   const zoomBasedOnDistance = useDetermineZoom(durations);
+  const [currentZoom, setCurrentZoom] = useState(zoom);
+  const [initialZoom, setInitialZoom] = useState(zoom);
+
+  useEffect(() => {
+    if (zoomBasedOnDistance) setCurrentZoom(zoomBasedOnDistance);
+  }, [zoomBasedOnDistance]);
+
   useEffect(() => {
     if (!token) dispatch(getToken());
   }, [dispatch, token]);
 
   useEffect(() => {
-    setViewport({ latitude, longitude, zoom: zoomBasedOnDistance || zoom });
-  }, [latitude, longitude, zoomBasedOnDistance]);
+    if (zoom - initialZoom >= 1) {
+      setInitialZoom(zoom);
+      setCurrentZoom((prevZoom) => prevZoom + 1);
+    }
+
+    if (zoom - initialZoom <= -1) {
+      setInitialZoom(zoom);
+      setCurrentZoom((prevZoom) => prevZoom - 1);
+    }
+  }, [zoom]);
 
   useEffect(() => {
-    setViewport({ latitude, longitude, zoom: zoom });
-
-  }, [zoom])
+    setViewport({ latitude, longitude, zoom: currentZoom });
+  }, [latitude, longitude, currentZoom]);
 
   useEffect(() => {
     return () => dispatch(clearDurations());

@@ -27,6 +27,7 @@ import {
   toISODateString,
   determineNumberOfGuests,
 } from "../../../utils/WishList";
+import { useDetermineInitialCoordinates } from "../../../hooks/MapBox";
 
 export function WishListListing() {
   const { wishlistId } = useParams();
@@ -103,6 +104,7 @@ export function WishListListing() {
     currentWishList
   );
   const filteredLists = useFilteredLists(allListings, listingSet);
+  const [latitude, longitude] = useDetermineInitialCoordinates(filteredLists);
   const validListings = useValidListings(
     filteredLists,
     currentWishList,
@@ -287,8 +289,8 @@ export function WishListListing() {
           </button>
         </div>
         <MapBox
-          latitude={35.4117}
-          longitude={-118.2712}
+          latitude={latitude}
+          longitude={longitude}
           style={containerStyle}
           zoom={zoom}
           coordinates={filteredLists}

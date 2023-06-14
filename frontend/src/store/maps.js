@@ -3,6 +3,7 @@ import { csrfFetch } from "./csrf";
 const LOAD_API_KEY = "maps/LOAD_API_KEY";
 const LOAD_ACCESS_TOKEN = "maps/LOAD_ACCESS_TOKEN";
 const CALCULATE_DISTANCE = "maps/CALCULATE_DISTANCE";
+const CLEAR_DURATIONS = "maps/CLEAR_DURATIONS";
 
 const loadApiKey = (key) => ({
   type: LOAD_API_KEY,
@@ -18,6 +19,12 @@ function calculateDistance(durations) {
   return {
     type: CALCULATE_DISTANCE,
     durations,
+  };
+}
+
+export function clearDurations() {
+  return {
+    type: CLEAR_DURATIONS,
   };
 }
 
@@ -60,7 +67,7 @@ export function getDistancesBetweenListings(token, listings, profile) {
   };
 }
 
-const initialState = { key: null, token: null, durations: {} };
+const initialState = { key: null, token: null, durations: [] };
 
 const mapsReducer = (state = initialState, action) => {
   let newState;
@@ -74,12 +81,14 @@ const mapsReducer = (state = initialState, action) => {
         return state;
       }
 
-      newState = { ...state, durations: {} };
+      newState = { ...state, durations: [] };
       // As of right now, I can't think of a reason to normalize the duration to get from point A to B.
       // The distances key won't mean anything in this context. And, given that there could be up to 25 points, the duration might repeat meaning that some items might be replaced.
       // Durations could be null too meaning that a key could be null.
       newState.durations = action.durations.flatMap((duration) => duration);
       return newState;
+    case CLEAR_DURATIONS:
+      return initialState;
     default:
       return state;
   }

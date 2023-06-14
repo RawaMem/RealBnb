@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Map, { Marker } from "react-map-gl";
 import { useDispatch, useSelector } from "react-redux";
-import { getToken } from "../../store/maps";
+import { clearDurations, getToken } from "../../store/maps";
 import { Modal } from "../../context/Modal";
 import "mapbox-gl/dist/mapbox-gl.css";
 import ListingCard from "../Listings/ListingCard";
@@ -23,16 +23,26 @@ export function MapBox({
   const [viewport, setViewport] = useState({ latitude, longitude, zoom: 12 });
   const [showListing, setShowListing] = useState(false);
   // Made it a custom hook to separate a bit of the logic and so that the map looks more like just a map while the logic happens somewhere else.
-  const durations = useCalculateDistanceBetweenListings(token, filteredLists, "driving");
-  // const zoom = useDetermineZoom(durations);
-
+  // https://stackoverflow.com/questions/72455157/react-has-detected-a-change-in-the-order-of-hooks
+  const durations = 
+  useCalculateDistanceBetweenListings(token, filteredLists, "driving");
+  const zoomBasedOnDistance = useDetermineZoom(durations);
   useEffect(() => {
     if (!token) dispatch(getToken());
   }, [dispatch, token]);
 
   useEffect(() => {
-    setViewport({ latitude, longitude, zoom: zoom || 12 });
-  }, [latitude, longitude, zoom]);
+    setViewport({ latitude, longitude, zoom: zoomBasedOnDistance || zoom });
+  }, [latitude, longitude, zoomBasedOnDistance]);
+
+  useEffect(() => {
+    setViewport({ latitude, longitude, zoom: zoom });
+
+  }, [zoom])
+
+  useEffect(() => {
+    return () => dispatch(clearDurations());
+  }, [])
 
   const MAPBOX_TOKEN = token;
 
@@ -40,7 +50,7 @@ export function MapBox({
   return (
     <Map
       {...viewport}
-      // style={style}
+      style={style}
       mapStyle="mapbox://styles/mapbox/streets-v12"
       mapboxAccessToken={MAPBOX_TOKEN}
       onMove={event => setViewport(event.viewState)}

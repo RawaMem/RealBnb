@@ -6,7 +6,6 @@ const { requireAuth } = require('../../utils/auth')
 
 const router = express.Router();
 
-const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY)
 
 // get all user bookings
 router.get('/userBooking', requireAuth, asyncHandler(async (req, res) => {
@@ -66,29 +65,43 @@ router.get("/stripeConfig", (req, res) => {
     });
   });
 
-router.post("/create-payment-intent", asyncHandler(async (req,res) => {
-    const {totalCost} = req.body;
+const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY)
+
+router.post("/create-payment-intent", requireAuth, asyncHandler(async (req,res) => {
+    const {totalCost, imageUrl, listingName, listingId } = req.body;
     try {
         // use paymentIntenets.create() to allow more flexibility
-        const stripePayment = await stripe.paymentIntents.create({
-            currency: "usd",
-            amount: totalCost * 100, //calculated in cents
+        const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
-            automatic_payment_methods: { enabled: true },
+            mode: "payment",
+            line_items: [
+                {
+                price_data: {
+                    currency: "usd",
+                    product_data: {
+                        name: listingName,
+                        images: [imageUrl]
+                    },
+                    unit_amount: Math.round(totalCost * 100)
+                },
+                quantity: 1
+                }
+            ],
+            success_url: "http://localhost:3000/user-profile", 
+            cancel_url: `http://localhost:3000/listings/${listingId}`,
         });
 
-        return res.json({
-            stripePaymentId: stripePayment.id,
-            client_secret: paymentIntent.client_secret
+        res.json({
+            stripePaymentId: session.id,
+            url: session.url
         });
         } catch (error) {
-            return res.status(400).send({
+            res.status(400).json({
                 error: {
                   message: error.message,
                 },
             });
         };
-
 }));
 
 router.post('/create', requireAuth, asyncHandler(async (req, res) => {

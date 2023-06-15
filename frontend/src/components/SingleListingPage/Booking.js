@@ -171,47 +171,37 @@ function Booking({listing}) {
             endDate: state.endDate.toISOString()
         };
 
-        const stripePaymentIntentRes = await fetch("/api/bookings/create-payment-intent", {
+        const previewImage = listing.Images.find(image => image.preview);
+        const listingName = listing.name;
+
+        const dataForStripe = {
+            imageUrl: previewImage.url,
+            listingName: listingName,
+            totalCost: totalPrice,
+            listingId: listing.id
+        }
+
+        const stripePaymentIntentRes = await csrfFetch("/api/bookings/create-payment-intent", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({totalCost: newBooking.totalCost})
-        });
+            body: JSON.stringify(dataForStripe)
+        })
 
         const stripeResult = await stripePaymentIntentRes.json();
-
+        console.log("stripeResult.stripePaymentId", stripeResult.stripePaymentId)
         if(stripeResult.stripePaymentId) newBooking.stripePaymentIntentId = stripeResult.stripePaymentId;
 
         if(stripeResult.error) {
             console.error(stripeResult.error);
         } else {
             // confirm payment intent on client side
-            const stripe = useStripe();
-            const elements = useElements();
-            const cardElement = elements.getElement(CardElement);
-
-            const {error, paymentIntent} = await stripe.confirmCardPayment(stripeResult.client_secret, {
-                payment_method: {
-                    card: cardElement,
-                    billing_details: {
-                        name: 'John Doe',
-                    },
-                },
-            });
-
-        if (error) {
-            console.error(error);
-        } else if (paymentIntent.status === 'succeeded') {
-                // Payment was successful, you can now create the booking
-                const newlyCreatedBooking = await dispatchThunk(createBookingThunk(newBooking));
-                if(newlyCreatedBooking) history.push("/user-profile");
-            }
+            window.location.replace(stripeResult.url);
+            const newlyCreatedBooking = await dispatchThunk(createBookingThunk(newBooking));
+            if(newlyCreatedBooking) history.push("/user-profile");
         }
-
-        const newlyCreatedBooking = await dispatchThunk(createBookingThunk(newBooking));
-
-        if(newlyCreatedBooking) history.push("/user-profile");
+        
     };
 
     if(!curPrice) return null;

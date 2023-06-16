@@ -59,11 +59,6 @@ router.delete('/:bookingId', requireAuth, asyncHandler(async (req, res) => {
     return res.json({ message: 'successfully deleted' })
 }));
 
-router.get("/stripeConfig", (req, res) => {
-    res.send({
-      publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
-    });
-  });
 
 const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY)
 
@@ -103,8 +98,8 @@ router.post("/create-payment-intent", async (req,res) => {
                 quantity: 1
                 }
             ],
-            success_url: "http://localhost:3000/user-profile", 
-            cancel_url: `http://localhost:3000/listings/${listingId}`,
+            success_url: `http://localhost:3000/user-bookings/${userId}`, 
+            cancel_url: `http://localhost:3000/edit-listing/${listingId}`,
         });
 
         res.json({

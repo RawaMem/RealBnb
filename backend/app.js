@@ -16,7 +16,14 @@ app.use(morgan("dev"));
 
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+// app.use(express.json());
+app.use((req, res, next) => {
+  if (req.originalUrl === "/api/bookings/webhook") {
+    next();
+  } else {
+    express.json()(req, res, next);
+  }
+});
 
 // Security Middleware
 if (!isProduction) {
@@ -29,15 +36,37 @@ app.use(helmet({
 }));
 
 // Set the _csrf token and create req.csrfToken method
-app.use(
-  csurf({
-    cookie: {
-      secure: isProduction,
-      sameSite: isProduction && "Lax",
-      httpOnly: true,
-    },
-  })
-);
+// app.use(
+//   csurf({
+//     cookie: {
+//       secure: isProduction,
+//       sameSite: isProduction && "Lax",
+//       httpOnly: true,
+//     },
+//   })
+// );
+
+// csurf options
+const csurfProtection = csurf({
+  cookie: {
+    secure: isProduction,
+    sameSite: isProduction && "Lax",
+    httpOnly: true,
+  },
+});
+
+
+app.use((req, res, next) => {
+  // Only apply CSRF protection if the request is not for the webhook endpoint.
+  if (!req.url.includes('/webhook')) {
+    csurfProtection(req, res, next);
+  } else {
+    next();
+  }
+});
+
+
+
 
 app.use(routes); // Connect all the routes
 

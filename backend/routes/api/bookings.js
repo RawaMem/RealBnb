@@ -67,13 +67,29 @@ router.get("/stripeConfig", (req, res) => {
 
 const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY)
 
-router.post("/create-payment-intent", requireAuth, asyncHandler(async (req,res) => {
-    const {totalCost, imageUrl, listingName, listingId } = req.body;
+router.post("/create-payment-intent", async (req,res) => {
+    console.log("req.body", req.body)
+
+    const {userId, totalCost, imageUrl, listingName, avePricePerDay, numOfGuests, startDate, endDate, listingId} = req.body;
+
+    const newBooking = await stripe.customers.create({
+        metadata: {
+            userId,
+            listingId,
+            totalCost,
+            avePricePerDay,
+            numOfGuests,
+            startDate,
+            endDate
+        }
+    });
+
     try {
         // use paymentIntenets.create() to allow more flexibility
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
             mode: "payment",
+            customer: newBooking.id,
             line_items: [
                 {
                 price_data: {
@@ -102,7 +118,63 @@ router.post("/create-payment-intent", requireAuth, asyncHandler(async (req,res) 
                 },
             });
         };
-}));
+});
+
+// This is the Stripe CLI webhook secret for testing endpoint locally.
+let endpointSecret;
+
+endpointSecret = "whsec_1a43d283a95cca353365e5c538a5b0d750403558f2489e85441406391a3a0cf5";
+
+router.post('/webhook', express.raw({type: 'application/json'}), async(request, response) => {
+    const sig = request.headers['stripe-signature'];
+
+    let data;
+    let eventType;
+
+    if(endpointSecret) {
+        let event;
+        
+        try {
+            event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
+            console.log("webhook verified")
+        } catch (err) {
+            console.log("webhook failed", `Webhook Error: ${err.message}`)
+            response.status(400).send(`Webhook Error: ${err.message}`);
+            return;
+        }
+
+        data = event.data.object;
+        eventType = event.type;
+    } else {
+        data = request.body.object;
+        eventType = request.body.type;
+    };
+    
+    // Handle the event
+    let booking;
+    if(eventType === "checkout.session.completed") {
+        stripe.customers.retrieve(data.customer)
+        .then((customer) => {
+                const bookingData = customer.metadata
+                booking = Booking.create({
+                    userId:+bookingData.userId,
+                    listingId:+bookingData.listingId,
+                    totalCost:+bookingData.totalCost,
+                    avePricePerDay:+bookingData.avePricePerDay,
+                    numOfGuests: +bookingData.numOfGuests,
+                    startDate:bookingData.startDate,
+                    endDate:bookingData.endDate
+                });
+            }
+        ).catch(err => console.log("err from checkout sessiont", err.message))
+    };
+
+    if(booking) {
+        console.log("booking successful created")
+    };
+}
+);
+  
 
 router.post('/create', requireAuth, asyncHandler(async (req, res) => {
     const { totalCost, avePricePerDay, startDate, endDate, listingId, numOfGuests, stripePaymentIntentId } = req.body;

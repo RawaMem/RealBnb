@@ -123,7 +123,7 @@ router.post("/create-payment-intent", async (req,res) => {
 // This is the Stripe CLI webhook secret for testing endpoint locally.
 let endpointSecret;
 
-endpointSecret = "whsec_1a43d283a95cca353365e5c538a5b0d750403558f2489e85441406391a3a0cf5";
+endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 router.post('/webhook', express.raw({type: 'application/json'}), async(request, response) => {
     const sig = request.headers['stripe-signature'];

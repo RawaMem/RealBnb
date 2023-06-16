@@ -7,7 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     avePricePerDay: DataTypes.DECIMAL,
     numOfGuests: DataTypes.INTEGER,
     startDate: DataTypes.DATE,
-    endDate: DataTypes.DATE
+    endDate: DataTypes.DATE,
+    stripePaymentIntentId: DataTypes.STRING
   }, {});
   Booking.associate = function(models) {
     // associations can be defined here

@@ -1,16 +1,18 @@
 import { useReducer, useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { CardElement, useStripe, useElements} from "@stripe/react-stripe-js"
 import DatePicker from "../../ui/DatePicker";
 import { datePickerReducer } from "../../ui/DatePicker";
 import BasicSelect from "../../ui/SelectField.js/BasicSelect";
 import PinkPurpleBtn from "../../ui/Buttons/PinkPurpleBtn";
 import { createBookingThunk } from "../../store/bookings";
+import { csrfFetch } from "../../store/csrf";
 
 function Booking({listing}) {
     const dispatchThunk = useDispatch();
     const history = useHistory();
-
+    const sessionUser = useSelector(state => state.session.user)
     let today = new Date();
 
     const initialState = {
@@ -161,6 +163,7 @@ function Booking({listing}) {
     const handleReserve = async() => {
         const avePricePerDay = (totalPrice / numOfDays).toFixed(2);
         const newBooking = {
+            userId: sessionUser.id,
             listingId: listing.id,
             totalCost: totalPrice,
             avePricePerDay: avePricePerDay,
@@ -168,10 +171,43 @@ function Booking({listing}) {
             startDate: state.startDate.toISOString(),
             endDate: state.endDate.toISOString()
         };
-        console.log("newBooking", newBooking)
-        const newlyCreatedBooking = await dispatchThunk(createBookingThunk(newBooking));
 
-        if(newlyCreatedBooking) history.push("/user-profile");
+        const previewImage = listing.Images.find(image => image.preview);
+        const listingName = listing.name;
+
+        const dataForStripe = {
+            userId: sessionUser.id,
+            imageUrl: previewImage.url,
+            listingName: listingName,
+            totalCost: totalPrice,
+            listingId: listing.id,
+            avePricePerDay: avePricePerDay,
+            numOfGuests,
+            startDate: state.startDate.toISOString(),
+            endDate: state.endDate.toISOString()
+        }
+
+        const stripePaymentIntentRes = await csrfFetch("/api/bookings/create-payment-intent", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(dataForStripe)
+        })
+
+        const stripeResult = await stripePaymentIntentRes.json();
+        console.log("stripeResult.stripePaymentId", stripeResult.stripePaymentId)
+        if(stripeResult.stripePaymentId) newBooking.stripePaymentIntentId = stripeResult.stripePaymentId;
+
+        if(stripeResult.error) {
+            console.error(stripeResult.error);
+        } else {
+            // confirm payment intent on client side
+            window.location.replace(stripeResult.url);
+            // const newlyCreatedBooking = await dispatchThunk(createBookingThunk(newBooking));
+            // if(newlyCreatedBooking) history.push("/user-profile");
+        }
+        
     };
 
     if(!curPrice) return null;

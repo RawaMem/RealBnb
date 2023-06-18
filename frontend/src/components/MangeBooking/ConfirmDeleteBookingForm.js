@@ -1,13 +1,15 @@
 import { useDispatch } from "react-redux";
-import { deleteUserListingThunk } from "../../store/listings";
+import { removeBookingThunk } from "../../store/bookings";
+import "./ManageBooking.css";
 
-function ConfirmDeleteListingForm({setShowConfirmDeleteForm, previewImageUrl, listingId}) {
-
+export default function ConfirmDeleteBookingForm({setShowConfirmDeleteForm, bookingId,previewImageUrl}) {
     const dispatch = useDispatch();
 
+
     function handleDelete() {
-        dispatch(deleteUserListingThunk(listingId))
-        .then(() => setShowConfirmDeleteForm(false));
+        dispatch(removeBookingThunk(bookingId))
+        setShowConfirmDeleteForm(false);
+      
     };
 
     return (
@@ -17,31 +19,35 @@ function ConfirmDeleteListingForm({setShowConfirmDeleteForm, previewImageUrl, li
                 <div className="confirmDeleteListingForm-image-container">
                     <img src={previewImageUrl} className="confirmDeleteListingForm-preview-image" />
                 </div>
-                <div className="confirmDeleteListingForm-contents-container">
-                    <div>Deleting this listing will permanently remove it from the site.<br />Are you sure you want to proceed?</div>
+                <div className="confirmDeleteBookingForm-contents-container">
+                    <div className="confirmDeleteBookingForm-contents-inner-container">
+                        <div className="confirmDeleteBookingForm-contents-top">
+                            Please note that deleting this booking will permanently remove it from your account<br />
+                            However, you can always make a new booking if your plans change. <br />
+                        </div>
+                        Are you certain you want to proceed with this cancellation?
+                    </div>
                 </div>
             </div>
 
             <div className="confirmDeleteListingForm-bottom-container">
                 <div className="confirmDeleteListingForm-bottom-inner-container">
-                    <div 
+                    <div
                     className="confirmDeleteForm-button" 
                     style={{cursor:"pointer"}}
                     onClick={() => setShowConfirmDeleteForm(false)}
                     >
-                        No, Keep Listing
+                        No, Keep Booking
                     </div>
                     <div 
-                    style={{cursor:"pointer"}}
                     className="confirmDeleteForm-button" 
+                    style={{cursor:"pointer"}}
                     onClick={handleDelete}
                     >
-                        Yes, Delete Listing
+                        Yes, Delete Booking
                     </div>
                 </div>
             </div>
         </div>
     );
 };
-
-export default ConfirmDeleteListingForm;

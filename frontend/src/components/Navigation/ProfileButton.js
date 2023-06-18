@@ -52,6 +52,7 @@ function ProfileButton({ isLoaded, setShowLogInModal, setShowSignUpModal}) {
           <br />
           <NavLink to="/wishlists">Wishlists</NavLink>
           <li onClick={logout}>Log Out</li>
+          <NavLink to={`/user-bookings/${user.id}`}>Trips</NavLink>
         </ul>
       </div>
     )

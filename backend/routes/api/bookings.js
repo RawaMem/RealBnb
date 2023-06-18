@@ -1,10 +1,12 @@
 const express = require('express');
 const asyncHandler = require('express-async-handler');
 require("dotenv").config()
-const { Booking, Listing, Image } = require('../../db/models');
+const Sequelize = require('sequelize');
+const { Booking, Listing, Image, User } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth')
 
 const router = express.Router();
+
 
 
 // get all user bookings
@@ -59,11 +61,6 @@ router.delete('/:bookingId', requireAuth, asyncHandler(async (req, res) => {
     return res.json({ message: 'successfully deleted' })
 }));
 
-router.get("/stripeConfig", (req, res) => {
-    res.send({
-      publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
-    });
-  });
 
 const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY)
 
@@ -103,8 +100,8 @@ router.post("/create-payment-intent", async (req,res) => {
                 quantity: 1
                 }
             ],
-            success_url: "http://localhost:3000/user-profile", 
-            cancel_url: `http://localhost:3000/listings/${listingId}`,
+            success_url: `http://localhost:3000/user-bookings/${userId}`, 
+            cancel_url: `http://localhost:3000/edit-listing/${listingId}`,
         });
 
         res.json({
@@ -210,6 +207,35 @@ router.post('/create', requireAuth, asyncHandler(async (req, res) => {
             },
         });
     };
+}));
+
+// get booking by bookingId
+router.get("/:bookingId/detail", requireAuth, asyncHandler(async(req, res) => {
+    const bookingId = req.params.bookingId;
+
+    const booking = await Booking.findByPk(bookingId, {
+        include: [
+            {
+            model: Listing,
+            attributes: ["longitude", "latitude"],
+            }
+        ]
+    });
+
+    if(!booking) res.status(404).json({errors: ["Booking not found."]});
+
+    const listingId = booking.listingId;
+    const listing = await Listing.findByPk(listingId);
+
+    const listingOwner = await listing.getUser({attributes: ["username"]});
+
+    const bookingToJson = booking.toJSON();
+    bookingToJson.listingLng = bookingToJson.Listing.longitude;
+    bookingToJson.listingLat = bookingToJson.Listing.latitude;
+    delete bookingToJson.Listing;
+    bookingToJson.listingHostUsername = listingOwner.username;
+
+    res.json(bookingToJson);
 }));
 
 module.exports = router;

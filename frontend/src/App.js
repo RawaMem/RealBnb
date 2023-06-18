@@ -23,6 +23,7 @@ import CreateNewList from './components/CreateListing';
 import UserProfile from './components/UserProfile';
 import WishList, { WishListListing } from './components/WishLists';
 import EditListingForm from './components/EditListing';
+import ManageUserBookings from './components/MangeBooking';
 
 
 //websocket setup
@@ -171,6 +172,9 @@ function App() {
           </Route>
           <Route exact path='/user-profile'>
             <UserProfile />
+          </Route>
+          <Route exact path='/user-bookings/:userId'>
+            <ManageUserBookings />
           </Route>
 
           <StyledEngineProvider injectFirst>

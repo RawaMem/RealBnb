@@ -1,0 +1,35 @@
+.confirmDeleteBookingForm-contents-container {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.confirmDeleteBookingForm-contents-inner-container {
+    width: 80%;
+    font-weight: 500;
+    font-size: 20px;
+}
+
+.confirmDeleteBookingForm-contents-top {
+    font-size: 15px;
+    color: orange;
+    margin-bottom: 5%;
+}
+
+.confirmDeleteForm-button {
+    transition: background-color 0.3s ease-in-out;
+    width: 180px;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    font-weight: 400;
+}
+
+.confirmDeleteForm-button:hover {
+    background-color: rgb(247,247,247);
+}

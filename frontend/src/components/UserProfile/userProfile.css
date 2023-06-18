@@ -246,8 +246,8 @@
     border-radius: 5px;
     cursor: pointer;
     background-color: rgb(247,247,247);
-    margin-top: 5px;
     transition: box-shadow 0.3s ease-in-out;
+    margin-top: 5px;
 }
 
 .user-review-edit-pen-container:hover {

@@ -94,7 +94,6 @@
 
 #edit-delete-btn-container {
     width: 4%;
-    /* border: 2px solid orange; */
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -236,7 +235,6 @@
 }
 
 .user-review-edit-pen-container {
-    /* border: .5px solid black; */
     width: 45px;
     height: 30px;
     display: flex;

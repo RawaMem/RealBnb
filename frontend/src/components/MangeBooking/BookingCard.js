@@ -1,11 +1,8 @@
-import { useState } from "react";
-import {Link} from "react-router-dom";
-import { Modal } from "../../context/Modal";
-import ConfirmDeleteBookingForm from "./ConfirmDeleteBookingForm";
+import { Link } from "react-router-dom";
+
 
 export default function BookingCard({booking, showConfirmDeleteModal, showConfirmDeleteForm, setShowConfirmDeleteForm}) {
 
-    // const [showConfirmDeleteForm, setShowConfirmDeleteForm] = useState(false);
 
     function convertDate(date) {
         const dateObj = new Date(date);
@@ -19,23 +16,10 @@ export default function BookingCard({booking, showConfirmDeleteModal, showConfir
         return formattedDate;
     };
 
-    // function showConfirmDeleteModal() {
-    //     return (
-    //         <Modal onClick={() => setShowConfirmDeleteForm(false)}>
-    //             <ConfirmDeleteBookingForm
-    //                 setShowConfirmDeleteForm={setShowConfirmDeleteForm}
-    //                 previewImageUrl={booking.listingImagePreview}
-    //                 bookingId={booking.id}
-    //             />
-    //         </Modal>
-    //     );
-    // };
-
-
     return (
         <div className="userListingCard-container">
             <Link
-                to={`/listings/${booking.listingId}`}
+                to={`/user-bookings/detail/${booking.id}`}
                 style={{textDecoration: "none"}}
                 className="userListingCard-clickable-container"
             >

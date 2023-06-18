@@ -228,13 +228,18 @@ router.get("/:bookingId/detail", requireAuth, asyncHandler(async(req, res) => {
     const listing = await Listing.findByPk(listingId);
 
     const listingOwner = await listing.getUser({attributes: ["username"]});
+    const listingPreviewImage = await listing.getImages({
+        where: {
+            preview: true
+        }
+    });
 
     const bookingToJson = booking.toJSON();
     bookingToJson.listingLng = bookingToJson.Listing.longitude;
     bookingToJson.listingLat = bookingToJson.Listing.latitude;
     delete bookingToJson.Listing;
     bookingToJson.listingHostUsername = listingOwner.username;
-
+    bookingToJson.listingPreviewImage = listingPreviewImage[0].url
     res.json(bookingToJson);
 }));
 

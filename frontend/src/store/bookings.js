@@ -1,8 +1,9 @@
 import { csrfFetch } from "./csrf";
 
-const CREATE_BOOKING = "listings/CREATE_BOOKING";
-const DELETE_BOOKING = "listings/DELETE_BOOKING";
+const CREATE_BOOKING = "bookings/CREATE_BOOKING";
+const DELETE_BOOKING = "bookings/DELETE_BOOKING";
 const GET_USER_BOOKINGS = "bookings/GET_USER_BOOKINGS";
+const GET_BOOKING_DETAIL = "bookings/GET_BOOKING_DETAIL"
 
 const getUserBookings = bookings => ({
     type: GET_USER_BOOKINGS,
@@ -18,6 +19,21 @@ const deleteBooking = bookingId => ({
     type: DELETE_BOOKING,
     bookingId
 });
+
+const getBookingDetail = booking => ({
+    type: GET_BOOKING_DETAIL,
+    booking
+});
+
+
+export const getBookingDetailThunk = bookingId => async dispatch => {
+    const response = await csrfFetch(`/api/bookings/${bookingId}/detail`);
+
+    if(response.ok) {
+        const booking = await response.json();
+        dispatch(getBookingDetail(booking));
+    };
+};
 
 export const getUserBookingsThunk = () => async dispatch => {
     const response = await csrfFetch("/api/bookings/userBooking");
@@ -65,6 +81,10 @@ export default function bookingsReducer(state = {}, action) {
         case DELETE_BOOKING: {
             const newState = { ...state };
             delete newState[action.bookingId];
+            return newState;
+        }
+        case GET_BOOKING_DETAIL: {
+            const newState = action.booking;
             return newState;
         }
         default:

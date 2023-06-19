@@ -31,7 +31,7 @@ function WishList({
         const promises = listOfWishlists.map((wishlist) => {
           if (!wishlist.Listings.length) return;
           const listingId = wishlist.Listings.find((listing) => listing).id;
-          return dispatch(getSingleListingThunk(listingId));
+          return dispatch(getSingleListingThunk(listingId, "WishList"));
         });
         const data = await Promise.all(promises);
         setListings(data);

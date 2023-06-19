@@ -87,13 +87,12 @@ function Navigation({ isLoaded }){
 
             <button className="searchBtn">Search</button>
           </form>
-
         </div>
 
         <div className='right-section'>
-          {sessionUser && <Link to='/messages'>
+          {/* {sessionUser && <Link to='/messages'>
             <div className="navbar-messages">Messages</div>
-          </Link>}
+          </Link>} */}
 
           <div className='become-host-btn-container'>
             {sessionUser && <NavLink id="become-host-link-id" to='/createListing/introduction'>Become a Host</NavLink>}

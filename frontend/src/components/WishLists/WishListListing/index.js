@@ -145,7 +145,6 @@ export function WishListListing() {
     };
     await dispatch(updateWishlistThunk(updatedWishlist));
   }
-
   return (
     <div style={{ display: "flex" }}>
       <div>
@@ -220,6 +219,28 @@ export function WishListListing() {
             <p>As you search, click the heart icon to save your favorite places and Experiences to a wishlist.</p>
           </div>
         )}
+        {filteredLists && filteredLists.length > 0 && currentWishList && !currentWishList?.checkIn && (
+          <div>
+            {filteredLists.map((listing) => (
+              <div
+              onMouseOver={() => setHoveredListing(listing.id)}
+              onMouseLeave={() => setHoveredListing(null)}
+              key={listing.id}
+            >
+              <NavLink
+                key={listing.id}
+                style={{ textDecoration: "none" }}
+                to={`/listings/${listing.id}`}
+              >
+                <ListingCard
+                  listing={listing}
+                  wishListListing={wishListListing}
+                />
+              </NavLink>
+            </div>
+            ))}
+          </div>
+        )}
         {validListings.map((listing) => (
           <div
             onMouseOver={() => setHoveredListing(listing.id)}
@@ -239,7 +260,7 @@ export function WishListListing() {
           </div>
         ))}
 
-        {exceedMaxGuestListings.length > 0 && (
+        {exceedMaxGuestListings.length > 0 && currentWishList?.checkIn && (
           <div>
             <h3>None of these homes fit your trip</h3>
             <p>

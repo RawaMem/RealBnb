@@ -168,7 +168,6 @@ export const getListingSearchResultsThunk = (searchFormValues) => async dispatch
 
 export const getSingleListingThunk = (listingId, event="Listing") => async dispatch => {
     const response = await csrfFetch(`/api/listings/${listingId}`);
-    console.log("%c theventevent", "color:pink; font-size: 15px;", event)
     if (response.ok) {
         const listing = await response.json()
         //check if listing has reviews
@@ -260,7 +259,6 @@ export default function listings(state = initialState, action) {
             action.listings.forEach(listing => newState.allListings[listing.id] = listing);
             return newState;
         case GET_SINGLE_LISTING:
-            console.log("%c am I even here?", "color:yellow; font-size: 15px;", action)
             newState = {allListings:{...state.allListings}, singleListing: {}, singleListingForWishLists: {}}
             newState.singleListing = action.listing
             return newState;

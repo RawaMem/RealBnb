@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useReceiverId } from "../../context/ReceiverId";
 import { useDispatch, useSelector } from "react-redux";
 import { createDMThreadsThunk } from "../../store/directMessageThreads";
-import { deleteWishlistListingThunk } from "../../store/wishlists";
+import { deleteWishlistListingThunk, getUserWishlistsThunk } from "../../store/wishlists";
 import { Modal } from "../../context/Modal";
 import { CreateWishListParentComponent } from "../WishLists/CreateParentComponent";
 import LoginForm from "../LoginFormModal";
@@ -17,6 +17,18 @@ export default function SingleListingTitle({ listing, currentUser }) {
   const [showLogInModal, setShowLogInModal] = useState(false);
   const { user } = useSelector((state) => state.session);
   const { wishListListing } = useSelector((state) => state.wishlists);
+
+  useEffect(() => {
+    if (user) {
+      dispatch(getUserWishlistsThunk(user.id));
+    }
+  }, [dispatch, user]);
+
+  useEffect(() => {
+    if (!user) {
+        dispatch(clearWishlists());
+    }
+}, [dispatch, user]);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();

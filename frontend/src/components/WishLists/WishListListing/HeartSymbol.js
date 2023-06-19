@@ -1,15 +1,15 @@
-export function HeartSymbol({listing, wishListListing, user, setShowCreateWishListModal, setModalOpen, dispatch, setShowLogInModal}) {
+import { createWishlistListingThunk, deleteWishlistListingThunk } from "../../../store/wishlists";
+import { useParams } from "react-router-dom";
+
+export function HeartSymbol({listing, wishListListing, dispatch}) {
+    const { wishlistId } = useParams();
     async function handleHeartClick () {
-        if (!user) {
-          setShowLogInModal(listing.id);
-          return;
-        }
         if (listing.id in wishListListing) {
-          await dispatch(deleteWishlistListingThunk(wishListListing[listing.id].WishListListing.wishlistId, listing.id));
+          await dispatch(deleteWishlistListingThunk(wishlistId, listing.id));
           return;
+        } else {
+            await dispatch(createWishlistListingThunk(wishlistId, listing.id));
         }
-        setShowCreateWishListModal(listing.id);
-        setModalOpen("CreateWishListModal");
       }
     
       return (

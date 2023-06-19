@@ -219,7 +219,7 @@ export function WishListListing() {
             <p>As you search, click the heart icon to save your favorite places and Experiences to a wishlist.</p>
           </div>
         )}
-        {filteredLists && filteredLists.length > 0 && currentWishList && !currentWishList?.checkIn && (
+        {filteredLists && filteredLists.length > 0 && currentWishList && !currentWishList?.checkIn && !currentWishList?.adultGuests && (
           <div>
             {filteredLists.map((listing) => (
               <div
@@ -260,7 +260,7 @@ export function WishListListing() {
           </div>
         ))}
 
-        {exceedMaxGuestListings.length > 0 && currentWishList?.checkIn && (
+        {exceedMaxGuestListings.length > 0 && (
           <div>
             <h3>None of these homes fit your trip</h3>
             <p>

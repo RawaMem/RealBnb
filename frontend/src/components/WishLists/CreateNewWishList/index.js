@@ -10,10 +10,6 @@ export function CreateNewWishList({ setOpenWishList, user, setModalOpen, listing
     const newWishListObj = {
       name,
       userId: user.id,
-      adultGuests: 1,
-      childGuests: 0,
-      infantGuests: 0,
-      petGuests: 0,
     };
 
     const response = await dispatch(createWishlistThunk(newWishListObj, listingId));

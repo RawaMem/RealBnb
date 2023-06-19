@@ -32,6 +32,36 @@ export default function BookingDetail() {
         dispatch(getBookingDetailThunk(bookingId));
     }, [dispatch]);
 
+    function bookingStatus() {
+        const status = "future"
+        const startDate = new Date(bookingState.startDate);
+        const endDate = new Date(bookingState.endDate);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        if(startDate <= today && today <= endDate) status = "onGoing";
+        if(today >= endDate) status = "past";
+        
+        return status
+    };
+
+
+    const markerContent = (
+        <div className="booking-detail-marker-content-container">
+            <span 
+                className="material-symbols-outlined"
+                id="material-symbols-mylocation"
+            >
+                location_home
+            </span>
+            <div className="booking-detail-marker-content">
+                {bookingStatus() === "past" && "Where you stayed"}
+                {bookingStatus() === "onGoing" && "Where you are staying"}
+                {bookingStatus() === "future" && "Where you will be staying"}
+            </div>
+        </div>
+    );
+
 
     if(!bookingState.id) return null;
 
@@ -91,7 +121,9 @@ export default function BookingDetail() {
                     <GeoLocationMap 
                         latitude={bookingState.listingLat} 
                         longitude={bookingState.listingLng}
-                        style={{width: "98%", height: "100%"}}
+                        style={{width: "98%", height: "100%", filter: "brightness(80%)"}}
+                        markerContent={markerContent}
+                        zoom={14}
                     />
                 </div>
             </div>

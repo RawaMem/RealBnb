@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 
-export default function BookingCard({booking, showConfirmDeleteModal, showConfirmDeleteForm, setShowConfirmDeleteForm}) {
+export default function BookingCard({booking, showConfirmDeleteModal, showConfirmDeleteForm, setShowConfirmDeleteForm, type}) {
 
 
     function convertDate(date) {
@@ -34,13 +34,15 @@ export default function BookingCard({booking, showConfirmDeleteModal, showConfir
                 </div>
             </Link>
 
-            <div id="edit-delete-btn-container">                 
+           {
+            type==="UpcomingBookings" && <div id="edit-delete-btn-container">                 
                 <span 
                 onClick={() => setShowConfirmDeleteForm(true)}
                 className="material-symbols-outlined">
                     delete
                 </span>                  
             </div>
+            }
 
             {showConfirmDeleteForm && showConfirmDeleteModal(booking)}
         </div>

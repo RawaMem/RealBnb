@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getToken } from '../../store/maps';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-export function GeoLocationMap({style, latitude, longitude }) {
+export function GeoLocationMap({style, latitude, longitude, markerContent, zoom }) {
     const dispatch = useDispatch();
     const token = useSelector((state) => state.maps?.token);
     const [viewport, setViewport] = useState({latitude, longitude, zoom: 12})
@@ -14,7 +14,7 @@ export function GeoLocationMap({style, latitude, longitude }) {
     }, [dispatch, token]);
 
     useEffect(() => {
-        setViewport({latitude, longitude, zoom:12})
+        setViewport({latitude, longitude, zoom })
     }, [latitude, longitude])
 
     const MAPBOX_TOKEN = token
@@ -23,11 +23,14 @@ export function GeoLocationMap({style, latitude, longitude }) {
     return (
         <Map
             {...viewport}
+            onMove={evt => setViewport(evt.viewState)}
             style={style}
-            mapStyle="mapbox://styles/mapbox/streets-v9"
+            mapStyle="mapbox://styles/mapbox/streets-v11"
             mapboxAccessToken={MAPBOX_TOKEN}
             >
-                <Marker longitude={longitude} latitude={latitude} color="red" />
+                <Marker longitude={longitude} latitude={latitude} color="red" anchor="bottom" >                   
+                        {markerContent && markerContent}                  
+                </Marker>
         </Map>
     )
-}
+};

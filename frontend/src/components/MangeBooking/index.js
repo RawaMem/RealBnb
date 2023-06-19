@@ -19,7 +19,6 @@ export default function ManageUserBookings() {
 
     const userBookings = Object.values(userBookingsState);
 
-    console.log("userBookings", userBookingsState)
     userBookings.forEach(booking => {
         const today = new Date();
         const startDate = new Date(booking.startDate);

@@ -63,7 +63,12 @@ export default function SingleListingPage() {
                 <hr />
                 <div>
                     <h3>Where you'll be</h3>
-                    <GeoLocationMap style={{width: '100%', height: '550px'}} latitude={listing.latitude} longitude={listing.longitude} />
+                    <GeoLocationMap 
+                        style={{width: '100%', height: '550px'}} 
+                        latitude={listing.latitude} 
+                        longitude={listing.longitude} 
+                        zoom={14}
+                        />
                 </div>
                 <hr />
                 <div className="reviewContainer">

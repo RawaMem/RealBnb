@@ -39,8 +39,8 @@
     width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-between;
+    align-items: flex-start;
 }
 
 .bookingDetail-inner-container {
@@ -129,8 +129,29 @@
 
 }
 
+.bookingDetail-guests-container {
+    height: 15%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid rgb(224,224,224);
+}
+
+.bookingDetail-guests-inner-container {
+    height: 100%;
+    width: 95%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    font-size: 17px;
+    font-weight: 600;
+    margin-top: 5%;
+}
+
 .bookingDetail-pricing-container {
-    height: 35%;
+    height: 20%;
     width: 100%;
     display: flex;
     justify-content: flex-end;
@@ -151,5 +172,51 @@
 .bookingDetail-pricing-title {
     font-size: 17px;
     font-weight: 600;
+}
+
+#material-symbols-arrow-back {
+    color:rgb(102,102,102);
+    border-radius: 50%;
+}
+
+.booking-info-container {
+    color:rgb(102,102,102);
+    margin-left: 2%;
+    margin-top: 1%;
+
+}
+
+#edit-delete-btn-container {
+    color:rgb(102,102,102);
+    margin-top: 1%;
+    width: 45px;
+    height: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: box-shadow 0.5s ease-in-out;
+}
+
+
+.material-symbols-arrow-back-container {
+    width: 45px;
+    height: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: box-shadow 0.5s ease-in-out;
+    margin-top: 5px;
+    border-radius: 50%;
+}
+
+.material-symbols-arrow-back-container :hover,
+#edit-delete-btn-container:hover {
+    box-shadow: 0px 0px 10px 2px rgba(128,128,128,0.5);
 }
 

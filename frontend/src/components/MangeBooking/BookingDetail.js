@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory} from "react-router-dom";
 import { getBookingDetailThunk } from "../../store/bookings";
 import { GeoLocationMap } from "../Maps/GeoLocationMap";
 import "./ManageBooking.css";
@@ -21,6 +21,10 @@ export default function BookingDetail() {
     const {bookingId} = useParams();
 
     const bookingState = useSelector(state => state.bookings);
+
+    const userId = useSelector(state => state.session.user.id);
+
+    const history = useHistory();
     
     const dispatch = useDispatch();
 
@@ -28,12 +32,22 @@ export default function BookingDetail() {
         dispatch(getBookingDetailThunk(bookingId));
     }, [dispatch]);
 
-    console.log("bookingState", bookingState)
 
     if(!bookingState.id) return null;
 
     return (
         <div className="bookingDetail-container">
+            <div 
+                className="material-symbols-arrow-back-container"
+                onClick={() => history.push(`/user-bookings/${userId}`)}
+            >
+                <span 
+                    className="material-symbols-outlined"
+                    id="material-symbols-arrow-back"
+                >
+                    arrow_back
+                </span>
+            </div>
             <div className="bookingDetail-inner-container">
                 <div className="bookingDetail-left-container">
                     <div className="bookingDetail-listing-preview-container">
@@ -59,6 +73,11 @@ export default function BookingDetail() {
                                 <div className="bookingDetail-dates-contents">{convertDate(bookingState.endDate)}
                                 </div>                                
                             </div>
+                        </div>
+                    </div>
+                    <div className="bookingDetail-guests-container">
+                        <div className="bookingDetail-guests-inner-container">
+                            Guest Total: <div style={{color: "rgb(117,117,117)", marginLeft: "2%"}}>     {bookingState.numOfGuests}</div>
                         </div>
                     </div>
                     <div className="bookingDetail-pricing-container">

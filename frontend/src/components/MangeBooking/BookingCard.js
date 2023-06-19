@@ -30,23 +30,16 @@ export default function BookingCard({booking, showConfirmDeleteModal, showConfir
 
                 <div className="booking-info-container">
                     <h5>{booking.listingName}</h5>
-                    <div>Guest Total: {booking.numOfGuests}</div>
-                    <div>Check-In Date: {convertDate(booking.startDate)}</div>
-                    <div>Check-Out Date: {convertDate(booking.endDate)}</div>
                     <div>Date of Reservation: {convertDate(booking.createdAt)}</div>
-                    <div>Average Rate: $ {booking.avePricePerDay}</div>
-                    <div>Total Amount: $ {booking.totalCost}</div>
                 </div>
             </Link>
 
-            <div id="edit-delete-btn-container">
-                    <div>
-                        <span 
-                        onClick={() => setShowConfirmDeleteForm(true)}
-                        className="material-symbols-outlined">
-                            delete
-                        </span>
-                    </div>
+            <div id="edit-delete-btn-container">                 
+                <span 
+                onClick={() => setShowConfirmDeleteForm(true)}
+                className="material-symbols-outlined">
+                    delete
+                </span>                  
             </div>
 
             {showConfirmDeleteForm && showConfirmDeleteModal(booking)}

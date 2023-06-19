@@ -4,24 +4,11 @@
     width: 100%;
 }
 
-.left-section-container {
-    height: 100%;
-    width: 50%;
-    display: flex;
-    justify-content: center;
-    position: relative;
-}
+
 
 .left-section-inner-container {
     height: 100%;
     width: 100%;
-}
-
-.right-section-container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 50%;
 }
 
 .video-description {
@@ -163,11 +150,12 @@ input::-webkit-inner-spin-button {
     align-items: center;
     height: 100%;
     margin-left: 4%;
+    margin-right: 4%;
 }
 
 #price-input input {
-    width: 80%;
-    height: 100%;
+    width: 150px;
+    height: 40px;
     border-radius: 10px;
     margin-left: 0.2rem;
     border: 1px solid rgb(197,197,197);
@@ -490,7 +478,7 @@ span.disabled {
     grid-template-columns: repeat(auto-fill, 200px);
     grid-template-rows: repeat(auto-fill, 200px);
     gap: 10px 20px; 
-    overflow-y: scroll;  
+    overflow-y: auto;  
     margin: 1.5em;
 }
 
@@ -535,7 +523,6 @@ span.disabled {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    /* padding-left: 2%; */
 }
 
 .image-drop-down div {
@@ -570,20 +557,6 @@ span.disabled {
     align-items: center;
     border: 1px dashed lightgrey;
     border-radius: 5px;
-}
-
-#image-drop-zone {
-    position:absolute;
-    top: 10%;
-    height: 80%;
-    width: 45%;
-    right: 40px;
-    border: 1px dashed grey;
-    background-color: rgb(247,247,247);
-    border-radius: 15px;
-    text-align: center;
-    font-size: 40px;
-    font: grey;
 }
 
 .edit-photo-modal-container {
@@ -860,5 +833,71 @@ video::-webkit-media-controls-time-remaining-display {
     display: none;
 }
 
+@media (min-width: 1224px) {
+    .left-section-container,
+    .address-form-left-section,
+    .bed-guest-left-section,
+    .ameniti-left-section,
+    .category-left-section {
+        height: 100%;
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        position: relative;
+    }
 
+    .right-section-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 50%;
+    }
+
+    #image-drop-zone {
+        position:absolute;
+        top: 10%;
+        height: 80%;
+        width: 45%;
+        right: 40px;
+        border: 1px dashed grey;
+        background-color: rgb(247,247,247);
+        border-radius: 15px;
+        text-align: center;
+        font-size: 40px;
+        font: grey;
+    }
+
+}
+
+
+@media (max-width: 1223px) {
+    .left-section-container,
+    .address-form-left-section,
+    .bed-guest-left-section,
+    .ameniti-left-section,
+    .category-left-section {
+        display: none;
+    }
+
+    .right-section-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+    }
+
+    #image-drop-zone {
+        position:absolute;
+        top: 10%;
+        height: 80%;
+        width: 95%;
+        border: 1px dashed grey;
+        background-color: rgb(247,247,247);
+        border-radius: 15px;
+        text-align: center;
+        font-size: 40px;
+        font: grey;
+    }
+
+}
 

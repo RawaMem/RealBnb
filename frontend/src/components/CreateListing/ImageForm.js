@@ -211,8 +211,7 @@ export default function ImageForm() {
         };
     }, [previewImageUrl, multiImages, hasSubmitted]);
 
-    return (
-        
+    return (        
             <div className="form-container">
                 <section className="left-section-container">
                     <div className="video-description">Next, let's add some photos of your place</div>
@@ -232,7 +231,8 @@ export default function ImageForm() {
                     <div 
                     className="image-form-image-section-container"
                     >
-                        {dragZone && ( <div 
+                        {dragZone && 
+                        ( <div 
                         id="image-drop-zone"
                         {...getRootProps({ className: 'dropzone' })} 
                         onDragOver={e => {
@@ -244,7 +244,8 @@ export default function ImageForm() {
                             e.preventDefault()
                             setDragZone(false);
                         }}
-                        >Drop Files Here</div> ) }
+                        >Drop Files Here</div> ) 
+                        }
                         <div className="image-form-image-section-container-upper">
                             <div>
                                 <h3>Ta-da! How does this look?</h3>

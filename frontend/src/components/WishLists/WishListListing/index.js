@@ -44,7 +44,7 @@ export function WishListListing() {
   const [name, setName] = useState(currentWishList?.name || "");
   const [showGuestModal, setShowGuestModal] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
-  const [zoom, setZoom] = useState(9);
+  const [zoom, setZoom] = useState(1);
   const [hoveredListing, setHoveredListing] = useState(null);
 
   const containerStyle = {
@@ -214,6 +214,12 @@ export function WishListListing() {
             </>
           </Modal>
         )}
+        {filteredLists && filteredLists.length === 0 && (
+          <div>
+            <h6>No saves yet</h6>
+            <p>As you search, click the heart icon to save your favorite places and Experiences to a wishlist.</p>
+          </div>
+        )}
         {validListings.map((listing) => (
           <div
             onMouseOver={() => setHoveredListing(listing.id)}
@@ -289,8 +295,8 @@ export function WishListListing() {
           </button>
         </div>
         <MapBox
-          latitude={latitude}
-          longitude={longitude}
+          latitude={latitude || 38.765}
+          longitude={longitude || -122.45}
           style={containerStyle}
           zoom={zoom}
           coordinates={filteredLists}

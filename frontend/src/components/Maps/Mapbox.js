@@ -74,6 +74,7 @@ export function MapBox({
       {coordinates && validListings ? (
         coordinates.map((item) => (
           <Marker
+            key={item.id}
             longitude={item.longitude}
             latitude={item.latitude}
             color="red"
@@ -106,7 +107,7 @@ export function MapBox({
                       ? "black"
                       : "transparent",
                 }}
-                class="material-symbols-outlined"
+                className="material-symbols-outlined"
               >
                 block
               </span>

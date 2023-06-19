@@ -28,6 +28,7 @@ import {
   determineNumberOfGuests,
 } from "../../../utils/WishList";
 import { useDetermineInitialCoordinates } from "../../../hooks/MapBox";
+import { RenderListings } from "./RenderListings";
 
 export function WishListListing() {
   const { wishlistId } = useParams();
@@ -46,6 +47,10 @@ export function WishListListing() {
   const [showCalendar, setShowCalendar] = useState(false);
   const [zoom, setZoom] = useState(1);
   const [hoveredListing, setHoveredListing] = useState(null);
+  const [showCreateWishListModal, setShowCreateWishListModal] = useState(false);
+  const [modalOpen, setModalOpen] = useState(null);
+  const user = useSelector((state) => state.session.user);
+
 
   const containerStyle = {
     width: "90%",
@@ -220,45 +225,11 @@ export function WishListListing() {
           </div>
         )}
         {filteredLists && filteredLists.length > 0 && currentWishList && !currentWishList?.checkIn && !currentWishList?.adultGuests && (
-          <div>
-            {filteredLists.map((listing) => (
-              <div
-              onMouseOver={() => setHoveredListing(listing.id)}
-              onMouseLeave={() => setHoveredListing(null)}
-              key={listing.id}
-            >
-              <NavLink
-                key={listing.id}
-                style={{ textDecoration: "none" }}
-                to={`/listings/${listing.id}`}
-              >
-                <ListingCard
-                  listing={listing}
-                  wishListListing={wishListListing}
-                />
-              </NavLink>
-            </div>
-            ))}
-          </div>
+          <RenderListings listings={filteredLists} wishListListing={wishListListing} user={user} setShowCreateWishListModal={setShowCreateWishListModal} setModalOpen={setModalOpen} dispatch={dispatch} setHoveredListing={setHoveredListing}/>
         )}
-        {validListings.map((listing) => (
-          <div
-            onMouseOver={() => setHoveredListing(listing.id)}
-            onMouseLeave={() => setHoveredListing(null)}
-            key={listing.id}
-          >
-            <NavLink
-              key={listing.id}
-              style={{ textDecoration: "none" }}
-              to={`/listings/${listing.id}`}
-            >
-              <ListingCard
-                listing={listing}
-                wishListListing={wishListListing}
-              />
-            </NavLink>
-          </div>
-        ))}
+        {validListings.length > 0 && (
+          <RenderListings listings={validListings} wishListListing={wishListListing} user={user} setShowCreateWishListModal={setShowCreateWishListModal} setModalOpen={setModalOpen} dispatch={dispatch} setHoveredListing={setHoveredListing}/>
+        )}
 
         {exceedMaxGuestListings.length > 0 && (
           <div>
@@ -267,24 +238,7 @@ export function WishListListing() {
               If you’re flexible, try adjusting your wishlist filters to find
               other options.
             </p>
-            {exceedMaxGuestListings.map((listing) => (
-              <div
-                onMouseOver={() => setHoveredListing(listing.id)}
-                onMouseLeave={() => setHoveredListing(null)}
-                key={listing.id}
-              >
-                <NavLink
-                  key={listing.id}
-                  style={{ textDecoration: "none" }}
-                  to={`/listings/${listing.id}`}
-                >
-                  <ListingCard
-                    listing={listing}
-                    wishListListing={wishListListing}
-                  />
-                </NavLink>
-              </div>
-            ))}
+            <RenderListings listings={exceedMaxGuestListings} wishListListing={wishListListing} user={user} setShowCreateWishListModal={setShowCreateWishListModal} setModalOpen={setModalOpen} dispatch={dispatch} setHoveredListing={setHoveredListing}/>
           </div>
         )}
       </div>

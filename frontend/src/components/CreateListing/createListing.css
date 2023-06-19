@@ -1,24 +1,27 @@
-.listingform-container {
-    font-family: 'Roboto', sans-serif;
-    max-height: 100vh;
-}
-
 .form-container{
     display: flex;
     height: 85vh;
     width: 100%;
 }
 
-.video-section-container,
-.category-left-section,
-.ameniti-left-section,
-.bed-guest-left-section,
-.address-form-left-section {
+.left-section-container {
     height: 100%;
     width: 50%;
     display: flex;
     justify-content: center;
     position: relative;
+}
+
+.left-section-inner-container {
+    height: 100%;
+    width: 100%;
+}
+
+.right-section-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 50%;
 }
 
 .video-description {
@@ -29,17 +32,7 @@
     font-weight: 600;
 }
 
-.addressForm-right-selection,
-.title-form-container,
-.price-form-container,
-.category-selection-container,
-.ameniti-selection-container,
-.bedGuest-selection-container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 50%;
-}
+
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -96,33 +89,26 @@ input::-webkit-inner-spin-button {
     align-items: flex-start;
     justify-content: space-around;
     height: 20%;
-    width: 80%;
-    /* background-color: purple; */
-    
+    width: 80%;  
 }
 
 .price-form-calendar {
-    /* background-color: pink; */
     display: flex;
     flex-direction: column;
-    /* padding: 2%; */
-
 }
 
 .category-content-container {
     height: 85%;
     width: 100%;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
-
+    overflow-y: auto;
 }
 #category-content {
-    overflow-y: scroll;
     height: 95%;
     width: 95%;
     display: flex;
-    /* justify-content: center; */
     flex-wrap: wrap;
     row-gap: 2rem;
     column-gap: 2rem;
@@ -203,7 +189,7 @@ input::-webkit-inner-spin-button {
 
 .title-content-div {
     width: 60%;
-    height: 60%;
+    height: 80%;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -217,7 +203,6 @@ input::-webkit-inner-spin-button {
     font-size: 25px;
 }
 
-.button-container,
 .button-layout {
     height: 15%;
     width: 100%;
@@ -234,12 +219,12 @@ input::-webkit-inner-spin-button {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
+    align-items: center;
     background-color: black;
 }
 
 
 .button-container-div {
-    /* background-color: pink; */
     height: 80%;
     width: 85%;
     display: flex;
@@ -413,18 +398,6 @@ span.disabled {
     padding: 2%;
 }
 
-.address-suggestion-container
-
-
-.video-caption {
-    position: absolute;
-    width: 75%;
-    left: 6%;
-    right: 5%;
-    bottom: 15%;
-
-}
-
 .exit-button-introduction {
     display: flex;
     justify-content: flex-end;
@@ -467,10 +440,7 @@ span.disabled {
     justify-content: center;
     align-items: center;
     border-radius: 15px;
-    margin-right: 40px;
-    padding-bottom: 0;
-    position: absolute;
-    bottom: 40px;
+    margin-right: 3%;
 }
 
 .exit-button-wrapper {
@@ -496,6 +466,8 @@ span.disabled {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 50%;
+    height: 100%;
 }
 
 .word-section-1,
@@ -835,11 +807,20 @@ span.disabled {
 .confirmation-form-bottom-inner-container {
     width: 80%;
     height: 85%;
-    /* border: 1px solid black; */
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+}
+
+.create-listing-image-form-error {
+    color: red;
+    font-size: 600;
+}
+
+.create-listing-description-textarea {
+    width: 500px;
+    height: 550px;
 }
 
 

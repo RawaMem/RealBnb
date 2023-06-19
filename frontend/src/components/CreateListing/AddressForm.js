@@ -69,7 +69,7 @@ export default function AddressForm() {
                 <span className='word-section-1'>Where's your place located?</span>
             </section>
                           
-            <section className="addressForm-right-selection">
+            <section className="right-section-container">
                 <div className='addressForm-content-container'>   
                     <div className='grid-right-inner-page'>
                         <form>

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import './createListing.css';
 import DatePicker from "../../ui/DatePicker";
 import { datePickerReducer } from "../../ui/DatePicker";
+import { VideoPlayer } from "../../ui/VideoPlayer";
 
 import './createListing.css';
 
@@ -33,8 +34,9 @@ export default function ListingPriceForm() {
     const [cleaningFee, setCleaningFee] = useState(getInitalPrice("cleanning fee", 1));
 
     const [error, setError] = useState({});
-    const [focusedInput, setFocusedInput] = useState(null);
     const [listingPrice, setListingPrice] = useState(getInitalPrice("listing price", 10));
+
+    const videoSrc = "https://a0.muscache.com/v/9c/d4/9cd47434-c6bd-58ec-90b7-b50aa7dba461/9cd47434c6bd58ec90b7b50aa7dba461_4000k_1.mp4";
 
     function isDateBlocked(date) {
         // the function should return a boolean, if true then date will be blocked
@@ -84,23 +86,11 @@ export default function ListingPriceForm() {
 
     return (
         <div className="form-container">
-            <section className="video-section-container">
+            <section className="left-section-container">
                 <div className="video-description">Now, set your price</div>
-                <video 
-                    autoPlay 
-                    controls
-                    muted 
-                    preload='auto' 
-                    controlsList="play nodownload noplaybackrate"
-                    disablePictureInPicture
-                    playsInline
-                    crossOrigin="anonymous"
-                    style = {{ width:'100%', height: "100%"}}
-                >
-                    <source src="https://a0.muscache.com/v/9c/d4/9cd47434-c6bd-58ec-90b7-b50aa7dba461/9cd47434c6bd58ec90b7b50aa7dba461_4000k_1.mp4" />
-                </video>
+                <VideoPlayer src={videoSrc} />
             </section>
-            <section className="price-form-container">
+            <section className="right-section-container">
                 <div className="price-content">
                     <div className="price-content-innerContainer">
                         <div id="price-content-innerContainer-id">
@@ -198,7 +188,7 @@ export default function ListingPriceForm() {
 
                     </div>
                 </div>
-                <div className="button-container">
+                <div className="button-layout">
                     <div className="button-container-div">
                         <Link 
                             to="/createListing/descriptionForm" 
@@ -206,10 +196,10 @@ export default function ListingPriceForm() {
                             onClick={handlePageChange}
                         >Back</Link>
                         <Link 
-                            // className={(Object.values(error).length || startDateError || endDateError) ? "edit-photo-modal-save-button-disabled" :"edit-photo-modal-save-button"}
                             style={{textDecoration:'none'}}
                             to="/createListing/images"
                             onClick={handlePageChange}
+                            className={state.startDate && state.endDate ? "edit-photo-modal-save-button" : "edit-photo-modal-save-button-disabled"}
                         >
                             <div>Next</div>
                         </Link>

@@ -42,7 +42,7 @@ export default function AmenitiForm() {
             <section className="ameniti-left-section">
                 <span className='word-section-1'>Let guests know what your place has to offer</span>
             </section>
-            <section className="ameniti-selection-container">
+            <section className="right-section-container">
                 <div className='ameniti-content-container'>
                     <div className='grid-right-inner-container-top-amentityForm-inner-block'>
                         <h2>Do you have any standout amenities?</h2>
@@ -80,6 +80,7 @@ export default function AmenitiForm() {
                         </div>
                     </div>
                 </div>
+                
                 <div className='button-layout'>
                     <div className="button-container-div">
                    

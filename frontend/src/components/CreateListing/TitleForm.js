@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { VideoPlayer } from "../../ui/VideoPlayer";
 
 export default function TitleForm() {
     const [name, setName] = useState(localStorage.getItem('listing_name') || '');// 
     const [nameLength, setNameLength] = useState(0);
     const bedroomQty = localStorage.getItem('bedrooms');
     const city = localStorage.getItem('city');
+    const videoSrc = "https://a0.muscache.com/v/33/20/3320c65c-5167-5999-ad8b-89c6c0c27b53/3320c65c51675999ad8b89c6c0c27b53_4000k_1.mp4"
 
     const handlePageChange = () => {
         localStorage.setItem('listing_name', name);
@@ -17,23 +19,11 @@ export default function TitleForm() {
 
     return (
         <div className="form-container">
-            <section className="video-section-container">
+            <section className="left-section-container">
                 <div className="video-description">Let's give your place a name</div>
-                <video 
-                    autoPlay 
-                    controls
-                    muted 
-                    preload='auto' 
-                    controlsList="play nodownload noplaybackrate"
-                    disablePictureInPicture
-                    playsInline
-                    crossOrigin="anonymous"
-                    style = {{ width:'100%', height: "100%"}}
-                >
-                    <source src="https://a0.muscache.com/v/33/20/3320c65c-5167-5999-ad8b-89c6c0c27b53/3320c65c51675999ad8b89c6c0c27b53_4000k_1.mp4" type="video/mp4" />
-                </video>
+                <VideoPlayer src={videoSrc} />
             </section>
-            <section className="title-form-container">
+            <section className="right-section-container">
                 <div className="title-content">
                     <div className="title-content-div">
                         <h5 style={{fontSize:'22px'}}>Create your title</h5>
@@ -48,7 +38,8 @@ export default function TitleForm() {
                         <div style={{color:'rgb(118,118,118)', fontWeight:'600'}}>{nameLength}/50</div>
                     </div>
                 </div>
-                <div className="button-container">
+
+                <div className="button-layout">
                     <div className="button-container-div">
                         <Link 
                             to="/createListing-categoryForm" 

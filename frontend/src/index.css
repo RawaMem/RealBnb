@@ -42,6 +42,8 @@
     --confirmation-modal-bottom-container-height: 20%;
 
     --disabled-btn-background-color: rgb(221,221,221);
+    --charcoal-grey-color-code: #36454F;
+    --white-smoke-hover-color: #F5F5F5;
 }
 
 .mapboxgl-ctrl.mapboxgl-ctrl-attrib {

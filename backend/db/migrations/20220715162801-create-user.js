@@ -33,32 +33,26 @@ module.exports = {
         unique: true,
       },
       host: {
-        allowNull: false,
         type: Sequelize.BOOLEAN,
         defaultValue: false
       },
       superHost: {
-        allowNull: false,
         type: Sequelize.BOOLEAN,
         defaultValue: false
       },
       identityVerified: {
-        allowNull: false,
         type: Sequelize.BOOLEAN,
         defaultValue: false
       },
       online: {
-        allowNull: false,
         type: Sequelize.BOOLEAN,
         defaultValue: true
       },
       aboutMe: {
         type: Sequelize.STRING(2000),
-        allowNull: false,
       },
       duringStay: {
         type: Sequelize.STRING(2000),
-        allowNull: false,
       },
       hashedPassword: {
         type: Sequelize.STRING.BINARY,

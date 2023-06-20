@@ -5,6 +5,7 @@ import { getToken } from '../../store/maps';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 export function GeoLocationMap({style, latitude, longitude, markerContent, zoom }) {
+
     const dispatch = useDispatch();
     const token = useSelector((state) => state.maps?.token);
     const [viewport, setViewport] = useState({latitude, longitude, zoom: 12})
@@ -28,7 +29,11 @@ export function GeoLocationMap({style, latitude, longitude, markerContent, zoom 
             mapStyle="mapbox://styles/mapbox/streets-v11"
             mapboxAccessToken={MAPBOX_TOKEN}
             >
-                <Marker longitude={longitude} latitude={latitude} color="red" anchor="bottom" >                   
+                <Marker 
+                longitude={longitude} 
+                latitude={latitude} 
+                color="red" 
+                anchor="bottom" >                   
                         {markerContent && markerContent}                  
                 </Marker>
         </Map>

@@ -7,7 +7,17 @@
     align-items: center;
 }
 
-.login-form-inner-container {
+.signup-form-container {
+    height: 95vh;
+    width: 35vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-form-inner-container,
+.signup-form-inner-container {
     width: 90%;
     height: 90%;
     display: flex;
@@ -15,12 +25,22 @@
     align-items: center;
 }
 
-.login-form-formContainer {
+
+
+.login-form-formContainer,
+.signup-form-formContainer {
     width: 100%;
     height: 70%;
 }
 
-.login-form-login-btn-container {
+.signup-form-formContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-form-login-btn-container,
+.signup-form-login-btn-container {
     width: 100%;
     height: 25%;
     display: flex;
@@ -29,7 +49,13 @@
     align-items: flex-end;
 }
 
-.login-form-login-btn {
+.signup-form-login-btn-container {
+    margin-top: 5%;
+}
+
+
+.login-form-login-btn,
+.signup-form-btn {
     height: 50px;
     width: 120px;
     border-radius: 15px;
@@ -41,7 +67,8 @@
     transition: filter 0.3s ease-in-out;
 }
 
-.login-form-login-btn-disabled {
+.login-form-login-btn-disabled,
+.signup-form-btn-diabled {
     height: 50px;
     width: 120px;
     border-radius: 15px;
@@ -77,11 +104,13 @@
 }
 
 .login-form-login-btn:hover,
-.demoUserButton:hover {
+.demoUserButton:hover,
+.signup-form-btn:hover {
     filter: brightness(80%);
 }
 
-.login-form-error-lists {
+.login-form-error-lists,
+.signup-form-error-lists {
     margin-top: 2%;
     font-weight: 500;
     color: orange;

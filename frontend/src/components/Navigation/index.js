@@ -1,5 +1,5 @@
-import React, { useState, useReducer, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useState, useReducer } from 'react';
+import { NavLink, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
 import LoginForm from '../LoginFormModal';
@@ -20,6 +20,7 @@ function Navigation({ isLoaded }){
   const [showLogInModal, setShowLogInModal] = useState(false);
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [showSearchDropDown, setShowSearchDropDown] = useState(false);
+  const history = useHistory();
 
   const {setSorted} = useCategory();
 
@@ -62,6 +63,7 @@ function Navigation({ isLoaded }){
     }
     dispatchThunk(getListingSearchResultsThunk(searchFormValues))
     .then(() => setShowSearchDropDown(false))
+    .then(() => history.push("/"))
   };
 
   let sessionLinks = (

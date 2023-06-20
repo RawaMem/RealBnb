@@ -64,7 +64,7 @@ function LoginForm( {setShowLogInModal} ) {
               <InputField 
                 size={{ m: 3, width: "35ch"}}
                 setter={setCredential}
-                value={credential}
+                val={credential}
                 label={"Username or Email"}
                 id={"standard-basic"}
                 multiline={false}
@@ -77,7 +77,7 @@ function LoginForm( {setShowLogInModal} ) {
               <InputField 
                 size={{ m: 3, width: "35ch"}}
                 setter={setPassword}
-                value={password}
+                val={password}
                 label={"Password"}
                 id={"standard-basic"}
                 multiline={false}

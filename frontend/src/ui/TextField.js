@@ -13,7 +13,7 @@ function InputField({size, setter, val, label, type, id, multiline, rows, varian
           },
         },
         typography: {
-          fontSize: 20, // change the default font size
+          fontSize: 17, // change the default font size
         },
       });
 
@@ -21,7 +21,6 @@ function InputField({size, setter, val, label, type, id, multiline, rows, varian
         <ThemeProvider theme={theme}>
 
             <Box
-                component="form"
                 sx={{
                     '& > :not(style)': size,
                 }}

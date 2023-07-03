@@ -6,6 +6,7 @@ import ImageDropDown from "./ImageDropDown";
 import EditPhotoForm from "./EditPhotoForm";
 import { Modal } from "../../context/Modal";
 import ConfirmForm from "./ConfirmForm";
+import { VideoPlayer } from "../../ui/VideoPlayer";
 
 export default function ImageForm() {
 
@@ -25,6 +26,7 @@ export default function ImageForm() {
     // const [errors, setErrors] = useState([]);
     const [errors, setErrors] = useState({});
     const [hasSubmitted, setHasSubmitted] = useState(false);
+    const videoSrc = "https://a0.muscache.com/v/d6/12/d6120feb-75fc-52dd-b5bb-5755913fb756/d6120feb75fc52ddb5bb5755913fb756_4000k_1.mp4";
     
     const handleDeleteImage = url => {
 
@@ -209,28 +211,15 @@ export default function ImageForm() {
         };
     }, [previewImageUrl, multiImages, hasSubmitted]);
 
-    return (
-        <>
+    return (        
             <div className="form-container">
-                <section className="video-section-container">
-                    <video 
-                        autoPlay 
-                        controls
-                        muted 
-                        preload='auto' 
-                        controlsList="play nodownload noplaybackrate"
-                        disablePictureInPicture
-                        playsInline
-                        crossOrigin="anonymous"
-                        style = {{ width:'100%', height: 'auto'}}
-                    >
-                        <source src="https://a0.muscache.com/v/d6/12/d6120feb-75fc-52dd-b5bb-5755913fb756/d6120feb75fc52ddb5bb5755913fb756_4000k_1.mp4" type="video/mp4" />
-                    </video>
-                    <span className="video-caption">Next, let's add some photos of your place</span>
+                <section className="left-section-container">
+                    <div className="video-description">Next, let's add some photos of your place</div>
+                    <VideoPlayer src={videoSrc} />                    
                 </section>
 
                 <section 
-                className="title-form-container"   
+                className="right-section-container"   
                 id="title-form-container"
                 onDragEnter={e => {
                     imageDrag ? setDragZone(false) : setDragZone(true)
@@ -242,7 +231,8 @@ export default function ImageForm() {
                     <div 
                     className="image-form-image-section-container"
                     >
-                        {dragZone && ( <div 
+                        {dragZone && 
+                        ( <div 
                         id="image-drop-zone"
                         {...getRootProps({ className: 'dropzone' })} 
                         onDragOver={e => {
@@ -254,11 +244,20 @@ export default function ImageForm() {
                             e.preventDefault()
                             setDragZone(false);
                         }}
-                        >Drop Files Here</div> ) }
+                        >Drop Files Here</div> ) 
+                        }
                         <div className="image-form-image-section-container-upper">
                             <div>
                                 <h3>Ta-da! How does this look?</h3>
                                 <span>Drag to reorder</span>
+                                {Object.values(errors).length > 0 && (Object.values(errors).map(e => (
+                                    <div 
+                                    key={e}
+                                    className="create-listing-image-form-error"
+                                    >
+                                        ! {e}
+                                    </div>
+                                )))}
                             </div>
                             <div>
                                 <input type="file" multiple  {...getInputProps()} onChange={updateFiles} style={{display:'none'}} id="fileElem" />
@@ -269,9 +268,6 @@ export default function ImageForm() {
                                     <span className="upload-button">Upload</span>
                                 </div>
                             </div>
-                            {Object.values(errors).length > 0 && (Object.values(errors).map(e => (
-                                <div key={e}>{e}</div>
-                            )))}
                         </div>
                         {pictureZone()}
                         {showConformationForm && showConformationModal()}
@@ -298,6 +294,6 @@ export default function ImageForm() {
                 </section>
 
             </div>
-        </>
+        
     )
 };

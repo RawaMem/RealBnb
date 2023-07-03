@@ -9,7 +9,7 @@ export function VideoPlayer( {src} ) {
             disablePictureInPicture
             playsInline
             crossOrigin="anonymous"
-            style = {{ width:'100%', height: 'auto'}}
+            style = {{ width:'100%', height: "100%", objectFit:"cover"}}
         >
             <source src={src} type="video/mp4" />
         </video>

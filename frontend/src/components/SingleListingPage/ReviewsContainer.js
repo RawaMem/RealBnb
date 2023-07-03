@@ -70,83 +70,83 @@ export default function ReviewsContainer({reviews, currentUser, listingId, listi
                 }
             </div>
 
-            {reviewsArr.length <= 0 ? <div>Be the first to leave a review</div> : ( 
-            <div className="singleListing-aveRatingBars-container">
-                <div className="singleListing-leftRatings-container">
-                    <div className="singleListig-avgRatingBars-single">
-                        <div className='singleListing-progresBar-font'>Cleanliness</div>
-                        <div className="singleListing-progressBar-container" >
-                           
-                            <div className="progress-bar-item">
-                                <ProgressBar now={averageScores.aveCleanliness} max={5} className="custom-progress-bar"/>
-                            </div>
+            {reviewsArr.length <= 0 && listing.ownerId !== currentUser.id &&  <div>Be the first to leave a review</div>}
+             
+            { reviewsArr.length > 0 && 
+                <div className="singleListing-aveRatingBars-container">
+                    <div className="singleListing-leftRatings-container">
+                        <div className="singleListig-avgRatingBars-single">
+                            <div className='singleListing-progresBar-font'>Cleanliness</div>
+                            <div className="singleListing-progressBar-container" >
                             
-                            <div className='singleListing-progresBar-font'>{averageScores.aveCleanliness}</div>
+                                <div className="progress-bar-item">
+                                    <ProgressBar now={averageScores.aveCleanliness} max={5} className="custom-progress-bar"/>
+                                </div>
+                                
+                                <div className='singleListing-progresBar-font'>{averageScores.aveCleanliness}</div>
+                            </div>
+                        </div>
+
+                        <div className="singleListig-avgRatingBars-single">
+                            <div className='singleListing-progresBar-font'>Communication</div>                        
+                            <div className="singleListing-progressBar-container" >
+                                <div className="progress-bar-item">
+                                    <ProgressBar now={averageScores.aveCommunication} max={5} className="custom-progress-bar"/>
+                                </div>
+                                <div className='singleListing-progresBar-font'>{averageScores.aveCommunication}</div>
+                                </div>
+                        </div>
+
+                        <div className="singleListig-avgRatingBars-single">
+                            <div className='singleListing-progresBar-font'>Check-in</div>                        
+                        
+                        
+                            <div className="singleListing-progressBar-container" >
+
+                                <div className="progress-bar-item">
+                                    <ProgressBar now={averageScores.aveCheckIn} max={5} className="custom-progress-bar"/>
+                                </div>
+                                <div className='singleListing-progresBar-font'>{averageScores.aveCheckIn}</div>
+                            </div>
                         </div>
                     </div>
-
-                    <div className="singleListig-avgRatingBars-single">
-                        <div className='singleListing-progresBar-font'>Communication</div>                        
-                        <div className="singleListing-progressBar-container" >
-                            <div className="progress-bar-item">
-                                <ProgressBar now={averageScores.aveCommunication} max={5} className="custom-progress-bar"/>
-                            </div>
-                            <div className='singleListing-progresBar-font'>{averageScores.aveCommunication}</div>
-                            </div>
-                    </div>
-
-                    <div className="singleListig-avgRatingBars-single">
-                        <div className='singleListing-progresBar-font'>Check-in</div>                        
-                    
-                       
-                        <div className="singleListing-progressBar-container" >
-
-                            <div className="progress-bar-item">
-                                <ProgressBar now={averageScores.aveCheckIn} max={5} className="custom-progress-bar"/>
-                            </div>
-                            <div className='singleListing-progresBar-font'>{averageScores.aveCheckIn}</div>
-                        </div>
-                    </div>
-                </div>
                 
+                    <div className="singleListing-rightRatings-container">
+                        <div className="singleListig-avgRatingBars-single">
+                            <div className='singleListing-progresBar-font'>Accuracy</div>                        
+                    
+                        
+                            <div className="singleListing-progressBar-container" >
 
-
-                <div className="singleListing-rightRatings-container">
-                    <div className="singleListig-avgRatingBars-single">
-                        <div className='singleListing-progresBar-font'>Accuracy</div>                        
-                   
-                     
-                        <div className="singleListing-progressBar-container" >
+                                <div className="progress-bar-item">
+                                <ProgressBar now={averageScores.aveAccuracy} max={5} className="custom-progress-bar"/>
+                                </div>
+                                <div className='singleListing-progresBar-font'>{averageScores.aveAccuracy}</div>
+                            </div>
+                        </div>
+                        <div className="singleListig-avgRatingBars-single">
+                            <div className='singleListing-progresBar-font'>Location</div>                                                
+                            <div className="singleListing-progressBar-container" >
 
                             <div className="progress-bar-item">
-                            <ProgressBar now={averageScores.aveAccuracy} max={5} className="custom-progress-bar"/>
+                                <ProgressBar now={averageScores.aveLocation} max={5} className="custom-progress-bar"/>
                             </div>
-                            <div className='singleListing-progresBar-font'>{averageScores.aveAccuracy}</div>
+                            <div className='singleListing-progresBar-font'>{averageScores.aveLocation}</div>
+                            </div>
                         </div>
-                    </div>
-                    <div className="singleListig-avgRatingBars-single">
-                        <div className='singleListing-progresBar-font'>Location</div>                                                
-                        <div className="singleListing-progressBar-container" >
+                        <div className="singleListig-avgRatingBars-single">
+                            <div className='singleListing-progresBar-font'>Value</div>                                                
+                            <div className="singleListing-progressBar-container" >
 
-                        <div className="progress-bar-item">
-                            <ProgressBar now={averageScores.aveLocation} max={5} className="custom-progress-bar"/>
-                        </div>
-                        <div className='singleListing-progresBar-font'>{averageScores.aveLocation}</div>
-                        </div>
-                    </div>
-                    <div className="singleListig-avgRatingBars-single">
-                        <div className='singleListing-progresBar-font'>Value</div>                                                
-                        <div className="singleListing-progressBar-container" >
-
-                        <div className="progress-bar-item">
-                            <ProgressBar now={averageScores.aveValue} max={5} className="custom-progress-bar"/>
-                        </div>
-                        <div className='singleListing-progresBar-font'>{averageScores.aveValue}</div>
+                            <div className="progress-bar-item">
+                                <ProgressBar now={averageScores.aveValue} max={5} className="custom-progress-bar"/>
+                            </div>
+                            <div className='singleListing-progresBar-font'>{averageScores.aveValue}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            )}
+            }
             
             
 

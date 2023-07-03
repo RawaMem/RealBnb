@@ -1,4 +1,4 @@
-.profile-dropdown-container {
+.profile-dropdown-icon-container {
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -9,7 +9,7 @@
     cursor: pointer;
 }
 
-.profile-dropdown-container:hover {
+.profile-dropdown-icon-container:hover {
     box-shadow: var(--profile-dropdown-box-shadow)
 }
 

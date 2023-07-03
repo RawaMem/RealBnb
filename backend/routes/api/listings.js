@@ -267,6 +267,7 @@ router.patch("/:listingId/edit", requireAuth, asyncHandler(async(req, res) => {
 //search listings on home  page
 router.get('/search', asyncHandler(async (req, res) => {
   const queryInfo = req.query
+  console.log("this is request query", req.query)
   // let test11
   let whereListing = {}
   if (req.query.destination) {
@@ -278,14 +279,8 @@ router.get('/search', asyncHandler(async (req, res) => {
         { state: { [Op.iLike]: `%${req.query.destination}%` } }
       ]
     }
-
-    // test11 = {[Op.iLike]: `%${req.query.destination}%`}
-    // whereListing.name = req.query.destination
-    // whereListing.address = req.query.destination
-    // whereListing.city = req.query.destination
-    // whereListing.state = req.query.destination
-  }
-  if (req.query.numGuests) whereListing.maxGuests = { [Op.lte]: req.query.numGuests }
+  };
+  if (req.query.numGuests) whereListing.maxGuests = { [Op.gte]: req.query.numGuests }
 
   let whereDates = {}
   if (req.query.checkIn && !req.query.checkOut) {
@@ -296,7 +291,6 @@ router.get('/search', asyncHandler(async (req, res) => {
         { endDate: { [Op.gt]: req.query.checkIn } }
       ]
     }
-    // whereDates.startDate = {[Op.lte]:req.query.checkIn}
   }
   if (req.query.checkOut && !req.query.checkIn) {
     console.log('CHECKOUT DATE BUT NO CHECKIN')
@@ -335,20 +329,42 @@ router.get('/search', asyncHandler(async (req, res) => {
       },
       {
         model: ListingPrice,
-        where: whereDates
+        where: whereDates,
+        attributes: ['pricePerDay', 'startDate', 'endDate']
       },
-      Category
+      {
+        model: Category,
+        attributes: ['name']
+      },
+      {
+        model: Image,
+        where: {
+          preview: true
+        },
+        attributes: ["url"]
+      }
     ],
-    group: ['Listing.id',
+    group: [
+      'Listing.id',
       'ListingPrices.id',
       'Categories.id',
+      "Categories->ListingCategory.id",
       'Categories->ListingCategory.categoryId',
       'Categories->ListingCategory.listingId',
       'Categories->ListingCategory.createdAt',
-      'Categories->ListingCategory.updatedAt']
+      'Categories->ListingCategory.updatedAt',
+      "Images.id"
+      ]
   });
 
-  res.json(listings)
+  const newListing = listings.map(singleListing => {
+    const convertListings = singleListing.toJSON();
+    convertListings.previewImageUrl = convertListings.Images[0].url;
+    delete convertListings["Images"];
+    return convertListings
+  });
+
+  res.json(newListing)
 }))
 
 

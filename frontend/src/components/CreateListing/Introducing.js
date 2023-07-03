@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { VideoPlayer } from '../../ui/VideoPlayer';
-// import './createListing.css';
+import './createListing.css';
 
 
 export default function Introducing() {
@@ -8,10 +8,12 @@ export default function Introducing() {
 
     return (
         <div className='form-container'>
-            <section className='video-section-container'>
-                <VideoPlayer src={videoSrc} />
-            </section>
-            <section className='title-form-container'>
+            <div className='left-section-container'>
+                <div className="left-section-inner-container">
+                    <VideoPlayer src={videoSrc} />
+                </div>
+            </div>
+            <div className='right-section-container'>
                 <div className="title-content-introduction">
                     <div className='exit-button-introduction'>
                         <div className='exit-button-wrapper'>
@@ -44,7 +46,7 @@ export default function Introducing() {
                         >Let's go!</NavLink>
                     </div>
                 </div>
-            </section>
+            </div>
         </div>
     )
 }

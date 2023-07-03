@@ -1,11 +1,8 @@
-import { useState } from "react";
-import {Link} from "react-router-dom";
-import { Modal } from "../../context/Modal";
-import ConfirmDeleteBookingForm from "./ConfirmDeleteBookingForm";
+import { Link } from "react-router-dom";
 
-export default function BookingCard({booking, showConfirmDeleteModal, showConfirmDeleteForm, setShowConfirmDeleteForm}) {
 
-    // const [showConfirmDeleteForm, setShowConfirmDeleteForm] = useState(false);
+export default function BookingCard({booking, showConfirmDeleteModal, showConfirmDeleteForm, setShowConfirmDeleteForm, type}) {
+
 
     function convertDate(date) {
         const dateObj = new Date(date);
@@ -19,23 +16,10 @@ export default function BookingCard({booking, showConfirmDeleteModal, showConfir
         return formattedDate;
     };
 
-    // function showConfirmDeleteModal() {
-    //     return (
-    //         <Modal onClick={() => setShowConfirmDeleteForm(false)}>
-    //             <ConfirmDeleteBookingForm
-    //                 setShowConfirmDeleteForm={setShowConfirmDeleteForm}
-    //                 previewImageUrl={booking.listingImagePreview}
-    //                 bookingId={booking.id}
-    //             />
-    //         </Modal>
-    //     );
-    // };
-
-
     return (
         <div className="userListingCard-container">
             <Link
-                to={`/listings/${booking.listingId}`}
+                to={`/user-bookings/detail/${booking.id}`}
                 style={{textDecoration: "none"}}
                 className="userListingCard-clickable-container"
             >
@@ -46,24 +30,19 @@ export default function BookingCard({booking, showConfirmDeleteModal, showConfir
 
                 <div className="booking-info-container">
                     <h5>{booking.listingName}</h5>
-                    <div>Guest Total: {booking.numOfGuests}</div>
-                    <div>Check-In Date: {convertDate(booking.startDate)}</div>
-                    <div>Check-Out Date: {convertDate(booking.endDate)}</div>
                     <div>Date of Reservation: {convertDate(booking.createdAt)}</div>
-                    <div>Average Rate: $ {booking.avePricePerDay}</div>
-                    <div>Total Amount: $ {booking.totalCost}</div>
                 </div>
             </Link>
 
-            <div id="edit-delete-btn-container">
-                    <div>
-                        <span 
-                        onClick={() => setShowConfirmDeleteForm(true)}
-                        className="material-symbols-outlined">
-                            delete
-                        </span>
-                    </div>
+           {
+            type==="UpcomingBookings" && <div id="edit-delete-btn-container">                 
+                <span 
+                onClick={() => setShowConfirmDeleteForm(true)}
+                className="material-symbols-outlined">
+                    delete
+                </span>                  
             </div>
+            }
 
             {showConfirmDeleteForm && showConfirmDeleteModal(booking)}
         </div>

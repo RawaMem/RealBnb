@@ -62,7 +62,6 @@ function DatePicker({ state, dispatch, isDateBlocked, daySize, setShowCalendar, 
           <DateRangeInput
             onDatesChange={(data) => {
               dispatch({ type: "dateChange", payload: data });
-              console.log("%c what is going on here", "color: orange", data);
               if (data.endDate && setShowCalendar && updateWishlistDates) {
                 setShowCalendar(false);
                 updateWishlistDates(data);

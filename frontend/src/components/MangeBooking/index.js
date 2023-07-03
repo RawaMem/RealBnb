@@ -19,7 +19,6 @@ export default function ManageUserBookings() {
 
     const userBookings = Object.values(userBookingsState);
 
-    console.log("userBookings", userBookingsState)
     userBookings.forEach(booking => {
         const today = new Date();
         const startDate = new Date(booking.startDate);
@@ -53,7 +52,7 @@ export default function ManageUserBookings() {
         <div className="user-bookings-display-container">
 
             <div>
-                <h2>Trips</h2>
+                <h2 style={{marginLeft: "3%"}}>Trips</h2>
             </div>
             
             <div className="toggle-tab-container-outer">

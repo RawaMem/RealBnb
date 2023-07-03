@@ -59,11 +59,24 @@ function UserListingCard({listing}) {
                     </div>
                 </Link>
 
-                <div id="edit-delete-btn-container">
-                    <Link to={`/edit-listing/${listing.id}`} >Edit</Link >
-                    <div onClick={() => setShowConfirmDeleteForm(true) }><span className="material-symbols-outlined">
+                <div id="user-listing-edit-delete-btn-container">
+                    <Link 
+                    className="user-review-edit-pen-container"
+                    to={`/edit-listing/${listing.id}`} 
+                    >
+                        <span className="material-symbols-outlined" style={{color:"rgb(102,102,102)"}}>
+                            edit
+                        </span>
+                    </Link >
+
+                    <div 
+                    onClick={() => setShowConfirmDeleteForm(true) }
+                    className="listing-card-delete-icon"
+                    >
+                        <span className="material-symbols-outlined">
                         delete
-                    </span></div>
+                        </span>                    
+                    </div>
                 </div>
 
                 {showConfirmDeleteForm && showConfirmDeleteModal()}

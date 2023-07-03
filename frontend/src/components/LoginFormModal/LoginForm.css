@@ -1,0 +1,117 @@
+.login-form-container {
+    height: 65vh;
+    width: 30vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.signup-form-container {
+    height: 95vh;
+    width: 35vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-form-inner-container,
+.signup-form-inner-container {
+    width: 90%;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+
+.login-form-formContainer,
+.signup-form-formContainer {
+    width: 100%;
+    height: 70%;
+}
+
+.signup-form-formContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-form-login-btn-container,
+.signup-form-login-btn-container {
+    width: 100%;
+    height: 25%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.signup-form-login-btn-container {
+    margin-top: 5%;
+}
+
+
+.login-form-login-btn,
+.signup-form-btn {
+    height: 50px;
+    width: 120px;
+    border-radius: 15px;
+    font-weight: 500;
+    font-size: 20px;
+    border: none;
+    color: white;
+    background: linear-gradient(to right, rgb(230, 30, 77) 0%, rgb(227, 28, 95) 50%, rgb(215, 4, 102) 100%) !important;
+    transition: filter 0.3s ease-in-out;
+}
+
+.login-form-login-btn-disabled,
+.signup-form-btn-diabled {
+    height: 50px;
+    width: 120px;
+    border-radius: 15px;
+    font-weight: 500;
+    font-size: 20px;
+    border: none;
+    cursor: not-allowed;
+    background-color: #D3D3D3;
+}
+
+
+.login-form-demo-button-container {
+    height: 20%;
+    width: 100%;
+    margin-top: 5%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.demoUserButton {
+    height: 35px;
+    width: 150px;
+    color: white;
+    font-weight: 600;
+    border-radius: 10px;
+    background-color: black;
+    border: none;
+    margin: 2%;
+    transition: filter 0.3s ease-in-out;
+
+}
+
+.login-form-login-btn:hover,
+.demoUserButton:hover,
+.signup-form-btn:hover {
+    filter: brightness(80%);
+}
+
+.login-form-error-lists,
+.signup-form-error-lists {
+    margin-top: 2%;
+    font-weight: 500;
+    color: orange;
+}

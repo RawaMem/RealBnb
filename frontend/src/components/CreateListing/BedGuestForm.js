@@ -39,7 +39,7 @@ export default function BedGuestForm() {
                 <span className='word-section-1'>How many guests would you like to welcome?</span>
             </section>
 
-            <section className="bedGuest-selection-container">
+            <section className="right-section-container">
                 <div className='bedGuest-content-container'>
                     <div className="grid-right-inner-container-bedGuestForm-innerDivContainer">
                         <div className="bedGuestForm-type">

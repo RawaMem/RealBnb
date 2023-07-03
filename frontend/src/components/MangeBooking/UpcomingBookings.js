@@ -27,6 +27,7 @@ export default function UpcomingBookings({upcomingBookings}) {
                     booking={booking} 
                     showConfirmDeleteModal={showConfirmDeleteModal} showConfirmDeleteForm={showConfirmDeleteForm} 
                     setShowConfirmDeleteForm={setShowConfirmDeleteForm}
+                    type={"UpcomingBookings"}
                     />
                 </div>
             ))}

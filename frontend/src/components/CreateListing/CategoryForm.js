@@ -32,7 +32,7 @@ export default function CategoryForm() {
                 </div>
             </section>
 
-            <section className="category-selection-container">
+            <section className="right-section-container">
                 <div className="category-content-container">
                     <div className="category-content" id="category-content">
                         <span onClick={() => handleOnClick('Beach')}>
@@ -91,7 +91,7 @@ export default function CategoryForm() {
                     </div>
                 </div>
 
-                <div className="button-container">
+                <div className="button-layout">
                     <div className="button-container-div">
                         <Link to="/createListing-amenitiForm" style={{color:'rgb(34,34,34)', fontWeight:'600', fontSize:'18px'}}>Back</Link>
                         <Link 

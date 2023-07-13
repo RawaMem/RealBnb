@@ -27,11 +27,12 @@ export function MapBox({
   const durations = 
   useCalculateDistanceBetweenListings(token, filteredLists, "driving");
   const zoomBasedOnDistance = useDetermineZoom(durations);
+
   const [currentZoom, setCurrentZoom] = useState(zoom);
   const [initialZoom, setInitialZoom] = useState(zoom);
 
   useEffect(() => {
-    if (zoomBasedOnDistance) setCurrentZoom(zoomBasedOnDistance);
+    if (zoomBasedOnDistance) setCurrentZoom(filteredLists.length ? zoomBasedOnDistance : 1);
   }, [zoomBasedOnDistance]);
 
   useEffect(() => {
@@ -54,6 +55,7 @@ export function MapBox({
     setViewport({ latitude, longitude, zoom: currentZoom });
   }, [latitude, longitude, currentZoom]);
 
+
   useEffect(() => {
     return () => dispatch(clearDurations());
   }, [])
@@ -72,6 +74,7 @@ export function MapBox({
       {coordinates && validListings ? (
         coordinates.map((item) => (
           <Marker
+            key={item.id}
             longitude={item.longitude}
             latitude={item.latitude}
             color="red"
@@ -104,7 +107,7 @@ export function MapBox({
                       ? "black"
                       : "transparent",
                 }}
-                class="material-symbols-outlined"
+                className="material-symbols-outlined"
               >
                 block
               </span>

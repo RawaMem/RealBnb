@@ -17,7 +17,6 @@ export default function Listings() {
 
     const dispatch = useDispatch();
     const listingsObj = useSelector(state => state.listings.allListings);
-    const { error } = useSelector((state) => state.wishlists);
     const { wishListListing } = useSelector((state) => state.wishlists);
     const user = useSelector((state) => state.session.user);
 
@@ -83,9 +82,6 @@ export default function Listings() {
     return(
         <>
             <section>
-                {error && error !== "Unauthorized" && (
-                    <p style={{color:"red"}}>{error}</p>
-                )}
                 <div style={{display:"flex"}}>
                     {displayCategories()}
                 </div>
@@ -100,7 +96,6 @@ export default function Listings() {
                                     return;
                                 }
                                 if (listing.id in wishListListing) {
-                                    console.log("%c wishListListing[listing.id]", "color:pink;", wishListListing[listing.id]);
                                     await dispatch(deleteWishlistListingThunk(wishListListing[listing.id].WishListListing.wishlistId, listing.id));
                                     return;
                                 }

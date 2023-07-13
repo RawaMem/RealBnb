@@ -5,10 +5,10 @@ import { updateWishlistThunk, clearError } from "../../../store/wishlists";
 
 export function Guests({ currentWishList, setShowGuestModal }) {
   const dispatch = useDispatch();
-  const [adults, setAdults] = useState(currentWishList.adultGuests);
-  const [children, setChildren] = useState(currentWishList.childGuests);
-  const [infants, setInfants] = useState(currentWishList.infantGuests);
-  const [pets, setPets] = useState(currentWishList.petGuests);
+  const [adults, setAdults] = useState(currentWishList.adultGuests || 1);
+  const [children, setChildren] = useState(currentWishList.childGuests || 0);
+  const [infants, setInfants] = useState(currentWishList.infantGuests || 0);
+  const [pets, setPets] = useState(currentWishList.petGuests || 0);
   const [validation, setValidation] = useState(null);
 
   useEffect(() => {

@@ -26,7 +26,7 @@ export function useDetermineZoom(durations) {
         if (maxDurationInHours < 25) return 4.5;
         if (maxDurationInHours < 40) return 3.5;
         if (maxDurationInHours < 60) return 2.5;  
-        return 2;
-        }
+    }
+    return 10;
     }, [durations]);
 }

@@ -9,6 +9,7 @@ const STORE_LISTING_IMAGES_FILES="listings/STORE_LISTING_IMAGES_FILES";
 const GET_USER_LISTINGS = "listings/GET_USER_LISTINGS";
 const DELETE_USER_LISTING = "listings/DELETE_USER_LISTING";
 const GET_LISTING_INFO_FOR_EDIT = "listings/GET_LISTING_INFO_FOR_EDIT";
+const GET_LISTING_FOR_WISHLISTS = "listings/GET_LISTING_FOR_WISHLISTS";
 const EDIT_LISTING = "listing/EDIT_LISTING";
 const REMOVE_CATEGORY_AMENITY = "listing/REMOVE_CATEGORY_AMENITY";
 
@@ -42,6 +43,13 @@ const getSingleListingAction = (listing) => ({
     type: GET_SINGLE_LISTING,
     listing
 });
+
+function getSingleListingForWishListsAction(listing) {
+    return {
+        type: GET_LISTING_FOR_WISHLISTS,
+        listing
+    }
+}
 
 const listingSearchResultsAction = (listings) => ({
     type: LISTING_SEARCH_RESULTS,
@@ -158,7 +166,7 @@ export const getListingSearchResultsThunk = (searchFormValues) => async dispatch
 };
 
 
-export const getSingleListingThunk = (listingId) => async dispatch => {
+export const getSingleListingThunk = (listingId, event="Listing") => async dispatch => {
     const response = await csrfFetch(`/api/listings/${listingId}`);
     if (response.ok) {
         const listing = await response.json()
@@ -168,8 +176,11 @@ export const getSingleListingThunk = (listingId) => async dispatch => {
             await dispatch(getReviewsForSingleListingAction([...listing.Reviews]))
             delete listing.Reviews
         }
-
-        dispatch(getSingleListingAction(listing))
+        if (event === "Listing") {
+            dispatch(getSingleListingAction(listing))
+        } else if (event === "WishList") {
+            dispatch(getSingleListingForWishListsAction(listing))
+        }
         return listing
     }
 };
@@ -239,7 +250,7 @@ export const createNewListingThunk = (newListing, amenityAndCategory, newListing
     };
 };
 
-const initialState = {allListings:{}, singleListing: {}};
+const initialState = {allListings:{}, singleListing: {}, singleListingForWishLists: {}};
 export default function listings(state = initialState, action) {
     let newState;
     switch (action.type) {
@@ -248,8 +259,12 @@ export default function listings(state = initialState, action) {
             action.listings.forEach(listing => newState.allListings[listing.id] = listing);
             return newState;
         case GET_SINGLE_LISTING:
-            newState = {allListings:{...state.allListings}, singleListing: {}}
+            newState = {allListings:{...state.allListings}, singleListing: {}, singleListingForWishLists: {}}
             newState.singleListing = action.listing
+            return newState;
+        case GET_LISTING_FOR_WISHLISTS: 
+            newState = {allListings:{...state.allListings}, singleListing: {...state.singleListing}, singleListingForWishLists: {}}
+            newState.singleListingForWishLists = action.listing
             return newState;
         case LISTING_SEARCH_RESULTS:
             newState = {allListings:{}, singleListing: {}};

@@ -6,6 +6,9 @@
  * @returns {string} - A string representing the number of guests and pets.
  */
 export function determineNumberOfGuests(adults = 0, children = 0, pets = 0) {
+    if (!adults && !children && !pets) {
+        return "Guests";
+    }
     // Sum the number of adults and children to get the total number of guests.
     let numberOfGuests = adults + children;
 

@@ -31,19 +31,19 @@ module.exports = {
         type: Sequelize.DATE
       },
       adultGuests: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.INTEGER
       },
       childGuests: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.INTEGER
       },
       infantGuests: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.INTEGER
       },
       petGuests: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.INTEGER
       },
       createdAt: {

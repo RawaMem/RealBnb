@@ -1,9 +1,202 @@
-.wishlist-container {
-    display: grid;
-    grid-template-columns: auto auto auto;
-    padding: 10px;
+
+.create-wishlist-modal-container {
+    height: 85vh;
+    width: 50vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
-.wishlist-item {
+.create-wishlist-title-container {
+    height: 10%;
+    width: 100%;
+    border-bottom: 1px solid lightgray;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
 
+.create-wishlist-title-inner-container {
+    height: 100%;
+    width: 60%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#material-symbols--outlined-close {
+    font-size: 21px;
+    font-weight: 500;
+    color: var(--charcoal-grey-color-code)
+}
+
+.create-wishlist-close-container {
+    margin-left: 2%;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color, .3s ease-in-out;
+}
+
+.create-wishlist-close-container:hover {
+    background-color: var(--white-smoke-hover-color);
+}
+
+.create-wishlist-title-inner-container>h3 {
+    font-size: 27px;
+}
+
+.create-wishlist-user-wishlist-container {
+    height: 80%;
+    width: 100%;
+    margin-top: 3%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+}
+
+.wishlist-main-container {
+    height: 100%;
+    width: 90%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+    gap: 2rem; 
+    margin-bottom: 5%;
+}
+
+
+.wishListCard-item {
+    width: 300px;
+    height: 320px;
+}
+
+.single-wishlist-img-container {
+    width: 100%;
+    height: 75%;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    transition: filter 0.3s ease-in-out;
+}
+
+.single-wishlist-img-container:hover {
+    filter: brightness(90%);
+}
+
+.single-wishlist-left-image-container {
+    height: 100%;
+    width: 70%;
+    background-color: rgb(225,225,225);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px; 
+}
+
+.single-wishlist-left-image-container img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.single-wishlist-right-image-container {
+    height: 100%;
+    width: 29.5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.single-wishlist-right-image-container-top,
+.single-wishlist-right-image-container-bottom {
+    height: 49.5%;
+    width: 100%;
+    background-color: rgb(225,225,225);
+}
+
+.single-wishlist-right-image-container-top {
+    border-top-right-radius: 10px;
+}
+
+.single-wishlist-right-image-container-bottom {
+    border-bottom-right-radius: 10px;
+}
+
+.single-wishlist-right-image-container-top img,
+.single-wishlist-right-image-container-bottom img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.single-wishlist-right-image-container-top img {
+    border-top-right-radius: 10px;
+}
+
+.single-wishlist-right-image-container-bottom img {
+    border-bottom-right-radius: 10px;
+}
+
+.single-wishlist-name-container {
+    height: 25%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.single-wishlist-name-top-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 3% 3% 0;
+}
+
+.single-wishlist-name-top-container h5 {
+    font-size: 20px;
+}
+
+.single-wishlist-name-top-container div {
+    color: grey;
+    font-size: 15px;
+}
+
+.single-wishlist-name-container p {
+    color: grey;
+    font-size: 15px;
+    margin-left: 3%;
+}
+
+.create-wishlist-btn-container {
+    height: 10%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid lightgrey;
+}
+
+.create-wishlist-btn-container button {
+    width: 80%;
+    height: 65%;
+    border-radius: 10px;
+    border:none;
+    background-color: black;
+    color: white;
+    transition: filter .3s ease-in-out;
+}
+
+.create-wishlist-btn-container button:hover {
+    filter: brightness(80%)
 }

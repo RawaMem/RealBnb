@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import "../WishList.css";
 
 import { createWishlistListingThunk } from "../../../store/wishlists";
 import "./WishListCard.css";
@@ -18,7 +19,9 @@ export function WishListCard({ wishlist, singleListing, listingId, setWishListMo
   }
   if (listingId) {
     return (
-      <div style={{cursor: "pointer"}} onClick={addListingToExistingWishList}>
+      <div 
+      style={{cursor: "pointer"}} onClick={addListingToExistingWishList}
+      >
         <SingleWishList wishlist={wishlist} singleListing={singleListing} />
       </div>
     )

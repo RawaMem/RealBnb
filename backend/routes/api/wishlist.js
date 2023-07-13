@@ -190,6 +190,12 @@ router.get(
 				include: [
 					{
 						model: Listing,
+						include: {
+							model: Image,
+							where: {preview: true},
+							attributes: ["url"]
+							
+						}
 					},
 				],
 			});

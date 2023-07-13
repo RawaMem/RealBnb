@@ -7,6 +7,7 @@ import { deleteWishlistListingThunk, getUserWishlistsThunk } from "../../store/w
 import { Modal } from "../../context/Modal";
 import { CreateWishListParentComponent } from "../WishLists/CreateParentComponent";
 import LoginForm from "../LoginFormModal";
+import { clearWishlists } from "../../store/wishlists";
 
 export default function SingleListingTitle({ listing, currentUser }) {
   const { setThreadIdFromListing } = useReceiverId();

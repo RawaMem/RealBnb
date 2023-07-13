@@ -12,9 +12,10 @@ export function useExceedMaxGuestListings (filteredLists, currentWishList, listi
   return useMemo(() => {
     return filteredLists.filter((listing) => {
       return (
-        listing.maxGuests <
+        currentWishList?.checkIn && currentWishList?.adultGuests ? listing.maxGuests <
           currentWishList?.adultGuests + currentWishList?.childGuests ||
-        !listingPricesSet.has(listing.id)
+        !listingPricesSet.has(listing.id) : listing.maxGuests <
+        currentWishList?.adultGuests + currentWishList?.childGuests
       );
     });
   }, [filteredLists, currentWishList, listingPricesSet]);

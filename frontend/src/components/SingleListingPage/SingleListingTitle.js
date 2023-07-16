@@ -67,7 +67,7 @@ export default function SingleListingTitle({ listing, currentUser }) {
             {listing && wishListListing && listing.id in wishListListing ? (
               <>
                 <div className="wishListHeart">
-                  <span className="material-icons" style={{ color: 'red' }} onClick={async () => {
+                  <span className="material-icons" style={{ color: 'red', cursor:"pointer" }} onClick={async () => {
                     if (!user) {
                       setShowLogInModal(listing.id);
                       return;
@@ -92,7 +92,9 @@ export default function SingleListingTitle({ listing, currentUser }) {
                       return;
                     }
                     setModalOpen("CreateWishListModal");
-                  }}>
+                  }}
+                  style={{cursor:"pointer"}}
+                  >
                     favorite
                   </span>
                 </div>

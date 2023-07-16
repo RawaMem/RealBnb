@@ -160,7 +160,7 @@ function Booking({listing}) {
    
     const daySize = [25, 26];
 
-    const reserveBtnDisabled = !state.startDate && !state.endDate;
+    const reserveBtnDisabled = !sessionUser || !state.startDate || !state.endDate;
 
     const handleReserve = async() => {
         const avePricePerDay = (totalPrice / numOfDays).toFixed(2);

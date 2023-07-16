@@ -251,8 +251,11 @@ export function WishListListing() {
                 <p className="edit-wishlist-character-counter">{name.length} / {50-name.length} characters</p>
               </div>
               <div className="edit-wishlist-btn-container">
-                <button type="submit" onClick={() => updateWishlist()}
-                  className="edit-wishlist-btn"
+                <button 
+                type="submit" 
+                onClick={() => updateWishlist()}
+                className={name.length >= 1 ? "edit-wishlist-btn" : "edit-wishlist-btn-disabled"}
+                disabled={name.length < 1}
                 >
                   Update this wishlist
                 </button>

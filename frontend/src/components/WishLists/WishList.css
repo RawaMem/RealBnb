@@ -380,6 +380,7 @@
     background-color: white;
     border-radius: 15px;
     box-shadow: var(--all-side-box-shadow);
+    z-index: 12;
 }
 
 .wishlist-listing-empty-list-container {
@@ -531,6 +532,16 @@
 
 .edit-wishlist-btn:hover {
     filter: brightness(80%)
+}
+
+.edit-wishlist-btn-disabled {
+    height: 40px;
+    width: 180px;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--disabled-btn-background-color);
+    cursor: not-allowed;
+    font-weight: 500;
 }
 
 .guests-parent-container {

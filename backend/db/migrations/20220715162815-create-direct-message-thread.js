@@ -18,6 +18,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: { model: 'Users' }
       },
+      socketRoom: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       guestId: {
         allowNull: false,
         type: Sequelize.INTEGER,

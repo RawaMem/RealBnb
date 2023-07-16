@@ -109,7 +109,7 @@ export default function SingleListingTitle({ listing, currentUser }) {
 
           <div
             className="single-listing-send-message-btn-container"
-            onClick={handleSendMessage}
+            onClick={() => window.alert("feature coming soon")}
           >
             Message Host
           </div>

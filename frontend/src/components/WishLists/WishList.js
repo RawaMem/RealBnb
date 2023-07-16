@@ -39,7 +39,7 @@ function WishList({
       fetchListingDetails();
     }
   }, [dispatch, user, wishLists]);
-
+  // console.log("listOfWishlists from WishList.js", listOfWishlists)
   return (
     <div className="wishlist-main-container">
       {error && error !== "Unauthorized" && (

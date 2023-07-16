@@ -35,15 +35,15 @@ if (process.env.NODE_ENV === 'production') {
   serverUrl = 'http://localhost:5000'
 }
 
-const socket = io(serverUrl, {
-  transports: ['websocket']
-})
-socket.on("connect_error", (err) => {
-  console.log(`connect_error due to ${err.message}`);
-});
-socket.on("connect", () => {
-  console.log(`socket created in frontend/App.js with socket.id ${socket.id}.`)
-})
+// const socket = io(serverUrl, {
+//   transports: ['websocket']
+// })
+// socket.on("connect_error", (err) => {
+//   console.log(`connect_error due to ${err.message}`);
+// });
+// socket.on("connect", () => {
+//   console.log(`socket created in frontend/App.js with socket.id ${socket.id}.`)
+// })
 //end websocket code
 
 function App() {
@@ -62,7 +62,7 @@ function App() {
       {isLoaded && (
         <Switch>
           <Route exact path='/wishlists'>
-            <WishList wishListStyle={{display: "grid", gridTemplateColumns: "auto auto auto", padding: "10px"}} />
+            <WishList />
           </Route>
           <Route exact path='/wishlists/:wishlistId'>
             <WishListListing />
@@ -115,18 +115,18 @@ function App() {
             </Route>
           </StyledEngineProvider>
 
-          <Route exact path='/messages/'>
+          {/* <Route exact path='/messages/'>
             <MessageWrapper socket={socket}/>
-          </Route>
+          </Route> */}
           <Route exact path='/testing'>
             <TestCompontent />
           </Route>
           <Route exact path="/">
             <Listings />
           </Route>
-          <Route exact path='/sockets'>
+          {/* <Route exact path='/sockets'>
             <Socket socket={socket} />
-          </Route>
+          </Route> */}
         </Switch>
       )}
     </>

@@ -4,9 +4,14 @@ import "../WishList.css";
 
 
 function SingleWishList({wishlist, singleListing}) {
+  // console.log("wishlist from singleWishList", wishlist)
   const wishListListings = wishlist.Listings;
 
-  const imageUrls = wishListListings.map(listing => listing.Images[0].url);
+  const imageUrls = wishListListings.map(listing => {
+    if(!listing.Images) return null;
+    else return listing.Images[0].url});
+  // console.log("imageUrls", imageUrls)
+  // if(!imageUrls[0]) return null;
 
   let leftImage = null;
   let rightImageTop = null;

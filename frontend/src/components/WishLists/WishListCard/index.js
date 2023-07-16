@@ -17,6 +17,7 @@ export function WishListCard({ wishlist, singleListing, listingId, setWishListMo
       }
     }
   }
+
   if (listingId) {
     return (
       <div 
@@ -29,6 +30,7 @@ export function WishListCard({ wishlist, singleListing, listingId, setWishListMo
     return (
       <NavLink
         to={`/wishlists/${wishlist.id}`}
+        className="wishlist-card-navlink"
       >
         <SingleWishList wishlist={wishlist} singleListing={singleListing} />
       </NavLink>

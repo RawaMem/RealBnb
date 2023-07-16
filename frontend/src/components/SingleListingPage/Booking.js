@@ -196,7 +196,7 @@ function Booking({listing}) {
         })
 
         const stripeResult = await stripePaymentIntentRes.json();
-        console.log("stripeResult.stripePaymentId", stripeResult.stripePaymentId)
+
         if(stripeResult.stripePaymentId) newBooking.stripePaymentIntentId = stripeResult.stripePaymentId;
 
         if(stripeResult.error) {

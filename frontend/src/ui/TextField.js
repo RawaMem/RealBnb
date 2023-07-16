@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 
 
 function InputField({size, setter, val, label, type, id, multiline, rows, variant, labelFontSize, maxLength}) {
-    console.log("maxLength", maxLength)
+
     const theme = createTheme({
         palette: {
           primary: {

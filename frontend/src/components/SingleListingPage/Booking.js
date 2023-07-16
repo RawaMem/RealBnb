@@ -60,18 +60,17 @@ function Booking({listing}) {
             } else if(start > selectedStart) return start > selectedStart
         });
         const selectedDays = calculateDays(state.startDate, state.endDate);
-        console.log("selectedDays", selectedDays)
-        console.log("curPrice.pricePerDay", curPrice.pricePerDay)
+
 
         setCurPrice(curPrice);
         setNumsOfDays(selectedDays);
         setRoomPrice(+selectedDays * (+curPrice.pricePerDay));
         const cleaningFee = listing.cleaningFee;
         const serviceFee = listing.serviceFee;
-        console.log("roomPrice", roomPrice)
+
         setTotalPrice((+cleaningFee)+(+serviceFee)+(+selectedDays * (+curPrice.pricePerDay)));
     }, [state]);
-    console.log("totalPrice", totalPrice)
+
     function calculateDays(startDate, endDate) {
         const start = new Date(startDate);
         const end = new Date(endDate);

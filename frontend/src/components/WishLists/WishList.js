@@ -24,8 +24,8 @@ function WishList({
   }, [dispatch, user]);
 
   const listOfWishlists = Object.values(wishLists);
-  console.log("listOfWishlists", listOfWishlists);
-  
+
+
   useEffect(() => {
     if (user) {
       async function fetchListingDetails() {

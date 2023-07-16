@@ -59,7 +59,6 @@ export default function GoogleMaps({
 
   const onChangeAddress = (autocomplete) => {
     const location = autocomplete.getPlace();
-    console.log('location', location);
     if(!location.geometry){
       alert('Sorry that place was not found.');
       return;

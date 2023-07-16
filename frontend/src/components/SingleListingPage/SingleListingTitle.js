@@ -72,7 +72,7 @@ export default function SingleListingTitle({ listing, currentUser }) {
                       setShowLogInModal(listing.id);
                       return;
                     }
-                    console.log("%c what is going on hree", "color:blue; font-size: 16px", {listing, wishListListing})
+                 
                     if (listing.id in wishListListing) {
                       await dispatch(deleteWishlistListingThunk(wishListListing[listing.id].WishListListing.wishlistId, listing.id));
                       return;

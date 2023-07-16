@@ -21,7 +21,7 @@ export default function AddressForm() {
     const [suggestions, setSuggestions] = useState([]);
     const [displayedSuggestions, setDisplayedSuggestions] = useState([]);
     const token = useSelector((state) => state.maps.token);
-    console.log("city", city)
+
     useEffect(() => {
         if(!token) dispatch(getToken());
     }, [dispatch]);
@@ -127,7 +127,7 @@ export default function AddressForm() {
                                                             className='suggestion-location-container'
                                                             key={suggestion.place_name} 
                                                             onClick={() => {
-                                                                console.log("suggestion", suggestion)
+                                                             
                                                                 setLatitude(suggestion.geometry.coordinates[1])
                                                                 setLongitude(suggestion.geometry.coordinates[0])
                                                                 setAddress(suggestion.place_name)

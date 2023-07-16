@@ -130,7 +130,6 @@ export function createWishlistThunk(wishlist, listingId) {
 
 export function createWishlistListingThunk(wishlistId, listingId) {
   return async function (dispatch) {
-    console.log("from thunk", wishlistId)
     try {
       const response = await csrfFetch(`/api/wishlists/${wishlistId}`, {
         method: "POST",

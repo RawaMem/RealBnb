@@ -9,7 +9,8 @@ function SingleWishList({wishlist, singleListing}) {
 
   const imageUrls = wishListListings.map(listing => {
     if(!listing.Images) return null;
-    else return listing.Images[0].url});
+    else return listing.Images[0].url
+  });
   // console.log("imageUrls", imageUrls)
   // if(!imageUrls[0]) return null;
 

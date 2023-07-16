@@ -24,7 +24,8 @@ function WishList({
   }, [dispatch, user]);
 
   const listOfWishlists = Object.values(wishLists);
-
+  console.log("listOfWishlists", listOfWishlists);
+  
   useEffect(() => {
     if (user) {
       async function fetchListingDetails() {
@@ -39,7 +40,7 @@ function WishList({
       fetchListingDetails();
     }
   }, [dispatch, user, wishLists]);
-  // console.log("listOfWishlists from WishList.js", listOfWishlists)
+
   return (
     <div className="wishlist-main-container">
       {error && error !== "Unauthorized" && (

@@ -193,8 +193,7 @@ router.get(
 						include: {
 							model: Image,
 							where: {preview: true},
-							attributes: ["url"]
-							
+							attributes: ["url"]							
 						}
 					},
 				],

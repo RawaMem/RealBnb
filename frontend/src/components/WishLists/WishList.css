@@ -626,6 +626,10 @@
     color: var(--charcoal-grey-color-code);
 }
 
+.guests-container-right-section input[type="number"] {
+    text-align: center;
+}
+
 .guests-btn-container {
     width: 100%;
     height: 15%;
@@ -672,6 +676,21 @@
 
 .guests-btn-save:hover {
     filter: brightness(80%);
+}
+
+.guests-btn-save-disabled {
+    font-size: 17px;
+    width: 80px;
+    height: 40px;
+    border-radius: 10px;
+    border:none;
+    font-weight: 500;
+    cursor: not-allowed;
+}
+
+.minusBtnDisabled,
+.plusBtnDisabled {
+    cursor: not-allowed;
 }
 
 

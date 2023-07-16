@@ -65,7 +65,6 @@ router.delete('/:bookingId', requireAuth, asyncHandler(async (req, res) => {
 const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY)
 
 router.post("/create-payment-intent", async (req,res) => {
-    console.log("req.body", req.body)
 
     const {userId, totalCost, imageUrl, listingName, avePricePerDay, numOfGuests, startDate, endDate, listingId} = req.body;
 
@@ -133,9 +132,9 @@ router.post('/webhook', express.raw({type: 'application/json'}), async(request, 
         
         try {
             event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
-            console.log("webhook verified")
+           
         } catch (err) {
-            console.log("webhook failed", `Webhook Error: ${err.message}`)
+      
             response.status(400).send(`Webhook Error: ${err.message}`);
             return;
         }

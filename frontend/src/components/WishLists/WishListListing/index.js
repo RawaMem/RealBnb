@@ -1,6 +1,6 @@
 import { useEffect, useState, useReducer } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, NavLink, useHistory } from "react-router-dom";
+import { useParams, NavLink, useHistory, Link } from "react-router-dom";
 import DatePicker, { datePickerReducer } from "../../../ui/DatePicker";
 import { MapBox } from "../../Maps/Mapbox";
 import ListingCard from "../../Listings/ListingCard";
@@ -29,6 +29,7 @@ import {
 } from "../../../utils/WishList";
 import { useDetermineInitialCoordinates } from "../../../hooks/MapBox";
 import { RenderListings } from "./RenderListings";
+import "../WishList.css";
 
 export function WishListListing() {
   const { wishlistId } = useParams();
@@ -53,8 +54,8 @@ export function WishListListing() {
 
 
   const containerStyle = {
-    width: "90%",
-    height: "95%",
+    width: "100%",
+    height: "100%",
   };
 
   const initialState = {
@@ -151,21 +152,32 @@ export function WishListListing() {
     await dispatch(updateWishlistThunk(updatedWishlist));
   }
   return (
-    <div style={{ display: "flex" }}>
-      <div>
-        <span
-          className="material-symbols-outlined"
-          style={{
-            fontVariationSettings: "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48",
-          }}
-          onClick={() => setShowModal(true)}
-        >
-          more_horiz
-        </span>
-        <h1>{currentWishList?.name}</h1>
+    <div className="wishlisting-listing-main-container">
+      <div className="wishlist-listing-left-container">
+        <div className="wishlist-listing-option-container">
+          <NavLink exact to="/wishlists" className="wishlist-listing-arrow-back-navlink">
+            <span 
+              className="material-symbols-outlined"
+              id="material-symbols-arrow_back"
+            >
+              arrow_back
+            </span>
+          </NavLink>
+          <span
+            className="material-symbols-outlined"
+            id="material-symbols-more_horiz"
+            onClick={() => setShowModal(true)}
+          >
+            more_horiz
+          </span>
+        </div>
+        <h3 className="wishlisting-listing-title">{currentWishList?.name}</h3>
         <p className="errors">{error}</p>
         <div className="wishListListing-button-container">
-          <button onClick={() => setShowCalendar((prev) => !prev)}>
+          <button 
+            onClick={() => setShowCalendar((prev) => !prev)}
+            className="wishlisting-listing-open-calendar"
+          >
             {currentWishList &&
             currentWishList.checkIn &&
             currentWishList.checkOut
@@ -176,14 +188,19 @@ export function WishListListing() {
               : "Date"}
           </button>
           {showCalendar && (
-            <DatePicker
-              state={state}
-              dispatch={dispatchCalendar}
-              setShowCalendar={setShowCalendar}
-              updateWishlistDates={updateWishlistDates}
-            />
+            <div className="wishlisting-listing-calendar">
+              <DatePicker
+                state={state}
+                dispatch={dispatchCalendar}
+                setShowCalendar={setShowCalendar}
+                updateWishlistDates={updateWishlistDates}
+              />
+            </div>
           )}
-          <button onClick={() => setShowGuestModal(true)}>
+          <button 
+            onClick={() => setShowGuestModal(true)}
+            className="wishlisting-listing-open-calendar"
+          >
             {currentWishList
               ? determineNumberOfGuests(
                   currentWishList.adultGuests,
@@ -203,25 +220,79 @@ export function WishListListing() {
         </div>
         {showModal && (
           <Modal onClose={() => setShowModal(false)}>
-            <>
-              <input
-                type="text"
-                onChange={(e) => setName(e.target.value)}
-                value={name}
-              />
-              <button type="submit" onClick={() => updateWishlist()}>
-                Update this wishlist
-              </button>
-              <button type="submit" onClick={() => deleteWishlist()}>
-                Delete this wishlist
-              </button>
-            </>
+            <div className="edit-wishlist-modal-container">
+              <div className="edit-wishlist-modal-title-container">
+                <div className="edit-wishlist-modal-title-inner-container">
+                  <div className="edit-wishlist-close-container">
+                    <span 
+                      className="material-symbols-outlined"
+                      id="material-symbols--outlined-close"
+                      onClick={() => setShowModal(false)}
+                    >
+                      close
+                    </span>
+                  </div>
+                  <h5>Edit wishlist</h5>
+                </div>
+              </div>
+              <div className="edit-wishlist-content-container">
+                <label
+                for="edit-wishlist-input"
+                className="edit-wishlist-input-label"
+                >Name</label>
+                <input
+                  id="edit-wishlist-input"
+                  type="text"
+                  onChange={(e) => setName(e.target.value)}
+                  value={name}
+                  className="edit-wishlist-content-input"
+                  maxlength="50"
+                />
+                <p className="edit-wishlist-character-counter">{name.length} / {50-name.length} characters</p>
+              </div>
+              <div className="edit-wishlist-btn-container">
+                <button 
+                type="submit" 
+                onClick={() => updateWishlist()}
+                className={name.length >= 1 ? "edit-wishlist-btn" : "edit-wishlist-btn-disabled"}
+                disabled={name.length < 1}
+                >
+                  Update this wishlist
+                </button>
+                <button type="submit" onClick={() => deleteWishlist()}
+                  className="edit-wishlist-btn"
+                
+                >
+                  Delete this wishlist
+                </button>
+              </div>
+            </div>
           </Modal>
         )}
+
         {filteredLists && filteredLists.length === 0 && (
-          <div>
+          <div className="wishlist-listing-empty-list-container">
             <h6>No saves yet</h6>
-            <p>As you search, click the heart icon to save your favorite places and Experiences to a wishlist.</p>
+            <p style={{fontSize: "15px", color: "#36454F"}}>As you search, click the heart icon to save your favorite places and Experiences to a wishlist.</p>
+            <Link 
+            to="/" 
+            style={{
+              textDecoration:"none",
+              border: "1px solid black",
+              width:"150px",
+              height: "40px",
+              display:"flex",
+              flexDirection:"row",
+              justifyContent: "center",
+              alignItems:"center",
+              fontSize:"18px",
+              backgroundColor: "black",
+              borderRadius:"10px",
+              color: "white"
+            }}
+            className="wishlist-listing-empty-list-btn">
+              Start exploring
+            </Link>
           </div>
         )}
         {filteredLists && filteredLists.length > 0 && currentWishList && !currentWishList?.checkIn && !currentWishList?.adultGuests && (
@@ -232,8 +303,8 @@ export function WishListListing() {
         )}
 
         {exceedMaxGuestListings.length > 0 && (
-          <div>
-            <h3>None of these homes fit your trip</h3>
+          <div style={{margin:"3% 0 3% 3%", fontSize: "15px", fontWeight:"500", color:"red"}}>
+            <div>None of these homes fit your trip</div>
             <p>
               If you’re flexible, try adjusting your wishlist filters to find
               other options.
@@ -243,42 +314,35 @@ export function WishListListing() {
         )}
       </div>
       <div
-        style={{
-          width: "80%",
-          height: "100vh",
-          display: "flex",
-          flexDirection: "row-reverse",
-        }}
+        className="wishlist-listing-right-container"
       >
         <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-          }}
+          className="wishlist-listing-nav-btn-container"
         >
           <button
-            style={{ height: "100px" }}
             onClick={() => setZoom((prev) => prev + 1)}
+            className="wishlist-listing-nav-btn-plus"
           >
             +
           </button>
           <button
-            style={{ height: "100px" }}
             onClick={() => setZoom((prev) => prev - 1)}
+            className="wishlist-listing-nav-btn-minus"
+
           >
             -
           </button>
-        </div>
-        <MapBox
-          latitude={latitude || 38.765}
-          longitude={longitude || -122.45}
-          style={containerStyle}
-          zoom={zoom}
-          coordinates={filteredLists}
-          validListings={validListingSet}
-          hoveredListing={hoveredListing}
-          filteredLists={filteredLists}
-        />
+        </div>        
+          <MapBox
+            latitude={latitude || 38.765}
+            longitude={longitude || -122.45}
+            style={containerStyle}
+            zoom={zoom}
+            coordinates={filteredLists}
+            validListings={validListingSet}
+            hoveredListing={hoveredListing}
+            filteredLists={filteredLists}
+          />     
       </div>
     </div>
   );

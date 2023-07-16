@@ -3,7 +3,7 @@ import { CreateNewWishList } from "../CreateNewWishList";
 import { CreateWishListModal } from "../CreateWishListModal";
 
 export function CreateWishListParentComponent({ user, setModalOpen, listingId }) {
-  console.log("%c this is the create Parent", "color: orange;  font-size:20px", { user, setModalOpen, listingId })
+
   const [wishListModalOpen, setWishListModalOpen] = useState(true);
   const [newWishListOpen, setNewWishListOpen] = useState(false);
 

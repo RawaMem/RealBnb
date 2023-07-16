@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserWishlistsThunk } from "../../store/wishlists";
 import { getSingleListingThunk } from "../../store/listings";
 import { WishListCard } from "./WishListCard";
+import "./WishList.css";
 
 function WishList({
-  wishListStyle,
   listingId,
   setWishListModalOpen,
   setModalOpen,
@@ -25,6 +25,7 @@ function WishList({
 
   const listOfWishlists = Object.values(wishLists);
 
+
   useEffect(() => {
     if (user) {
       async function fetchListingDetails() {
@@ -41,26 +42,25 @@ function WishList({
   }, [dispatch, user, wishLists]);
 
   return (
-    <>
+    <div className="wishlist-main-container">
       {error && error !== "Unauthorized" && (
         <p style={{ color: "red" }}>{error}</p>
       )}
       {listOfWishlists.length && listings && (
-        <div style={wishListStyle}>
-          {listOfWishlists.map((wishlist, idx) => (
-            <div className="wishlist-item" key={`${wishlist.id}`}>
-              <WishListCard
-                wishlist={wishlist}
-                singleListing={listings[idx]}
-                listingId={listingId}
-                setWishListModalOpen={setWishListModalOpen}
-                setModalOpen={setModalOpen}
-              />
-            </div>
+        <>
+          {listOfWishlists.map((wishlist, idx) => (            
+            <WishListCard
+              wishlist={wishlist}
+              singleListing={listings[idx]}
+              listingId={listingId}
+              setWishListModalOpen={setWishListModalOpen}
+              setModalOpen={setModalOpen}
+              key={`${wishlist.id}`}
+            />           
           ))}
-        </div>
+        </>
       )}
-    </>
+    </div>
   );
 }
 

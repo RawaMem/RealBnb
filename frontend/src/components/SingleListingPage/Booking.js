@@ -61,12 +61,14 @@ function Booking({listing}) {
         });
         const selectedDays = calculateDays(state.startDate, state.endDate);
 
+
         setCurPrice(curPrice);
         setNumsOfDays(selectedDays);
-        setRoomPrice(selectedDays * +(curPrice.pricePerDay));
+        setRoomPrice(+selectedDays * (+curPrice.pricePerDay));
         const cleaningFee = listing.cleaningFee;
         const serviceFee = listing.serviceFee;
-        setTotalPrice((+cleaningFee)+(+serviceFee)+roomPrice);
+
+        setTotalPrice((+cleaningFee)+(+serviceFee)+(+selectedDays * (+curPrice.pricePerDay)));
     }, [state]);
 
     function calculateDays(startDate, endDate) {
@@ -196,7 +198,7 @@ function Booking({listing}) {
         })
 
         const stripeResult = await stripePaymentIntentRes.json();
-        console.log("stripeResult.stripePaymentId", stripeResult.stripePaymentId)
+
         if(stripeResult.stripePaymentId) newBooking.stripePaymentIntentId = stripeResult.stripePaymentId;
 
         if(stripeResult.error) {

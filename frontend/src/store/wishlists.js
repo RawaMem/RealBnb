@@ -80,11 +80,13 @@ export function updateWishlist(wishlist) {
 export function getUserWishlistsThunk(userId) {
   return async function (dispatch, getState) {
     const { wishLists } = getState().wishlists;
+
     if (wishLists && Object.keys(wishLists).length > 0) return;
     try {
       const response = await csrfFetch(`/api/wishlists/${userId}`);
       if (response.ok) {
         const wishlists = await response.json();
+
         dispatch(getUserWishlists(wishlists));
       }
     } catch (error) {

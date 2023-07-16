@@ -267,7 +267,6 @@ router.patch("/:listingId/edit", requireAuth, asyncHandler(async(req, res) => {
 //search listings on home  page
 router.get('/search', asyncHandler(async (req, res) => {
   const queryInfo = req.query
-  console.log("this is request query", req.query)
   // let test11
   let whereListing = {}
   if (req.query.destination) {
@@ -284,7 +283,6 @@ router.get('/search', asyncHandler(async (req, res) => {
 
   let whereDates = {}
   if (req.query.checkIn && !req.query.checkOut) {
-    console.log('CHECKIN DATE BUT NO CHECKOUT')
     whereDates = {
       [Op.and]: [
         { startDate: { [Op.lte]: req.query.checkIn } },
@@ -293,7 +291,6 @@ router.get('/search', asyncHandler(async (req, res) => {
     }
   }
   if (req.query.checkOut && !req.query.checkIn) {
-    console.log('CHECKOUT DATE BUT NO CHECKIN')
 
     whereDates = {
       [Op.and]: [
@@ -305,7 +302,6 @@ router.get('/search', asyncHandler(async (req, res) => {
   }
 
   if (req.query.checkIn && req.query.checkOut) {
-    console.log('BOTH CHECKIN AND CHECKOUT')
 
     whereDates = {
       [Op.and]: [
@@ -315,7 +311,6 @@ router.get('/search', asyncHandler(async (req, res) => {
     }
   }
 
-  console.log('THIS IS SEARCH INFO-----------------------', queryInfo, whereListing, whereDates)
 
   const listings = await Listing.findAll({
     where: whereListing,

@@ -54,7 +54,7 @@ export default function ListingCard({ listing }) {
                     <span style={{ color: "#4c4c4c" }}><span style={{ color: "#323232", fontWeight: "600", fontSize: "14px" }}>${listing.ListingPrices[0].pricePerDay}</span> night</span>
                 </div>
                 <div className="listing-info-right">
-                    <span className="material-symbols-outlined" style={{ color: "#323232" }}>star</span>
+                    <span className="material-icons" style={{ color: "#323232" }}>star</span>
                     <span style={{ color: "#4c4c4c", fontSize: "15px" }}>{listing.avgRating ? Number(listing.avgRating).toFixed(2) : "New"}</span>
                 </div>
             </div>

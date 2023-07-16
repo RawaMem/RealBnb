@@ -1,26 +1,56 @@
 import React from "react";
 import { wishlistDateFormatter } from "../../../utils/WishList/wishlistDateFormatter";
-import "../WishListCard/WishListCard.css";
+import "../WishList.css";
 
 
 function SingleWishList({wishlist, singleListing}) {
+  // console.log("wishlist from singleWishList", wishlist)
+  const wishListListings = wishlist.Listings;
+
+  const imageUrls = wishListListings.map(listing => {
+    if(!listing.Images) return null;
+    else return listing.Images[0].url
+  });
+  // console.log("imageUrls", imageUrls)
+  // if(!imageUrls[0]) return null;
+
+  let leftImage = null;
+  let rightImageTop = null;
+  let leftImageBottom = null;
+
+  if(imageUrls[0]) leftImage = imageUrls[0];
+  if(imageUrls[1]) rightImageTop = imageUrls[1];
+  if(imageUrls[2]) leftImageBottom = imageUrls[2];
+
   return (
     <div className="wishListCard-item">
-      <div className="wishListCard-container">
-        {singleListing?.Images?.slice(0, 3).map((image, idx) => (
-          <div key={idx} className={`wishListCard-item-${idx}`}>
-            <img
-              className="wishListCardImg"
-              src={image.url}
-              alt={`${image.description}`}
-            />
+      <div 
+        className="single-wishlist-img-container"
+      >
+          <div className="single-wishlist-left-image-container">
+              {leftImage && <img src={leftImage} alt="wishlist-left" /> }
           </div>
-        ))}
+
+          <div className="single-wishlist-right-image-container">
+              <div className="single-wishlist-right-image-container-top">
+                  {rightImageTop && <img src={rightImageTop} alt="wishlist-top-right" />}
+              </div>
+
+              <div className="single-wishlist-right-image-container-bottom">
+                  {leftImageBottom && <img src={leftImageBottom} alt="wishlist-bottom-right" />}
+              </div>
+          </div>
       </div>
-      <h3>{wishlist.name}</h3>
-      {wishlist.checkIn && (
-        <p>{wishlistDateFormatter(wishlist.checkIn, wishlist.checkOut)}</p>
-      )}
+
+      <div className="single-wishlist-name-container">
+        <div className="single-wishlist-name-top-container">
+          <h5>{wishlist.name}</h5>
+          <div>{wishListListings.length} Saved</div>
+        </div>
+        {wishlist.checkIn && (
+          <p>{wishlistDateFormatter(wishlist.checkIn, wishlist.checkOut)}</p>
+        )}
+      </div>
     </div>
   );
 }

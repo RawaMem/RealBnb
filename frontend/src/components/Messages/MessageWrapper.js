@@ -13,14 +13,14 @@ export default function MessageWrapper({socket}) {
     const sessionUser = useSelector((state) => state.session.user);
 
     const messageThreadsArr = Object.values(messageThreadsObj);
-    // console.log('messageThreadsArr==========', messageThreadsArr)
+
 
     useEffect(() => {
         dispatch(getDMThreadsThunk())
     }, [dispatch])
 
     useEffect(() => {
-        console.log('this is socket in useEffect OF JOINING ROOMS', socket)
+
         messageThreadsArr.forEach((thread) => {
             const threadAndUser = {threadId: thread.id, userId: sessionUser.id, socketRoom: thread.socketRoom}
             socket.emit('joinThreadRoom', threadAndUser)

@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
 
-function InputField({size, setter, val, label, type, id, multiline, rows, variant, labelFontSize}) {
+function InputField({size, setter, val, label, type, id, multiline, rows, variant, labelFontSize, maxLength}) {
 
     const theme = createTheme({
         palette: {
@@ -16,6 +16,8 @@ function InputField({size, setter, val, label, type, id, multiline, rows, varian
           fontSize: 17, // change the default font size
         },
       });
+    
+    if(!maxLength) maxLength = null;
 
     return (
         <ThemeProvider theme={theme}>
@@ -40,6 +42,7 @@ function InputField({size, setter, val, label, type, id, multiline, rows, varian
                         shrink: true,
                         style: { fontSize: labelFontSize }, // or any other size you want
                     }}
+                  
                 />
             </Box>
         </ThemeProvider>

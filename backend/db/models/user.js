@@ -140,7 +140,6 @@ module.exports = (sequelize, DataTypes) => {
       lastName
     });
 
-    console.log("created user", user)
     return await User.scope('currentUser').findByPk(user.id);
   };
   return User;

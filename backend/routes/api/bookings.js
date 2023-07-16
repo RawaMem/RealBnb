@@ -41,7 +41,7 @@ router.get('/userBooking', requireAuth, asyncHandler(async (req, res) => {
         const listingImagePreview = dataJson["Listing"]["Images"][0].url;
         dataJson.listingName = listingName;
         dataJson.listingImagePreview = listingImagePreview;
-        delete dataJson["Listing"]; 
+        delete dataJson["Listing"];
         userBookingData.push(dataJson);
     });
 
@@ -79,6 +79,12 @@ router.post("/create-payment-intent", async (req,res) => {
             endDate
         }
     });
+    let currentURL
+    if (process.env.NODE_ENV === "production") {
+        currentURL = process.env.LIVEURL
+    } else {
+        currentURL = process.env.LOCALURL
+    }
 
     try {
         // use paymentIntenets.create() to allow more flexibility
@@ -99,8 +105,8 @@ router.post("/create-payment-intent", async (req,res) => {
                 quantity: 1
                 }
             ],
-            success_url: `http://localhost:3000/user-bookings/${userId}`, 
-            cancel_url: `http://localhost:3000/edit-listing/${listingId}`,
+            success_url: `${currentURL}/user-bookings/${userId}`,
+            cancel_url: `${currentURL}/edit-listing/${listingId}`,
         });
 
         res.json({
@@ -129,12 +135,12 @@ router.post('/webhook', express.raw({type: 'application/json'}), async(request, 
 
     if(endpointSecret) {
         let event;
-        
+
         try {
             event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
-           
+
         } catch (err) {
-      
+
             response.status(400).send(`Webhook Error: ${err.message}`);
             return;
         }
@@ -145,7 +151,7 @@ router.post('/webhook', express.raw({type: 'application/json'}), async(request, 
         data = request.body.object;
         eventType = request.body.type;
     };
-    
+
     // Handle the event
     let booking;
     if(eventType === "checkout.session.completed") {
@@ -170,11 +176,11 @@ router.post('/webhook', express.raw({type: 'application/json'}), async(request, 
     };
 }
 );
-  
+
 
 router.post('/create', requireAuth, asyncHandler(async (req, res) => {
     const { totalCost, avePricePerDay, startDate, endDate, listingId, numOfGuests, stripePaymentIntentId } = req.body;
-    
+
     const userId = req.user.id;
 
     const listing = await Listing.findByPk(listingId);
@@ -194,7 +200,7 @@ router.post('/create', requireAuth, asyncHandler(async (req, res) => {
             numOfGuests,
             startDate,
             endDate,
-            stripePaymentIntentId   
+            stripePaymentIntentId
         });
 
         return res.json({booking});

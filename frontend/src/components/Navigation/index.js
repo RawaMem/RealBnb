@@ -10,6 +10,8 @@ import { useCategory } from '../../context/CategoryContext';
 import { getListingsThunk } from '../../store/listings';
 import DatePicker, {datePickerReducer} from '../../ui/DatePicker';
 import { getListingSearchResultsThunk } from '../../store/listings';
+import { login as loginThunk, signup } from '../../store/session';
+import { useGoogleLogin } from '@react-oauth/google';
 
 function Navigation({ isLoaded }){
 
@@ -29,6 +31,27 @@ function Navigation({ isLoaded }){
     endDate: null,
     focusedInput: null,
   };
+
+  const login = useGoogleLogin({
+    onSuccess: async(tokenResponse) => {
+      const googleUserDetailsUrl = 'https://www.googleapis.com/oauth2/v2/userinfo';
+      const response = await fetch(googleUserDetailsUrl, {
+        headers: {
+          Authorization: `Bearer ${tokenResponse.access_token}`
+        },
+      });
+      const data = await response.json();
+      if (data.error) return;
+      try {
+        await dispatchThunk(signup({username: data.name, email: data.email, password: data.id, firstName: data.given_name, lastName: data.family_name }));
+        return
+      } catch(error) {
+        await dispatchThunk(loginThunk({credential: data.email, password: data.id}));
+      } finally {
+        setShowLogInModal(false);
+      }
+    }
+  });
 
   const [state, dispatch] = useReducer(datePickerReducer, initialState);
 
@@ -184,6 +207,7 @@ function Navigation({ isLoaded }){
           {showLogInModal && (
           <Modal onClose={() => setShowLogInModal(false)}>
             <LoginForm setShowLogInModal={setShowLogInModal} />
+            <button onClick={login}>Log in with Google</button>
           </Modal>
           )}
           {showSignUpModal && (

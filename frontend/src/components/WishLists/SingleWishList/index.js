@@ -4,23 +4,15 @@ import "../WishList.css";
 
 
 function SingleWishList({wishlist, singleListing}) {
-  // console.log("wishlist from singleWishList", wishlist)
   const wishListListings = wishlist.Listings;
-
-  const imageUrls = wishListListings.map(listing => {
-    if(!listing.Images) return null;
-    else return listing.Images[0].url
-  });
-  // console.log("imageUrls", imageUrls)
-  // if(!imageUrls[0]) return null;
 
   let leftImage = null;
   let rightImageTop = null;
   let leftImageBottom = null;
 
-  if(imageUrls[0]) leftImage = imageUrls[0];
-  if(imageUrls[1]) rightImageTop = imageUrls[1];
-  if(imageUrls[2]) leftImageBottom = imageUrls[2];
+  if(singleListing?.Images[0]) leftImage = singleListing?.Images[0]?.url;
+  if(singleListing?.Images[1]) rightImageTop = singleListing?.Images[1]?.url;
+  if(singleListing?.Images[2]) leftImageBottom = singleListing?.Images[2]?.url;
 
   return (
     <div className="wishListCard-item">

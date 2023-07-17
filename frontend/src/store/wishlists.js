@@ -244,7 +244,7 @@ export default function wishlistsReducer(state = initialState, action) {
       newState.wishListListing[action.listingId] = {
         id: action.listingId,
         WishListListing: {
-          wishlistId: action.wishlistId,
+          wishlistId: action.wishlist.id,
           listingId: action.listingId,
         },
       };

@@ -187,7 +187,7 @@ export function Guests({ currentWishList, setShowGuestModal }) {
           <button 
             onClick={saveGuestsInformation}
             className={!saveBtnDisabled() ? "guests-btn-save" : "guests-btn-save-disabled"}
-            disabled={saveBtnDisabled()}
+            // disabled={saveBtnDisabled()}
           >
             Save
           </button>

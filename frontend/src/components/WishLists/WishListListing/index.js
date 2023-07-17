@@ -38,7 +38,6 @@ export function WishListListing() {
   const { wishLists, wishListListing } = useSelector(
     (state) => state.wishlists
   );
-  const { id } = useSelector((state) => state.session.user);
   const { allListings } = useSelector((state) => state.listings);
   const { error } = useSelector((state) => state.wishlists);
   const currentWishList = wishLists[wishlistId];
@@ -77,8 +76,10 @@ export function WishListListing() {
   }, [wishLists]);
 
   useEffect(() => {
-    dispatch(getUserWishlistsThunk(id));
-  }, [dispatch, id, wishlistId]);
+    if (user) {
+      dispatch(getUserWishlistsThunk(user.id));
+    }
+  }, [dispatch, user?.id, wishlistId]);
 
   useEffect(() => {
     dispatch(getListingsThunk());
@@ -295,9 +296,9 @@ export function WishListListing() {
             </Link>
           </div>
         )}
-        {filteredLists && filteredLists.length > 0 && currentWishList && !currentWishList?.checkIn && !currentWishList?.adultGuests && (
+        {/* {filteredLists && filteredLists.length > 0 && currentWishList && !currentWishList?.checkIn && !currentWishList?.adultGuests && (
           <RenderListings listings={filteredLists} wishListListing={wishListListing} user={user} setShowCreateWishListModal={setShowCreateWishListModal} setModalOpen={setModalOpen} dispatch={dispatch} setHoveredListing={setHoveredListing}/>
-        )}
+        )} */}
         {validListings.length > 0 && (
           <RenderListings listings={validListings} wishListListing={wishListListing} user={user} setShowCreateWishListModal={setShowCreateWishListModal} setModalOpen={setModalOpen} dispatch={dispatch} setHoveredListing={setHoveredListing}/>
         )}

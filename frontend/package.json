@@ -10,6 +10,7 @@
     "@googlemaps/react-wrapper": "^1.1.35",
     "@mui/material": "^5.12.2",
     "@react-google-maps/api": "^2.13.1",
+    "@react-oauth/google": "^0.11.0",
     "@stripe/react-stripe-js": "^2.1.0",
     "@stripe/stripe-js": "^1.54.0",
     "@testing-library/jest-dom": "^5.12.0",

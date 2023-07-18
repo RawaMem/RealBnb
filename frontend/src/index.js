@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { ModalProvider } from './context/Modal';
 import App from './App';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 import configureStore from './store';
 import { restoreCSRF, csrfFetch } from "./store/csrf";
@@ -26,9 +27,9 @@ if (process.env.NODE_ENV !== "production") {
   window.wishlistActions = wishlistActions;
 }
 
-
 function Root() {
   return (
+    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
     <ModalProvider>
         <Provider store={store}>
           <CategoryProvider>
@@ -42,6 +43,7 @@ function Root() {
         </CategoryProvider>
       </Provider>
     </ModalProvider>
+    </GoogleOAuthProvider>
   );
 }
 

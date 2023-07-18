@@ -81,13 +81,43 @@
 
 
 .login-form-demo-button-container {
-    height: 20%;
+    height: 10%;
     width: 100%;
     margin-top: 5%;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
+}
+
+.login-with-google-button-container {
+    border: 1px solid lightgray;
+    width: 60%;
+    height: 10%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 1%;
+    justify-content: space-between;
+    border-radius: 15px;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: box-shadow .3s ease-in-out;
+}
+
+.login-with-google-button-container:hover {
+    box-shadow: var(--all-side-box-shadow);
+}
+
+.login-with-google-button-container div {
+    font-weight: 500;
+    margin-left: 3%
+}
+
+
+.google-logo-login {
+    width: 15%;
+    height: 100%;
 }
 
 .demoUserButton {

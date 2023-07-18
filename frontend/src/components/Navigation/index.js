@@ -206,8 +206,7 @@ function Navigation({ isLoaded }){
 
           {showLogInModal && (
           <Modal onClose={() => setShowLogInModal(false)}>
-            <LoginForm setShowLogInModal={setShowLogInModal} />
-            <button onClick={login}>Log in with Google</button>
+            <LoginForm setShowLogInModal={setShowLogInModal} login={login} />
           </Modal>
           )}
           {showSignUpModal && (

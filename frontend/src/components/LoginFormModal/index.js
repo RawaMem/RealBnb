@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import InputField from "../../ui/TextField";
 import "./LoginForm.css";
 
-function LoginForm( {setShowLogInModal} ) {
+function LoginForm( {setShowLogInModal, login} ) {
   const dispatch = useDispatch();
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
@@ -106,6 +106,10 @@ function LoginForm( {setShowLogInModal} ) {
           <button
             className="demoUserButton"
             onClick={handleDemoUser2}>Demo user 2</button>
+        </div>
+        <div className="login-with-google-button-container">
+          <div onClick={login}>Log in with Google</div>
+          <img src="https://cdn.discordapp.com/attachments/908381608355180594/1130909868446973992/image.png" alt="google-logo" className="google-logo-login"/>
         </div>
       </div>
 

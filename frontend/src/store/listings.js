@@ -148,7 +148,7 @@ export const deleteUserListingThunk = listingId => async dispatch => {
 export const getListingSearchResultsThunk = (searchFormValues) => async dispatch => {
     let currentUrl;
     if (process.env.NODE_ENV === 'production') {
-        currentUrl = 'https://realbnb.onrender.com/api/listings/search'
+        currentUrl = 'https://realbnb-bvb1.onrender.com/api/listings/search'
     } else {
         currentUrl = 'http://localhost:5000/api/listings/search'
     }

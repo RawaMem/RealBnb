@@ -16,7 +16,6 @@ app.use(morgan("dev"));
 
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
-// app.use(express.json());
 app.use((req, res, next) => {
   if (req.originalUrl === "/api/bookings/webhook") {
     next();
@@ -35,16 +34,6 @@ app.use(helmet({
   contentSecurityPolicy: false
 }));
 
-// Set the _csrf token and create req.csrfToken method
-// app.use(
-//   csurf({
-//     cookie: {
-//       secure: isProduction,
-//       sameSite: isProduction && "Lax",
-//       httpOnly: true,
-//     },
-//   })
-// );
 
 // csurf options
 const csurfProtection = csurf({

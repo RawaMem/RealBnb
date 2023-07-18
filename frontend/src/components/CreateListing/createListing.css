@@ -706,6 +706,9 @@ span.disabled {
     height: 50%;
     border: 1px solid rgb(176,176,176);
     border-radius: 10px;
+    padding: 3%;
+    font-size: 20px;
+
 }
 
 .edit-photo-caption-inner-container div {

@@ -33,7 +33,7 @@ export default function BookingDetail() {
     }, [dispatch]);
 
     function bookingStatus() {
-        const status = "future"
+        let status = "future"
         const startDate = new Date(bookingState.startDate);
         const endDate = new Date(bookingState.endDate);
         const today = new Date();

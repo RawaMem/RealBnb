@@ -1,7 +1,24 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { Modal } from "../../context/Modal";
+import ConfirmDeleteBookingForm from "./ConfirmDeleteBookingForm";
 
+export default function BookingCard({booking, type}) {
 
-export default function BookingCard({booking, showConfirmDeleteModal, showConfirmDeleteForm, setShowConfirmDeleteForm, type}) {
+    const [showConfirmDeleteForm, setShowConfirmDeleteForm] = useState(false);
+    
+    function showConfirmDeleteModal(selectedBooking) {
+
+        return (
+            <Modal onClick={() => setShowConfirmDeleteForm(false)}>
+                <ConfirmDeleteBookingForm
+                    setShowConfirmDeleteForm={setShowConfirmDeleteForm}
+                    previewImageUrl={booking.listingImagePreview}
+                    bookingId={booking.id}
+                />
+            </Modal>
+        );
+    };
 
 
     function convertDate(date) {

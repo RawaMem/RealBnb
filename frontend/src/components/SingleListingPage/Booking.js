@@ -189,7 +189,14 @@ function Booking({listing}) {
             endDate: state.endDate.toISOString()
         }
 
-        const stripePaymentIntentRes = await csrfFetch("/api/bookings/create-payment-intent", {
+        let fetchUrlPrefix;
+        if(process.env.NODE_ENV === "production") {
+            fetchUrlPrefix = `${process.env.REACT_APP_PRODUCTION_URL}/bookings/create-payment-intent`
+        } else {
+            fetchUrlPrefix = "/api/bookings/create-payment-intent"
+        }
+
+        const stripePaymentIntentRes = await csrfFetch(fetchUrlPrefix, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

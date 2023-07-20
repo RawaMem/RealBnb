@@ -108,7 +108,7 @@ router.post("/create-payment-intent", async (req,res) => {
             success_url: `${currentURL}/user-bookings/${userId}`,
             cancel_url: `${currentURL}/edit-listing/${listingId}`,
         });
-
+        console.log("session---------", session)
         res.json({
             stripePaymentId: session.id,
             url: session.url
@@ -128,6 +128,7 @@ let endpointSecret;
 endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 router.post('/webhook', express.raw({type: 'application/json'}), async(request, response) => {
+
     const sig = request.headers['stripe-signature'];
 
     let data;

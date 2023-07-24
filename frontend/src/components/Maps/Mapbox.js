@@ -89,15 +89,19 @@ export function MapBox({
                   fontSize: "15px",
                   color: "red",
                   fontWeight: "bold",
-                  backgroundColor:
-                    hoveredListing !== null && hoveredListing === item.id
-                      ? "black"
-                      : "transparent",
+                  // backgroundColor:
+                  //   hoveredListing !== null && hoveredListing === item.id
+                  //     ? "black"
+                  //     : "transparent",
                 }}
               >
+                { hoveredListing !== null && hoveredListing === item.id && <span className="material-symbols-outlined">
+                      open_in_new
+                      </span>}
                 {item.ListingPrices[0].pricePerDay}
               </div>
             ) : (
+              
               <span
                 key={item.id}
                 onClick={() => setShowListing(item.id)}

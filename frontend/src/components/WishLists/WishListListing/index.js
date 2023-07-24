@@ -199,7 +199,10 @@ export function WishListListing() {
             </div>
           )}
           <button 
-            onClick={() => setShowGuestModal(true)}
+            onClick={() => {
+              setShowGuestModal(true)
+              setShowCalendar(false)
+            }}
             className="wishlisting-listing-open-calendar"
           >
             {currentWishList

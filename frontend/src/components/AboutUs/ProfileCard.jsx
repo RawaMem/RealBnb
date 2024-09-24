@@ -1,4 +1,5 @@
 import "./AboutUs.css";
+import "./AboutUsQueries.css";
 
 export function ProfileCard({
   image,

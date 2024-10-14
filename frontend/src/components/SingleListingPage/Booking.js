@@ -61,7 +61,6 @@ function Booking({listing}) {
         });
         const selectedDays = calculateDays(state.startDate, state.endDate);
 
-
         setCurPrice(curPrice);
         setNumsOfDays(selectedDays);
         setRoomPrice(+selectedDays * (+curPrice.pricePerDay));
@@ -177,45 +176,45 @@ function Booking({listing}) {
         const previewImage = listing.Images.find(image => image.preview);
         const listingName = listing.name;
 
-        const dataForStripe = {
-            userId: sessionUser.id,
-            imageUrl: previewImage.url,
-            listingName: listingName,
-            totalCost: totalPrice,
-            listingId: listing.id,
-            avePricePerDay: avePricePerDay,
-            numOfGuests,
-            startDate: state.startDate.toISOString(),
-            endDate: state.endDate.toISOString()
-        }
+        // const dataForStripe = {
+        //     userId: sessionUser.id,
+        //     imageUrl: previewImage.url,
+        //     listingName: listingName,
+        //     totalCost: totalPrice,
+        //     listingId: listing.id,
+        //     avePricePerDay: avePricePerDay,
+        //     numOfGuests,
+        //     startDate: state.startDate.toISOString(),
+        //     endDate: state.endDate.toISOString()
+        // }
 
-        let fetchUrlPrefix;
-        if(process.env.NODE_ENV === "production") {
-            fetchUrlPrefix = `${process.env.REACT_APP_PRODUCTION_URL}/bookings/create-payment-intent`
-        } else {
-            fetchUrlPrefix = "/api/bookings/create-payment-intent"
-        }
+        // let fetchUrlPrefix;
+        // if(process.env.NODE_ENV === "production") {
+        //     fetchUrlPrefix = `${process.env.REACT_APP_PRODUCTION_URL}/bookings/create-payment-intent`
+        // } else {
+        //     fetchUrlPrefix = "/api/bookings/create-payment-intent"
+        // }
 
-        const stripePaymentIntentRes = await csrfFetch(fetchUrlPrefix, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dataForStripe)
-        })
+        // const stripePaymentIntentRes = await csrfFetch(fetchUrlPrefix, {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "application/json"
+        //     },
+        //     body: JSON.stringify(dataForStripe)
+        // })
 
-        const stripeResult = await stripePaymentIntentRes.json();
+        // const stripeResult = await stripePaymentIntentRes.json();
 
-        if(stripeResult.stripePaymentId) newBooking.stripePaymentIntentId = stripeResult.stripePaymentId;
+        // if(stripeResult.stripePaymentId) newBooking.stripePaymentIntentId = stripeResult.stripePaymentId;
 
-        if(stripeResult.error) {
-            console.error(stripeResult.error);
-        } else {
-            // confirm payment intent on client side
-            window.location.replace(stripeResult.url);
-            // const newlyCreatedBooking = await dispatchThunk(createBookingThunk(newBooking));
-            // if(newlyCreatedBooking) history.push("/user-profile");
-        }
+        // if(stripeResult.error) {
+        //     console.error(stripeResult.error);
+        // } else {
+        //     // confirm payment intent on client side
+        //     window.location.replace(stripeResult.url);
+        //     // const newlyCreatedBooking = await dispatchThunk(createBookingThunk(newBooking));
+        //     // if(newlyCreatedBooking) history.push("/user-profile");
+        // }
         
     };
 

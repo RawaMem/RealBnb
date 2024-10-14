@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { getUserWishlistsThunk } from "../../store/wishlists";
 import { getSingleListingThunk } from "../../store/listings";
 import { WishListCard } from "./WishListCard";
@@ -40,6 +41,16 @@ function WishList({
       fetchListingDetails();
     }
   }, [dispatch, user, wishLists]);
+
+  const noWishListContent = () => (
+    <div className="no-wishlist-content-container">
+      <h2>No wishlist saved...yet! </h2>
+      <h5>Create your first wishlist</h5><br />
+      <p>As you search, click the heart icon to save your favorite places and Experiences to a wishlist.</p>
+    </div>
+    );
+
+  if(!listOfWishlists.length) return noWishListContent();
 
   return (
     <div className="wishlist-main-container">

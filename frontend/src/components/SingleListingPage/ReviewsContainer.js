@@ -31,6 +31,7 @@ export default function ReviewsContainer({reviews, currentUser, listingId, listi
             <div className="noReviews">No reviews at this time.</div>
         </>
     );
+    
     const qualifyToLeaveAnReview = () => {    
         if(currentUser) {
             const findExitReview = reviewsArr.find(review => review.User.id === currentUser.id);

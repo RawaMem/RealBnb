@@ -79,7 +79,9 @@ router.post("/create-payment-intent", async (req,res) => {
             endDate
         }
     });
-    let currentURL
+
+    let currentURL;
+
     if (process.env.NODE_ENV === "production") {
         currentURL = process.env.LIVEURL
     } else {
@@ -106,9 +108,9 @@ router.post("/create-payment-intent", async (req,res) => {
                 }
             ],
             success_url: `${currentURL}/user-bookings/${userId}`,
-            cancel_url: `${currentURL}/edit-listing/${listingId}`,
+            cancel_url: `${currentURL}/listings/${listingId}`,
         });
-        console.log("session---------", session)
+
         res.json({
             stripePaymentId: session.id,
             url: session.url
@@ -175,7 +177,7 @@ router.post('/webhook', express.raw({type: 'application/json'}), async(request, 
     if(booking) {
         console.log("booking successful created")
     };
-}
+    }
 );
 
 

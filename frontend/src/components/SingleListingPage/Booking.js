@@ -61,7 +61,6 @@ function Booking({listing}) {
         });
         const selectedDays = calculateDays(state.startDate, state.endDate);
 
-
         setCurPrice(curPrice);
         setNumsOfDays(selectedDays);
         setRoomPrice(+selectedDays * (+curPrice.pricePerDay));

@@ -14,7 +14,7 @@ function Booking({listing}) {
     const history = useHistory();
     const sessionUser = useSelector(state => state.session.user)
     let today = new Date();
-
+    console.log("sessionUser", sessionUser)
     const initialState = {
         startDate:null,
         endDate:null,
@@ -164,17 +164,22 @@ function Booking({listing}) {
     const handleReserve = async() => {
         const avePricePerDay = (totalPrice / numOfDays).toFixed(2);
         const newBooking = {
-            userId: sessionUser.id,
-            listingId: listing.id,
             totalCost: totalPrice,
             avePricePerDay: avePricePerDay,
-            numOfGuests,
             startDate: state.startDate.toISOString(),
-            endDate: state.endDate.toISOString()
+            endDate: state.endDate.toISOString(),
+            listingId: listing.id,
+            numOfGuests,
         };
 
-        const previewImage = listing.Images.find(image => image.preview);
-        const listingName = listing.name;
+        const newlyCreatedBooking = await dispatchThunk(createBookingThunk(newBooking));
+
+        if(newlyCreatedBooking) history.push(`/user-bookings/${sessionUser.id}`);
+        
+
+        // below code is used when booking through Stripe api 
+        // const previewImage = listing.Images.find(image => image.preview);
+        // const listingName = listing.name;
 
         // const dataForStripe = {
         //     userId: sessionUser.id,

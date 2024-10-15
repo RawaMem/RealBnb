@@ -29,6 +29,7 @@ import Socket from "./components/Socket";
 import Messages from "./components/Messages";
 import MessageWrapper from "./components/Messages/MessageWrapper";
 import Footer from "./components/Footer/Footer";
+import { Faq } from "./components/Faq/Faq";
 let serverUrl;
 if (process.env.NODE_ENV === "production") {
   serverUrl = "https://realbnb.onrender.com/";
@@ -62,6 +63,9 @@ function App() {
         <Switch>
           <Route exact path="/about-us">
             <AboutUs />
+          </Route>
+          <Route exact path="/faq">
+            <Faq />
           </Route>
           <Route exact path="/wishlists">
             <WishList />

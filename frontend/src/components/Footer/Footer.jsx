@@ -43,7 +43,7 @@ function Footer() {
                     style={{ cursor: "pointer" }}
                     onClick={(e) => {
                         e.preventDefault();
-                        history.push(`/feed`);
+                        history.push(`/`);
                     }}
                 >
                     <h3 id="logo-text">RealBnB</h3>

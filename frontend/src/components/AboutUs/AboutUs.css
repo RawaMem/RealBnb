@@ -1,20 +1,22 @@
 .profile-cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    justify-items: center;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
     padding: 24px;
 
-    --button-active-color: hsl(75, 94%, 57%);
-    --button-color: hsl(0, 0%, 20%);
-    --card-color: hsl(0, 0%, 12%);
-    --text-main-color: hsl(0, 0%, 100%);
-    --text-secondary-color: hsl(75, 94%, 57%);
+    --button-active-color: #4338CA;
+    --button-color--first: #F9FAFB;
+    --button-color--secondary: #D2D6DB;
+    --card-color: #FFFFFF;
+    --text-main-color: #171717;
+    --text-secondary-color: #4338CA;
 
     font-weight: 500;
 }
 
 .profile-card {
     background-color: var(--card-color);
+    box-shadow: 0px 2px 2px 2px rgba(0, 0, 0, 0.1);
     width: 384px;
     height: 600px;
     padding: 30px 20px;
@@ -42,15 +44,16 @@
 .profile-card__name {
     color: var(--text-main-color);
     font-weight: 400;
-    font-size: 20px;
+    font-size: 24px;
     text-align: center;
     margin-bottom: 10px;
 }
 
 .profile-card__location {
     color: var(--text-secondary-color);
+    font-weight: 700;
     text-align: center;
-    font-size: 12px;
+    font-size: 14px;
     margin-bottom: 20px;
 }
 
@@ -58,7 +61,7 @@
     color: var(--text-main-color);
     text-align: center;
     font-weight: 200;
-    font-size: 12px;
+    font-size: 16px;
     margin-bottom: 20px;
 }
 
@@ -69,10 +72,11 @@
     gap: 15px;
 }
 
-.profile-card__link:link, .profile-card__link:visited {
+.profile-card__link:link,
+.profile-card__link:visited {
     width: 304px;
     height: 45px;
-    background-color: var(--button-color);
+    background-image: linear-gradient(to right, var(--button-color--first), var(--button-color--secondary));
     border-radius: 8px;
     text-align: center;
     align-content: center;
@@ -82,7 +86,8 @@
     font-size: 14px;
 }
 
-.profile-card__link:active, .profile-card__link:hover {
-    background-color: var(--button-active-color);
+.profile-card__link:active,
+.profile-card__link:hover {
+    background-image: linear-gradient(var(--button-active-color), var(--button-active-color));
     color: var(--card-color);
 }

@@ -1,0 +1,133 @@
+#copyright {
+    margin-right: auto;
+}
+
+.t {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 10px solid red;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    transform: rotate(90deg);
+    left: 50%;
+    bottom: -10px;
+}
+
+.tools {
+    position: absolute;
+    display: none;
+    text-align: center;
+    bottom: 40px;
+    right: -8px;
+    align-self: flex-end;
+    background: white;
+    color: black;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.tools-active {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.tools__header {
+    grid-column: 1/-1;
+}
+
+.technologies a,
+.technologies div {
+    margin-right: 15px;
+}
+
+/*******************/
+.footer {
+    margin-top: auto;
+    box-sizing: border-box;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    color: white;
+    padding: 64px;
+
+    color: #303030;
+}
+
+.footer__section {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.footer__ul {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    padding: 0 !important;
+
+}
+
+.footer__logo .fa-meteor {
+    padding: 0;
+}
+
+.footer__section__title {
+    color: #606060;
+}
+
+.footer__explore,
+.footer__legal,
+.footer__extras {
+    cursor: not-allowed;
+}
+
+.footer__help .footer__ul .footer__li,
+.footer__logo {
+    cursor: pointer;
+}
+
+.footer__how__it__works__a:link,
+.footer__how__it__works__a:visited {
+    color: black;
+    text-decoration: underline !important;
+}
+
+.footer__social__media__a:link,
+.footer__social__media__a:visited,
+.footer__about__us__a:link,
+.footer__about__us__a:visited {
+    color: #303030;
+}
+
+.about__the__project {
+    text-align: center;
+}
+
+.footer__about__us {
+    cursor: pointer;
+}
+
+.footer__ul__technologies {
+    position: relative;
+}
+
+.about__the__project {
+    width: 250px;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    padding: 12px;
+}
+
+
+.about__the__project h1, .how__it__works h1 {
+    font-size: 18px;
+}
+
+.show__it__works {
+    width: 180px;
+    height: 180px;
+}

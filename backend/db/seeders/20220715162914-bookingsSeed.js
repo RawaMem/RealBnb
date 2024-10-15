@@ -31,9 +31,7 @@ module.exports = {
         userId = 1
 
         for (let i = 0; i < 5; i++){
-          // console.log('inside for loop, this is listingId and userId', listingId, userId)
           if (listingId !== userId) {
-            // console.log('inside if statement, this is listingId and userId', listingId, userId)
             let forCycleNumber = i
             let bookingsObj = {
               listingId,
@@ -51,7 +49,6 @@ module.exports = {
             bookingsObj.startDate = formattedStartDate
             bookingsObj.endDate = formattedEndDate
             let numOfDays = Math.floor((endDate - startDate)/oneDayInMilliseconds)
-            // console.log('this is NUM DAYS', numOfDays)
             bookingsObj.totalCost = avePricePerDay * numOfDays
             bookingsDataArray.push(bookingsObj)
           }
@@ -62,35 +59,8 @@ module.exports = {
         whileCycleNumber++
         avePricePerDay += 25
       }
-      // console.log('THIS IS THE BOOKINGS DATA ARRAY', bookingsDataArray)
 
       return queryInterface.bulkInsert(options, bookingsDataArray, {})
-
-
-    //   return queryInterface.bulkInsert(options, [
-    //     {
-    //       userId: 1,
-    //       listingId: 2,
-    //       totalCost:399.96,
-    //       avePricePerDay:99.99,
-    //       paymentConfirmed: true,
-    //       startDate: "2022-09-10",
-    //       endDate:"2022-09-14",
-    //     createdAt: new Date(),
-    //     updatedAt: new Date()
-    //     },
-    //     {
-    //       userId: 1,
-    //       listingId: 2,
-    //       totalCost:479.97,
-    //       avePricePerDay:159.99,
-    //       paymentConfirmed: true,
-    //       startDate: "2022-11-06",
-    //       endDate:"2022-11-09",
-    //     createdAt: new Date(),
-    //     updatedAt: new Date()
-    //     },
-    // ], {});
   },
 
   down: (queryInterface, Sequelize) => {

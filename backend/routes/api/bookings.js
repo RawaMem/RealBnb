@@ -173,16 +173,12 @@ router.post('/webhook', express.raw({type: 'application/json'}), async(request, 
             }
         ).catch(err => console.log("err from checkout sessiont", err.message))
     };
-
-    if(booking) {
-        console.log("booking successful created")
-    };
     }
 );
 
 
 router.post('/create', requireAuth, asyncHandler(async (req, res) => {
-    const { totalCost, avePricePerDay, startDate, endDate, listingId, numOfGuests, stripePaymentIntentId } = req.body;
+    const { totalCost, avePricePerDay, startDate, endDate, listingId, numOfGuests } = req.body;
 
     const userId = req.user.id;
 
@@ -203,7 +199,6 @@ router.post('/create', requireAuth, asyncHandler(async (req, res) => {
             numOfGuests,
             startDate,
             endDate,
-            stripePaymentIntentId
         });
 
         return res.json({booking});

@@ -173,10 +173,6 @@ router.post('/webhook', express.raw({type: 'application/json'}), async(request, 
             }
         ).catch(err => console.log("err from checkout sessiont", err.message))
     };
-
-    if(booking) {
-        console.log("booking successful created")
-    };
     }
 );
 

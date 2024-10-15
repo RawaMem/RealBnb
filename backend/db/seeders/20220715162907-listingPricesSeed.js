@@ -39,112 +39,46 @@ module.exports = {
       // const cycleMultiplier = 1
       // const oneWeekInMilliseconds = 7 * oneDayInMilliseconds
       // let todaysDate = new Date()
-      const listingPriceDataArray = []
-      const todaysDateInMilliseconds = new Date().getTime()
-      const oneDayInMilliseconds =  86400000
-      const threeWeeksInMilliseconds = 21 * oneDayInMilliseconds
-      const fourWeeksInMilliseconds = 28 * oneDayInMilliseconds
-      const dateGapBetweenListings =  4 * oneDayInMilliseconds
-      let listingId = 1
-      let userId = 1
-      let pricePerDay = 199.99
+      const listingPriceDataArray = [];
+      const todaysDateInMilliseconds = new Date().getTime();
+      const oneDayInMilliseconds =  86400000;
+      const threeWeeksInMilliseconds = 21 * oneDayInMilliseconds;
+      const fourWeeksInMilliseconds = 28 * oneDayInMilliseconds;
+      const dateGapBetweenListings =  4 * oneDayInMilliseconds;
+      let userId = 1;
+      const pricePerDay = [199.99, 299.99, 169.87, 699.00, 499.89];
+      let priceIdx = 0;
+      let whileCycleNumber = 0;
+      let forCycleNumber = 0;
 
-      let whileCycleNumber = 0
-      while (userId < 6) {
+      for (let i = 1; i < 51; i++) { // i references listing Id
+        let priceListingObj = {
+          listingId: i,
+          userId: userId % 5,
+          pricePerDay: pricePerDay[priceIdx % 5],
+          createdAt: new Date(),
+          updatedAt: new Date()
+        };
 
-        for (let i = 0; i < 12; i++) {
-          let forCycleNumber = i
-          let priceListingObj = {
-            listingId,
-            userId,
-            pricePerDay,
-            createdAt: new Date(),
-            updatedAt: new Date()
-          }
+        const startDate = todaysDateInMilliseconds + (fourWeeksInMilliseconds * forCycleNumber % 12) + (dateGapBetweenListings * whileCycleNumber);
+        const endDate = startDate + threeWeeksInMilliseconds;
+        let formattedStartDate = new Date(startDate).toISOString().split('T')[0];
+        let formattedEndDate = new Date(endDate).toISOString().split('T')[0];
 
-          const startDate = todaysDateInMilliseconds + (fourWeeksInMilliseconds * forCycleNumber) + (dateGapBetweenListings * whileCycleNumber)
-          const endDate = startDate + threeWeeksInMilliseconds
-          let formattedStartDate = new Date(startDate).toISOString().split('T')[0]
-          let formattedEndDate = new Date(endDate).toISOString().split('T')[0]
-          priceListingObj.startDate = formattedStartDate
-          priceListingObj.endDate = formattedEndDate
+        priceListingObj.startDate = formattedStartDate;
+        priceListingObj.endDate = formattedEndDate;
 
-          listingPriceDataArray.push(priceListingObj)
+        listingPriceDataArray.push({...priceListingObj});
+
+        userId += 1;
+        if (userId % 5 == 0) {
+          userId += 1;
         }
-        listingId++
-        userId++
-        whileCycleNumber++
-        pricePerDay += 25
+        priceIdx += 1;
+        whileCycleNumber += 1;
+        forCycleNumber += 1;
       }
-      // console.log('THIS IS THE PRICE LISTING DATA ARRAY', listingPriceDataArray)
       return queryInterface.bulkInsert(options, listingPriceDataArray, {})
-
-
-//    return queryInterface.bulkInsert(options, [
-//     {
-//       listingId: 1,
-//       userId: 1,
-//       pricePerDay: 199.99,
-//       startDate: "2023-9-1",
-//       endDate: "2023-10-1",
-//       createdAt: new Date(),
-//       updatedAt: new Date()
-//    },
-//     {
-//       listingId: 1,
-//       userId: 1,
-//       pricePerDay: 299.99,
-//       startDate: "2023-11-01",
-//       endDate: "2023-12-01",
-//       createdAt: new Date(),
-//       updatedAt: new Date()
-//    },
-//     {
-//       listingId: 2,
-//       userId: 2,
-//       pricePerDay: 99.99,
-//       startDate: "2023-09-05",
-//       endDate: "2023-10-10",
-//       createdAt: new Date(),
-//       updatedAt: new Date()
-//    },
-//     {
-//       listingId: 2,
-//       userId: 2,
-//       pricePerDay: 159.99,
-//       startDate: "2023-11-01",
-//       endDate: "2023-12-10",
-//       createdAt: new Date(),
-//       updatedAt: new Date()
-//    },
-//    {
-//     listingId: 3,
-//     userId: 3,
-//     pricePerDay: 220,
-//     startDate: "2023-11-01",
-//     endDate: "2023-12-01",
-//     createdAt: new Date(),
-//     updatedAt: new Date()
-//  },
-//   {
-//     listingId: 4,
-//     userId: 4,
-//     pricePerDay: 400,
-//     startDate: "2023-09-05",
-//     endDate: "2023-10-10",
-//     createdAt: new Date(),
-//     updatedAt: new Date()
-//  },
-//   {
-//     listingId: 5,
-//     userId: 5,
-//     pricePerDay: 160,
-//     startDate: "2023-11-01",
-//     endDate: "2023-12-10",
-//     createdAt: new Date(),
-//     updatedAt: new Date()
-//  },
-//   ], {});
   },
 
   down: (queryInterface, Sequelize) => {

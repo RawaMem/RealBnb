@@ -14,7 +14,6 @@ function Booking({listing}) {
     const history = useHistory();
     const sessionUser = useSelector(state => state.session.user)
     let today = new Date();
-    console.log("sessionUser", sessionUser)
     const initialState = {
         startDate:null,
         endDate:null,

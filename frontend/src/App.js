@@ -28,6 +28,7 @@ import { io } from "socket.io-client";
 import Socket from "./components/Socket";
 import Messages from "./components/Messages";
 import MessageWrapper from "./components/Messages/MessageWrapper";
+import Footer from "./components/Footer/Footer";
 let serverUrl;
 if (process.env.NODE_ENV === "production") {
   serverUrl = "https://realbnb.onrender.com/";
@@ -130,6 +131,7 @@ function App() {
           </Route> */}
         </Switch>
       )}
+      <Footer />
     </>
   );
 }

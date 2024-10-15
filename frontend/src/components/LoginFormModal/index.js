@@ -1,53 +1,74 @@
 import React, { useState } from "react";
 import * as sessionActions from "../../store/session";
 import { useDispatch } from "react-redux";
+import { GoogleLogin } from "@react-oauth/google";
+import { Redirect, useHistory } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import InputField from "../../ui/TextField";
 import "./LoginForm.css";
 
-function LoginForm( {setShowLogInModal, login} ) {
+function LoginForm({ setShowLogInModal, login }) {
   const dispatch = useDispatch();
+  const history = useHistory();
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState([]);
 
-  const LoginBtnDisabled = !credential.length || !password.length
+  const LoginBtnDisabled = !credential.length || !password.length;
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
     return dispatch(sessionActions.login({ credential, password }))
-    .then(() => setShowLogInModal(false))
-    .catch(
-      async (res) => {
+      .then(() => setShowLogInModal(false))
+      .catch(async (res) => {
         const data = await res.json();
         if (data && data.errors) setErrors(data.errors);
-      }
+      });
+  };
+
+  const responseGoogle = async (response) => {
+    const decodedToken = jwtDecode(response.credential);
+    console.log({ decodedToken });
+    await dispatch(
+      sessionActions.login({
+        credential: decodedToken.email,
+        password: decodedToken.sub,
+      })
     );
+    if (user) {
+      history.push("/feed");
+    }
+
+    return response;
   };
 
   const handleDemoUser1 = (e) => {
     e.preventDefault();
-    return dispatch(sessionActions.login({ credential: 'demo@user.io', password: 'password' }))
-    .then(setShowLogInModal(false))
-    .catch(
-      async (res) => {
+    return dispatch(
+      sessionActions.login({ credential: "demo@user.io", password: "password" })
+    )
+      .then(setShowLogInModal(false))
+      .catch(async (res) => {
         const data = await res.json();
         if (data && data.errors) setErrors(data.errors);
-      }
-    )
-  }
+      });
+  };
 
   const handleDemoUser2 = (e) => {
     e.preventDefault();
-    return dispatch(sessionActions.login({ credential: 'MacBookProEnergy', password: 'password' }))
-    .then(setShowLogInModal(false))
-    .catch(
-      async (res) => {
+    return dispatch(
+      sessionActions.login({
+        credential: "MacBookProEnergy",
+        password: "password",
+      })
+    )
+      .then(setShowLogInModal(false))
+      .catch(async (res) => {
         const data = await res.json();
         if (data && data.errors) setErrors(data.errors);
-      }
-    )
-  }
+      });
+  };
 
   return (
     <div className="login-form-container">
@@ -61,8 +82,8 @@ function LoginForm( {setShowLogInModal, login} ) {
           </ul>
           <div className="login-form-credential-container">
             <div className="login-form-username-container">
-              <InputField 
-                size={{ m: 3, width: "35ch"}}
+              <InputField
+                size={{ m: 3, width: "35ch" }}
                 setter={setCredential}
                 val={credential}
                 label={"Username or Email"}
@@ -74,8 +95,8 @@ function LoginForm( {setShowLogInModal, login} ) {
             </div>
 
             <div className="login-form-username-container">
-              <InputField 
-                size={{ m: 3, width: "35ch"}}
+              <InputField
+                size={{ m: 3, width: "35ch" }}
                 setter={setPassword}
                 val={password}
                 label={"Password"}
@@ -87,32 +108,38 @@ function LoginForm( {setShowLogInModal, login} ) {
             </div>
           </div>
           <div className="login-form-login-btn-container">
-            <button 
-            type="submit" 
-            className={!LoginBtnDisabled ? "login-form-login-btn" : "login-form-login-btn-disabled"}
-            disabled={LoginBtnDisabled}
+            <button
+              type="submit"
+              className={
+                !LoginBtnDisabled
+                  ? "login-form-login-btn"
+                  : "login-form-login-btn-disabled"
+              }
+              disabled={LoginBtnDisabled}
             >
               Log In
             </button>
-
           </div>
-
         </form>
 
         <div className="login-form-demo-button-container">
-          <button
-            className="demoUserButton"
-            onClick={handleDemoUser1}>Demo user 1</button>
-          <button
-            className="demoUserButton"
-            onClick={handleDemoUser2}>Demo user 2</button>
+          <button className="demoUserButton" onClick={handleDemoUser1}>
+            Demo user 1
+          </button>
+          <button className="demoUserButton" onClick={handleDemoUser2}>
+            Demo user 2
+          </button>
         </div>
         <div className="login-with-google-button-container">
-          <div onClick={login}>Log in with Google</div>
-          <img src="https://cdn.discordapp.com/attachments/908381608355180594/1130909868446973992/image.png" alt="google-logo" className="google-logo-login"/>
+          <GoogleLogin
+            buttonText="Login with Google"
+            onSuccess={responseGoogle}
+            onFailure={responseGoogle}
+            cookiePolicy={"single_host_origin"}
+            // onClick={e => { e.preventDefault(); history.push(`/feed`) }}
+          ></GoogleLogin>
         </div>
       </div>
-
     </div>
   );
 }

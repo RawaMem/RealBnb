@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, useLocation, matchPath } from "react-router-dom";
 import { StyledEngineProvider } from "@mui/material/styles";
 import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
@@ -55,6 +55,14 @@ function App() {
   useEffect(() => {
     dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
   }, [dispatch]);
+
+  const location = useLocation();
+
+  const isListingPage = matchPath(location.pathname, {
+    path: "/listings/:listingId",
+    exact: true,
+    strict: false,
+  });
 
   return (
     <>
@@ -135,7 +143,7 @@ function App() {
           </Route> */}
         </Switch>
       )}
-      <Footer />
+      {!isListingPage && <Footer />}
     </>
   );
 }
